@@ -955,14 +955,14 @@ object dmTaxa: TdmTaxa
   object dbLibLoader: TSQLDBLibraryLoader
     Enabled = False
     ConnectionType = 'SQLite3'
-    LibraryName = 'D:\Desenv\Xolmis\tools\taxonomy_editor\sqlite3.dll'
+    LibraryName = 'F:\Xolmis_Tools\taxonomy_editor\sqlite3.dll'
     Left = 208
     Top = 40
   end
   object sqlCon: TSQLConnector
     Connected = False
     LoginPrompt = False
-    DatabaseName = 'D:\Desenv\Xolmis\TaxonomyDB.sqlite3'
+    DatabaseName = 'F:\Xolmis\TaxonomyDB.sqlite3'
     KeepConnection = False
     Params.Strings = (
       'OpenFlags = [sofReadWrite,sofCreate];'
@@ -971,6 +971,14 @@ object dmTaxa: TdmTaxa
     CharSet = 'UTF-8'
     ConnectorType = 'SQLite3'
     Left = 88
+    Top = 40
+  end
+  object TaskDlg: TTaskDialog
+    Buttons = <>
+    DefaultButton = tcbCancel
+    MainIcon = tdiNone
+    RadioButtons = <>
+    Left = 574
     Top = 40
   end
 end

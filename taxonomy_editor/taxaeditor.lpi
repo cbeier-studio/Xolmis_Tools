@@ -124,13 +124,13 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="cbs_pack"/>
+      </Item>
+      <Item>
         <PackageName Value="SynEditDsgn"/>
       </Item>
       <Item>
         <PackageName Value="SynEdit"/>
-      </Item>
-      <Item>
-        <PackageName Value="cbs_library"/>
       </Item>
       <Item>
         <PackageName Value="rxnew"/>
@@ -140,12 +140,6 @@
       </Item>
       <Item>
         <PackageName Value="FCL"/>
-      </Item>
-      <Item>
-        <PackageName Value="ibcontrols"/>
-      </Item>
-      <Item>
-        <PackageName Value="dclibx"/>
       </Item>
       <Item>
         <PackageName Value="bgracontrols"/>
@@ -193,18 +187,21 @@
         <Filename Value="udlg_desttaxon.pp"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDestTaxon"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
         <Filename Value="udlg_edithierarchy.pp"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgEditHierarchy"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
         <Filename Value="udlg_sqlfilter.pp"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSqlFilter"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>

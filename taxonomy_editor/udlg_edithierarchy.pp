@@ -5,7 +5,8 @@ unit udlg_edithierarchy;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, atshapelinebgra, BCPanel;
+  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, EditBtn, Buttons,
+  atshapelinebgra, BCPanel;
 
 type
 
@@ -19,20 +20,20 @@ type
     BCPanel5: TBCPanel;
     BCPanel6: TBCPanel;
     BCPanel7: TBCPanel;
-    CheckBox1: TCheckBox;
-    CheckBox2: TCheckBox;
-    CheckBox3: TCheckBox;
-    CheckBox4: TCheckBox;
-    CheckBox5: TCheckBox;
-    CheckBox6: TCheckBox;
-    CheckBox7: TCheckBox;
-    eDestinationTaxon: TEditButton;
-    eDestinationTaxon1: TEditButton;
-    eDestinationTaxon2: TEditButton;
-    eDestinationTaxon3: TEditButton;
-    eDestinationTaxon4: TEditButton;
-    eDestinationTaxon5: TEditButton;
-    eDestinationTaxon6: TEditButton;
+    cbClearParentTaxon: TCheckBox;
+    cbClearOrder: TCheckBox;
+    cbClearFamily: TCheckBox;
+    cbClearSubfamily: TCheckBox;
+    cbClearGenus: TCheckBox;
+    cbClearSpecies: TCheckBox;
+    cbClearSubspeciesGroup: TCheckBox;
+    eParentTaxon: TEditButton;
+    eOrder: TEditButton;
+    eFamily: TEditButton;
+    eSubfamily: TEditButton;
+    eGenus: TEditButton;
+    eSpecies: TEditButton;
+    eSubspeciesGroup: TEditButton;
     lblDestinationTaxon: TLabel;
     lblDestinationTaxon1: TLabel;
     lblDestinationTaxon2: TLabel;
@@ -56,7 +57,7 @@ var
 implementation
 
 initialization
-  {$I unit1.lrs}
+  {$I udlg_edithierarchy.lrs}
 
 end.
 

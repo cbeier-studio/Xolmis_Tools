@@ -5,7 +5,7 @@ unit udm_taxa;
 interface
 
 uses
-  Classes, SysUtils, LResources, SQLDBLib, SQLDB, DB, SQLite3Conn;
+  Classes, SysUtils, LResources, Dialogs, SQLDBLib, SQLDB, DB, SQLite3Conn;
 
 type
 
@@ -81,6 +81,7 @@ type
     qTaxavalid_name: TStringField;
     sqlCon: TSQLConnector;
     sqlTrans: TSQLTransaction;
+    TaskDlg: TTaskDialog;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
   private

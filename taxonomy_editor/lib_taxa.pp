@@ -5,7 +5,41 @@ unit lib_taxa;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, DB, SQLDB, StrUtils, Generics.Collections, RegExpr, CheckLst;
+  Classes, SysUtils, Forms, Controls, DB, SQLDB, Dialogs, StdCtrls,
+  {$IFDEF MSWINDOWS} Windows, DwmApi, Messages,{$ENDIF}
+  StrUtils, Generics.Collections, RegExpr, CheckLst;
+
+{$IFDEF MSWINDOWS}
+type
+  TRoundedWindowCornerType = (rcDefault, rcOff, rcOn, rcSmall);
+
+const
+  DWMWCP_DEFAULT    = 0; // Let the system decide whether or not to round window corners
+  DWMWCP_DONOTROUND = 1; // Never round window corners
+  DWMWCP_ROUND      = 2; // Round the corners if appropriate
+  DWMWCP_ROUNDSMALL = 3; // Round the corners if appropriate, with a small radius
+
+  DWMWA_WINDOW_CORNER_PREFERENCE = 33; // [set] WINDOW_CORNER_PREFERENCE, Controls the policy that rounds top-level window corners
+{$ENDIF}
+
+{ Hashtags }
+const
+  AllQS: array of String        = ('#tudo', '#all');
+  MarkedQS: array of String     = ('#marcados', '#marked');
+  UnmarkedQS: array of String   = ('#naomarcados', '#unmarked');
+  FilterQS: array of String     = ('#filtro', '#filter');
+  DeletedQS: array of String    = ('#lixo', '#deleted');
+  PrintQueueQS: array of String = ('#fila', '#queued', '#toprint');
+  OrderQS: array of String      = ('#ordem', '#order', '#ord');
+  FamilyQS: array of String     = ('#familia', '#family', '#fam');
+  GenusQS: array of String      = ('#genero', '#genus', '#gen');
+  SpeciesQS: array of String    = ('#especie', '#species', '#sp');
+  SiteQS: array of String       = ('#local', '#site');
+  QualifierQS: array of String  = ('#quali', '#qualifier');
+  ParentQS: array of String     = ('#superior', '#parent');
+  RankQS: array of String       = ('#nivel', '#categoria', '#rank');
+  ListsQS: array of String      = ('#listas', '#lists');
+  SqlQS: array of String        = ('#sql', '#sqlfilter');
 
 const
   NomeApp: String           = 'Xolmis Taxonomies Editor';
@@ -332,6 +366,11 @@ type
   end;
 
 const
+  TableAliases: array[TTableType] of String = ('',
+    'tr',
+    'z',
+    'pk',
+    'tc');
   TableNames: array[TTableType] of String = ('',
     'taxon_ranks',
     'zoo_taxa',
@@ -350,6 +389,12 @@ const
   function InstallDir: String;
   function AppDataDir: String;
   function TempDir: String;
+
+  procedure SetSelectSQL(const aSQL: TStrings; aTable: TTableType; var aAlias: String);
+  procedure SetTaxonRanksSQL(const aSQL: TStrings; aFilter: TFilterValue;
+    aSorting: String = ''; aDirection: String = '');
+  procedure SetZooTaxaSQL(const aSQL: TStrings; aFilter: TFilterValue;
+    aSorting: String = ''; aDirection: String = '');
 
   function GetKey(aTable, aKeyField, aNameField, aNameValue: String): Integer;
   function GetName(aTable, aNameField, aKeyField: String; aKeyValue: Integer): String;
@@ -397,15 +442,28 @@ const
     ExecNow: Boolean = True);
 
   function FindTaxonDlg(aFiltro: TTaxonFilters; aControl: TControl;
-    UseValid: Boolean; var aCod: Integer; const aInit: String = ''): Boolean; overload;
+    UseValid: Boolean; var aResultKey: Integer; const aInitialValue: String = ''): Boolean; overload;
   function FindTaxonDlg(aFiltro: TTaxonFilters; aControl: TControl; aDataset: TDataset;
-    aKeyField, aNameField: String; UseValid: Boolean; const aInit: String = ''): Boolean; overload;
+    aResultKeyField, aResultNameField: String; UseValid: Boolean; SaveOnClose: Boolean;
+    const aInitialValue: String = ''): Boolean; overload;
+
+  function MsgDlg(aTitle, aText: String; aType: TMsgDlgType): Boolean;
+  {$IFDEF MSWINDOWS}
+  procedure SetRoundedCorners(const TheHandle: HWND; const CornerType: TRoundedWindowCornerType);
+  {$ENDIF}
+
+  function WildcardWords(aText: String; aWildcard: String = '%'): String;
+  function WildcardSyllables(aText: String; aWildcard: String = '%'): String;
 
 var
   Closing: Boolean;
   Parar: Boolean;
 
 resourcestring
+  rsTitleError = 'Error';
+  rsTitleConfirmation = 'Confirmation';
+  rsTitleInformation = 'Information';
+  rsTitleCaution = 'Warning';
   rsCaptionFind = 'Find';
   rsErrorTableNotFound = 'Table %s not found.';
   rsErrorRewritingHierarchy = 'An error occurred during hierarchy rewriting. All changes will be reverted back.';
@@ -454,6 +512,95 @@ begin
   Result := s;
   if not DirectoryExists(Result) then
     CreateDir(Result);
+end;
+
+procedure SetSelectSQL(const aSQL: TStrings; aTable: TTableType; var aAlias: String);
+begin
+  case aTable of
+    tbNone: ;
+    tbTaxonRanks:
+      SetTaxonRanksSQL(aSQL, fvNone);
+    tbZooTaxa:
+      begin
+        SetZooTaxaSQL(aSQL, fvNone);
+        //aAlias := TableAliases[aTable] + '.';
+      end;
+  end;
+end;
+
+procedure SetTaxonRanksSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String; aDirection: String);
+var
+  AD: String;
+begin
+  with aSQL do
+  begin
+    Clear;
+    Add('SELECT * FROM taxon_ranks');
+    case aFilter of
+      fvNone:
+        ; // do nothing
+      fvReset:
+        Add('WHERE (active_status = 1)');
+      fvAll:
+        Add('WHERE (active_status = 1)');
+      fvMarked:
+        Add('WHERE (active_status = 1) AND (marked_status = 1)');
+      fvDeleted:
+        Add('WHERE (active_status = 0)');
+    end;
+    if Trim(aSorting) <> '' then
+    begin
+      if aDirection = '' then
+        AD := 'ASC'
+      else
+        AD := aDirection;
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} AD);
+    end;
+  end;
+end;
+
+procedure SetZooTaxaSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String; aDirection: String);
+var
+  AD: String;
+begin
+  with aSQL do
+  begin
+    Clear;
+    Add('SELECT z.*,');
+    Add('(SELECT u.full_name FROM zoo_taxa AS u WHERE u.taxon_id = z.parent_taxon_id) AS parent_taxon_name,');
+    Add('(SELECT v.full_name FROM zoo_taxa AS v WHERE v.taxon_id = z.valid_id) AS valid_name,');
+    Add('(SELECT ui.full_name FROM zoo_taxa AS ui WHERE ui.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_name,');
+    Add('(SELECT vi.full_name FROM zoo_taxa AS vi WHERE vi.taxon_id = z.ioc_valid_id) AS ioc_valid_name,');
+    Add('(SELECT uc.full_name FROM zoo_taxa AS uc WHERE uc.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_name,');
+    Add('(SELECT vc.full_name FROM zoo_taxa AS vc WHERE vc.taxon_id = z.cbro_valid_id) AS cbro_valid_name,');
+    Add('(SELECT o.full_name FROM zoo_taxa AS o WHERE o.taxon_id = z.order_id) AS order_name,');
+    Add('(SELECT f.full_name FROM zoo_taxa AS f WHERE f.taxon_id = z.family_id) AS family_name,');
+    Add('(SELECT s.full_name FROM zoo_taxa AS s WHERE s.taxon_id = z.subfamily_id) AS subfamily_name,');
+    Add('(SELECT n.full_name FROM zoo_taxa AS n WHERE n.taxon_id = z.genus_id) AS genero_name,');
+    Add('(SELECT e.full_name FROM zoo_taxa AS e WHERE e.taxon_id = z.species_id) AS species_name,');
+    Add('(SELECT g.full_name FROM zoo_taxa AS g WHERE g.taxon_id = z.subspecies_group_id) AS subspecies_group_name');
+    Add('FROM zoo_taxa AS z');
+    case aFilter of
+      fvNone:
+        ; // do nothing
+      fvReset:
+        Add('WHERE (z.taxon_id = -1) AND (z.active_status = 1)');
+      fvAll:
+        Add('WHERE (z.active_status = 1)');
+      fvMarked:
+        Add('WHERE (z.active_status = 1) AND (z.marked_status = 1)');
+      fvDeleted:
+        Add('WHERE (z.active_status = 0)');
+    end;
+    if Trim(aSorting) <> '' then
+    begin
+      if aDirection = '' then
+        AD := 'ASC'
+      else
+        AD := aDirection;
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} AD);
+    end;
+  end;
 end;
 
 function GetKey(aTable, aKeyField, aNameField, aNameValue: String): Integer;
@@ -2084,8 +2231,8 @@ begin
   end;
 end;
 
-function FindTaxonDlg(aFiltro: TTaxonFilters; aControl: TControl; UseValid: Boolean; var aCod: Integer;
-  const aInit: String): Boolean;
+function FindTaxonDlg(aFiltro: TTaxonFilters; aControl: TControl; UseValid: Boolean; var aResultKey: Integer;
+  const aInitialValue: String): Boolean;
 var
   PControl: TPoint;
 begin
@@ -2096,20 +2243,28 @@ begin
   dlgFind := TdlgFind.Create(nil);
   with dlgFind do
   try
-    FiltroTaxon := aFiltro;
-    UsarValido := UseValid;
-    //PControl := aControl.ClientToScreen(Point(aControl.Left, aControl.Top));
-    PControl := aControl.ClientOrigin;
-    SetDialogPosition(PControl.X, PControl.Y, aControl.Width, aControl.Height);
-    Init := aInit;
+    TableType := tbZooTaxa;
+    TaxonFilter := aFiltro;
+    //UsarValido := UseValid;
+    //GetFormPosition(aControl, WindowPos);
+    if Assigned(aControl) then
+    begin
+      //PControl := aControl.ClientToScreen(Point(aControl.Left, aControl.Top));
+      PControl := aControl.ClientOrigin;
+      SetDialogPosition(PControl.X, PControl.Y, aControl.Width, aControl.Height);
+    end
+    else
+      Position := poScreenCenter;
+    InitialValue := aInitialValue;
     if ShowModal = mrOK then
     begin
-      aCod := dlgFind.Codigo;
-      if aControl is TCustomEdit then
-      begin
-        TCustomEdit(aControl).Text := dlgFind.Nome;
-        TCustomEdit(aControl).Modified := True;
-      end;
+      aResultKey := dlgFind.KeySelected;
+      if Assigned(aControl) then
+        if aControl is TCustomEdit then
+        begin
+          TCustomEdit(aControl).Text := dlgFind.NameSelected;
+          TCustomEdit(aControl).Modified := True;
+        end;
       Result := True;
     end;
   finally
@@ -2120,8 +2275,8 @@ begin
   end;
 end;
 
-function FindTaxonDlg(aFiltro: TTaxonFilters; aControl: TControl; aDataset: TDataset; aKeyField,
-  aNameField: String; UseValid: Boolean; const aInit: String): Boolean;
+function FindTaxonDlg(aFiltro: TTaxonFilters; aControl: TControl; aDataset: TDataset; aResultKeyField,
+  aResultNameField: String; UseValid: Boolean; SaveOnClose: Boolean; const aInitialValue: String): Boolean;
 var
   PControl: TPoint;
 begin
@@ -2129,29 +2284,179 @@ begin
   {$IFDEF DEBUG}
   LogDebug('OPEN DIALOG: Find taxon');
   {$ENDIF}
-  dlgFindTaxon := TdlgFindTaxon.Create(nil);
-  with dlgFindTaxon do
+  dlgFind := TdlgFind.Create(nil);
+  with dlgFind do
   try
-    FiltroTaxon := aFiltro;
-    UsarValido := UseValid;
+    TableType := tbZooTaxa;
+    TaxonFilter := aFiltro;
+    //UsarValido := UseValid;
+    //GetFormPosition(aControl, WindowPos);
     //PControl := aControl.ClientToScreen(Point(aControl.Left, aControl.Top));
     PControl := aControl.ClientOrigin;
     SetDialogPosition(PControl.X, PControl.Y, aControl.Width, aControl.Height);
-    Init := aInit;
-    if ShowModal = mrOK then
+    InitialValue := aInitialValue;
+    Result := ShowModal = mrOK;
+    if Result then
     begin
-      CanEdit(aDataSet);
-      aDataSet.FieldByName(aKeyField).AsInteger := dlgFindTaxon.Codigo;
-      aDataSet.FieldByName(aNameField).AsString := dlgFindTaxon.Nome;
-      Result := True;
+      //CanEdit(aDataSet);
+      aDataSet.FieldByName(aResultKeyField).AsInteger := dlgFind.KeySelected;
+      aDataSet.FieldByName(aResultNameField).AsString := dlgFind.NameSelected;
+      if SaveOnClose then
+        aDataSet.Post;
       if aControl is TCustomEdit then
         TCustomEdit(aControl).Modified := True;
+    end else
+    begin
+      if SaveOnClose then
+        aDataSet.Cancel;
     end;
   finally
-    FreeAndNil(dlgFindTaxon);
+    FreeAndNil(dlgFind);
     {$IFDEF DEBUG}
     LogDebug('CLOSE DIALOG: Find taxon');
     {$ENDIF}
+  end;
+end;
+
+function MsgDlg(aTitle, aText: String; aType: TMsgDlgType): Boolean;
+begin
+  Result := False;
+
+  with dmTaxa.TaskDlg do
+  begin
+    Flags := Flags - [tfShowProgressBar];
+    FooterText := EmptyStr;
+    FooterIcon := tdiNone;
+    Title := aTitle;
+    Text := aText;
+    case aType of
+      mtError:
+        begin
+          Caption := rsTitleError;
+          CommonButtons := [tcbOk];
+          MainIcon := tdiError;
+          DefaultButton := tcbOk;
+        end;
+      mtConfirmation:
+        begin
+          Caption := rsTitleConfirmation;
+          CommonButtons := [tcbYes, tcbNo];
+          MainIcon := tdiNone;
+          DefaultButton := tcbNo;
+        end;
+      mtInformation:
+        begin
+          Caption := rsTitleInformation;
+          CommonButtons := [tcbOK];
+          MainIcon := tdiInformation;
+          DefaultButton := tcbOK;
+        end;
+      mtWarning:
+        begin
+          Caption := rsTitleCaution;
+          CommonButtons := [tcbOK];
+          MainIcon := tdiWarning;
+          DefaultButton := tcbOK;
+        end;
+    end;
+    if Execute then
+    begin
+      case ModalResult of
+        mrOK, mrYes:
+          Result := True;
+        mrCancel, mrNo:
+          Result := False;
+      end;
+    end
+    else
+      Result := False;
+  end;
+end;
+
+{$IFDEF MSWINDOWS}
+procedure SetRoundedCorners(const TheHandle: HWND; const CornerType: TRoundedWindowCornerType);
+var
+  DWM_WINDOW_CORNER_PREFERENCE: Cardinal;
+begin
+  if InitDwmLibrary then
+  begin
+    case CornerType of
+      rcOff:
+        DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_DONOTROUND;
+      rcOn:
+        DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_ROUND;
+      rcSmall:
+        DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_ROUNDSMALL;
+    else
+      DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_DEFAULT;
+    end;
+    DwmSetWindowAttribute(TheHandle, DWMWA_WINDOW_CORNER_PREFERENCE,
+      @DWM_WINDOW_CORNER_PREFERENCE, sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+  end;
+end;
+{$ENDIF}
+
+function WildcardWords(aText: String; aWildcard: String): String;
+var
+  i, total: Integer;
+  Words: TStringList;
+begin
+  Result := EmptyStr;
+
+  Words := TStringList.Create; // ('"', ' ', [soStrictDelimiter]);
+  try
+    total := ExtractStrings([' '], [' '], PAnsiChar(aText), Words);
+    if total > 1 then
+      for i := 0 to Words.Count - 1 do
+        if ExecRegExpr('^#[a-z]+$', Words[i]) then
+          Result := Result + ''
+        else
+          if i = 0 then
+            Result := AnsiDequotedStr(Words[i], '"') + aWildcard + ' '
+          else
+            if i = Words.Count - 1 then
+              Result := Result + aWildcard + AnsiDequotedStr(Words[i], '"')
+            else
+              Result := Result + aWildcard + AnsiDequotedStr(Words[i], '"') + aWildcard + ' ';
+    if total = 1 then
+      if ExecRegExpr('^#[a-z]+$', aText) then
+        Result := ''
+      else
+        Result := AnsiDequotedStr(aText, '"');
+  finally
+    FreeAndNil(Words);
+  end;
+end;
+
+function WildcardSyllables(aText: String; aWildcard: String): String;
+var
+  i, total: Integer;
+  Syllables: TStringList;
+begin
+  Result := EmptyStr;
+
+  Syllables := TStringList.Create; // ('"', ' ', [soStrictDelimiter]);
+  try
+    total := ExtractStrings([' ', '+'], [' '], PAnsiChar(aText), Syllables);
+    if total > 1 then
+      for i := 0 to Syllables.Count - 1 do
+        if ExecRegExpr('^#[a-z]+$', Syllables[i]) then
+          Result := Result + ''
+        else
+          if i = 0 then
+            Result := AnsiDequotedStr(Syllables[i], '"') + aWildcard
+          else
+            if i = Syllables.Count - 1 then
+              Result := Result + AnsiDequotedStr(Syllables[i], '"')
+            else
+              Result := Result + AnsiDequotedStr(Syllables[i], '"') + aWildcard;
+    if total = 1 then
+      if ExecRegExpr('^#[a-z]+$', aText) then
+        Result := ''
+      else
+        Result := AnsiDequotedStr(aText, '"');
+  finally
+    FreeAndNil(Syllables);
   end;
 end;
 

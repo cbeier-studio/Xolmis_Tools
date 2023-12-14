@@ -1,8 +1,33 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: lib_taxa.rscaptionfind
+msgid "Find"
+msgstr ""
+
 #: lib_taxa.rserrorrewritinghierarchy
 msgid "An error occurred during hierarchy rewriting. All changes will be reverted back."
+msgstr ""
+
+#: lib_taxa.rserrortablenotfound
+#, object-pascal-format
+msgid "Table %s not found."
+msgstr ""
+
+#: lib_taxa.rstitlecaution
+msgid "Warning"
+msgstr ""
+
+#: lib_taxa.rstitleconfirmation
+msgid "Confirmation"
+msgstr ""
+
+#: lib_taxa.rstitleerror
+msgid "Error"
+msgstr ""
+
+#: lib_taxa.rstitleinformation
+msgid "Information"
 msgstr ""
 
 #: tdlgabout.caption
@@ -58,6 +83,129 @@ msgstr ""
 msgid "Copiar"
 msgstr ""
 
+#: tdlgdesttaxon.caption
+msgid "Lump/move taxon"
+msgstr ""
+
+#: tdlgdesttaxon.lbldestinationtaxon.caption
+msgid "Destination taxon"
+msgstr ""
+
+#: tdlgdesttaxon.sbapply.caption
+msgctxt "tdlgdesttaxon.sbapply.caption"
+msgid "Apply"
+msgstr ""
+
+#: tdlgdesttaxon.sbclose.caption
+msgctxt "tdlgdesttaxon.sbclose.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tdlgedithierarchy.caption
+msgid "Editing selected/marked taxon hierarchy"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox1.caption
+msgctxt "tdlgedithierarchy.checkbox1.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox2.caption
+msgctxt "tdlgedithierarchy.checkbox2.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox3.caption
+msgctxt "tdlgedithierarchy.checkbox3.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox4.caption
+msgctxt "tdlgedithierarchy.checkbox4.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox5.caption
+msgctxt "tdlgedithierarchy.checkbox5.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox6.caption
+msgctxt "tdlgedithierarchy.checkbox6.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.checkbox7.caption
+msgctxt "tdlgedithierarchy.checkbox7.caption"
+msgid "Clear"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon.caption
+msgctxt "tdlgedithierarchy.lbldestinationtaxon.caption"
+msgid "Parent taxon"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon1.caption
+msgid "Order"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon2.caption
+msgid "Family"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon3.caption
+msgid "Subfamily"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon4.caption
+msgid "Genus"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon5.caption
+msgid "Species"
+msgstr ""
+
+#: tdlgedithierarchy.lbldestinationtaxon6.caption
+msgid "Subspecies group"
+msgstr ""
+
+#: tdlgedithierarchy.sbapply.caption
+msgctxt "tdlgedithierarchy.sbapply.caption"
+msgid "Apply"
+msgstr ""
+
+#: tdlgedithierarchy.sbclose.caption
+msgctxt "tdlgedithierarchy.sbclose.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tdlgfind.caption
+msgid "Buscar"
+msgstr ""
+
+#: tdlgfind.ep.texthint
+msgctxt "tdlgfind.ep.texthint"
+msgid "Find..."
+msgstr ""
+
+#: tdlgfind.ulist.columns[0].title.caption
+msgid "Name"
+msgstr ""
+
+#: tdlgsqlfilter.caption
+msgid "SQL filter"
+msgstr ""
+
+#: tdlgsqlfilter.sbapply.caption
+msgctxt "tdlgsqlfilter.sbapply.caption"
+msgid "Apply"
+msgstr ""
+
+#: tdlgsqlfilter.sbclose.caption
+msgctxt "tdlgsqlfilter.sbclose.caption"
+msgid "Cancel"
+msgstr ""
+
 #: tfrmtaxaeditor.actabout.caption
 msgid "About"
 msgstr ""
@@ -105,6 +253,11 @@ msgstr ""
 #: tfrmtaxaeditor.cktioc.caption
 msgctxt "tfrmtaxaeditor.cktioc.caption"
 msgid "IOC"
+msgstr ""
+
+#: tfrmtaxaeditor.efindrank.texthint
+msgctxt "tfrmtaxaeditor.efindrank.texthint"
+msgid "Find..."
 msgstr ""
 
 #: tfrmtaxaeditor.efindtaxa.texthint
@@ -278,8 +431,24 @@ msgstr ""
 msgid "Unmarked records"
 msgstr ""
 
-#: tfrmtaxaeditor.sbcancelrecord.caption
+#: tfrmtaxaeditor.sbcancelrank.caption
+msgctxt "tfrmtaxaeditor.sbcancelrank.caption"
 msgid "Cancel"
+msgstr ""
+
+#: tfrmtaxaeditor.sbcancelrecord.caption
+msgctxt "tfrmtaxaeditor.sbcancelrecord.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tfrmtaxaeditor.sbclearfindtaxa.hint
+msgctxt "tfrmtaxaeditor.sbclearfindtaxa.hint"
+msgid "Clear search"
+msgstr ""
+
+#: tfrmtaxaeditor.sbclearsearchrank.hint
+msgctxt "tfrmtaxaeditor.sbclearsearchrank.hint"
+msgid "Clear search"
 msgstr ""
 
 #: tfrmtaxaeditor.sbdelrecord.caption
@@ -294,11 +463,23 @@ msgstr ""
 msgid "File"
 msgstr ""
 
+#: tfrmtaxaeditor.sbinsertrank.caption
+msgctxt "tfrmtaxaeditor.sbinsertrank.caption"
+msgid "New"
+msgstr ""
+
 #: tfrmtaxaeditor.sbinsertrecord.caption
+msgctxt "tfrmtaxaeditor.sbinsertrecord.caption"
 msgid "New"
 msgstr ""
 
 #: tfrmtaxaeditor.sbmoreoptions.hint
+msgctxt "tfrmtaxaeditor.sbmoreoptions.hint"
+msgid "Mais opções"
+msgstr ""
+
+#: tfrmtaxaeditor.sbmoreoptionsranks.hint
+msgctxt "tfrmtaxaeditor.sbmoreoptionsranks.hint"
 msgid "Mais opções"
 msgstr ""
 
@@ -318,7 +499,13 @@ msgstr ""
 msgid "Move"
 msgstr ""
 
+#: tfrmtaxaeditor.sbsaverank.caption
+msgctxt "tfrmtaxaeditor.sbsaverank.caption"
+msgid "Save"
+msgstr ""
+
 #: tfrmtaxaeditor.sbsaverecord.caption
+msgctxt "tfrmtaxaeditor.sbsaverecord.caption"
 msgid "Save"
 msgstr ""
 

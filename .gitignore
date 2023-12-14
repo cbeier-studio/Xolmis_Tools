@@ -34,7 +34,7 @@ published/
 *.app/
 
 # User defined
-*.sqlite3
+sqlite3.dll
 test/
 data/
 *.json

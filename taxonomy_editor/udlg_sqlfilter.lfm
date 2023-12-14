@@ -62,7 +62,7 @@ object dlgSqlFilter: TdlgSqlFilter
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
-    Highlighter = SynSQLSyn1
+    Highlighter = SynSQLSyn
     Keystrokes = <    
       item
         Command = ecUp
@@ -566,8 +566,8 @@ object dlgSqlFilter: TdlgSqlFilter
       end
     end
   end
-  object SynCompletion1: TSynCompletion
-    Position = 0
+  object SynCompletion: TSynCompletion
+    Position = -1
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False
@@ -581,8 +581,9 @@ object dlgSqlFilter: TdlgSqlFilter
     Left = 522
     Top = 150
   end
-  object SynSQLSyn1: TSynSQLSyn
+  object SynSQLSyn: TSynSQLSyn
     DefaultFilter = 'SQL Files (*.sql)|*.sql'
+    Enabled = False
     CommentAttri.Foreground = clBlue
     CommentAttri.Style = [fsBold]
     DataTypeAttri.Foreground = clTeal

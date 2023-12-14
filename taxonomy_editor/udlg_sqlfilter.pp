@@ -5,8 +5,8 @@ unit udlg_sqlfilter;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, SynEdit, SynCompletion,
-  SynHighlighterSQL, atshapelinebgra;
+  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, StdCtrls,
+  SynEdit, SynCompletion, SynHighlighterSQL, atshapelinebgra;
 
 type
 
@@ -17,8 +17,8 @@ type
     sbApply: TBitBtn;
     sbClose: TButton;
     seScript: TSynEdit;
-    SynCompletion1: TSynCompletion;
-    SynSQLSyn1: TSynSQLSyn;
+    SynCompletion: TSynCompletion;
+    SynSQLSyn: TSynSQLSyn;
   private
 
   public
@@ -31,7 +31,7 @@ var
 implementation
 
 initialization
-  {$I unit1.lrs}
+  {$I udlg_sqlfilter.lrs}
 
 end.
 

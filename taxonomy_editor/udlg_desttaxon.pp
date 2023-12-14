@@ -5,8 +5,8 @@ unit udlg_desttaxon;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, CheckLst, EditBtn, DBEditButton,
-  atshapelinebgra, BCPanel;
+  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, CheckLst, EditBtn, StdCtrls,
+  Buttons, atshapelinebgra, BCPanel;
 
 type
 
@@ -33,7 +33,7 @@ var
 implementation
 
 initialization
-  {$I unit1.lrs}
+  {$I udlg_desttaxon.lrs}
 
 end.
 

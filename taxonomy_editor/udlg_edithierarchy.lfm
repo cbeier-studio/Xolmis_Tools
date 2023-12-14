@@ -114,7 +114,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon: TEditButton
+    object eParentTaxon: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -132,7 +132,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox1: TCheckBox
+    object cbClearParentTaxon: TCheckBox
       Left = 603
       Height = 28
       Top = 9
@@ -201,7 +201,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon1: TEditButton
+    object eOrder: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -219,7 +219,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox2: TCheckBox
+    object cbClearOrder: TCheckBox
       Left = 603
       Height = 28
       Top = 9
@@ -287,7 +287,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon2: TEditButton
+    object eFamily: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -305,7 +305,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox3: TCheckBox
+    object cbClearFamily: TCheckBox
       Left = 603
       Height = 28
       Top = 9
@@ -373,7 +373,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon3: TEditButton
+    object eSubfamily: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -391,7 +391,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox4: TCheckBox
+    object cbClearSubfamily: TCheckBox
       Left = 603
       Height = 28
       Top = 9
@@ -459,7 +459,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon4: TEditButton
+    object eGenus: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -477,7 +477,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox5: TCheckBox
+    object cbClearGenus: TCheckBox
       Left = 603
       Height = 28
       Top = 9
@@ -545,7 +545,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon5: TEditButton
+    object eSpecies: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -563,7 +563,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox6: TCheckBox
+    object cbClearSpecies: TCheckBox
       Left = 603
       Height = 28
       Top = 9
@@ -632,7 +632,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Constraints.MinWidth = 120
       Layout = tlCenter
     end
-    object eDestinationTaxon6: TEditButton
+    object eSubspeciesGroup: TEditButton
       Left = 145
       Height = 28
       Top = 9
@@ -650,7 +650,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Spacing = 0
       TabOrder = 0
     end
-    object CheckBox7: TCheckBox
+    object cbClearSubspeciesGroup: TCheckBox
       Left = 603
       Height = 28
       Top = 9

@@ -22,8 +22,8 @@ begin
   Application.Title := 'Xolmis Taxonomies Editor';
   Application.Scaled := True;
   Application.Initialize;
-  Application.CreateForm(TfrmTaxaEditor, frmTaxaEditor);
   Application.CreateForm(TdmTaxa, dmTaxa);
+  Application.CreateForm(TfrmTaxaEditor, frmTaxaEditor);
   Application.Run;
 end.
 
