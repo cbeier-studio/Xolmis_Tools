@@ -15,5 +15,8 @@
 {"hash":174825363,"name":"tdlgedithierarchy.lbldestinationtaxon5.caption","sourcebytes":[83,112,101,99,105,101,115],"value":"Species"},
 {"hash":4860802,"name":"tdlgedithierarchy.cbclearspecies.caption","sourcebytes":[67,108,101,97,114],"value":"Clear"},
 {"hash":251708048,"name":"tdlgedithierarchy.lbldestinationtaxon6.caption","sourcebytes":[83,117,98,115,112,101,99,105,101,115,32,103,114,111,117,112],"value":"Subspecies group"},
-{"hash":4860802,"name":"tdlgedithierarchy.cbclearsubspeciesgroup.caption","sourcebytes":[67,108,101,97,114],"value":"Clear"}
+{"hash":4860802,"name":"tdlgedithierarchy.cbclearsubspeciesgroup.caption","sourcebytes":[67,108,101,97,114],"value":"Clear"},
+{"hash":124669631,"name":"tdlgedithierarchy.lblapplyto.caption","sourcebytes":[65,112,112,108,121,32,99,104,97,110,103,101,115,32,116,111],"value":"Apply changes to"},
+{"hash":87593396,"name":"tdlgedithierarchy.sbapplytomarked.caption","sourcebytes":[77,97,114,107,101,100],"value":"Marked"},
+{"hash":204189476,"name":"tdlgedithierarchy.sbapplytoselected.caption","sourcebytes":[83,101,108,101,99,116,101,100],"value":"Selected"}
 ]}

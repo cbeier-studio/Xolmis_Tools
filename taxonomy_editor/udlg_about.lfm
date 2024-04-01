@@ -1,58 +1,60 @@
 object dlgAbout: TdlgAbout
   Left = 352
-  Height = 389
+  Height = 342
   Top = 33
-  Width = 389
+  Width = 310
+  AutoSize = True
   BorderStyle = bsDialog
   Caption = 'Sobre o Xolmis'
-  ClientHeight = 389
-  ClientWidth = 389
-  DesignTimePPI = 120
+  ClientHeight = 342
+  ClientWidth = 310
   OnShow = FormShow
   PopupMode = pmAuto
   Position = poScreenCenter
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
-    Top = 339
-    Width = 389
-    Align = alBottom
+    Top = 290
+    Width = 310
+    Align = alTop
     LineColor = 9276813
     ArrowColor = clBlack
     LineWidth = 1
   end
   object pBottom: TPanel
     Left = 0
-    Height = 48
-    Top = 341
-    Width = 389
-    Align = alBottom
+    Height = 50
+    Top = 292
+    Width = 310
+    Align = alTop
+    AutoSize = True
     BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 16
     ChildSizing.TopBottomSpacing = 8
     ChildSizing.HorizontalSpacing = 8
-    ClientHeight = 48
-    ClientWidth = 389
+    ClientHeight = 50
+    ClientWidth = 310
     Color = 15987699
     ParentBackground = False
     ParentColor = False
     TabOrder = 0
     object sbClose: TButton
-      Left = 243
-      Height = 32
+      Left = 205
+      Height = 34
       Top = 8
-      Width = 130
+      Width = 89
       Align = alRight
       Caption = 'Fechar'
       ModalResult = 11
       TabOrder = 0
     end
     object sbCopy: TBitBtn
-      Left = 105
-      Height = 32
+      Left = 108
+      Height = 34
       Top = 8
-      Width = 130
+      Width = 89
       Align = alRight
+      AutoSize = True
       Caption = 'Copiar'
       Images = frmTaxaEditor.bMenu
       ImageIndex = 78
@@ -63,15 +65,16 @@ object dlgAbout: TdlgAbout
   end
   object pContent: TPanel
     Left = 0
-    Height = 228
-    Top = 111
-    Width = 389
-    Align = alClient
+    Height = 188
+    Top = 102
+    Width = 310
+    Align = alTop
+    AutoSize = True
     BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 16
     ChildSizing.TopBottomSpacing = 16
-    ClientHeight = 228
-    ClientWidth = 389
+    ClientHeight = 188
+    ClientWidth = 310
     Color = 16444392
     ParentBackground = False
     ParentColor = False
@@ -79,11 +82,11 @@ object dlgAbout: TdlgAbout
     object linkPrivacy: TATLabelLink
       Cursor = crHandPoint
       Left = 16
-      Height = 20
-      Top = 148
-      Width = 357
+      Height = 15
+      Top = 121
+      Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 4
+      BorderSpacing.Bottom = 3
       Caption = 'Privacidade'
       Font.Color = 13066075
       ParentColor = False
@@ -96,11 +99,11 @@ object dlgAbout: TdlgAbout
     object linkLicense: TATLabelLink
       Cursor = crHandPoint
       Left = 16
-      Height = 20
-      Top = 172
-      Width = 357
+      Height = 15
+      Top = 139
+      Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 4
+      BorderSpacing.Bottom = 3
       Caption = 'Termos de licença'
       Font.Color = 13066075
       ParentColor = False
@@ -113,11 +116,11 @@ object dlgAbout: TdlgAbout
     object linkThirdParty: TATLabelLink
       Cursor = crHandPoint
       Left = 16
-      Height = 20
-      Top = 196
-      Width = 357
+      Height = 15
+      Top = 157
+      Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 16
+      BorderSpacing.Bottom = 13
       Caption = 'Avisos de terceiros'
       Font.Color = 13066075
       ParentColor = False
@@ -129,23 +132,23 @@ object dlgAbout: TdlgAbout
     end
     object lblAppCopyright: TLabel
       Left = 16
-      Height = 20
+      Height = 15
       Top = 16
-      Width = 357
+      Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 8
+      BorderSpacing.Bottom = 6
       Caption = '© 2023 Christian Beier'
       ParentColor = False
     end
     object linkWebsite: TATLabelLink
       Cursor = crHandPoint
       Left = 16
-      Height = 20
+      Height = 15
       Hint = 'http://xolmis.github.io'
-      Top = 112
-      Width = 357
+      Top = 93
+      Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 16
+      BorderSpacing.Bottom = 13
       Caption = 'Website'
       Font.Color = 13066075
       ParentColor = False
@@ -158,11 +161,12 @@ object dlgAbout: TdlgAbout
     end
     object BCPanel1: TBCPanel
       Left = 16
-      Height = 52
-      Top = 44
-      Width = 357
+      Height = 43
+      Top = 37
+      Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 16
+      AutoSize = True
+      BorderSpacing.Bottom = 13
       ChildSizing.LeftRightSpacing = 16
       ChildSizing.TopBottomSpacing = 8
       ChildSizing.HorizontalSpacing = 8
@@ -200,89 +204,54 @@ object dlgAbout: TdlgAbout
       Rounding.RoundX = 8
       Rounding.RoundY = 8
       TabOrder = 0
-      object pAppVersion: TBCPanel
-        Left = 220
-        Height = 34
-        Top = 9
-        Width = 120
-        Align = alRight
-        ChildSizing.LeftRightSpacing = 16
-        ChildSizing.TopBottomSpacing = 4
-        Background.Color = 14349031
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clBlack
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        BevelInner = bvNone
-        BevelOuter = bvRaised
-        BevelWidth = 1
-        Border.Style = bboNone
-        BorderBCStyle = bpsBorder
-        Caption = '0.1'
-        Color = 16448250
-        Constraints.MaxWidth = 120
-        FontEx.Color = 4946723
-        FontEx.FontQuality = fqSystemClearType
-        FontEx.Height = 18
-        FontEx.Shadow = False
-        FontEx.ShadowRadius = 5
-        FontEx.ShadowOffsetX = 5
-        FontEx.ShadowOffsetY = 5
-        FontEx.Style = [fsBold]
-        FontEx.PaddingLeft = 8
-        FontEx.PaddingRight = 8
-        ParentBackground = False
-        Rounding.RoundX = 16
-        Rounding.RoundY = 16
-        TabOrder = 0
-      end
       object lblAppVersion: TLabel
         Left = 17
-        Height = 34
+        Height = 25
         Top = 9
-        Width = 44
+        Width = 34
         Align = alLeft
         Caption = 'Versão'
         Layout = tlCenter
+      end
+      object pAppVersion: TLabel
+        Left = 234
+        Height = 25
+        Top = 9
+        Width = 27
+        Align = alRight
+        Caption = '0.1'
+        Font.Color = 4946723
+        Font.Height = -19
+        Font.Style = [fsBold]
+        ParentFont = False
       end
     end
   end
   object pTitle: TPanel
     Left = 0
-    Height = 111
+    Height = 102
     Top = 0
-    Width = 389
+    Width = 310
     Align = alTop
+    AutoSize = True
     BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 16
     ChildSizing.TopBottomSpacing = 16
-    ClientHeight = 111
-    ClientWidth = 389
+    ClientHeight = 102
+    ClientWidth = 310
     Color = 16448250
     ParentBackground = False
     ParentColor = False
     TabOrder = 2
     object lblAppName: TLabel
       Left = 16
-      Height = 54
-      Top = 47
-      Width = 357
+      Height = 45
+      Top = 41
+      Width = 278
       Align = alTop
       Caption = 'Taxonomies Editor'
       Font.Color = 13066075
-      Font.Height = -40
+      Font.Height = -32
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
@@ -290,13 +259,13 @@ object dlgAbout: TdlgAbout
     end
     object lblAppName1: TLabel
       Left = 16
-      Height = 31
+      Height = 25
       Top = 16
-      Width = 357
+      Width = 278
       Align = alTop
       Caption = 'Xolmis'
       Font.Color = 6381921
-      Font.Height = -23
+      Font.Height = -18
       ParentColor = False
       ParentFont = False
       WordWrap = True

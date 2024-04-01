@@ -87,6 +87,11 @@ msgstr ""
 msgid "Lump/move taxon"
 msgstr ""
 
+#: tdlgdesttaxon.lblapplyto.caption
+msgctxt "tdlgdesttaxon.lblapplyto.caption"
+msgid "Apply changes to"
+msgstr ""
+
 #: tdlgdesttaxon.lbldestinationtaxon.caption
 msgid "Destination taxon"
 msgstr ""
@@ -94,6 +99,16 @@ msgstr ""
 #: tdlgdesttaxon.sbapply.caption
 msgctxt "tdlgdesttaxon.sbapply.caption"
 msgid "Apply"
+msgstr ""
+
+#: tdlgdesttaxon.sbapplytomarked.caption
+msgctxt "tdlgdesttaxon.sbapplytomarked.caption"
+msgid "Marked"
+msgstr ""
+
+#: tdlgdesttaxon.sbapplytoselected.caption
+msgctxt "tdlgdesttaxon.sbapplytoselected.caption"
+msgid "Selected"
 msgstr ""
 
 #: tdlgdesttaxon.sbclose.caption
@@ -140,6 +155,11 @@ msgctxt "tdlgedithierarchy.cbclearsubspeciesgroup.caption"
 msgid "Clear"
 msgstr ""
 
+#: tdlgedithierarchy.lblapplyto.caption
+msgctxt "tdlgedithierarchy.lblapplyto.caption"
+msgid "Apply changes to"
+msgstr ""
+
 #: tdlgedithierarchy.lbldestinationtaxon.caption
 msgctxt "tdlgedithierarchy.lbldestinationtaxon.caption"
 msgid "Parent taxon"
@@ -174,6 +194,16 @@ msgctxt "tdlgedithierarchy.sbapply.caption"
 msgid "Apply"
 msgstr ""
 
+#: tdlgedithierarchy.sbapplytomarked.caption
+msgctxt "tdlgedithierarchy.sbapplytomarked.caption"
+msgid "Marked"
+msgstr ""
+
+#: tdlgedithierarchy.sbapplytoselected.caption
+msgctxt "tdlgedithierarchy.sbapplytoselected.caption"
+msgid "Selected"
+msgstr ""
+
 #: tdlgedithierarchy.sbclose.caption
 msgctxt "tdlgedithierarchy.sbclose.caption"
 msgid "Cancel"
@@ -204,6 +234,10 @@ msgstr ""
 #: tdlgsqlfilter.sbclose.caption
 msgctxt "tdlgsqlfilter.sbclose.caption"
 msgid "Cancel"
+msgstr ""
+
+#: tdlgsqlfilter.speedbutton1.caption
+msgid "Reset"
 msgstr ""
 
 #: tfrmtaxaeditor.actabout.caption
@@ -271,6 +305,11 @@ msgstr ""
 
 #: tfrmtaxaeditor.gridtaxa.columns[0].title.caption
 msgctxt "tfrmtaxaeditor.gridtaxa.columns[0].title.caption"
+msgid "marked_status"
+msgstr ""
+
+#: tfrmtaxaeditor.gridtaxa.columns[1].title.caption
+msgctxt "tfrmtaxaeditor.gridtaxa.columns[1].title.caption"
 msgid "Scientific name"
 msgstr ""
 
@@ -473,6 +512,11 @@ msgctxt "tfrmtaxaeditor.sbinsertrecord.caption"
 msgid "New"
 msgstr ""
 
+#: tfrmtaxaeditor.sblumptaxon.caption
+msgctxt "tfrmtaxaeditor.sblumptaxon.caption"
+msgid "Lump"
+msgstr ""
+
 #: tfrmtaxaeditor.sbmoreoptions.hint
 msgctxt "tfrmtaxaeditor.sbmoreoptions.hint"
 msgid "Mais opções"
@@ -483,20 +527,13 @@ msgctxt "tfrmtaxaeditor.sbmoreoptionsranks.hint"
 msgid "Mais opções"
 msgstr ""
 
+#: tfrmtaxaeditor.sbmovetaxon.caption
+msgctxt "tfrmtaxaeditor.sbmovetaxon.caption"
+msgid "Move"
+msgstr ""
+
 #: tfrmtaxaeditor.sbrecordhistory.caption
 msgid "History"
-msgstr ""
-
-#: tfrmtaxaeditor.sbrecordhistory1.caption
-msgid "Lump"
-msgstr ""
-
-#: tfrmtaxaeditor.sbrecordhistory2.caption
-msgid "Split"
-msgstr ""
-
-#: tfrmtaxaeditor.sbrecordhistory3.caption
-msgid "Move"
 msgstr ""
 
 #: tfrmtaxaeditor.sbsaverank.caption
@@ -507,5 +544,10 @@ msgstr ""
 #: tfrmtaxaeditor.sbsaverecord.caption
 msgctxt "tfrmtaxaeditor.sbsaverecord.caption"
 msgid "Save"
+msgstr ""
+
+#: tfrmtaxaeditor.sbsplittaxon.caption
+msgctxt "tfrmtaxaeditor.sbsplittaxon.caption"
+msgid "Split"
 msgstr ""
 

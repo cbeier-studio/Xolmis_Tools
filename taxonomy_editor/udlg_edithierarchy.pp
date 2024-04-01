@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, EditBtn, Buttons,
-  atshapelinebgra, BCPanel;
+  atshapelinebgra, BCPanel, lib_taxa;
 
 type
 
@@ -20,6 +20,7 @@ type
     BCPanel5: TBCPanel;
     BCPanel6: TBCPanel;
     BCPanel7: TBCPanel;
+    pApplyTo: TBCPanel;
     cbClearParentTaxon: TCheckBox;
     cbClearOrder: TCheckBox;
     cbClearFamily: TCheckBox;
@@ -41,14 +42,26 @@ type
     lblDestinationTaxon4: TLabel;
     lblDestinationTaxon5: TLabel;
     lblDestinationTaxon6: TLabel;
+    lblApplyTo: TLabel;
     lineBottom: TShapeLineBGRA;
     pBottom: TPanel;
     sbClose: TButton;
     sbApply: TBitBtn;
+    sbApplyToSelected: TSpeedButton;
+    sbApplyToMarked: TSpeedButton;
   private
-
+    FApplyTo: TApplyChangesTo;
+    FParent: Integer;
+    FOrder, FFamily, FSubfamily, FGenus, FSpecies, FSubspeciesGroup: Integer;
   public
-
+    property ApplyTo: TApplyChangesTo read FApplyTo write FApplyTo;
+    property ParentTaxon: Integer read FParent write FParent;
+    property Order: Integer read FOrder write FOrder;
+    property Family: Integer read FFamily write FFamily;
+    property Subfamily: Integer read FSubfamily write FSubfamily;
+    property Genus: Integer read FGenus write FGenus;
+    property Species: Integer read FSpecies write FSpecies;
+    property SubspeciesGroup: Integer read FSubspeciesGroup write FSubspeciesGroup;
   end;
 
 var

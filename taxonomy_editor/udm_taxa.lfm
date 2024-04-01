@@ -2,16 +2,10 @@ object dmTaxa: TdmTaxa
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
-  Height = 522
-  HorizontalOffset = 478
-  VerticalOffset = 40
-  Width = 732
-  PPI = 120
-  object dsTaxa: TDataSource
-    DataSet = qTaxa
-    Left = 232
-    Top = 181
-  end
+  Height = 418
+  HorizontalOffset = 382
+  VerticalOffset = 32
+  Width = 586
   object qTaxa: TSQLQuery
     PacketRecords = 200
     FieldDefs = <    
@@ -306,6 +300,7 @@ object dmTaxa: TdmTaxa
         Precision = -1
         Size = 100
       end>
+    AfterInsert = qTaxaAfterInsert
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -324,8 +319,8 @@ object dmTaxa: TdmTaxa
     Params = <>
     Macros = <>
     MacroCheck = True
-    Left = 88
-    Top = 181
+    Left = 70
+    Top = 145
     object qTaxamarked_status: TBooleanField
       FieldKind = fkData
       FieldName = 'marked_status'
@@ -873,8 +868,8 @@ object dmTaxa: TdmTaxa
     )
     Params = <>
     Macros = <>
-    Left = 400
-    Top = 181
+    Left = 320
+    Top = 145
     object lookRanksrank_id: TLongintField
       DisplayLabel = 'Id'
       FieldKind = fkData
@@ -900,8 +895,8 @@ object dmTaxa: TdmTaxa
   object dslookRanks: TDataSource
     AutoEdit = False
     DataSet = lookRanks
-    Left = 530
-    Top = 181
+    Left = 424
+    Top = 145
   end
   object qRanks: TSQLQuery
     FieldDefs = <>
@@ -909,8 +904,8 @@ object dmTaxa: TdmTaxa
     Transaction = sqlTrans
     Params = <>
     Macros = <>
-    Left = 88
-    Top = 256
+    Left = 70
+    Top = 205
   end
   object qPacks: TSQLQuery
     FieldDefs = <>
@@ -918,8 +913,8 @@ object dmTaxa: TdmTaxa
     Transaction = sqlTrans
     Params = <>
     Macros = <>
-    Left = 88
-    Top = 328
+    Left = 70
+    Top = 262
   end
   object qTaxaUpdates: TSQLQuery
     FieldDefs = <>
@@ -927,42 +922,42 @@ object dmTaxa: TdmTaxa
     Transaction = sqlTrans
     Params = <>
     Macros = <>
-    Left = 88
-    Top = 400
+    Left = 70
+    Top = 320
   end
   object dsRanks: TDataSource
     DataSet = qRanks
-    Left = 232
-    Top = 256
+    Left = 186
+    Top = 205
   end
   object dsPacks: TDataSource
     DataSet = qPacks
-    Left = 232
-    Top = 328
+    Left = 186
+    Top = 262
   end
   object dsTaxaUpdates: TDataSource
     DataSet = qTaxaUpdates
-    Left = 232
-    Top = 400
+    Left = 186
+    Top = 320
   end
   object sqlTrans: TSQLTransaction
     Active = False
     Action = caCommitRetaining
     Database = sqlCon
-    Left = 320
-    Top = 40
+    Left = 256
+    Top = 32
   end
   object dbLibLoader: TSQLDBLibraryLoader
     Enabled = False
     ConnectionType = 'SQLite3'
     LibraryName = 'F:\Xolmis_Tools\taxonomy_editor\sqlite3.dll'
-    Left = 208
-    Top = 40
+    Left = 166
+    Top = 32
   end
   object sqlCon: TSQLConnector
     Connected = False
     LoginPrompt = False
-    DatabaseName = 'F:\Xolmis\TaxonomyDB.sqlite3'
+    DatabaseName = 'D:\Desenv\Xolmis_Local\TaxonomyDB.sqlite3'
     KeepConnection = False
     Params.Strings = (
       'OpenFlags = [sofReadWrite,sofCreate];'
@@ -970,15 +965,22 @@ object dmTaxa: TdmTaxa
     Transaction = sqlTrans
     CharSet = 'UTF-8'
     ConnectorType = 'SQLite3'
-    Left = 88
-    Top = 40
+    Left = 70
+    Top = 32
   end
   object TaskDlg: TTaskDialog
     Buttons = <>
     DefaultButton = tcbCancel
     MainIcon = tdiNone
     RadioButtons = <>
-    Left = 574
-    Top = 40
+    Left = 459
+    Top = 32
+  end
+  object UniqueInstance1: TUniqueInstance
+    Enabled = True
+    Identifier = 'AF965FDD-A5E0-4DB4-8D6B-7EBE9F1B6538'
+    OnOtherInstance = UniqueInstance1OtherInstance
+    Left = 360
+    Top = 32
   end
 end

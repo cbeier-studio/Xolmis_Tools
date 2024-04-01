@@ -98,6 +98,7 @@ type
   TBirdTaxonomies = set of TBirdTaxonomy;
 
   TTaxonomyAction = (taNew, taSplit, taLump, taMove, taUpdate);
+  TApplyChangesTo = (acSelected, acMarked);
 
   TTableType = (tbNone,
     tbTaxonRanks,
@@ -412,10 +413,8 @@ const
 
   procedure RewriteTaxonHierarchy;
 
-  procedure SplitTaxon(aSubspecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-    ExecNow: Boolean = True);
-  procedure LumpTaxon(aSpecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-    ExecNow: Boolean = True);
+  procedure SplitTaxon(aSubspecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
+  procedure LumpTaxon(aSpecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
 
   procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
     ExecNow: Boolean = True);
@@ -569,9 +568,9 @@ begin
     Add('SELECT z.*,');
     Add('(SELECT u.full_name FROM zoo_taxa AS u WHERE u.taxon_id = z.parent_taxon_id) AS parent_taxon_name,');
     Add('(SELECT v.full_name FROM zoo_taxa AS v WHERE v.taxon_id = z.valid_id) AS valid_name,');
-    Add('(SELECT ui.full_name FROM zoo_taxa AS ui WHERE ui.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_name,');
+    Add('(SELECT ui.full_name FROM zoo_taxa AS ui WHERE ui.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_taxon_name,');
     Add('(SELECT vi.full_name FROM zoo_taxa AS vi WHERE vi.taxon_id = z.ioc_valid_id) AS ioc_valid_name,');
-    Add('(SELECT uc.full_name FROM zoo_taxa AS uc WHERE uc.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_name,');
+    Add('(SELECT uc.full_name FROM zoo_taxa AS uc WHERE uc.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,');
     Add('(SELECT vc.full_name FROM zoo_taxa AS vc WHERE vc.taxon_id = z.cbro_valid_id) AS cbro_valid_name,');
     Add('(SELECT o.full_name FROM zoo_taxa AS o WHERE o.taxon_id = z.order_id) AS order_name,');
     Add('(SELECT f.full_name FROM zoo_taxa AS f WHERE f.taxon_id = z.family_id) AS family_name,');
@@ -1277,11 +1276,12 @@ begin
   //end;
 end;
 
-procedure SplitTaxon(aSubspecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery; ExecNow: Boolean);
+procedure SplitTaxon(aSubspecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
 var
   OldName, NewName: String;
   SpRank, ParentGenus, ValidSp, ExistingId: Integer;
   Ssp: TTaxon;
+  aDataSet: TSQLQuery;
 begin
   ExistingId := 0;
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSubspecies);
@@ -1290,6 +1290,8 @@ begin
   ParentGenus := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(1, OldName, [' ']));
   Ssp := TTaxon.Create(aSubspecies);
 
+  aDataSet := TSQLQuery.Create(dmTaxa.sqlCon);
+  aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
     if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
@@ -1457,15 +1459,17 @@ begin
 
   finally
     FreeAndNil(Ssp);
+    FreeAndNil(aDataSet);
   end;
 end;
 
-procedure LumpTaxon(aSpecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery; ExecNow: Boolean
+procedure LumpTaxon(aSpecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean
   );
 var
   OldName, LumpToName, NewName: String;
   SspRank, ParentSp, ValidSp, ExistingId: Integer;
   Ssp, LumpToSp: TTaxon;
+  aDataSet: TSQLQuery;
 begin
   ExistingId := 0;
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSpecies);
@@ -1476,6 +1480,8 @@ begin
   Ssp := TTaxon.Create(aSpecies);
   LumpToSp := TTaxon.Create(ToSpecies);
 
+  aDataSet := TSQLQuery.Create(dmTaxa.sqlCon);
+  aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
     if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
@@ -1655,6 +1661,7 @@ begin
   finally
     FreeAndNil(Ssp);
     FreeAndNil(LumpToSp);
+    FreeAndNil(aDataSet);
   end;
 end;
 

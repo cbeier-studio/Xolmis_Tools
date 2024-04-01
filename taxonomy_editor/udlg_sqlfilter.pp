@@ -13,10 +13,12 @@ type
   { TdlgSqlFilter }
 
   TdlgSqlFilter = class(TForm)
+    Panel1: TPanel;
     pBottom: TPanel;
     sbApply: TBitBtn;
     sbClose: TButton;
     seScript: TSynEdit;
+    SpeedButton1: TSpeedButton;
     SynCompletion: TSynCompletion;
     SynSQLSyn: TSynSQLSyn;
   private

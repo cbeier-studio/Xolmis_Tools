@@ -1,14 +1,13 @@
 object dlgFind: TdlgFind
   Left = 352
-  Height = 332
+  Height = 266
   Top = 33
-  Width = 495
+  Width = 396
   BorderIcons = [biSystemMenu]
   BorderStyle = bsNone
   Caption = 'Buscar'
-  ClientHeight = 332
-  ClientWidth = 495
-  DesignTimePPI = 120
+  ClientHeight = 266
+  ClientWidth = 396
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
@@ -18,23 +17,25 @@ object dlgFind: TdlgFind
   ShowInTaskBar = stNever
   object pHeader: TPanel
     Left = 0
-    Height = 41
+    Height = 36
     Top = 0
-    Width = 495
+    Width = 396
     Align = alTop
+    AutoSize = True
     BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 4
     ChildSizing.TopBottomSpacing = 4
     ChildSizing.HorizontalSpacing = 4
-    ClientHeight = 41
-    ClientWidth = 495
+    ClientHeight = 36
+    ClientWidth = 396
     TabOrder = 0
     object pEP: TBCPanel
       Left = 4
-      Height = 33
+      Height = 28
       Top = 4
-      Width = 487
+      Width = 388
       Align = alClient
+      AutoSize = True
       ChildSizing.LeftRightSpacing = 4
       ChildSizing.TopBottomSpacing = 1
       ChildSizing.HorizontalSpacing = 8
@@ -75,11 +76,12 @@ object dlgFind: TdlgFind
       Rounding.RoundY = 4
       TabOrder = 0
       object sbClearSearch: TSpeedButton
-        Left = 417
-        Height = 29
+        Left = 328
+        Height = 24
         Top = 2
-        Width = 29
+        Width = 24
         Align = alRight
+        AutoSize = True
         BorderSpacing.Top = 2
         BorderSpacing.Bottom = 2
         Flat = True
@@ -91,12 +93,12 @@ object dlgFind: TdlgFind
       end
       object EP: TEdit
         Left = 4
-        Height = 23
-        Top = 5
-        Width = 405
+        Height = 20
+        Top = 4
+        Width = 316
         Align = alClient
-        BorderSpacing.Top = 5
-        BorderSpacing.Bottom = 5
+        BorderSpacing.Top = 4
+        BorderSpacing.Bottom = 4
         BorderStyle = bsNone
         TabOrder = 0
         TextHint = 'Find...'
@@ -105,11 +107,12 @@ object dlgFind: TdlgFind
         OnKeyPress = FormKeyPress
       end
       object sbClose: TSpeedButton
-        Left = 454
-        Height = 29
+        Left = 360
+        Height = 24
         Top = 2
-        Width = 29
+        Width = 24
         Align = alRight
+        AutoSize = True
         BorderSpacing.Top = 2
         BorderSpacing.Bottom = 2
         Flat = True
@@ -122,9 +125,9 @@ object dlgFind: TdlgFind
   end
   object uList: TDBGrid
     Left = 0
-    Height = 291
-    Top = 41
-    Width = 495
+    Height = 230
+    Top = 36
+    Width = 396
     Align = alClient
     AlternateColor = cl3DLight
     AutoEdit = False
@@ -133,7 +136,7 @@ object dlgFind: TdlgFind
     Columns = <    
       item
         Title.Caption = 'Name'
-        Width = 470
+        Width = 375
       end>
     DataSource = dsFind
     FixedCols = 0
@@ -150,22 +153,22 @@ object dlgFind: TdlgFind
   object dsFind: TDataSource
     AutoEdit = False
     DataSet = qFind
-    Left = 64
-    Top = 226
+    Left = 51
+    Top = 181
   end
   object qFind: TSQLQuery
     PacketRecords = 50
     FieldDefs = <>
     Params = <>
     Macros = <>
-    Left = 151
-    Top = 225
+    Left = 121
+    Top = 180
   end
   object TimerFind: TTimer
     Enabled = False
     Interval = 250
     OnTimer = TimerFindTimer
-    Left = 240
-    Top = 225
+    Left = 192
+    Top = 180
   end
 end

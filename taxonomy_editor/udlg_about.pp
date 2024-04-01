@@ -14,6 +14,7 @@ type
 
   TdlgAbout = class(TForm)
     BCPanel1: TBCPanel;
+    pAppVersion: TLabel;
     lblAppName1: TLabel;
     lblAppVersion: TLabel;
     lblAppName: TLabel;
@@ -22,7 +23,6 @@ type
     linkLicense: TATLabelLink;
     linkThirdParty: TATLabelLink;
     linkWebsite: TATLabelLink;
-    pAppVersion: TBCPanel;
     pTitle: TPanel;
     sbCopy: TBitBtn;
     lineBottom: TShapeLineBGRA;

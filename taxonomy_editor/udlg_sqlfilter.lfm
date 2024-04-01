@@ -1,43 +1,43 @@
 object dlgSqlFilter: TdlgSqlFilter
   Left = 373
-  Height = 512
+  Height = 410
   Top = 34
-  Width = 827
+  Width = 662
   Caption = 'SQL filter'
-  ClientHeight = 512
-  ClientWidth = 827
-  DesignTimePPI = 120
+  ClientHeight = 410
+  ClientWidth = 662
   object pBottom: TPanel
     Left = 0
-    Height = 48
-    Top = 464
-    Width = 827
+    Height = 41
+    Top = 369
+    Width = 662
     Align = alBottom
+    AutoSize = True
     BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 16
     ChildSizing.TopBottomSpacing = 8
     ChildSizing.HorizontalSpacing = 8
-    ClientHeight = 48
-    ClientWidth = 827
+    ClientHeight = 41
+    ClientWidth = 662
     Color = 15987699
     ParentBackground = False
     ParentColor = False
     TabOrder = 0
     object sbClose: TButton
-      Left = 681
-      Height = 32
+      Left = 542
+      Height = 25
       Top = 8
-      Width = 130
+      Width = 104
       Align = alRight
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
     end
     object sbApply: TBitBtn
-      Left = 543
-      Height = 32
+      Left = 430
+      Height = 25
       Top = 8
-      Width = 130
+      Width = 104
       Align = alRight
       Caption = 'Apply'
       ImageWidth = 24
@@ -46,10 +46,11 @@ object dlgSqlFilter: TdlgSqlFilter
   end
   inline seScript: TSynEdit
     Left = 0
-    Height = 464
-    Top = 0
-    Width = 827
+    Height = 329
+    Top = 40
+    Width = 662
     Align = alClient
+    Font.Height = -10
     Font.Name = 'Fira Code'
     Font.Pitch = fpFixed
     Font.Quality = fqCleartype
@@ -58,7 +59,7 @@ object dlgSqlFilter: TdlgSqlFilter
     TabOrder = 1
     Gutter.Color = clWhite
     Gutter.RightOffset = 16
-    Gutter.Width = 68
+    Gutter.Width = 55
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -529,11 +530,11 @@ object dlgSqlFilter: TdlgSqlFilter
     LineHighlightColor.Foreground = clNone
     inline SynLeftGutterPartList1: TSynGutterPartList
       object SynGutterMarks1: TSynGutterMarks
-        Width = 30
+        Width = 24
         MouseActions = <>
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
-        Width = 19
+        Width = 13
         MouseActions = <>
         MarkupInfo.Background = clWhite
         MarkupInfo.Foreground = clSilver
@@ -543,20 +544,19 @@ object dlgSqlFilter: TdlgSqlFilter
         LeadingZeros = False
       end
       object SynGutterChanges1: TSynGutterChanges
-        Width = 5
+        Width = 4
         Visible = False
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
       end
       object SynGutterSeparator1: TSynGutterSeparator
-        Width = 3
+        Width = 2
         MouseActions = <>
         MarkupInfo.Background = clWhite
         MarkupInfo.Foreground = clWhite
       end
       object SynGutterCodeFolding1: TSynGutterCodeFolding
-        Width = 13
         Visible = False
         MouseActions = <>
         MarkupInfo.Background = clNone
@@ -564,6 +564,35 @@ object dlgSqlFilter: TdlgSqlFilter
         MouseActionsExpanded = <>
         MouseActionsCollapsed = <>
       end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 40
+    Top = 0
+    Width = 662
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 8
+    ChildSizing.HorizontalSpacing = 8
+    ChildSizing.ControlsPerLine = 10
+    ClientHeight = 40
+    ClientWidth = 662
+    TabOrder = 2
+    object SpeedButton1: TSpeedButton
+      Left = 16
+      Height = 24
+      Top = 8
+      Width = 56
+      Align = alLeft
+      AutoSize = True
+      Caption = 'Reset'
+      Flat = True
+      Images = frmTaxaEditor.bMenu
+      ImageIndex = 62
+      ImageWidth = 20
     end
   end
   object SynCompletion: TSynCompletion
@@ -592,8 +621,8 @@ object dlgSqlFilter: TdlgSqlFilter
     ExecCommandID = ecSynCompletionExecute
     Editor = seScript
     ToggleReplaceWhole = False
-    Left = 522
-    Top = 150
+    Left = 418
+    Top = 120
   end
   object SynSQLSyn: TSynSQLSyn
     DefaultFilter = 'SQL Files (*.sql)|*.sql'
@@ -619,7 +648,7 @@ object dlgSqlFilter: TdlgSqlFilter
       'cv'
     )
     SQLDialect = sqlSQLite
-    Left = 522
-    Top = 215
+    Left = 418
+    Top = 172
   end
 end

@@ -5,7 +5,7 @@ unit udm_taxa;
 interface
 
 uses
-  Classes, SysUtils, LResources, Dialogs, SQLDBLib, SQLDB, DB, SQLite3Conn;
+  Classes, SysUtils, LResources, Forms, Dialogs, UniqueInstance, SQLDBLib, SQLDB, DB, SQLite3Conn;
 
 type
 
@@ -16,7 +16,6 @@ type
     dslookRanks: TDataSource;
     dsPacks: TDataSource;
     dsRanks: TDataSource;
-    dsTaxa: TDataSource;
     dsTaxaUpdates: TDataSource;
     lookRanks: TSQLQuery;
     lookRanksrank_id: TLongintField;
@@ -82,8 +81,12 @@ type
     sqlCon: TSQLConnector;
     sqlTrans: TSQLTransaction;
     TaskDlg: TTaskDialog;
+    UniqueInstance1: TUniqueInstance;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+    procedure qTaxaAfterInsert(DataSet: TDataSet);
+    procedure UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;
+      const Parameters: array of String);
   private
 
   public
@@ -109,6 +112,21 @@ end;
 procedure TdmTaxa.DataModuleDestroy(Sender: TObject);
 begin
   sqlCon.Close;
+end;
+
+procedure TdmTaxa.qTaxaAfterInsert(DataSet: TDataSet);
+begin
+  DataSet.FieldByName('extinct').AsBoolean:= False;
+  DataSet.FieldByName('clements_taxonomy').AsBoolean:= False;
+  DataSet.FieldByName('ioc_taxonomy').AsBoolean:= False;
+  DataSet.FieldByName('cbro_taxonomy').AsBoolean:= False;
+end;
+
+procedure TdmTaxa.UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;
+  const Parameters: array of String);
+begin
+  Application.Restore;
+  Application.BringToFront;
 end;
 
 initialization
