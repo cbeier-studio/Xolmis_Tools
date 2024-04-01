@@ -5,7 +5,7 @@ unit dm_dev;
 interface
 
 uses
-  Classes, SysUtils, Controls, SQLDB, SQLDBLib, SQLite3Conn, DB;
+  Classes, SysUtils, Forms, Controls, Dialogs, SQLDB, SQLDBLib, SQLite3Conn, DB;
 
 type
 
@@ -16,6 +16,7 @@ type
     dsFields: TDataSource;
     dsTables: TDataSource;
     imgBtns: TImageList;
+    OpenDlg: TOpenDialog;
     qFieldsdarwin_core_name: TStringField;
     qFieldsdisplay_name: TStringField;
     qFieldsfield_name: TStringField;
@@ -65,6 +66,8 @@ var
 
 implementation
 
+uses dev_types;
+
 {$R *.lfm}
 
 { TDMD }
@@ -72,6 +75,7 @@ implementation
 procedure TDMD.DataModuleCreate(Sender: TObject);
 begin
   sqlCon.Close();
+  sqlCon.DatabaseName := EmptyStr;
   if not Application.Terminated then
   begin
     sqlCon.Open;
@@ -93,7 +97,16 @@ end;
 
 procedure TDMD.sqlConBeforeConnect(Sender: TObject);
 begin
-  sqlCon.DatabaseName := ConcatPaths([AppDataDir, 'systemdb.sqlite3']);
+  if sqlCon.DatabaseName = EmptyStr then
+  begin
+    OpenDlg.InitialDir := AppDataDir;
+    if OpenDlg.Execute then
+    begin
+      sqlCon.DatabaseName := OpenDlg.FileName;
+    end
+    else
+      Application.Terminate;
+  end;
 end;
 
 end.

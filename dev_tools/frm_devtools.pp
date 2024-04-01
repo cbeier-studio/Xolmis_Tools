@@ -92,6 +92,7 @@ type
     splitTableField: TSplitter;
     TimerFind: TTimer;
     procedure FormShow(Sender: TObject);
+    procedure navTabsTabChanged(Sender: TObject);
     procedure TimerFindTimer(Sender: TObject);
   private
     Parar: Boolean;
@@ -121,6 +122,11 @@ end;
 procedure TfrmDevTools.FormShow(Sender: TObject);
 begin
   PG.PageIndex := 0;
+end;
+
+procedure TfrmDevTools.navTabsTabChanged(Sender: TObject);
+begin
+  PG.PageIndex := navTabs.TabIndex;
 end;
 
 end.

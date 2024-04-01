@@ -1,19 +1,19 @@
 object frmDevTools: TfrmDevTools
-  Left = -9
-  Height = 1038
-  Top = -9
-  Width = 1267
+  Left = 50
+  Height = 661
+  Top = 50
+  Width = 1049
   Caption = 'Xolmis Developer Tools'
-  ClientHeight = 1038
-  ClientWidth = 1267
-  DesignTimePPI = 120
-  Font.Height = -15
+  ClientHeight = 661
+  ClientWidth = 1049
+  Font.Height = -12
   OnShow = FormShow
+  Position = poDefault
   object navTabs: TATTabs
     Left = 0
     Height = 41
     Top = 0
-    Width = 1267
+    Width = 1049
     Align = alTop
     ParentColor = False
     Tabs = <    
@@ -72,81 +72,82 @@ object frmDevTools: TfrmDevTools
     OptHintForUser2 = '2'
     OptHintForUser3 = '3'
     OptHintForUser4 = '4'
+    OnTabChanged = navTabsTabChanged
   end
   object PG: TNotebook
     Left = 0
-    Height = 997
+    Height = 620
     Top = 41
-    Width = 1267
+    Width = 1049
     PageIndex = 0
     Align = alClient
     TabOrder = 1
     object pgDataMap: TPage
       object pMapTables: TPanel
         Left = 0
-        Height = 997
+        Height = 620
         Top = 0
-        Width = 405
+        Width = 324
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 997
-        ClientWidth = 405
+        ClientHeight = 620
+        ClientWidth = 324
         Color = 15987699
         ParentBackground = False
         ParentColor = False
         TabOrder = 0
         object pMapEditTable: TPanel
           Left = 0
-          Height = 302
-          Top = 647
-          Width = 405
+          Height = 242
+          Top = 378
+          Width = 324
           Align = alBottom
           BevelOuter = bvNone
           ChildSizing.LeftRightSpacing = 16
           ChildSizing.TopBottomSpacing = 8
           ChildSizing.HorizontalSpacing = 8
           ChildSizing.VerticalSpacing = 8
-          ClientHeight = 302
-          ClientWidth = 405
+          ClientHeight = 242
+          ClientWidth = 324
           Color = 14803425
           ParentBackground = False
           ParentColor = False
           TabOrder = 1
           object lblTableName: TLabel
             Left = 16
-            Height = 20
+            Height = 15
             Top = 8
-            Width = 373
+            Width = 292
             Align = alTop
             Caption = 'Table name:'
             ParentColor = False
           end
           object cbTableName: TDBComboBox
             Left = 16
-            Height = 28
-            Top = 36
-            Width = 373
+            Height = 23
+            Top = 31
+            Width = 292
             Align = alTop
             DataField = 'table_name'
             DataSource = DMD.dsTables
-            ItemHeight = 20
+            ItemHeight = 15
             MaxLength = 0
             TabOrder = 0
           end
           object lblTableDiplayName: TLabel
             Left = 16
-            Height = 20
-            Top = 72
-            Width = 373
+            Height = 15
+            Top = 62
+            Width = 292
             Align = alTop
             Caption = 'Display name:'
             ParentColor = False
           end
           object eTableDisplayName: TDBEdit
             Left = 16
-            Height = 28
-            Top = 100
-            Width = 373
+            Height = 23
+            Top = 85
+            Width = 292
             DataField = 'display_name'
             DataSource = DMD.dsTables
             Align = alTop
@@ -155,9 +156,9 @@ object frmDevTools: TfrmDevTools
           end
           object ckTableVisible: TDBCheckBox
             Left = 16
-            Height = 29
-            Top = 136
-            Width = 373
+            Height = 23
+            Top = 116
+            Width = 292
             Align = alTop
             Caption = 'Visible'
             DataField = 'visible_status'
@@ -168,9 +169,9 @@ object frmDevTools: TfrmDevTools
           end
           object ckTableCanFilter: TDBCheckBox
             Left = 16
-            Height = 29
-            Top = 247
-            Width = 373
+            Height = 23
+            Top = 209
+            Width = 292
             Align = alTop
             Caption = 'Can filter'
             DataField = 'filter_show'
@@ -181,9 +182,9 @@ object frmDevTools: TfrmDevTools
           end
           object ckTableCanImport: TDBCheckBox
             Left = 16
-            Height = 29
-            Top = 210
-            Width = 373
+            Height = 23
+            Top = 178
+            Width = 292
             Align = alTop
             Caption = 'Can import'
             DataField = 'import_show'
@@ -194,9 +195,9 @@ object frmDevTools: TfrmDevTools
           end
           object ckTableCanExport: TDBCheckBox
             Left = 16
-            Height = 29
-            Top = 173
-            Width = 373
+            Height = 23
+            Top = 147
+            Width = 292
             Align = alTop
             Caption = 'Can export'
             DataField = 'export_show'
@@ -208,25 +209,27 @@ object frmDevTools: TfrmDevTools
         end
         object pMapTablesTools: TPanel
           Left = 0
-          Height = 48
-          Top = 949
-          Width = 405
+          Height = 36
+          Top = 342
+          Width = 324
           Align = alBottom
+          AutoSize = True
           BevelOuter = bvNone
           ChildSizing.LeftRightSpacing = 16
           ChildSizing.TopBottomSpacing = 8
-          ClientHeight = 48
-          ClientWidth = 405
+          ClientHeight = 36
+          ClientWidth = 324
           Color = 15987699
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object navMapTables: TDBNavigator
-            Left = 88
-            Height = 32
+            Left = 108
+            Height = 20
             Top = 8
-            Width = 301
+            Width = 200
             Align = alRight
+            AutoSize = True
             BevelOuter = bvNone
             ChildSizing.EnlargeHorizontal = crsScaleChilds
             ChildSizing.EnlargeVertical = crsScaleChilds
@@ -234,43 +237,43 @@ object frmDevTools: TfrmDevTools
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 100
-            ClientHeight = 32
-            ClientWidth = 301
+            ClientHeight = 20
+            ClientWidth = 200
             DataSource = DMD.dsTables
             Options = []
             TabOrder = 0
           end
         end
         object gridTables: TDBGrid
-          Left = 8
-          Height = 603
-          Top = 44
-          Width = 397
+          Left = 6
+          Height = 307
+          Top = 35
+          Width = 318
           Align = alClient
-          BorderSpacing.Left = 8
+          BorderSpacing.Left = 6
           Color = clWindow
           Columns = <          
             item
               Title.Caption = 'Table name'
-              Width = 350
+              Width = 280
               FieldName = 'table_name'
             end>
           DataSource = DMD.dsTables
           TabOrder = 2
         end
         object eFindTable: TEditButton
-          Left = 8
-          Height = 28
-          Top = 8
-          Width = 397
+          Left = 6
+          Height = 23
+          Top = 6
+          Width = 318
           Align = alTop
-          BorderSpacing.Left = 8
-          BorderSpacing.Top = 8
-          BorderSpacing.Bottom = 8
-          ButtonWidth = 29
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 6
+          BorderSpacing.Bottom = 6
+          ButtonWidth = 23
           Images = DMD.imgBtns
           ImageIndex = 0
-          ImageWidth = 24
+          ImageWidth = 20
           MaxLength = 0
           NumGlyphs = 1
           PasswordChar = #0
@@ -280,32 +283,32 @@ object frmDevTools: TfrmDevTools
         end
       end
       object splitTableField: TSplitter
-        Left = 405
-        Height = 997
+        Left = 324
+        Height = 620
         Top = 0
-        Width = 6
+        Width = 5
       end
       object pMapFields: TPanel
-        Left = 411
-        Height = 997
+        Left = 329
+        Height = 620
         Top = 0
-        Width = 390
+        Width = 326
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 997
-        ClientWidth = 390
+        ClientHeight = 620
+        ClientWidth = 326
         TabOrder = 2
         object gridFields: TDBGrid
           Left = 0
-          Height = 953
-          Top = 44
-          Width = 389
-          Align = alLeft
+          Height = 585
+          Top = 35
+          Width = 326
+          Align = alClient
           Color = clWindow
           Columns = <          
             item
               Title.Caption = 'Field name'
-              Width = 250
+              Width = 200
               FieldName = 'field_name'
             end          
             item
@@ -317,16 +320,16 @@ object frmDevTools: TfrmDevTools
         end
         object eFindField: TEditButton
           Left = 0
-          Height = 28
-          Top = 8
-          Width = 390
+          Height = 23
+          Top = 6
+          Width = 326
           Align = alTop
-          BorderSpacing.Top = 8
-          BorderSpacing.Bottom = 8
-          ButtonWidth = 29
+          BorderSpacing.Top = 6
+          BorderSpacing.Bottom = 6
+          ButtonWidth = 23
           Images = DMD.imgBtns
           ImageIndex = 0
-          ImageWidth = 24
+          ImageWidth = 20
           MaxLength = 0
           NumGlyphs = 1
           PasswordChar = #0
@@ -336,41 +339,41 @@ object frmDevTools: TfrmDevTools
         end
       end
       object splitFieldEdit: TSplitter
-        Left = 801
-        Height = 997
+        Left = 655
+        Height = 620
         Top = 0
-        Width = 6
+        Width = 5
       end
       object pMapEdit: TPanel
-        Left = 807
-        Height = 997
+        Left = 660
+        Height = 620
         Top = 0
-        Width = 460
+        Width = 389
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 997
-        ClientWidth = 460
+        ClientHeight = 620
+        ClientWidth = 389
         TabOrder = 4
         object sboxMapEdit: TScrollBox
           Left = 0
-          Height = 953
-          Top = 44
-          Width = 460
-          HorzScrollBar.Page = 237
-          VertScrollBar.Page = 953
+          Height = 585
+          Top = 35
+          Width = 389
+          HorzScrollBar.Page = 195
+          VertScrollBar.Page = 585
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 953
-          ClientWidth = 439
+          ClientHeight = 585
+          ClientWidth = 372
           Color = 15658734
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object pMapEditFields: TPanel
             Left = 0
-            Height = 1081
+            Height = 909
             Top = 0
-            Width = 439
+            Width = 372
             Align = alTop
             AutoSize = True
             BevelOuter = bvNone
@@ -378,47 +381,47 @@ object frmDevTools: TfrmDevTools
             ChildSizing.TopBottomSpacing = 8
             ChildSizing.HorizontalSpacing = 8
             ChildSizing.VerticalSpacing = 8
-            ClientHeight = 1081
-            ClientWidth = 439
+            ClientHeight = 909
+            ClientWidth = 372
             Color = 14803425
             ParentBackground = False
             ParentColor = False
             TabOrder = 0
             object lblFieldName: TLabel
               Left = 16
-              Height = 20
+              Height = 15
               Top = 8
-              Width = 407
+              Width = 340
               Align = alTop
               Caption = 'Field name:'
               ParentColor = False
             end
             object cbFieldName: TDBComboBox
               Left = 16
-              Height = 28
-              Top = 36
-              Width = 407
+              Height = 23
+              Top = 31
+              Width = 340
               Align = alTop
               DataField = 'field_name'
               DataSource = DMD.dsFields
-              ItemHeight = 20
+              ItemHeight = 15
               MaxLength = 0
               TabOrder = 0
             end
             object lblFieldDisplayName: TLabel
               Left = 16
-              Height = 20
-              Top = 72
-              Width = 407
+              Height = 15
+              Top = 62
+              Width = 340
               Align = alTop
               Caption = 'Display name:'
               ParentColor = False
             end
             object eFieldDisplayName: TDBEdit
               Left = 16
-              Height = 28
-              Top = 100
-              Width = 407
+              Height = 23
+              Top = 85
+              Width = 340
               DataField = 'display_name'
               DataSource = DMD.dsFields
               Align = alTop
@@ -427,12 +430,12 @@ object frmDevTools: TfrmDevTools
             end
             object ckFieldVisible: TDBCheckBox
               Left = 16
-              Height = 31
-              Top = 200
-              Width = 180
+              Height = 25
+              Top = 170
+              Width = 144
               Align = alTop
               Caption = 'Visible'
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               DataField = 'visible_status'
               DataSource = DMD.dsFields
               TabOrder = 3
@@ -441,12 +444,12 @@ object frmDevTools: TfrmDevTools
             end
             object ckFieldCanSort: TDBCheckBox
               Left = 16
-              Height = 31
-              Top = 317
-              Width = 180
+              Height = 25
+              Top = 269
+              Width = 144
               Align = alTop
               Caption = 'Can sort'
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               DataField = 'sorted_status'
               DataSource = DMD.dsFields
               TabOrder = 6
@@ -455,12 +458,12 @@ object frmDevTools: TfrmDevTools
             end
             object ckAlphabeticKey: TDBCheckBox
               Left = 16
-              Height = 31
-              Top = 278
-              Width = 180
+              Height = 25
+              Top = 236
+              Width = 144
               Align = alTop
               Caption = 'Alphabetic key'
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               DataField = 'text_key'
               DataSource = DMD.dsFields
               TabOrder = 5
@@ -469,12 +472,12 @@ object frmDevTools: TfrmDevTools
             end
             object ckNumericKey: TDBCheckBox
               Left = 16
-              Height = 31
-              Top = 239
-              Width = 180
+              Height = 25
+              Top = 203
+              Width = 144
               Align = alTop
               Caption = 'Numeric key'
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               DataField = 'integer_key'
               DataSource = DMD.dsFields
               TabOrder = 4
@@ -483,18 +486,18 @@ object frmDevTools: TfrmDevTools
             end
             object lblDarwinCoreName: TLabel
               Left = 16
-              Height = 20
-              Top = 484
-              Width = 407
+              Height = 15
+              Top = 410
+              Width = 340
               Align = alTop
               Caption = 'Darwin Core (DwC) field name:'
               ParentColor = False
             end
             object eDarwinCoreName: TDBEdit
               Left = 16
-              Height = 28
-              Top = 512
-              Width = 407
+              Height = 23
+              Top = 433
+              Width = 340
               DataField = 'darwin_core_name'
               DataSource = DMD.dsFields
               Align = alTop
@@ -503,39 +506,39 @@ object frmDevTools: TfrmDevTools
             end
             object lblFieldPosition: TLabel
               Left = 16
-              Height = 20
-              Top = 136
-              Width = 407
+              Height = 15
+              Top = 116
+              Width = 340
               Align = alTop
               Caption = 'Position:'
               ParentColor = False
             end
             object eFieldPosition: TDBEdit
               Left = 16
-              Height = 28
-              Top = 164
-              Width = 180
+              Height = 23
+              Top = 139
+              Width = 144
               DataField = 'sort_num'
               DataSource = DMD.dsFields
               Align = alTop
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               MaxLength = 0
               TabOrder = 2
             end
             object lblLookupName: TLabel
               Left = 16
-              Height = 20
-              Top = 740
-              Width = 407
+              Height = 15
+              Top = 626
+              Width = 340
               Align = alTop
               Caption = 'Lookup field name:'
               ParentColor = False
             end
             object eLookupName: TDBEdit
               Left = 16
-              Height = 28
-              Top = 768
-              Width = 407
+              Height = 23
+              Top = 649
+              Width = 340
               DataField = 'lookup_name'
               DataSource = DMD.dsFields
               Align = alTop
@@ -544,74 +547,74 @@ object frmDevTools: TfrmDevTools
             end
             object lblMinValue: TLabel
               Left = 16
-              Height = 20
-              Top = 804
-              Width = 407
+              Height = 15
+              Top = 680
+              Width = 340
               Align = alTop
               Caption = 'Minimum value:'
               ParentColor = False
             end
             object eMinValue: TDBEdit
               Left = 16
-              Height = 28
-              Top = 832
-              Width = 180
+              Height = 23
+              Top = 703
+              Width = 144
               DataField = 'minimum_value'
               DataSource = DMD.dsFields
               Align = alTop
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               MaxLength = 0
               TabOrder = 14
             end
             object lblMaxValue: TLabel
               Left = 16
-              Height = 20
-              Top = 868
-              Width = 407
+              Height = 15
+              Top = 734
+              Width = 340
               Align = alTop
               Caption = 'Maximum value:'
               ParentColor = False
             end
             object eMaxValue: TDBEdit
               Left = 16
-              Height = 28
-              Top = 896
-              Width = 180
+              Height = 23
+              Top = 757
+              Width = 144
               DataField = 'maximum_value'
               DataSource = DMD.dsFields
               Align = alTop
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               MaxLength = 0
               TabOrder = 15
             end
             object lblFieldKind: TLabel
               Left = 16
-              Height = 20
-              Top = 420
-              Width = 407
+              Height = 15
+              Top = 356
+              Width = 340
               Align = alTop
               Caption = 'Field kind:'
               ParentColor = False
             end
             object lblFieldType: TLabel
               Left = 16
-              Height = 20
-              Top = 356
-              Width = 407
+              Height = 15
+              Top = 302
+              Width = 340
               Align = alTop
               Caption = 'Field type:'
               ParentColor = False
             end
             object cbFieldType: TDBComboBox
               Left = 16
-              Height = 28
-              Top = 384
-              Width = 180
+              Height = 23
+              Top = 325
+              Width = 144
               Align = alTop
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               DataField = 'field_type'
               DataSource = DMD.dsFields
-              ItemHeight = 20
+              ItemHeight = 15
               Items.Strings = (
                 'Blob'
                 'Boolean'
@@ -627,14 +630,14 @@ object frmDevTools: TfrmDevTools
             end
             object cbFieldKind: TDBComboBox
               Left = 16
-              Height = 28
-              Top = 448
-              Width = 180
+              Height = 23
+              Top = 379
+              Width = 144
               Align = alTop
-              Constraints.MaxWidth = 180
+              Constraints.MaxWidth = 144
               DataField = 'filter_type'
               DataSource = DMD.dsFields
-              ItemHeight = 20
+              ItemHeight = 15
               Items.Strings = (
                 'Binario'
                 'Bool'
@@ -652,81 +655,81 @@ object frmDevTools: TfrmDevTools
             end
             object cbLookupTable: TDBComboBox
               Left = 16
-              Height = 28
-              Top = 576
-              Width = 407
+              Height = 23
+              Top = 487
+              Width = 340
               Align = alTop
               DataField = 'lookup_table'
               DataSource = DMD.dsFields
-              ItemHeight = 20
+              ItemHeight = 15
               MaxLength = 0
               TabOrder = 10
             end
             object lblLookupTable: TLabel
               Left = 16
-              Height = 20
-              Top = 548
-              Width = 407
+              Height = 15
+              Top = 464
+              Width = 340
               Align = alTop
               Caption = 'Lookup table:'
               ParentColor = False
             end
             object lblLookupKey: TLabel
               Left = 16
-              Height = 20
-              Top = 612
-              Width = 407
+              Height = 15
+              Top = 518
+              Width = 340
               Align = alTop
               Caption = 'Lookup key field:'
               ParentColor = False
             end
             object lblLookupResultField: TLabel
               Left = 16
-              Height = 20
-              Top = 676
-              Width = 407
+              Height = 15
+              Top = 572
+              Width = 340
               Align = alTop
               Caption = 'Lookup result field:'
               ParentColor = False
             end
             object cbLookupKey: TDBComboBox
               Left = 16
-              Height = 28
-              Top = 640
-              Width = 407
+              Height = 23
+              Top = 541
+              Width = 340
               Align = alTop
               DataField = 'lookup_key'
               DataSource = DMD.dsFields
-              ItemHeight = 20
+              ItemHeight = 15
               MaxLength = 0
               TabOrder = 11
             end
             object cbLookupResultField: TDBComboBox
               Left = 16
-              Height = 28
-              Top = 704
-              Width = 407
+              Height = 23
+              Top = 595
+              Width = 340
               Align = alTop
               DataField = 'lookup_result'
               DataSource = DMD.dsFields
-              ItemHeight = 20
+              ItemHeight = 15
               MaxLength = 0
               TabOrder = 12
             end
             object lblValuesList: TLabel
               Left = 16
-              Height = 20
-              Top = 932
-              Width = 407
+              Height = 15
+              Top = 788
+              Width = 340
               Align = alTop
               Caption = 'Values list:'
               ParentColor = False
             end
             object mValuesList: TDBMemo
               Left = 16
-              Height = 113
-              Top = 960
-              Width = 407
+              Height = 90
+              Top = 811
+              Width = 340
               Align = alTop
               DataField = 'value_list'
               DataSource = DMD.dsFields
@@ -737,25 +740,26 @@ object frmDevTools: TfrmDevTools
         end
         object pMapEditTools: TPanel
           Left = 0
-          Height = 44
+          Height = 35
           Top = 0
-          Width = 460
+          Width = 389
           Align = alTop
           BevelOuter = bvNone
           ChildSizing.LeftRightSpacing = 16
           ChildSizing.TopBottomSpacing = 8
-          ClientHeight = 44
-          ClientWidth = 460
+          ClientHeight = 35
+          ClientWidth = 389
           Color = 15987699
           ParentBackground = False
           ParentColor = False
           TabOrder = 1
           object navMapFields: TDBNavigator
-            Left = 143
-            Height = 28
+            Left = 173
+            Height = 19
             Top = 8
-            Width = 301
+            Width = 200
             Align = alRight
+            AutoSize = True
             BevelOuter = bvNone
             ChildSizing.EnlargeHorizontal = crsScaleChilds
             ChildSizing.EnlargeVertical = crsScaleChilds
@@ -763,8 +767,8 @@ object frmDevTools: TfrmDevTools
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 100
-            ClientHeight = 28
-            ClientWidth = 301
+            ClientHeight = 19
+            ClientWidth = 200
             DataSource = DMD.dsFields
             Options = []
             TabOrder = 0
@@ -775,30 +779,30 @@ object frmDevTools: TfrmDevTools
     object pgReports: TPage
       object pReportTools: TPanel
         Left = 0
-        Height = 45
+        Height = 36
         Top = 0
-        Width = 1267
+        Width = 1014
         Align = alTop
         BevelOuter = bvNone
         ChildSizing.LeftRightSpacing = 16
         ChildSizing.TopBottomSpacing = 8
         ChildSizing.HorizontalSpacing = 8
-        ClientHeight = 45
-        ClientWidth = 1267
+        ClientHeight = 36
+        ClientWidth = 1014
         Color = 15987699
         ParentBackground = False
         ParentColor = False
         TabOrder = 0
         object eFindReport: TEditButton
           Left = 16
-          Height = 29
+          Height = 20
           Top = 8
-          Width = 277
+          Width = 222
           Align = alLeft
-          ButtonWidth = 29
+          ButtonWidth = 23
           Images = DMD.imgBtns
           ImageIndex = 0
-          ImageWidth = 24
+          ImageWidth = 20
           MaxLength = 0
           NumGlyphs = 1
           PasswordChar = #0
@@ -807,10 +811,10 @@ object frmDevTools: TfrmDevTools
           TextHint = 'Find report'
         end
         object navReport: TDBNavigator
-          Left = 950
-          Height = 29
+          Left = 757
+          Height = 20
           Top = 8
-          Width = 301
+          Width = 241
           Align = alRight
           BevelOuter = bvNone
           ChildSizing.EnlargeHorizontal = crsScaleChilds
@@ -819,8 +823,8 @@ object frmDevTools: TfrmDevTools
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 100
-          ClientHeight = 29
-          ClientWidth = 301
+          ClientHeight = 20
+          ClientWidth = 241
           Options = []
           TabOrder = 1
         end
@@ -828,52 +832,57 @@ object frmDevTools: TfrmDevTools
     end
     object pgBatch: TPage
       object pBatchProgress: TPanel
-        Left = 0
-        Height = 104
+        AnchorSideLeft.Control = pBatchTools
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = pBatchTools
+        AnchorSideRight.Control = pgBatch
+        AnchorSideRight.Side = asrBottom
+        Left = 205
+        Height = 83
         Top = 0
-        Width = 1267
-        Align = alTop
+        Width = 809
+        Anchors = [akTop, akLeft, akRight]
         BevelOuter = bvNone
         ChildSizing.LeftRightSpacing = 16
         ChildSizing.TopBottomSpacing = 8
         ChildSizing.HorizontalSpacing = 8
         ChildSizing.VerticalSpacing = 8
-        ClientHeight = 104
-        ClientWidth = 1267
+        ClientHeight = 83
+        ClientWidth = 809
         Color = 15987699
         ParentBackground = False
         ParentColor = False
         TabOrder = 0
         object LS: TLabel
           Left = 16
-          Height = 20
+          Height = 15
           Top = 8
-          Width = 1235
+          Width = 777
           Align = alTop
           Caption = 'Aguardando...'
           ParentColor = False
         end
         object PBar: TProgressBar
           Left = 16
-          Height = 16
-          Top = 36
-          Width = 1235
+          Height = 13
+          Top = 31
+          Width = 777
           Align = alTop
           TabOrder = 0
         end
         object lblRecCount: TLabel
-          Left = 127
-          Height = 20
-          Top = 67
-          Width = 64
+          Left = 102
+          Height = 15
+          Top = 54
+          Width = 51
           Caption = 'Registros:'
           ParentColor = False
         end
         object btnParar: TBitBtn
-          Left = 16
-          Height = 31
-          Top = 62
-          Width = 94
+          Left = 13
+          Height = 25
+          Top = 50
+          Width = 75
           Caption = 'Parar'
           ImageIndex = 5
           ImageWidth = 20
@@ -883,80 +892,80 @@ object frmDevTools: TfrmDevTools
       end
       object pBatchTools: TPanel
         Left = 0
-        Height = 890
-        Top = 104
-        Width = 256
+        Height = 789
+        Top = 0
+        Width = 205
         Align = alLeft
         BevelOuter = bvNone
         ChildSizing.LeftRightSpacing = 16
         ChildSizing.TopBottomSpacing = 16
         ChildSizing.HorizontalSpacing = 8
         ChildSizing.VerticalSpacing = 8
-        ClientHeight = 890
-        ClientWidth = 256
+        ClientHeight = 789
+        ClientWidth = 205
         Color = 13092807
         ParentBackground = False
         ParentColor = False
         TabOrder = 1
         object btnNumInterno: TButton
           Left = 16
-          Height = 31
+          Height = 25
           Top = 16
-          Width = 224
+          Width = 173
           Align = alTop
           Caption = 'Número interno'
           TabOrder = 0
         end
         object btnSepararNomes: TButton
           Left = 16
-          Height = 31
-          Top = 55
-          Width = 224
+          Height = 25
+          Top = 49
+          Width = 173
           Align = alTop
           Caption = 'Separar nomes'
           TabOrder = 1
         end
         object btnFormatarNomes: TButton
           Left = 16
-          Height = 31
-          Top = 250
-          Width = 224
+          Height = 25
+          Top = 214
+          Width = 173
           Align = alTop
           Caption = 'Formatar nomes'
           TabOrder = 2
         end
         object btnHierarquia: TButton
           Left = 16
-          Height = 31
-          Top = 211
-          Width = 224
+          Height = 25
+          Top = 181
+          Width = 173
           Align = alTop
           Caption = 'Hierarquia'
           TabOrder = 3
         end
         object btnGeneros: TButton
           Left = 16
-          Height = 31
-          Top = 172
-          Width = 224
+          Height = 25
+          Top = 148
+          Width = 173
           Align = alTop
           Caption = 'Gêneros'
           TabOrder = 4
         end
         object btnQuickCode: TButton
           Left = 16
-          Height = 31
-          Top = 133
-          Width = 224
+          Height = 25
+          Top = 115
+          Width = 173
           Align = alTop
           Caption = 'Quickcode'
           TabOrder = 5
         end
         object btnForeignNumInterno: TButton
           Left = 16
-          Height = 31
-          Top = 94
-          Width = 224
+          Height = 25
+          Top = 82
+          Width = 173
           Align = alTop
           Caption = 'Chaves estrangeiras Nº interno'
           TabOrder = 6
@@ -968,7 +977,7 @@ object frmDevTools: TfrmDevTools
     Enabled = False
     Interval = 250
     OnTimer = TimerFindTimer
-    Left = 141
-    Top = 286
+    Left = 113
+    Top = 229
   end
 end

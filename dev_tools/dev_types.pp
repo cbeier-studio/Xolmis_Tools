@@ -5,8 +5,11 @@ unit dev_types;
 interface
 
 uses
-  Classes, SysUtils, Controls, DateUtils, RegExpr, DB, SQLDB, StrUtils, lcltype, lclintf, Windows,
+  Classes, SysUtils, Forms, Controls, DateUtils, RegExpr, DB, SQLDB, StrUtils, lcltype, lclintf, Windows,
   DBCtrls;
+
+const
+  NomeApp: String           = 'Xolmis Dev Tools';
 
 type
   TFormPosition = record
@@ -160,6 +163,11 @@ resourcestring
   rs_FilterNull = 'empty';
   rs_FilterNotNull = 'not empty';
 
+  { System variables }
+  function InstallDir: String;
+  function AppDataDir: String;
+  function TempDir: String;
+
   function FindSortedField(const aFieldName: String; aSortedFields: TSortedFields): Integer;
   procedure AddSortedField(const aFieldName: String; aDirection: TSortDirection;
     var aSortedFields: TSortedFields);
@@ -169,7 +177,6 @@ resourcestring
 
   function CampoByName(const aCampoName: String): TCampoType;
   function FilterByName(const aFilterName: String): TFilterType;
-  function GetModifier(aModifier: String): TFilterValue;
 
   procedure SetSelect(const aSQL: TStrings; aTable: TTabelaType; var aAlias: String);
   procedure SetCount(const aSQL: TStrings; aTable: TTabelaType);
@@ -186,6 +193,40 @@ resourcestring
 implementation
 
 uses dm_dev;
+
+function InstallDir: String;
+var
+  s: String;
+begin
+  s := ExtractFilePath(Application.ExeName);
+  s := IncludeTrailingPathDelimiter(s);
+
+  Result := s;
+end;
+
+function AppDataDir: String;
+var
+  s: String;
+begin
+  s := GetAppConfigDir(False);
+  s := IncludeTrailingPathDelimiter(s);
+
+  Result:= s;
+  if not DirectoryExists(Result) then
+    CreateDir(Result);
+end;
+
+function TempDir: String;
+var
+  s: String;
+begin
+  s := ConcatPaths([GetTempDir(False), NomeApp]);
+  s := IncludeTrailingPathDelimiter(s);
+
+  Result := s;
+  if not DirectoryExists(Result) then
+    CreateDir(Result);
+end;
 
 function FindSortedField(const aFieldName: String; aSortedFields: TSortedFields): Integer;
 var
@@ -289,34 +330,11 @@ begin
   end;
 end;
 
-function GetModifier(aModifier: String): TFilterValue;
-begin
-  Result := fvNone;
-  //GravaLog('HASHTAG', aModifier);
-
-  if MatchStr(aModifier, AllQS) then { #tudo }
-    Result := fvAll
-  else
-  if MatchStr(aModifier, MarkedQS) then { #marcados }
-    Result := fvMarked
-  else
-  if MatchStr(aModifier, UnmarkedQS) then { #naomarcados }
-    Result := fvUnmarked
-  else
-  if MatchStr(aModifier, DeletedQS) then { #lixo }
-    Result := fvDeleted
-  else
-  if MatchStr(aModifier, PrintQueueQS) then { #fila }
-    Result := fvQueued;
-end;
-
 procedure SetSelect(const aSQL: TStrings; aTable: TTabelaType; var aAlias: String);
 begin
   aAlias := '';
   case aTable of
     tbNone:
-      ;
-    tbVersions:
       ;
 
   end;
@@ -326,8 +344,6 @@ procedure SetCount(const aSQL: TStrings; aTable: TTabelaType);
 begin
   case aTable of
     tbNone:
-      ;
-    tbVersions:
       ;
 
   end;

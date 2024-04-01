@@ -1,0 +1,207 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: dev_types.rs_filterand
+msgid "and"
+msgstr ""
+
+#: dev_types.rs_filterbetween
+msgid "between"
+msgstr ""
+
+#: dev_types.rs_filterequal
+msgid "equal to"
+msgstr ""
+
+#: dev_types.rs_filterlessthan
+msgid "less than or equal to"
+msgstr ""
+
+#: dev_types.rs_filterlike
+msgid "contains"
+msgstr ""
+
+#: dev_types.rs_filtermorethan
+msgid "more than or equal to"
+msgstr ""
+
+#: dev_types.rs_filternotnull
+msgid "not empty"
+msgstr ""
+
+#: dev_types.rs_filternull
+msgid "empty"
+msgstr ""
+
+#: dev_types.rs_filteror
+msgid "or"
+msgstr ""
+
+#: dev_types.rs_filterstartlike
+msgid "start with"
+msgstr ""
+
+#: tfrmdevtools.btnforeignnuminterno.caption
+msgid "Chaves estrangeiras Nº interno"
+msgstr ""
+
+#: tfrmdevtools.btnformatarnomes.caption
+msgid "Formatar nomes"
+msgstr ""
+
+#: tfrmdevtools.btngeneros.caption
+msgid "Gêneros"
+msgstr ""
+
+#: tfrmdevtools.btnhierarquia.caption
+msgid "Hierarquia"
+msgstr ""
+
+#: tfrmdevtools.btnnuminterno.caption
+msgid "Número interno"
+msgstr ""
+
+#: tfrmdevtools.btnparar.caption
+msgid "Parar"
+msgstr ""
+
+#: tfrmdevtools.btnquickcode.caption
+msgid "Quickcode"
+msgstr ""
+
+#: tfrmdevtools.btnsepararnomes.caption
+msgid "Separar nomes"
+msgstr ""
+
+#: tfrmdevtools.caption
+msgid "Xolmis Developer Tools"
+msgstr ""
+
+#: tfrmdevtools.ckalphabetickey.caption
+msgid "Alphabetic key"
+msgstr ""
+
+#: tfrmdevtools.ckfieldcansort.caption
+msgid "Can sort"
+msgstr ""
+
+#: tfrmdevtools.ckfieldvisible.caption
+msgctxt "tfrmdevtools.ckfieldvisible.caption"
+msgid "Visible"
+msgstr ""
+
+#: tfrmdevtools.cknumerickey.caption
+msgid "Numeric key"
+msgstr ""
+
+#: tfrmdevtools.cktablecanexport.caption
+msgid "Can export"
+msgstr ""
+
+#: tfrmdevtools.cktablecanfilter.caption
+msgid "Can filter"
+msgstr ""
+
+#: tfrmdevtools.cktablecanimport.caption
+msgid "Can import"
+msgstr ""
+
+#: tfrmdevtools.cktablevisible.caption
+msgctxt "tfrmdevtools.cktablevisible.caption"
+msgid "Visible"
+msgstr ""
+
+#: tfrmdevtools.efindfield.texthint
+msgid "Find field"
+msgstr ""
+
+#: tfrmdevtools.efindreport.texthint
+msgid "Find report"
+msgstr ""
+
+#: tfrmdevtools.efindtable.texthint
+msgid "Find table"
+msgstr ""
+
+#: tfrmdevtools.gridfields.columns[0].title.caption
+msgid "Field name"
+msgstr ""
+
+#: tfrmdevtools.gridfields.columns[1].title.caption
+msgid "Position"
+msgstr ""
+
+#: tfrmdevtools.gridtables.columns[0].title.caption
+msgid "Table name"
+msgstr ""
+
+#: tfrmdevtools.lbldarwincorename.caption
+msgid "Darwin Core (DwC) field name:"
+msgstr ""
+
+#: tfrmdevtools.lblfielddisplayname.caption
+msgctxt "tfrmdevtools.lblfielddisplayname.caption"
+msgid "Display name:"
+msgstr ""
+
+#: tfrmdevtools.lblfieldkind.caption
+msgid "Field kind:"
+msgstr ""
+
+#: tfrmdevtools.lblfieldname.caption
+msgid "Field name:"
+msgstr ""
+
+#: tfrmdevtools.lblfieldposition.caption
+msgid "Position:"
+msgstr ""
+
+#: tfrmdevtools.lblfieldtype.caption
+msgid "Field type:"
+msgstr ""
+
+#: tfrmdevtools.lbllookupkey.caption
+msgid "Lookup key field:"
+msgstr ""
+
+#: tfrmdevtools.lbllookupname.caption
+msgid "Lookup field name:"
+msgstr ""
+
+#: tfrmdevtools.lbllookupresultfield.caption
+msgid "Lookup result field:"
+msgstr ""
+
+#: tfrmdevtools.lbllookuptable.caption
+msgid "Lookup table:"
+msgstr ""
+
+#: tfrmdevtools.lblmaxvalue.caption
+msgid "Maximum value:"
+msgstr ""
+
+#: tfrmdevtools.lblminvalue.caption
+msgid "Minimum value:"
+msgstr ""
+
+#: tfrmdevtools.lblreccount.caption
+msgid "Registros:"
+msgstr ""
+
+#: tfrmdevtools.lbltablediplayname.caption
+msgctxt "tfrmdevtools.lbltablediplayname.caption"
+msgid "Display name:"
+msgstr ""
+
+#: tfrmdevtools.lbltablename.caption
+msgid "Table name:"
+msgstr ""
+
+#: tfrmdevtools.lblvalueslist.caption
+msgid "Values list:"
+msgstr ""
+
+#: tfrmdevtools.ls.caption
+msgid "Aguardando..."
+msgstr ""
+
