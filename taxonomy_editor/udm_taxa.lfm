@@ -435,7 +435,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
-      Required = True
+      Required = False
       Size = 100
     end
     object qTaxavalid_id: TLongintField
@@ -454,7 +454,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
-      Required = True
+      Required = False
       Size = 100
     end
     object qTaxaextinct: TBooleanField
@@ -626,7 +626,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
-      Required = True
+      Required = False
       Size = 100
     end
     object qTaxaioc_valid_id: TLongintField
@@ -645,7 +645,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
-      Required = True
+      Required = False
       Size = 100
     end
     object qTaxaioc_sort_num: TFloatField
@@ -725,7 +725,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
-      Required = True
+      Required = False
       Size = 100
     end
     object qTaxacbro_valid_id: TLongintField
@@ -744,7 +744,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
-      Required = True
+      Required = False
       Size = 100
     end
     object qTaxacbro_sort_num: TFloatField
@@ -899,46 +899,667 @@ object dmTaxa: TdmTaxa
     Top = 145
   end
   object qRanks: TSQLQuery
-    FieldDefs = <>
+    FieldDefs = <    
+      item
+        Name = 'rank_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'rank_seq'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'rank_name'
+        DataType = ftString
+        Precision = -1
+        Size = 30
+      end    
+      item
+        Name = 'rank_acronym'
+        DataType = ftString
+        Precision = -1
+        Size = 15
+      end    
+      item
+        Name = 'zoological_code'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'botanical_code'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'main_rank'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'subrank'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'infrarank'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'infraspecific'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'user_inserted'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'user_updated'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'insert_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'update_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'exported_status'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'marked_status'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'active_status'
+        DataType = ftBoolean
+        Precision = -1
+      end>
     Database = sqlCon
     Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT * FROM taxon_ranks'
+      'WHERE (active_status = 1)'
+      'ORDER BY rank_seq ASC'
+    )
     Params = <>
     Macros = <>
     Left = 70
     Top = 205
+    object qRanksmarked_status: TBooleanField
+      DisplayLabel = 'Marked'
+      FieldKind = fkData
+      FieldName = 'marked_status'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksrank_name: TStringField
+      DisplayLabel = 'Name'
+      FieldKind = fkData
+      FieldName = 'rank_name'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 30
+    end
+    object qRanksrank_acronym: TStringField
+      DisplayLabel = 'Acronym'
+      FieldKind = fkData
+      FieldName = 'rank_acronym'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 15
+    end
+    object qRanksrank_seq: TLongintField
+      DisplayLabel = 'Sequence'
+      FieldKind = fkData
+      FieldName = 'rank_seq'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+    end
+    object qRankszoological_code: TBooleanField
+      DisplayLabel = 'Zoological'
+      FieldKind = fkData
+      FieldName = 'zoological_code'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksbotanical_code: TBooleanField
+      DisplayLabel = 'Botanical'
+      FieldKind = fkData
+      FieldName = 'botanical_code'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksmain_rank: TBooleanField
+      DisplayLabel = 'Main'
+      FieldKind = fkData
+      FieldName = 'main_rank'
+      Index = 6
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRankssubrank: TBooleanField
+      DisplayLabel = 'Subrank'
+      FieldKind = fkData
+      FieldName = 'subrank'
+      Index = 7
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksinfrarank: TBooleanField
+      DisplayLabel = 'Infrarank'
+      FieldKind = fkData
+      FieldName = 'infrarank'
+      Index = 8
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksinfraspecific: TBooleanField
+      DisplayLabel = 'Infraspecific'
+      FieldKind = fkData
+      FieldName = 'infraspecific'
+      Index = 9
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksrank_id: TLongintField
+      DisplayLabel = 'ID'
+      FieldKind = fkData
+      FieldName = 'rank_id'
+      Index = 10
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+    end
+    object qRanksuser_inserted: TLongintField
+      DisplayLabel = 'Created by'
+      FieldKind = fkData
+      FieldName = 'user_inserted'
+      Index = 11
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qRanksuser_updated: TLongintField
+      DisplayLabel = 'Last modified by'
+      FieldKind = fkData
+      FieldName = 'user_updated'
+      Index = 12
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qRanksinsert_date: TDateTimeField
+      DisplayLabel = 'Creation date'
+      FieldKind = fkData
+      FieldName = 'insert_date'
+      Index = 13
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qRanksupdate_date: TDateTimeField
+      DisplayLabel = 'Last modified date'
+      FieldKind = fkData
+      FieldName = 'update_date'
+      Index = 14
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qRanksexported_status: TBooleanField
+      DisplayLabel = 'Exported'
+      FieldKind = fkData
+      FieldName = 'exported_status'
+      Index = 15
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+      DisplayValues = 'True;False'
+    end
+    object qRanksactive_status: TBooleanField
+      DisplayLabel = 'Active'
+      FieldKind = fkData
+      FieldName = 'active_status'
+      Index = 16
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+      DisplayValues = 'True;False'
+    end
   end
   object qPacks: TSQLQuery
-    FieldDefs = <>
+    FieldDefs = <    
+      item
+        Name = 'package_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'package_name'
+        DataType = ftString
+        Precision = -1
+        Size = 80
+      end    
+      item
+        Name = 'taxonomy'
+        DataType = ftString
+        Precision = -1
+        Size = 5
+      end    
+      item
+        Name = 'package_year'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'package_month'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'version'
+        DataType = ftString
+        Precision = -1
+        Size = 30
+      end    
+      item
+        Name = 'insert_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'update_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'marked_status'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'active_status'
+        DataType = ftBoolean
+        Precision = -1
+      end>
     Database = sqlCon
     Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT * FROM packages'
+      'WHERE (active_status = 1)'
+    )
     Params = <>
     Macros = <>
     Left = 70
     Top = 262
+    object qPacksmarked_status: TBooleanField
+      DisplayLabel = 'Marked'
+      FieldKind = fkData
+      FieldName = 'marked_status'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qPackspackage_name: TStringField
+      DisplayLabel = 'Package name'
+      DisplayWidth = 30
+      FieldKind = fkData
+      FieldName = 'package_name'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 80
+    end
+    object qPackstaxonomy: TStringField
+      DisplayLabel = 'Taxonomy'
+      FieldKind = fkData
+      FieldName = 'taxonomy'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 5
+    end
+    object qPackspackage_year: TLongintField
+      DisplayLabel = 'Year'
+      FieldKind = fkData
+      FieldName = 'package_year'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qPackspackage_month: TLongintField
+      DisplayLabel = 'Month'
+      FieldKind = fkData
+      FieldName = 'package_month'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qPacksversion: TStringField
+      DisplayLabel = 'Version'
+      DisplayWidth = 15
+      FieldKind = fkData
+      FieldName = 'version'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 30
+    end
+    object qPackspackage_id: TLongintField
+      DisplayLabel = 'ID'
+      FieldKind = fkData
+      FieldName = 'package_id'
+      Index = 6
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+    end
+    object qPacksinsert_date: TDateTimeField
+      DisplayLabel = 'Creation date'
+      FieldKind = fkData
+      FieldName = 'insert_date'
+      Index = 7
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qPacksupdate_date: TDateTimeField
+      DisplayLabel = 'Last modified date'
+      FieldKind = fkData
+      FieldName = 'update_date'
+      Index = 8
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qPacksactive_status: TBooleanField
+      DisplayLabel = 'Active'
+      FieldKind = fkData
+      FieldName = 'active_status'
+      Index = 9
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+      DisplayValues = 'True;False'
+    end
   end
   object qTaxaUpdates: TSQLQuery
-    FieldDefs = <>
+    FieldDefs = <    
+      item
+        Name = 'change_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'package_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'action_type'
+        DataType = ftString
+        Precision = -1
+        Size = 10
+      end    
+      item
+        Name = 'taxon_name'
+        DataType = ftString
+        Precision = -1
+        Size = 120
+      end    
+      item
+        Name = 'taxon_new_name'
+        DataType = ftString
+        Precision = -1
+        Size = 120
+      end    
+      item
+        Name = 'trait_name'
+        DataType = ftString
+        Precision = -1
+        Size = 50
+      end    
+      item
+        Name = 'new_value'
+        DataType = ftString
+        Precision = -1
+        Size = 250
+      end    
+      item
+        Name = 'insert_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'update_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'marked_status'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'active_status'
+        DataType = ftBoolean
+        Precision = -1
+      end>
     Database = sqlCon
     Transaction = sqlTrans
-    Params = <>
+    SQL.Strings = (
+      'SELECT * FROM taxon_changes'
+      'WHERE (package_id = :package_id)'
+      'AND (active_status = 1)'
+    )
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'package_id'
+        ParamType = ptInput
+      end>
     Macros = <>
+    DataSource = frmTaxaEditor.dsPacks
     Left = 70
     Top = 320
-  end
-  object dsRanks: TDataSource
-    DataSet = qRanks
-    Left = 186
-    Top = 205
-  end
-  object dsPacks: TDataSource
-    DataSet = qPacks
-    Left = 186
-    Top = 262
-  end
-  object dsTaxaUpdates: TDataSource
-    DataSet = qTaxaUpdates
-    Left = 186
-    Top = 320
+    object qTaxaUpdatesmarked_status: TBooleanField
+      DisplayLabel = 'Marked'
+      FieldKind = fkData
+      FieldName = 'marked_status'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qTaxaUpdatesaction_type: TStringField
+      DisplayLabel = 'Action'
+      FieldKind = fkData
+      FieldName = 'action_type'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 10
+    end
+    object qTaxaUpdatestaxon_name: TStringField
+      DisplayLabel = 'Taxon'
+      DisplayWidth = 50
+      FieldKind = fkData
+      FieldName = 'taxon_name'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 120
+    end
+    object qTaxaUpdatestaxon_new_name: TStringField
+      DisplayLabel = 'New taxon'
+      DisplayWidth = 50
+      FieldKind = fkData
+      FieldName = 'taxon_new_name'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 120
+    end
+    object qTaxaUpdatestrait_name: TStringField
+      DisplayLabel = 'Trait'
+      FieldKind = fkData
+      FieldName = 'trait_name'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 50
+    end
+    object qTaxaUpdatesnew_value: TStringField
+      DisplayLabel = 'New value'
+      FieldKind = fkData
+      FieldName = 'new_value'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 250
+    end
+    object qTaxaUpdateschange_id: TLongintField
+      DisplayLabel = 'ID'
+      FieldKind = fkData
+      FieldName = 'change_id'
+      Index = 6
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+    end
+    object qTaxaUpdatespackage_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'package_id'
+      Index = 7
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qTaxaUpdatesinsert_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'insert_date'
+      Index = 8
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qTaxaUpdatesupdate_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'update_date'
+      Index = 9
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qTaxaUpdatesactive_status: TBooleanField
+      FieldKind = fkData
+      FieldName = 'active_status'
+      Index = 10
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+      DisplayValues = 'True;False'
+    end
   end
   object sqlTrans: TSQLTransaction
     Active = False

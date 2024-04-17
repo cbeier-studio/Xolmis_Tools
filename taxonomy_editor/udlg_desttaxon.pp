@@ -13,13 +13,13 @@ type
   { TdlgDestTaxon }
 
   TdlgDestTaxon = class(TForm)
-    BCPanel1: TBCPanel;
+    pDestinationTaxon: TBCPanel;
     cklTaxonomy: TCheckListBox;
     eDestinationTaxon: TEditButton;
     lblApplyTo: TLabel;
     lblDestinationTaxon: TLabel;
     lineBottom: TShapeLineBGRA;
-    Panel1: TPanel;
+    pContent: TPanel;
     pApplyTo: TBCPanel;
     pBottom: TPanel;
     sbApplyToMarked: TSpeedButton;

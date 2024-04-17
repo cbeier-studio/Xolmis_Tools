@@ -1,12 +1,12 @@
 object dlgAbout: TdlgAbout
   Left = 352
-  Height = 342
+  Height = 334
   Top = 33
   Width = 310
   AutoSize = True
   BorderStyle = bsDialog
   Caption = 'Sobre o Xolmis'
-  ClientHeight = 342
+  ClientHeight = 334
   ClientWidth = 310
   OnShow = FormShow
   PopupMode = pmAuto
@@ -14,7 +14,7 @@ object dlgAbout: TdlgAbout
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
-    Top = 290
+    Top = 282
     Width = 310
     Align = alTop
     LineColor = 9276813
@@ -24,7 +24,7 @@ object dlgAbout: TdlgAbout
   object pBottom: TPanel
     Left = 0
     Height = 50
-    Top = 292
+    Top = 284
     Width = 310
     Align = alTop
     AutoSize = True
@@ -65,7 +65,7 @@ object dlgAbout: TdlgAbout
   end
   object pContent: TPanel
     Left = 0
-    Height = 188
+    Height = 180
     Top = 102
     Width = 310
     Align = alTop
@@ -73,7 +73,7 @@ object dlgAbout: TdlgAbout
     BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 16
     ChildSizing.TopBottomSpacing = 16
-    ClientHeight = 188
+    ClientHeight = 180
     ClientWidth = 310
     Color = 16444392
     ParentBackground = False
@@ -83,7 +83,7 @@ object dlgAbout: TdlgAbout
       Cursor = crHandPoint
       Left = 16
       Height = 15
-      Top = 121
+      Top = 113
       Width = 278
       Align = alTop
       BorderSpacing.Bottom = 3
@@ -100,7 +100,7 @@ object dlgAbout: TdlgAbout
       Cursor = crHandPoint
       Left = 16
       Height = 15
-      Top = 139
+      Top = 131
       Width = 278
       Align = alTop
       BorderSpacing.Bottom = 3
@@ -117,7 +117,7 @@ object dlgAbout: TdlgAbout
       Cursor = crHandPoint
       Left = 16
       Height = 15
-      Top = 157
+      Top = 149
       Width = 278
       Align = alTop
       BorderSpacing.Bottom = 13
@@ -136,7 +136,7 @@ object dlgAbout: TdlgAbout
       Top = 16
       Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 6
+      BorderSpacing.Bottom = 8
       Caption = '© 2023 Christian Beier'
       ParentColor = False
     end
@@ -145,10 +145,10 @@ object dlgAbout: TdlgAbout
       Left = 16
       Height = 15
       Hint = 'http://xolmis.github.io'
-      Top = 93
+      Top = 90
       Width = 278
       Align = alTop
-      BorderSpacing.Bottom = 13
+      BorderSpacing.Bottom = 8
       Caption = 'Website'
       Font.Color = 13066075
       ParentColor = False
@@ -162,11 +162,11 @@ object dlgAbout: TdlgAbout
     object BCPanel1: TBCPanel
       Left = 16
       Height = 43
-      Top = 37
+      Top = 39
       Width = 278
       Align = alTop
       AutoSize = True
-      BorderSpacing.Bottom = 13
+      BorderSpacing.Bottom = 8
       ChildSizing.LeftRightSpacing = 16
       ChildSizing.TopBottomSpacing = 8
       ChildSizing.HorizontalSpacing = 8
@@ -255,7 +255,6 @@ object dlgAbout: TdlgAbout
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
-      WordWrap = True
     end
     object lblAppName1: TLabel
       Left = 16

@@ -58,7 +58,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 0
     end
   end
-  object BCPanel1: TBCPanel
+  object pParentTaxon: TBCPanel
     Left = 13
     Height = 40
     Top = 68
@@ -145,7 +145,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 1
     end
   end
-  object BCPanel2: TBCPanel
+  object pOrder: TBCPanel
     Left = 13
     Height = 40
     Top = 121
@@ -233,7 +233,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 1
     end
   end
-  object BCPanel3: TBCPanel
+  object pFamily: TBCPanel
     Left = 13
     Height = 40
     Top = 161
@@ -320,7 +320,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 1
     end
   end
-  object BCPanel4: TBCPanel
+  object pSubfamily: TBCPanel
     Left = 13
     Height = 40
     Top = 201
@@ -407,7 +407,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 1
     end
   end
-  object BCPanel5: TBCPanel
+  object pGenus: TBCPanel
     Left = 13
     Height = 40
     Top = 241
@@ -494,7 +494,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 1
     end
   end
-  object BCPanel6: TBCPanel
+  object pSpecies: TBCPanel
     Left = 13
     Height = 40
     Top = 281
@@ -581,7 +581,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       TabOrder = 1
     end
   end
-  object BCPanel7: TBCPanel
+  object pSubspeciesGroup: TBCPanel
     Left = 13
     Height = 40
     Top = 321

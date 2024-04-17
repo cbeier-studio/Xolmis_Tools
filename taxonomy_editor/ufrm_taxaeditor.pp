@@ -29,9 +29,13 @@ type
     cktClements: TDBCheckBox;
     cktExtinct: TDBCheckBox;
     cktIoc: TDBCheckBox;
+    dsPacks: TDataSource;
+    dsRanks: TDataSource;
     dsTaxa: TDataSource;
+    dsTaxaUpdates: TDataSource;
+    eFindTaxa1: TEdit;
+    eFindTaxa2: TEdit;
     etParentTaxon: TDBEditButton;
-    eFindRank: TEdit;
     etAuthorship: TDBEdit;
     etCbroOtherPtNames: TDBEdit;
     etCbroSortNr: TDBEdit;
@@ -51,7 +55,11 @@ type
     etSortNr: TDBEdit;
     etSpanishName: TDBEdit;
     etSubspecificGroup: TDBEdit;
-    iconFindRank: TImage;
+    gridTaxa1: TDBGrid;
+    gridTaxa2: TDBGrid;
+    gridTaxa3: TDBGrid;
+    iconFindTaxa1: TImage;
+    iconFindTaxa2: TImage;
     lbltAuthorship: TLabel;
     lbltCbroOtherPtNames: TLabel;
     lbltCbroParentTaxon: TLabel;
@@ -76,12 +84,20 @@ type
     lbltSpanishName: TLabel;
     lbltSubspecificGroup: TLabel;
     lbltValidName: TLabel;
+    pmvMoveToSpecies: TMenuItem;
+    pmvMoveToGenus: TMenuItem;
+    pmvMoveToFamily: TMenuItem;
+    pmvMoveToOrder: TMenuItem;
     mtDistribution: TDBMemo;
     mtIocDistribution: TDBMemo;
     peTaxa: TPanel;
-    pFindRank: TBCPanel;
+    pFindTaxa1: TBCPanel;
+    pFindTaxa2: TBCPanel;
+    pmMove: TPopupMenu;
     ptAuthorship: TBCPanel;
-    pRankToolbar: TBCPanel;
+    pTaxaList1: TBCPanel;
+    pTaxaToolbar1: TBCPanel;
+    pTaxaToolbar2: TBCPanel;
     ptCbroOtherPtNames: TBCPanel;
     ptCbroParentTaxon: TBCPanel;
     ptCbroRank: TBCPanel;
@@ -112,27 +128,42 @@ type
     ptSubspecificGroup: TBCPanel;
     ptToolbar: TBCPanel;
     ptValidName: TBCPanel;
-    sbCancelRank: TSpeedButton;
-    sbClearFiltersRanks: TSpeedButton;
+    sbAdvancedFilters1: TSpeedButton;
+    sbAdvancedFilters2: TSpeedButton;
+    sbCancelRecord1: TSpeedButton;
+    sbCancelRecord2: TSpeedButton;
+    sbClearFilters1: TSpeedButton;
+    sbClearFilters2: TSpeedButton;
     sbClearFindTaxa: TColorSpeedButton;
-    sbClearSearchRank: TColorSpeedButton;
+    sbClearFindTaxa1: TColorSpeedButton;
+    sbClearFindTaxa2: TColorSpeedButton;
     sbDelRecord: TSpeedButton;
     sbEditRecord: TSpeedButton;
-    sbFirstRank: TSpeedButton;
-    sbGroupRanks: TSpeedButton;
-    sbInsertRank: TSpeedButton;
-    sbLastRank: TSpeedButton;
-    sbMoreOptionsRanks: TSpeedButton;
-    sbNextRank: TSpeedButton;
+    sbFirstRecord1: TSpeedButton;
+    sbFirstRecord2: TSpeedButton;
+    sbGroupRecords1: TSpeedButton;
+    sbGroupRecords2: TSpeedButton;
+    sbInsertRecord1: TSpeedButton;
+    sbInsertRecord2: TSpeedButton;
+    sbLastRecord1: TSpeedButton;
+    sbLastRecord2: TSpeedButton;
+    sbMoreOptions1: TSpeedButton;
+    sbMoreOptions2: TSpeedButton;
+    sbNextRecord1: TSpeedButton;
+    sbNextRecord2: TSpeedButton;
     sboxTaxa: TScrollBox;
-    sbPriorRank: TSpeedButton;
+    sbPriorRecord1: TSpeedButton;
+    sbPriorRecord2: TSpeedButton;
     sbRecordHistory: TSpeedButton;
     sbLumpTaxon: TSpeedButton;
+    sbRefreshRecords1: TSpeedButton;
+    sbRefreshRecords2: TSpeedButton;
+    sbSaveRecord1: TSpeedButton;
+    sbSaveRecord2: TSpeedButton;
+    sbSortRecords1: TSpeedButton;
+    sbSortRecords2: TSpeedButton;
     sbSplitTaxon: TSpeedButton;
     sbMoveTaxon: TSpeedButton;
-    sbRefreshRanks: TSpeedButton;
-    sbSaveRank: TSpeedButton;
-    sbSortRanks: TSpeedButton;
     Separator2: TMenuItem;
     mmBatchActions: TMenuItem;
     mmExit: TMenuItem;
@@ -207,6 +238,7 @@ type
     sbSortRecords: TSpeedButton;
     Separator1: TMenuItem;
     splitTaxaLeft: TSplitter;
+    splitTaxaLeft1: TSplitter;
     splitTaxaRight: TSplitter;
     TimerFind: TTimer;
     tsfMarked: TRxSwitch;
@@ -236,6 +268,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
     procedure navTabsTabChanged(Sender: TObject);
+    procedure pmvMoveToGenusClick(Sender: TObject);
+    procedure pmvMoveToSpeciesClick(Sender: TObject);
     procedure sbCancelRecordClick(Sender: TObject);
     procedure sbClearFindTaxaClick(Sender: TObject);
     procedure sbEditRecordClick(Sender: TObject);
@@ -243,6 +277,7 @@ type
     procedure sbInsertRecordClick(Sender: TObject);
     procedure sbLastRecordClick(Sender: TObject);
     procedure sbLumpTaxonClick(Sender: TObject);
+    procedure sbMoveTaxonClick(Sender: TObject);
     procedure sbNextRecordClick(Sender: TObject);
     procedure sbPriorRecordClick(Sender: TObject);
     procedure sbRefreshRecordsClick(Sender: TObject);
@@ -572,6 +607,7 @@ var
   FFilter: TTaxonFilters;
 begin
   FRank := GetRankType(dmTaxa.qTaxa.FieldByName('rank_id').AsInteger);
+  FFilter := [tfAll];
 
   case FRank of
     //trDomain: ;
@@ -679,6 +715,9 @@ begin
 
   dmTaxa.lookRanks.Open;
   dsTaxa.DataSet.Open;
+  dsRanks.DataSet.Open;
+  dsPacks.DataSet.Open;
+  dsTaxaUpdates.DataSet.Open;
 
   LoadTaxaRanks(dmTaxa.sqlCon, clbTaxonRanksFilter);
 
@@ -706,6 +745,92 @@ end;
 procedure TfrmTaxaEditor.navTabsTabChanged(Sender: TObject);
 begin
   nbPages.PageIndex := navTabs.TabIndex;
+end;
+
+procedure TfrmTaxaEditor.pmvMoveToGenusClick(Sender: TObject);
+var
+  Qry: TSQLQuery;
+begin
+  dlgDestTaxon := TdlgDestTaxon.Create(nil);
+  with dlgDestTaxon do
+  try
+    TaxonomyAction:= taLump;
+    if ShowModal = mrOK then
+    begin
+      case ApplyTo of
+        acSelected:
+        begin
+          MoveToGenus(dsTaxa.DataSet.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+        end;
+        acMarked:
+        begin
+          Qry := TSQLQuery.Create(dmTaxa.sqlCon);
+          Qry.SQLConnection := dmTaxa.sqlCon;
+          with Qry, SQL do
+          try
+            Add('SELECT taxon_id FROM zoo_taxa WHERE (marked_status = 1) AND (active_status = 1)');
+            Open;
+            First;
+            repeat
+              MoveToGenus(Qry.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+              Next;
+            until Eof;
+            Close;
+            Clear;
+            Add('UPDATE zoo_taxa SET marked_status = 0 WHERE marked_status = 1');
+            ExecSQL;
+          finally
+            FreeAndNil(Qry);
+          end;
+        end;
+      end;
+    end;
+  finally
+    FreeAndNil(dlgDestTaxon);
+  end;
+end;
+
+procedure TfrmTaxaEditor.pmvMoveToSpeciesClick(Sender: TObject);
+var
+  Qry: TSQLQuery;
+begin
+  dlgDestTaxon := TdlgDestTaxon.Create(nil);
+  with dlgDestTaxon do
+  try
+    TaxonomyAction:= taLump;
+    if ShowModal = mrOK then
+    begin
+      case ApplyTo of
+        acSelected:
+        begin
+          MoveToSpecies(dsTaxa.DataSet.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+        end;
+        acMarked:
+        begin
+          Qry := TSQLQuery.Create(dmTaxa.sqlCon);
+          Qry.SQLConnection := dmTaxa.sqlCon;
+          with Qry, SQL do
+          try
+            Add('SELECT taxon_id FROM zoo_taxa WHERE (marked_status = 1) AND (active_status = 1)');
+            Open;
+            First;
+            repeat
+              MoveToSpecies(Qry.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+              Next;
+            until Eof;
+            Close;
+            Clear;
+            Add('UPDATE zoo_taxa SET marked_status = 0 WHERE marked_status = 1');
+            ExecSQL;
+          finally
+            FreeAndNil(Qry);
+          end;
+        end;
+      end;
+    end;
+  finally
+    FreeAndNil(dlgDestTaxon);
+  end;
 end;
 
 procedure TfrmTaxaEditor.sbCancelRecordClick(Sender: TObject);
@@ -779,6 +904,12 @@ begin
   finally
     FreeAndNil(dlgDestTaxon);
   end;
+end;
+
+procedure TfrmTaxaEditor.sbMoveTaxonClick(Sender: TObject);
+begin
+  with sbMoveTaxon.ClientToScreen(point(0, sbMoveTaxon.Height + 1)) do
+    pmMove.Popup(X, Y);
 end;
 
 procedure TfrmTaxaEditor.sbNextRecordClick(Sender: TObject);

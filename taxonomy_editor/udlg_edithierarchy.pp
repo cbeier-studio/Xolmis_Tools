@@ -13,13 +13,13 @@ type
   { TdlgEditHierarchy }
 
   TdlgEditHierarchy = class(TForm)
-    BCPanel1: TBCPanel;
-    BCPanel2: TBCPanel;
-    BCPanel3: TBCPanel;
-    BCPanel4: TBCPanel;
-    BCPanel5: TBCPanel;
-    BCPanel6: TBCPanel;
-    BCPanel7: TBCPanel;
+    pParentTaxon: TBCPanel;
+    pOrder: TBCPanel;
+    pFamily: TBCPanel;
+    pSubfamily: TBCPanel;
+    pGenus: TBCPanel;
+    pSpecies: TBCPanel;
+    pSubspeciesGroup: TBCPanel;
     pApplyTo: TBCPanel;
     cbClearParentTaxon: TCheckBox;
     cbClearOrder: TCheckBox;

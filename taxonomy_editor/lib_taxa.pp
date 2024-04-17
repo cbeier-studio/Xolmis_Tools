@@ -416,14 +416,10 @@ const
   procedure SplitTaxon(aSubspecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
   procedure LumpTaxon(aSpecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
 
-  procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-    ExecNow: Boolean = True);
-  procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-    ExecNow: Boolean = True);
-  procedure MoveToFamily(aFamily: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-    ExecNow: Boolean = True);
-  procedure MoveToOrder(aOrder: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-    ExecNow: Boolean = True);
+  procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
+  procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
+  procedure MoveToFamily(aFamily: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
+  procedure MoveToOrder(aOrder: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
 
   procedure UpdateScientificName(aTaxon: Integer; aNewName: String; aDataset: TSQLQuery;
     ExecNow: Boolean = True);
@@ -1665,13 +1661,13 @@ begin
   end;
 end;
 
-procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery;
-  ExecNow: Boolean);
+procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
 var
   OldName, MoveToName, NewName: String;
   OldRankId, ParentSp, ValidSsp, ExistingId: Integer;
   Ssp, MoveToSp: TTaxon;
   OldRank: TZooRank;
+  aDataSet: TSQLQuery;
 begin
   ExistingId := 0;
   OldRankId := GetRankFromTaxon(aSubspecies);
@@ -1687,6 +1683,8 @@ begin
   MoveToSp := TTaxon.Create(ToSpecies);
   //GravaLog('MOVE TO SPECIES', OldName + ' -> ' + MoveToName + ' = ' + NewName);
 
+  aDataSet := TSQLQuery.Create(dmTaxa.sqlCon);
+  aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
     if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
@@ -1895,15 +1893,16 @@ begin
   finally
     FreeAndNil(Ssp);
     FreeAndNil(MoveToSp);
+    FreeAndNil(aDataSet);
   end;
 end;
 
-procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery; ExecNow: Boolean
-  );
+procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
 var
   OldName, MoveToName, NewName: String;
   SpRank, ParentGenus, ValidSp, ExistingId: Integer;
   Ssp, Gen: TTaxon;
+  aDataSet: TSQLQuery;
 begin
   ExistingId := 0;
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSpecies);
@@ -1914,6 +1913,8 @@ begin
   Ssp := TTaxon.Create(aSpecies);
   Gen := TTaxon.Create(ToGenus);
 
+  aDataSet := TSQLQuery.Create(dmTaxa.sqlCon);
+  aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
     if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
@@ -2095,15 +2096,16 @@ begin
   finally
     FreeAndNil(Ssp);
     FreeAndNil(Gen);
+    FreeAndNil(aDataSet);
   end;
 end;
 
-procedure MoveToFamily(aFamily: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery; ExecNow: Boolean);
+procedure MoveToFamily(aFamily: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
 begin
   { #todo : Move taxon to family }
 end;
 
-procedure MoveToOrder(aOrder: Integer; aTaxonomy: TBirdTaxonomies; aDataset: TSQLQuery; ExecNow: Boolean);
+procedure MoveToOrder(aOrder: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
 begin
   { #todo : Move taxon to order }
 end;
