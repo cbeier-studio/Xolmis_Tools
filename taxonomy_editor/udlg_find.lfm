@@ -159,8 +159,12 @@ object dlgFind: TdlgFind
   object qFind: TSQLQuery
     PacketRecords = 50
     FieldDefs = <>
+    Database = dmTaxa.sqlCon
+    Transaction = dmTaxa.sqlTrans
     Params = <>
     Macros = <>
+    MacroCheck = True
+    MacroChar = '&'
     Left = 121
     Top = 180
   end

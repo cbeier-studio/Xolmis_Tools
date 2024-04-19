@@ -3,9 +3,12 @@ object dlgSqlFilter: TdlgSqlFilter
   Height = 410
   Top = 34
   Width = 662
+  BorderIcons = [biSystemMenu]
   Caption = 'SQL filter'
   ClientHeight = 410
   ClientWidth = 662
+  PopupMode = pmAuto
+  Position = poScreenCenter
   object pBottom: TPanel
     Left = 0
     Height = 41
@@ -581,7 +584,7 @@ object dlgSqlFilter: TdlgSqlFilter
     ClientHeight = 40
     ClientWidth = 662
     TabOrder = 2
-    object SpeedButton1: TSpeedButton
+    object sbReset: TSpeedButton
       Left = 16
       Height = 24
       Top = 8
@@ -593,6 +596,7 @@ object dlgSqlFilter: TdlgSqlFilter
       Images = frmTaxaEditor.bMenu
       ImageIndex = 62
       ImageWidth = 20
+      OnClick = sbResetClick
     end
   end
   object SynCompletion: TSynCompletion

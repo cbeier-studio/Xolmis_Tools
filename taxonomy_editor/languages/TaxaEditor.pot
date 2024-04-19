@@ -1,6 +1,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: lib_taxa.rsactiverecordduplicated
+#, object-pascal-format
+msgid "A record with the same %s value already exists (%s)."
+msgstr ""
+
 #: lib_taxa.rscaptionfind
 msgid "Find"
 msgstr ""
@@ -12,6 +17,11 @@ msgstr ""
 #: lib_taxa.rserrortablenotfound
 #, object-pascal-format
 msgid "Table %s not found."
+msgstr ""
+
+#: lib_taxa.rsinactiverecordduplicated
+#, object-pascal-format
+msgid "An inactive record with the same %s value already exists (%s)."
 msgstr ""
 
 #: lib_taxa.rstitlecaution
@@ -237,7 +247,8 @@ msgctxt "tdlgsqlfilter.sbclose.caption"
 msgid "Cancel"
 msgstr ""
 
-#: tdlgsqlfilter.speedbutton1.caption
+#: tdlgsqlfilter.sbreset.caption
+msgctxt "tdlgsqlfilter.sbreset.caption"
 msgid "Reset"
 msgstr ""
 
@@ -264,6 +275,14 @@ msgstr ""
 
 #: tfrmtaxaeditor.actimport.caption
 msgid "Import"
+msgstr ""
+
+#: tfrmtaxaeditor.actimportclements.caption
+msgid "Clements Checklist"
+msgstr ""
+
+#: tfrmtaxaeditor.actimportiocnames.caption
+msgid "IOC Names"
 msgstr ""
 
 #: tfrmtaxaeditor.caption
@@ -307,6 +326,10 @@ msgstr ""
 msgid "Extinction year"
 msgstr ""
 
+#: tfrmtaxaeditor.etquickcode.texthint
+msgid "AAA AAA"
+msgstr ""
+
 #: tfrmtaxaeditor.gridtaxa.columns[0].title.caption
 msgctxt "tfrmtaxaeditor.gridtaxa.columns[0].title.caption"
 msgid "marked_status"
@@ -315,6 +338,14 @@ msgstr ""
 #: tfrmtaxaeditor.gridtaxa.columns[1].title.caption
 msgctxt "tfrmtaxaeditor.gridtaxa.columns[1].title.caption"
 msgid "Scientific name"
+msgstr ""
+
+#: tfrmtaxaeditor.gridtaxa.columns[2].title.caption
+msgid "valid_id"
+msgstr ""
+
+#: tfrmtaxaeditor.gridtaxa.columns[3].title.caption
+msgid "rank_id"
 msgstr ""
 
 #: tfrmtaxaeditor.gridtaxa1.columns[0].title.caption
@@ -581,6 +612,14 @@ msgstr ""
 msgid "Unmarked records"
 msgstr ""
 
+#: tfrmtaxaeditor.pmtsortalphabetical.caption
+msgid "Alphabetical"
+msgstr ""
+
+#: tfrmtaxaeditor.pmtsorttaxonomic.caption
+msgid "Taxonomic"
+msgstr ""
+
 #: tfrmtaxaeditor.pmvmovetofamily.caption
 msgid "To family"
 msgstr ""
@@ -685,10 +724,6 @@ msgstr ""
 
 #: tfrmtaxaeditor.sbmovetaxon.hint
 msgid "Move taxon into other order, family, genus or species"
-msgstr ""
-
-#: tfrmtaxaeditor.sbrecordhistory.caption
-msgid "History"
 msgstr ""
 
 #: tfrmtaxaeditor.sbsaverecord.caption

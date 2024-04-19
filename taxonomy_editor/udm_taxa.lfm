@@ -338,7 +338,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = False
-      Required = True
+      Required = False
     end
     object qTaxafull_name: TStringField
       FieldKind = fkData
@@ -433,7 +433,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'parent_taxon_name'
       Index = 11
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere]
       ReadOnly = False
       Required = False
       Size = 100
@@ -452,7 +452,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'valid_name'
       Index = 13
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere]
       ReadOnly = False
       Required = False
       Size = 100
@@ -624,7 +624,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'ioc_parent_taxon_name'
       Index = 31
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere]
       ReadOnly = False
       Required = False
       Size = 100
@@ -643,7 +643,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'ioc_valid_name'
       Index = 33
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere]
       ReadOnly = False
       Required = False
       Size = 100
@@ -723,7 +723,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'cbro_parent_taxon_name'
       Index = 41
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere]
       ReadOnly = False
       Required = False
       Size = 100
@@ -742,7 +742,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'cbro_valid_name'
       Index = 43
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere]
       ReadOnly = False
       Required = False
       Size = 100
@@ -1603,5 +1603,43 @@ object dmTaxa: TdmTaxa
     OnOtherInstance = UniqueInstance1OtherInstance
     Left = 360
     Top = 32
+  end
+  object lookAuthors: TSQLQuery
+    FieldDefs = <    
+      item
+        Name = 'authorship'
+        DataType = ftString
+        Precision = -1
+        Size = 150
+      end>
+    Database = sqlCon
+    Transaction = sqlTrans
+    ReadOnly = True
+    SQL.Strings = (
+      'SELECT DISTINCT authorship FROM zoo_taxa'
+      'WHERE (authorship != '''') and (active_status = 1)'
+      'ORDER BY authorship ASC'
+    )
+    Params = <>
+    Macros = <>
+    Left = 320
+    Top = 216
+    object lookAuthorsauthorship: TStringField
+      DisplayLabel = 'Authorship'
+      FieldKind = fkData
+      FieldName = 'authorship'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 150
+    end
+  end
+  object dslookAuthors: TDataSource
+    AutoEdit = False
+    DataSet = lookAuthors
+    Left = 424
+    Top = 216
   end
 end

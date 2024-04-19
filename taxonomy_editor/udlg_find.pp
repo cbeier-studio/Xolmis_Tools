@@ -87,10 +87,11 @@ end;
 
 procedure TdlgFind.FindTaxa(aSQL: TStrings; aFilter: TFilterValue; aCriteria: TCriteriaType);
 var
-  Operador: String;
+  Operador, AndOr: String;
   F: TTaxonFilter;
 begin
   Operador := GetCriteria(aCriteria);
+  AndOr := '';
 
   with aSQL do
   begin
@@ -110,6 +111,7 @@ begin
             end
             else
             begin
+              Add('AND (');
               for F in FTaxonFilter do
               begin
                 case F of
@@ -118,74 +120,88 @@ begin
                   // tfClasses: Add('AND ((NIV_CODIGO = 3) or (NIV_CODIGO = 14)) ');
                   tfOrders:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
-                    Add('WHERE taxon_ranks.rank_acronym LIKE ''%ord.'')) ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add('WHERE (taxon_ranks.rank_acronym = ''ord.'') OR (taxon_ranks.rank_acronym LIKE ''%ord.''))) ');
+                    AndOr := 'OR';
                   end;
                   tfFamilies:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
-                    Add('WHERE taxon_ranks.rank_acronym LIKE ''%fam.'')) ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add('WHERE (taxon_ranks.rank_acronym = ''fam.'') OR (taxon_ranks.rank_acronym LIKE ''%fam.''))) ');
+                    AndOr := 'OR';
                   end;
                   tfTribes:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
-                    Add('WHERE taxon_ranks.rank_acronym LIKE ''%tr.'')) ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add('WHERE (taxon_ranks.rank_acronym = ''tr.'') OR (taxon_ranks.rank_acronym LIKE ''%tr.''))) ');
+                    AndOr := 'OR';
                   end;
                   tfGenera:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
-                    Add('WHERE taxon_ranks.rank_acronym LIKE ''%g.'')) ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add('WHERE (taxon_ranks.rank_acronym = ''g.'') OR (taxon_ranks.rank_acronym LIKE ''%g.''))) ');
+                    AndOr := 'OR';
                   end;
                   tfSpecies:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE (taxon_ranks.rank_acronym = ''supersp.'') OR (taxon_ranks.rank_acronym = ''sp.''))) ');
+                    AndOr := 'OR';
                   end;
                   tfSubspecies:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE (taxon_ranks.rank_acronym = ''ssp.'')');
                     if not (tfSubspeciesGroups in FTaxonFilter) then
                       Add('OR (taxon_ranks.rank_acronym = ''grp. (mono)'')');
                     Add(')) ');
+                    AndOr := 'OR';
                   end;
                   tfSubspeciesGroups:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym LIKE ''grp. %'')) ');
+                    AndOr := 'OR';
                   end;
                   tfSpuhs:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym = ''spuh'')) ');
+                    AndOr := 'OR';
                   end;
                   tfSlashes:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym = ''slash'')) ');
+                    AndOr := 'OR';
                   end;
                   tfForms:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym = ''form'')) ');
+                    AndOr := 'OR';
                   end;
                   tfDomestics:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym = ''domest.'')) ');
+                    AndOr := 'OR';
                   end;
                   tfHybrids:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym = ''hybrid'')) ');
+                    AndOr := 'OR';
                   end;
                   tfIntergrades:
                   begin
-                    Add('AND (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
+                    Add(AndOr + ' (zoo_taxa.rank_id IN (SELECT taxon_ranks.rank_id FROM taxon_ranks ');
                     Add('WHERE taxon_ranks.rank_acronym = ''intergrade'')) ');
+                    AndOr := 'OR';
                   end;
                 end;
               end;
+              Add(')');
             end;
           end;
           Add('AND (active_status = 1)');
@@ -327,9 +343,9 @@ begin
     EP.SelStart := Length(EP.Text);
   end;
 
-  if (FFormattedNameField <> EmptyStr) then
-    uList.Columns[0].FieldName := FFormattedNameField
-  else
+  //if (FFormattedNameField <> EmptyStr) then
+  //  uList.Columns[0].FieldName := FFormattedNameField
+  //else
     uList.Columns[0].FieldName := FFullNameField;
 end;
 
@@ -543,9 +559,9 @@ begin
       tbTaxonRanks:
         SetupResult('rank_id', 'rank_name');
       tbZooTaxa:
-        if (qFind.FieldByName('valid_id').AsInteger > 0) then
-          SetupResult('valid_id', 'full_name')
-        else
+        //if (qFind.FieldByName('valid_id').AsInteger > 0) then
+        //  SetupResult('valid_id', 'full_name')
+        //else
           SetupResult('taxon_id', 'full_name');
     end;
 

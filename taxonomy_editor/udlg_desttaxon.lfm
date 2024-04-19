@@ -9,9 +9,11 @@ object dlgDestTaxon: TdlgDestTaxon
   ClientHeight = 205
   ClientWidth = 556
   OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   OnShow = FormShow
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '3.2.0.0'
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
@@ -48,6 +50,7 @@ object dlgDestTaxon: TdlgDestTaxon
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
+      OnKeyPress = FormKeyPress
     end
     object sbApply: TBitBtn
       Left = 324
@@ -58,6 +61,7 @@ object dlgDestTaxon: TdlgDestTaxon
       Caption = 'Apply'
       ImageWidth = 24
       OnClick = sbApplyClick
+      OnKeyPress = FormKeyPress
       TabOrder = 0
     end
   end
@@ -91,6 +95,7 @@ object dlgDestTaxon: TdlgDestTaxon
       )
       ItemHeight = 17
       TabOrder = 1
+      OnKeyPress = FormKeyPress
       Data = {
         03000000000000
       }
@@ -156,12 +161,14 @@ object dlgDestTaxon: TdlgDestTaxon
         Align = alTop
         ButtonWidth = 23
         Constraints.MinWidth = 382
+        DirectInput = False
         Images = frmTaxaEditor.bMenu
         ImageIndex = 6
         ImageWidth = 20
         MaxLength = 0
         NumGlyphs = 1
         OnButtonClick = eDestinationTaxonButtonClick
+        OnKeyPress = eDestinationTaxonKeyPress
         PasswordChar = #0
         Spacing = 0
         TabOrder = 0

@@ -5,7 +5,7 @@ unit lib_taxa;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, DB, SQLDB, Dialogs, StdCtrls,
+  Classes, SysUtils, Forms, Controls, DB, SQLDB, Dialogs, StdCtrls, EditBtn,
   {$IFDEF MSWINDOWS} Windows, DwmApi, Messages,{$ENDIF}
   StrUtils, Generics.Collections, RegExpr, CheckLst;
 
@@ -450,6 +450,10 @@ const
   function WildcardWords(aText: String; aWildcard: String = '%'): String;
   function WildcardSyllables(aText: String; aWildcard: String = '%'): String;
 
+  function IsRecordActive(aTable: TTableType; aFieldName, aValue: String): Boolean;
+  function RecordDuplicated(aTable: TTableType; aKeyField, aNameField, aNameValue: String; aKeyValue: Integer;
+    aMessageList: TStrings = nil): Boolean;
+
 var
   Closing: Boolean;
   Parar: Boolean;
@@ -462,6 +466,8 @@ resourcestring
   rsCaptionFind = 'Find';
   rsErrorTableNotFound = 'Table %s not found.';
   rsErrorRewritingHierarchy = 'An error occurred during hierarchy rewriting. All changes will be reverted back.';
+  rsActiveRecordDuplicated = 'A record with the same %s value already exists (%s).';
+  rsInactiveRecordDuplicated = 'An inactive record with the same %s value already exists (%s).';
 
 implementation
 
@@ -1312,12 +1318,12 @@ begin
         begin
           SQL.Add('ioc_taxonomy = 1,');
           SQL.Add('ioc_rank_id = :nivel_ioc,');
-          SQL.Add('ioc_parent_raxon_id = :sup_ioc,');
+          SQL.Add('ioc_parent_taxon_id = :sup_ioc,');
           SQL.Add('ioc_distribution = :geodist_ioc,');
           ParamByName('NIVEL_IOC').AsInteger := SpRank;
           ParamByName('SUP_IOC').AsInteger := ParentGenus;
-          ParamByName('GEODIST').DataType := ftMemo;
-          ParamByName('GEODIST').AsString := Ssp.IocDistribution;
+          ParamByName('GEODIST_IOC').DataType := ftMemo;
+          ParamByName('GEODIST_IOC').AsString := Ssp.IocDistribution;
         end;
         if (btCBRO in aTaxonomy) then { CBRO }
         begin
@@ -1347,7 +1353,7 @@ begin
         // List fields
         SQL.Add('INSERT INTO zoo_taxa (full_name, formatted_name, authorship, english_name,');
         SQL.Add('rank_id, parent_taxon_id, extinct, extinction_year, species_id, genus_id,');
-        SQL.Add('subfamily_id, family_id, order_id, subspecies_group_id, genus_name, species_epithet,');
+        SQL.Add('subfamily_id, family_id, order_id, subspecies_group_id, genus_epithet, species_epithet,');
         if (btClements in aTaxonomy) then
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
@@ -1544,7 +1550,7 @@ begin
         // List fields
         SQL.Add('INSERT INTO zoo_taxa (full_name, formatted_name, authorship, english_name,');
         SQL.Add('rank_id, parent_taxon_id, extinct, extinction_year, species_id, genus_id,');
-        SQL.Add('subfamily_id, family_id, order_id, subspecies_group_id, genus_name, species_epithet,');
+        SQL.Add('subfamily_id, family_id, order_id, subspecies_group_id, genus_epithet, species_epithet,');
         if (btClements in aTaxonomy) then
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
@@ -1746,18 +1752,20 @@ begin
           ParamByName('GEODISTIOC').DataType := ftMemo;
           ParamByName('GEODISTIOC').AsString := Ssp.IocDistribution;
         end;
-        case OldRank of
-          trMonotypicGroup:
-            begin
-              ParamByName('ARANKMONO').AsInteger := OldRankId;
-              ParamByName('AFORMATTEDMONO').AsString := FormattedBirdName(NewName, OldRankId);
-            end;
-          trPolitypicGroup:
-            begin
-              ParamByName('ARANKPOLI').AsInteger := OldRankId;
-              ParamByName('AFORMATTEDPOLI').AsString := FormattedBirdName(NewName, OldRankId);
-            end;
+        if aDataset.Params.FindParam('AFORMATTEDMONO') <> nil then
+        begin
+          ParamByName('ARANKMONO').AsInteger := OldRankId;
+          ParamByName('AFORMATTEDMONO').AsString := FormattedBirdName(NewName, OldRankId);
+        end
         else
+        if aDataset.Params.FindParam('AFORMATTEDPOLI') <> nil then
+        begin
+          ParamByName('ARANKPOLI').AsInteger := OldRankId;
+          ParamByName('AFORMATTEDPOLI').AsString := FormattedBirdName(NewName, OldRankId);
+        end
+        else
+        if aDataset.Params.FindParam('AFORMATTEDNAME') <> nil then
+        begin
           ParamByName('ARANK').AsInteger := Ssp.RankId;
           ParamByName('AFORMATTEDNAME').AsString := FormattedBirdName(NewName, Ssp.RankId);
         end;
@@ -1779,7 +1787,7 @@ begin
         // List fields
         SQL.Add('INSERT INTO zoo_taxa (full_name, formatted_name, authorship, english_name,');
         SQL.Add('rank_id, parent_taxon_id, extinct, extinction_year, species_id, genus_id, subfamily_id,');
-        SQL.Add('family_id, order_id, subspecies_group_id, genus_name, species_epithet, subspecies_epithet,');
+        SQL.Add('family_id, order_id, subspecies_group_id, genus_epithet, species_epithet, subspecies_epithet,');
         if (btClements in aTaxonomy) then
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
@@ -1983,7 +1991,7 @@ begin
         // List fields
         SQL.Add('INSERT INTO zoo_taxa (full_name, formatted_name, authorship, english_name,');
         SQL.Add('rank_id, parent_taxon_id, extinct, extinction_year, species_id, genus_id, subfamily_id,');
-        SQL.Add('family_id, order_id, subspecies_group_id, genus_name, species_epithet, subspecies_epithet,');
+        SQL.Add('family_id, order_id, subspecies_group_id, genus_epithet, species_epithet, subspecies_epithet,');
         if (btClements in aTaxonomy) then
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
@@ -2269,6 +2277,12 @@ begin
     begin
       aResultKey := dlgFind.KeySelected;
       if Assigned(aControl) then
+        if aControl is TEditButton then
+        begin
+          TEditButton(aControl).Text := dlgFind.NameSelected;
+          TEditButton(aControl).Modified := True;
+        end
+        else
         if aControl is TCustomEdit then
         begin
           TCustomEdit(aControl).Text := dlgFind.NameSelected;
@@ -2467,6 +2481,79 @@ begin
   finally
     FreeAndNil(Syllables);
   end;
+end;
+
+function RecordDuplicated(aTable: TTableType; aKeyField, aNameField, aNameValue: String; aKeyValue: Integer;
+  aMessageList: TStrings): Boolean;
+var
+  M: String;
+  Qry: TSQLQuery;
+begin
+  Result := False;
+  if (Trim(aNameValue) = '') then
+    Exit;
+
+  Qry := TSQLQuery.Create(dmTaxa.sqlCon);
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+    DataBase := dmTaxa.sqlCon;
+    Clear;
+    Add('SELECT %keyf FROM %tabname');
+    Add('WHERE (%uniquef = :uniquev) AND (%keyf != :keyv)');
+    MacroByName('KEYF').Value := aKeyField;
+    MacroByName('TABNAME').Value := TableNames[aTable];
+    MacroByName('UNIQUEF').Value := aNameField;
+    ParamByName('UNIQUEV').AsString := aNameValue;
+    ParamByName('KEYV').AsInteger := aKeyValue;
+    //GravaLogSQL(SQL);
+    Open;
+    Result := RecordCount > 0;
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+
+  if Result then
+  begin
+    if IsRecordActive(aTable, aNameField, aNameValue) then
+      M := Format(rsActiveRecordDuplicated, [aNameField, aNameValue])
+    else
+      M := Format(rsInactiveRecordDuplicated, [aNameField, aNameValue]);
+    if (Assigned(aMessageList)) then
+    begin
+      //LogError(M);
+      aMessageList.Add(M);
+    end
+    else
+      MsgDlg('', M, mtInformation);
+  end;
+end;
+
+function IsRecordActive(aTable: TTableType; aFieldName, aValue: String): Boolean;
+var
+  a: Boolean;
+  Qry: TSQLQuery;
+begin
+  Result := True;
+  Qry := TSQLQuery.Create(dmTaxa.sqlCon);
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+    DataBase := dmTaxa.sqlCon;
+    Clear;
+    Add('SELECT active_status FROM %tabname WHERE (%keyf = :keyv)');
+    MacroByName('TABNAME').Value := TableNames[aTable];
+    MacroByName('KEYF').Value := aFieldName;
+    ParamByName('KEYV').AsInteger := StrToInt(aValue);
+    // GravaLogSQL(SQL);
+    Open;
+    a := FieldByName('reg_ativo').AsBoolean;
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+  Result := a;
 end;
 
 { TSearchField }
@@ -2994,7 +3081,7 @@ begin
       FFamilyId := FieldByName('family_id').AsInteger;
       FSubfamilyId := FieldByName('subfamily_id').AsInteger;
       FGenusId := FieldByName('genus_id').AsInteger;
-      FGenusEpithet := FieldByName('genus_name').AsString;
+      FGenusEpithet := FieldByName('genus_epithet').AsString;
       FSpeciesId := FieldByName('species_id').AsInteger;
       FSpeciesEpithet := FieldByName('species_epithet').AsString;
       FSubspeciesGroupId := FieldByName('subspecies_group_id').AsInteger;

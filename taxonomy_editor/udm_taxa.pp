@@ -14,7 +14,10 @@ type
   TdmTaxa = class(TDataModule)
     dbLibLoader: TSQLDBLibraryLoader;
     dslookRanks: TDataSource;
+    dslookAuthors: TDataSource;
+    lookAuthorsauthorship: TStringField;
     lookRanks: TSQLQuery;
+    lookAuthors: TSQLQuery;
     lookRanksrank_id: TLongintField;
     lookRanksrank_name: TStringField;
     qPacks: TSQLQuery;

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, CheckLst, EditBtn, StdCtrls,
-  Buttons, atshapelinebgra, BCPanel, lib_taxa;
+  Character, Buttons, atshapelinebgra, BCPanel, lib_taxa;
 
 type
 
@@ -27,7 +27,9 @@ type
     sbClose: TButton;
     sbApply: TBitBtn;
     procedure eDestinationTaxonButtonClick(Sender: TObject);
+    procedure eDestinationTaxonKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
     procedure sbApplyClick(Sender: TObject);
     procedure sbApplyToSelectedClick(Sender: TObject);
@@ -98,6 +100,17 @@ begin
   FTaxon := 0;
 end;
 
+procedure TdlgDestTaxon.FormKeyPress(Sender: TObject; var Key: char);
+begin
+  { <ESC> key }
+  if (Key = #27) then
+  begin
+    Key := #0;
+
+    ModalResult := mrCancel;
+  end;
+end;
+
 procedure TdlgDestTaxon.FormShow(Sender: TObject);
 begin
   eDestinationTaxon.Enabled := FTaxonomyAction <> taSplit;
@@ -107,6 +120,24 @@ end;
 procedure TdlgDestTaxon.eDestinationTaxonButtonClick(Sender: TObject);
 begin
   FindTaxonDlg([tfAll], eDestinationTaxon, True, FTaxon);
+end;
+
+procedure TdlgDestTaxon.eDestinationTaxonKeyPress(Sender: TObject; var Key: char);
+begin
+  FormKeyPress(Sender, Key);
+
+  { Alphabetic search in numeric field }
+  if (IsLetter(Key) or IsNumber(Key) or IsPunctuation(Key) or IsSeparator(Key) or IsSymbol(Key)) then
+  begin
+    FindTaxonDlg([tfAll], eDestinationTaxon, True, FTaxon, Key);
+    Key := #0;
+  end;
+  { CLEAR FIELD VALUE = Backspace }
+  if (Key = #8) then
+  begin
+    eDestinationTaxon.Clear;
+    Key := #0;
+  end;
 end;
 
 initialization
