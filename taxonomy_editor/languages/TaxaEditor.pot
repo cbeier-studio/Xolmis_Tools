@@ -10,6 +10,15 @@ msgstr ""
 msgid "Find"
 msgstr ""
 
+#: lib_taxa.rserrorfileisempty
+msgid "Selected file is empty."
+msgstr ""
+
+#: lib_taxa.rserrorfilenotfound
+#, object-pascal-format
+msgid "File %s not found."
+msgstr ""
+
 #: lib_taxa.rserrorrewritinghierarchy
 msgid "An error occurred during hierarchy rewriting. All changes will be reverted back."
 msgstr ""
@@ -19,9 +28,17 @@ msgstr ""
 msgid "Table %s not found."
 msgstr ""
 
+#: lib_taxa.rsimportcanceledbyuser
+msgid "Import canceled by the user."
+msgstr ""
+
 #: lib_taxa.rsinactiverecordduplicated
 #, object-pascal-format
 msgid "An inactive record with the same %s value already exists (%s)."
+msgstr ""
+
+#: lib_taxa.rssuccessfulimport
+msgid "The selected file was sucessfully imported."
 msgstr ""
 
 #: lib_taxa.rstitlecaution
@@ -34,6 +51,10 @@ msgstr ""
 
 #: lib_taxa.rstitleerror
 msgid "Error"
+msgstr ""
+
+#: lib_taxa.rstitleimportfile
+msgid "Import file"
 msgstr ""
 
 #: lib_taxa.rstitleinformation
@@ -274,6 +295,7 @@ msgid "Format scientific names"
 msgstr ""
 
 #: tfrmtaxaeditor.actimport.caption
+msgctxt "tfrmtaxaeditor.actimport.caption"
 msgid "Import"
 msgstr ""
 
@@ -283,6 +305,11 @@ msgstr ""
 
 #: tfrmtaxaeditor.actimportiocnames.caption
 msgid "IOC Names"
+msgstr ""
+
+#: tfrmtaxaeditor.btncancelprogress.caption
+msgctxt "tfrmtaxaeditor.btncancelprogress.caption"
+msgid "Cancel"
 msgstr ""
 
 #: tfrmtaxaeditor.caption
@@ -477,6 +504,10 @@ msgstr ""
 msgid "Marked records"
 msgstr ""
 
+#: tfrmtaxaeditor.lblprogress.caption
+msgid "Progress"
+msgstr ""
+
 #: tfrmtaxaeditor.lblsynonymfilter.caption
 msgid "Is a synonym"
 msgstr ""
@@ -610,6 +641,11 @@ msgstr ""
 
 #: tfrmtaxaeditor.lblunmarkedfilter.caption
 msgid "Unmarked records"
+msgstr ""
+
+#: tfrmtaxaeditor.menuitem3.caption
+msgctxt "tfrmtaxaeditor.menuitem3.caption"
+msgid "Import"
 msgstr ""
 
 #: tfrmtaxaeditor.pmtsortalphabetical.caption

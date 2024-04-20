@@ -124,6 +124,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="SDFLaz"/>
+      </Item>
+      <Item>
         <PackageName Value="ibcontrols"/>
       </Item>
       <Item>

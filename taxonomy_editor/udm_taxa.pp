@@ -5,7 +5,7 @@ unit udm_taxa;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Dialogs, UniqueInstance, SQLDBLib, SQLDB, DB, SQLite3Conn;
+  Classes, SysUtils, LResources, Forms, Dialogs, UniqueInstance, SQLDBLib, SQLDB, DB, SdfData, SQLite3Conn;
 
 type
 

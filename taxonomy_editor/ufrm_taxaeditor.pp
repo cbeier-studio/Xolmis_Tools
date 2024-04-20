@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, LCLType, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, Menus, DB, DBCtrls,
   ActnList, StdCtrls, attabs, BCPanel, BCButton, ColorSpeedButton, StrUtils, RegExpr, Character,
-  BGRABitmap, SQLDB, CheckLst, rxswitch, Grids, DBGrids, DBEditButton, lib_taxa, IBLookupComboEditBox;
+  BGRABitmap, SQLDB, CheckLst, rxswitch, Grids, DBGrids, ComCtrls, DBEditButton, lib_taxa, IBLookupComboEditBox;
 
 type
 
@@ -24,6 +24,7 @@ type
     actImportClements: TAction;
     actList: TActionList;
     AppProperties: TApplicationProperties;
+    btnCancelProgress: TBitBtn;
     cbAuthorship: TIBLookupComboEditBox;
     cbtCbroRank: TDBLookupComboBox;
     cbtIocRank: TDBLookupComboBox;
@@ -62,6 +63,7 @@ type
     gridTaxa3: TDBGrid;
     iconFindTaxa1: TImage;
     iconFindTaxa2: TImage;
+    lblProgress: TLabel;
     lbltAuthorship: TLabel;
     lbltCbroOtherPtNames: TLabel;
     lbltCbroParentTaxon: TLabel;
@@ -88,6 +90,9 @@ type
     lbltValidName: TLabel;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
+    OpenDlg: TOpenDialog;
+    pProgress: TPanel;
+    PBar: TProgressBar;
     ptAuthorship: TBCPanel;
     ptFullName: TBCPanel;
     ptToolbar: TPanel;
@@ -254,6 +259,7 @@ type
     tsTaxonomyIoc: TRxSwitch;
     procedure actAboutExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
+    procedure actImportIOCNamesExecute(Sender: TObject);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
     procedure dsTaxaStateChange(Sender: TObject);
@@ -338,6 +344,12 @@ end;
 procedure TfrmTaxaEditor.actExitExecute(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TfrmTaxaEditor.actImportIOCNamesExecute(Sender: TObject);
+begin
+  if OpenDlg.Execute then
+    ImportIocData(OpenDlg.FileName);
 end;
 
 procedure TfrmTaxaEditor.AddSortedField(aFieldName: String; aDirection: TSortDirection; aCollation: String;
