@@ -98,6 +98,7 @@
 {"hash":116683779,"name":"tfrmtaxaeditor.gridtaxa3.columns[9].title.caption","sourcebytes":[73,110,102,114,97,115,112,101,99,105,102,105,99],"value":"Infraspecific"},
 {"hash":1236,"name":"tfrmtaxaeditor.gridtaxa3.columns[10].title.caption","sourcebytes":[73,68],"value":"ID"},
 {"hash":315429,"name":"tfrmtaxaeditor.sbfilemenu.caption","sourcebytes":[70,105,108,101],"value":"File"},
+{"hash":230860389,"name":"tfrmtaxaeditor.lblloading.caption","sourcebytes":[87,101,108,99,111,109,101],"value":"Welcome"},
 {"hash":19173363,"name":"tfrmtaxaeditor.actformatscinames.caption","sourcebytes":[70,111,114,109,97,116,32,115,99,105,101,110,116,105,102,105,99,32,110,97,109,101,115],"value":"Format scientific names"},
 {"hash":84178580,"name":"tfrmtaxaeditor.actimport.caption","sourcebytes":[73,109,112,111,114,116],"value":"Import"},
 {"hash":80705172,"name":"tfrmtaxaeditor.actexport.caption","sourcebytes":[69,120,112,111,114,116],"value":"Export"},

@@ -500,6 +500,10 @@ msgstr ""
 msgid "Have synonyms"
 msgstr ""
 
+#: tfrmtaxaeditor.lblloading.caption
+msgid "Welcome"
+msgstr ""
+
 #: tfrmtaxaeditor.lblmarkedfilter.caption
 msgid "Marked records"
 msgstr ""

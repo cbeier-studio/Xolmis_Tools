@@ -5,7 +5,8 @@ unit udm_taxa;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Dialogs, UniqueInstance, SQLDBLib, SQLDB, DB, SdfData, SQLite3Conn;
+  Classes, SysUtils, LResources, Forms, Dialogs, Controls, UniqueInstance, SQLDBLib, SQLDB, DB, SdfData,
+  SQLite3Conn;
 
 type
 
@@ -15,6 +16,7 @@ type
     dbLibLoader: TSQLDBLibraryLoader;
     dslookRanks: TDataSource;
     dslookAuthors: TDataSource;
+    iLogos: TImageList;
     lookAuthorsauthorship: TStringField;
     lookRanks: TSQLQuery;
     lookAuthors: TSQLQuery;

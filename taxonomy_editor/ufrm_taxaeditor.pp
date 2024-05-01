@@ -63,6 +63,8 @@ type
     gridTaxa3: TDBGrid;
     iconFindTaxa1: TImage;
     iconFindTaxa2: TImage;
+    imgSplash: TImage;
+    lblLoading: TLabel;
     lblProgress: TLabel;
     lbltAuthorship: TLabel;
     lbltCbroOtherPtNames: TLabel;
@@ -93,6 +95,7 @@ type
     OpenDlg: TOpenDialog;
     pProgress: TPanel;
     PBar: TProgressBar;
+    pSplash: TPanel;
     ptAuthorship: TBCPanel;
     ptFullName: TBCPanel;
     ptToolbar: TPanel;
@@ -1026,6 +1029,8 @@ end;
 procedure TfrmTaxaEditor.FormCreate(Sender: TObject);
 begin
   CanToggle := False;
+
+  nbTaxaSide.Visible := False;
 end;
 
 procedure TfrmTaxaEditor.FormDestroy(Sender: TObject);
@@ -1059,6 +1064,13 @@ end;
 
 procedure TfrmTaxaEditor.FormShow(Sender: TObject);
 begin
+  pSplash.Top := 0;
+  pSplash.Left := 0;
+  pSplash.Width := Self.ClientWidth;
+  pSplash.Height := Self.ClientHeight;
+  pSplash.Visible := True;
+  Application.ProcessMessages;
+
   FSearch := TCustomSearch.Create(tbZooTaxa);
   FSearch.DataSet := TSQLQuery(dsTaxa.DataSet);
 
@@ -1078,6 +1090,11 @@ begin
 
   UpdateButtons(dsTaxa.DataSet);
   CanToggle := True;
+
+  Application.ProcessMessages;
+  Sleep(500);
+
+  pSplash.Visible := False;
 end;
 
 procedure TfrmTaxaEditor.gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn;
