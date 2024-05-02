@@ -7,7 +7,7 @@ object dmTaxa: TdmTaxa
   VerticalOffset = 32
   Width = 586
   object qTaxa: TSQLQuery
-    PacketRecords = 200
+    PacketRecords = -1
     FieldDefs = <    
       item
         Name = 'taxon_id'
@@ -1113,7 +1113,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'rank_id'
       Index = 10
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = False
       Required = True
     end
@@ -1323,7 +1323,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'package_id'
       Index = 6
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = False
       Required = True
     end
@@ -1515,7 +1515,7 @@ object dmTaxa: TdmTaxa
       FieldName = 'change_id'
       Index = 6
       LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
+      ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = False
       Required = True
     end

@@ -138,6 +138,12 @@ begin
     eDestinationTaxon.Clear;
     Key := #0;
   end;
+  { <ENTER/RETURN> key }
+  if (Key = #13) then
+  begin
+    sbApplyClick(nil);
+    Key := #0;
+  end;
 end;
 
 initialization

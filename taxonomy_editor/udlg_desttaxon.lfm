@@ -13,7 +13,6 @@ object dlgDestTaxon: TdlgDestTaxon
   OnShow = FormShow
   PopupMode = pmAuto
   Position = poScreenCenter
-  LCLVersion = '3.2.0.0'
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
@@ -95,7 +94,7 @@ object dlgDestTaxon: TdlgDestTaxon
       )
       ItemHeight = 17
       TabOrder = 1
-      OnKeyPress = FormKeyPress
+      OnKeyPress = eDestinationTaxonKeyPress
       Data = {
         03000000000000
       }

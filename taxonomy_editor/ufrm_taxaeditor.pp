@@ -90,9 +90,21 @@ type
     lbltSpanishName: TLabel;
     lbltSubspecificGroup: TLabel;
     lbltValidName: TLabel;
+    pmgRefresh: TMenuItem;
+    pmgNewSubspecies: TMenuItem;
+    pmgMove: TMenuItem;
+    pmgMoveToSpecies: TMenuItem;
+    pmgMoveToGenus: TMenuItem;
+    pmgMoveToFamily: TMenuItem;
+    pmgMoveToOrder: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
+    pmgEdit: TMenuItem;
+    pmgDel: TMenuItem;
+    pmgSplit: TMenuItem;
+    pmgLump: TMenuItem;
     OpenDlg: TOpenDialog;
+    pmGrid: TPopupMenu;
     pProgress: TPanel;
     PBar: TProgressBar;
     pSplash: TPanel;
@@ -241,13 +253,14 @@ type
     sbPriorRecord: TSpeedButton;
     sbRefreshRecords: TSpeedButton;
     sbSaveRecord: TSpeedButton;
-    sbShowAudio: TSpeedButton;
-    sbShowDocs: TSpeedButton;
     sbShowImages: TSpeedButton;
     sbShowQuickFilters: TSpeedButton;
     sbShowRecycle: TSpeedButton;
     sbSortRecords: TSpeedButton;
     Separator1: TMenuItem;
+    Separator3: TMenuItem;
+    Separator4: TMenuItem;
+    Separator5: TMenuItem;
     splitTaxaLeft: TSplitter;
     splitTaxaLeft1: TSplitter;
     splitTaxaRight: TSplitter;
@@ -288,12 +301,15 @@ type
     procedure FormShow(Sender: TObject);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
     procedure navTabsTabChanged(Sender: TObject);
+    procedure pmgNewSubspeciesClick(Sender: TObject);
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
     procedure pTaxaListResize(Sender: TObject);
+    procedure sbAdvancedFiltersClick(Sender: TObject);
     procedure sbCancelRecordClick(Sender: TObject);
     procedure sbClearFindTaxaClick(Sender: TObject);
+    procedure sbDelRecordClick(Sender: TObject);
     procedure sbEditRecordClick(Sender: TObject);
     procedure sbFirstRecordClick(Sender: TObject);
     procedure sbInsertRecordClick(Sender: TObject);
@@ -304,6 +320,7 @@ type
     procedure sbPriorRecordClick(Sender: TObject);
     procedure sbRefreshRecordsClick(Sender: TObject);
     procedure sbSaveRecordClick(Sender: TObject);
+    procedure sbShowQuickFiltersClick(Sender: TObject);
     procedure sbSortRecordsClick(Sender: TObject);
     procedure sbSplitTaxonClick(Sender: TObject);
     procedure TimerFindTimer(Sender: TObject);
@@ -328,7 +345,7 @@ var
 implementation
 
 uses
-  udm_taxa, udlg_about, udlg_desttaxon, udlg_edithierarchy, udlg_sqlfilter;
+  udm_taxa, udlg_about, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter;
 
 {$R *.lfm}
 
@@ -1050,7 +1067,14 @@ begin
       0:
       begin
         if (dsTaxa.DataSet.State in [dsInsert, dsEdit]) then
+        begin
           dsTaxa.DataSet.Cancel;
+        end
+        else
+        begin
+          eFindTaxa.SetFocus;
+          eFindTaxa.Clear;
+        end;
       end;
       1: ;
       2:
@@ -1121,6 +1145,86 @@ end;
 procedure TfrmTaxaEditor.navTabsTabChanged(Sender: TObject);
 begin
   nbPages.PageIndex := navTabs.TabIndex;
+end;
+
+procedure TfrmTaxaEditor.pmgNewSubspeciesClick(Sender: TObject);
+var
+  Qry: TSQLQuery;
+  NewName: String;
+  SspRank: Integer;
+begin
+  dlgNewSubspecies := TdlgNewSubspecies.Create(nil);
+  with dlgNewSubspecies do
+  try
+    if ShowModal = mrOK then
+    begin
+      NewName := dsTaxa.DataSet.FieldByName('full_name').AsString + ' ' + Epythet;
+      SspRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ssp.');
+
+      Qry := TSQLQuery.Create(nil);
+      Qry.SQLConnection := dmTaxa.sqlCon;
+      with Qry, SQL do
+      try
+        Add('INSERT INTO zoo_taxa (full_name, formatted_name, ');
+        Add('rank_id, parent_taxon_id, species_id, genus_id,');
+        Add('genus_epithet, species_epithet,');
+        if (btClements in Taxonomies) then
+          SQL.Add('clements_taxonomy, ');
+        if (btIOC in Taxonomies) then
+          SQL.Add('ioc_taxonomy, ioc_rank_id, ioc_parent_taxon_id, ');
+        if (btCBRO in Taxonomies) then
+          SQL.Add('cbro_taxonomy, cbro_rank_id, cbro_parent_taxon_id,');
+        SQL.Add('insert_date, user_inserted) ');
+        // List values
+        SQL.Add('VALUES (:aname, :aformattedname, :anivel, :asup,');
+        SQL.Add(':aspecies, :agenus, ');
+        SQL.Add(':agenusname, :aepithet,');
+        if (btClements in Taxonomies) then
+        begin
+          SQL.Add('1, ');
+        end;
+        if (btIOC in Taxonomies) then
+        begin
+          SQL.Add('1, :anivelioc, :asupioc, ');
+        end;
+        if (btCBRO in Taxonomies) then
+        begin
+          SQL.Add('1, :anivelcbro, :asupcbro,');
+        end;
+        SQL.Add('datetime(''now'',''localtime''), :auser);');
+        ParamByName('ANAME').AsString := NewName;
+        ParamByName('AFORMATTEDNAME').AsString := FormattedBirdName(NewName, SspRank);
+        ParamByName('ANIVEL').AsInteger := SspRank;
+        ParamByName('ASUP').AsInteger := dsTaxa.DataSet.FieldByName('taxon_id').AsInteger;
+        ParamByName('ASPECIES').AsInteger := dsTaxa.DataSet.FieldByName('taxon_id').AsInteger;
+        ParamByName('AGENUS').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(1, NewName, [' ']));
+        //ParamByName('ASUBFAMILY').AsInteger := Ssp.SubfamilyId;
+        //ParamByName('AFAMILY').AsInteger := Ssp.FamilyId;
+        //ParamByName('AORDER').AsInteger := Ssp.OrderId;
+        ParamByName('AGENUSNAME').AsString := ExtractWord(1, NewName, [' ']);
+        ParamByName('AEPITHET').AsString := ExtractWord(2, NewName, [' ']);
+        if (btIOC in Taxonomies) then
+        begin
+          ParamByName('ANIVELIOC').AsInteger := SspRank;
+          ParamByName('ASUPIOC').AsInteger := dsTaxa.DataSet.FieldByName('taxon_id').AsInteger;
+        end;
+        if (btCBRO in Taxonomies) then
+        begin
+          ParamByName('ANIVELCBRO').AsInteger := SspRank;
+          ParamByName('ASUPCBRO').AsInteger := dsTaxa.DataSet.FieldByName('taxon_id').AsInteger;
+        end;
+        ParamByName('AUSER').AsInteger := AdminId;
+
+        ExecSQL;
+      finally
+        FreeAndNil(Qry);
+      end;
+    end;
+  finally
+    FreeAndNil(dlgNewSubspecies);
+  end;
+
+  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.pmtSortClick(Sender: TObject);
@@ -1225,6 +1329,18 @@ begin
   pFindTaxa.Width := pTaxaList.Width - pFindTaxa.Left;
 end;
 
+procedure TfrmTaxaEditor.sbAdvancedFiltersClick(Sender: TObject);
+begin
+  dlgSqlFilter := TdlgSqlFilter.Create(nil);
+  with dlgSqlFilter do
+  try
+    if ShowModal = mrOk then
+      TSQLQuery(dsTaxa.DataSet).SQL.Text := FilterText;
+  finally
+    FreeAndNil(dlgSqlFilter);
+  end;
+end;
+
 procedure TfrmTaxaEditor.sbCancelRecordClick(Sender: TObject);
 begin
   dsTaxa.DataSet.Cancel;
@@ -1235,6 +1351,14 @@ end;
 procedure TfrmTaxaEditor.sbClearFindTaxaClick(Sender: TObject);
 begin
   eFindTaxa.Clear;
+end;
+
+procedure TfrmTaxaEditor.sbDelRecordClick(Sender: TObject);
+begin
+  //DeleteRecord(tbZooTaxa, dsTaxa.DataSet);
+  dsTaxa.DataSet.Edit;
+  dsTaxa.DataSet.FieldByName('active_status').AsBoolean := False;
+  dsTaxa.DataSet.Post;
 end;
 
 procedure TfrmTaxaEditor.sbEditRecordClick(Sender: TObject);
@@ -1250,6 +1374,7 @@ end;
 procedure TfrmTaxaEditor.sbInsertRecordClick(Sender: TObject);
 begin
   dsTaxa.DataSet.Insert;
+  //etFullname.SetFocus;
 end;
 
 procedure TfrmTaxaEditor.sbLastRecordClick(Sender: TObject);
@@ -1328,9 +1453,26 @@ begin
   if not ValidateTaxon then
     Exit;
 
-  dsTaxa.DataSet.Post;
+  dmTaxa.qTaxa.Post;
 
-  dmTaxa.sqlTrans.CommitRetaining;
+  //dmTaxa.sqlTrans.CommitRetaining;
+
+  //UpdateButtons(dsTaxa.DataSet);
+end;
+
+procedure TfrmTaxaEditor.sbShowQuickFiltersClick(Sender: TObject);
+begin
+  if TSpeedButton(Sender).Down then
+  begin
+    nbTaxaSide.PageIndex := TSpeedButton(Sender).Tag;
+    nbTaxaSide.Visible := True;
+    splitTaxaRight.Visible := True;
+  end
+  else
+  begin
+    nbTaxaSide.Visible := False;
+    splitTaxaRight.Visible := False;
+  end;
 end;
 
 procedure TfrmTaxaEditor.sbSortRecordsClick(Sender: TObject);
@@ -1535,86 +1677,118 @@ end;
 
 procedure TfrmTaxaEditor.UpdateButtons(aDataSet: TDataSet);
 begin
-  if (aDataSet.State in [dsInsert, dsEdit]) then
-  begin
-    sbInsertRecord.Enabled := False;
-    sbEditRecord.Enabled := False;
-    sbDelRecord.Enabled := False;
-    sbFirstRecord.Enabled := False;
-    sbPriorRecord.Enabled := False;
-    sbNextRecord.Enabled := False;
-    sbLastRecord.Enabled := False;
-    //sbRecordHistory.Enabled := False;
-    sbSortRecords.Enabled := False;
-
-    sbSplitTaxon.Enabled := False;
-    sbLumpTaxon.Enabled := False;
-    sbMoveTaxon.Enabled := False;
-
-    sbShowQuickFilters.Enabled := False;
-    sbShowImages.Enabled := False;
-    sbShowAudio.Enabled := False;
-    sbShowDocs.Enabled := False;
-    //sbShowSummary.Enabled := False;
-    sbShowRecycle.Enabled := False;
-
-    sbCancelRecord.Visible := True;
-    sbSaveRecord.Visible := True;
-
-    //pmgRefresh.Enabled := False;
-
-    //navGrid.Enabled := False;
-    pTaxaRightBar.Enabled := False;
-  end
-  else
-  begin
-    if (aDataSet.Active) and not (TSQLQuery(aDataSet).ReadOnly) then
+  case aDataSet.State of
+    dsInactive:
     begin
-      sbInsertRecord.Enabled := True;
-      sbEditRecord.Enabled := (aDataSet.RecordCount > 0);
-      sbDelRecord.Enabled := (aDataSet.RecordCount > 0);
-      //sbRecordHistory.Enabled := (aDataSet.RecordCount > 0);
-      sbSortRecords.Enabled := (aDataSet.RecordCount > 0);
-
-      sbSplitTaxon.Enabled := (aDataSet.RecordCount > 0);
-      sbLumpTaxon.Enabled := (aDataSet.RecordCount > 0);
-      sbMoveTaxon.Enabled := (aDataSet.RecordCount > 0);
-    end
-    else
-    begin
-      sbEditRecord.Enabled := False;
+      sbInsertRecord.Enabled := False;
       sbEditRecord.Enabled := False;
       sbDelRecord.Enabled := False;
-      //sbRecordHistory.Enabled := False;
-      sbSortRecords.Enabled := False;
 
       sbSplitTaxon.Enabled := False;
       sbLumpTaxon.Enabled := False;
       sbMoveTaxon.Enabled := False;
+
+      sbFirstRecord.Enabled := False;
+      sbPriorRecord.Enabled := False;
+      sbNextRecord.Enabled := False;
+      sbLastRecord.Enabled := False;
+
+      sbRefreshRecords.Enabled := False;
+      sbSortRecords.Enabled := False;
+      sbAdvancedFilters.Enabled := False;
+      sbClearFilters.Enabled := False;
+      sbMoreOptions.Enabled := False;
+
+      sbShowQuickFilters.Enabled := True;
+      sbShowImages.Enabled := True;
+      sbShowRecycle.Enabled := True;
+
+      sbCancelRecord.Visible := False;
+      sbSaveRecord.Visible := False;
+
+      //gridTaxa.Enabled := False;
+      //pFindTaxa.Enabled := False;
+      pTaxaRightBar.Enabled := True;
+      sbFileMenu.Enabled := True;
+      navTabs.Enabled := True;
     end;
-    sbFirstRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo > 1);
-    sbPriorRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo > 1);
-    sbNextRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo < aDataSet.RecordCount);
-    sbLastRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo < aDataSet.RecordCount);
+    dsBrowse:
+    begin
+      sbInsertRecord.Enabled := True;
+      sbEditRecord.Enabled := (aDataSet.RecordCount > 0);
+      sbDelRecord.Enabled := (aDataSet.RecordCount > 0);
 
-    sbShowQuickFilters.Enabled := True;
-    sbShowImages.Enabled := True;
-    sbShowAudio.Enabled := True;
-    sbShowDocs.Enabled := True;
-    //sbShowSummary.Enabled := True;
-    sbShowRecycle.Enabled := True;
+      sbSplitTaxon.Enabled := (aDataSet.RecordCount > 0);
+      sbLumpTaxon.Enabled := (aDataSet.RecordCount > 0);
+      sbMoveTaxon.Enabled := (aDataSet.RecordCount > 0);
 
-    //pmgRefresh.Enabled := True;
+      sbFirstRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo > 1);
+      sbPriorRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo > 1);
+      sbNextRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo < aDataSet.RecordCount);
+      sbLastRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo < aDataSet.RecordCount);
 
-    sbSaveRecord.Visible := False;
-    sbCancelRecord.Visible := False;
+      sbRefreshRecords.Enabled := True;
+      sbSortRecords.Enabled := True;
+      sbAdvancedFilters.Enabled := True;
+      sbClearFilters.Enabled := True;
+      sbMoreOptions.Enabled := True;
 
-    //navGrid.Enabled := True;
-    pTaxaRightBar.Enabled := True;
+      sbShowQuickFilters.Enabled := True;
+      sbShowImages.Enabled := True;
+      sbShowRecycle.Enabled := True;
+
+      sbSaveRecord.Visible := False;
+      sbCancelRecord.Visible := False;
+
+      //gridTaxa.Enabled := True;
+      //pFindTaxa.Enabled := True;
+      pTaxaRightBar.Enabled := True;
+      sbFileMenu.Enabled := True;
+      navTabs.Enabled := True;
+    end;
+    dsEdit, dsInsert:
+    begin
+      sbInsertRecord.Enabled := False;
+      sbEditRecord.Enabled := False;
+      sbDelRecord.Enabled := False;
+
+      sbSplitTaxon.Enabled := False;
+      sbLumpTaxon.Enabled := False;
+      sbMoveTaxon.Enabled := False;
+
+      sbFirstRecord.Enabled := False;
+      sbPriorRecord.Enabled := False;
+      sbNextRecord.Enabled := False;
+      sbLastRecord.Enabled := False;
+
+      sbRefreshRecords.Enabled := False;
+      sbSortRecords.Enabled := False;
+      sbAdvancedFilters.Enabled := False;
+      sbClearFilters.Enabled := False;
+      sbMoreOptions.Enabled := False;
+
+      sbShowQuickFilters.Enabled := False;
+      sbShowImages.Enabled := False;
+      sbShowRecycle.Enabled := False;
+
+      sbCancelRecord.Visible := True;
+      sbSaveRecord.Visible := True;
+
+      //gridTaxa.Enabled := False;
+      //pFindTaxa.Enabled := False;
+      pTaxaRightBar.Enabled := False;
+      sbFileMenu.Enabled := False;
+      navTabs.Enabled := False;
+    end;
   end;
-  //pmgEdit.Enabled := sbEditRecord.Enabled;
-  //pmgDel.Enabled := sbDelRecord.Enabled;
-  //pmgRecordHistory.Enabled := sbChildHistory.Enabled;
+
+  pmgRefresh.Enabled := sbRefreshRecords.Enabled;
+  pmgEdit.Enabled := sbEditRecord.Enabled;
+  pmgDel.Enabled := sbDelRecord.Enabled;
+  pmgNewSubspecies.Enabled := sbSplitTaxon.Enabled;
+  pmgSplit.Enabled := sbSplitTaxon.Enabled;
+  pmgLump.Enabled := sbLumpTaxon.Enabled;
+  pmgMove.Enabled := sbMoveTaxon.Enabled;
 
   //if dsLink.DataSet.RecordCount = 1 then
   //  lblRecordStatus.Caption := Format(rsRecordsFound, [dsLink.DataSet.RecordCount, rsRecords])
@@ -1629,9 +1803,9 @@ function TfrmTaxaEditor.ValidateTaxon: Boolean;
 begin
   Result := True;
 
-  Result := RecordDuplicated(tbZooTaxa, 'taxon_id', 'full_name',
-              dsTaxa.DataSet.FieldByName('full_name').AsString,
-              dsTaxa.DataSet.FieldByName('taxon_id').AsInteger);
+  //Result := RecordDuplicated(tbZooTaxa, 'taxon_id', 'full_name',
+  //            dsTaxa.DataSet.FieldByName('full_name').AsString,
+  //            dsTaxa.DataSet.FieldByName('taxon_id').AsInteger);
 end;
 
 end.

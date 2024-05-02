@@ -10,6 +10,18 @@ msgstr ""
 msgid "Find"
 msgstr ""
 
+#: lib_taxa.rsdeleterecordfooter
+msgid "Deleted record stay in recycle bin for the time period defined in Settings before being permanently deleted."
+msgstr ""
+
+#: lib_taxa.rsdeleterecordprompt
+msgid "Do you really want to delete this record?"
+msgstr ""
+
+#: lib_taxa.rsdeleterecordtitle
+msgid "Delete record"
+msgstr ""
+
 #: lib_taxa.rserrorfileisempty
 msgid "Selected file is empty."
 msgstr ""
@@ -35,6 +47,14 @@ msgstr ""
 #: lib_taxa.rsinactiverecordduplicated
 #, object-pascal-format
 msgid "An inactive record with the same %s value already exists (%s)."
+msgstr ""
+
+#: lib_taxa.rsrestorerecordprompt
+msgid "Do you really want to restore this record?"
+msgstr ""
+
+#: lib_taxa.rsrestorerecordtitle
+msgid "Restore record"
 msgstr ""
 
 #: lib_taxa.rssuccessfulimport
@@ -252,6 +272,25 @@ msgstr ""
 #: tdlgfind.ulist.columns[0].title.caption
 msgctxt "tdlgfind.ulist.columns[0].title.caption"
 msgid "Name"
+msgstr ""
+
+#: tdlgnewsubspecies.caption
+msgctxt "tdlgnewsubspecies.caption"
+msgid "New subspecies"
+msgstr ""
+
+#: tdlgnewsubspecies.lblapplyto.caption
+msgid "Subspecies epithet"
+msgstr ""
+
+#: tdlgnewsubspecies.sbapply.caption
+msgctxt "tdlgnewsubspecies.sbapply.caption"
+msgid "Apply"
+msgstr ""
+
+#: tdlgnewsubspecies.sbclose.caption
+msgctxt "tdlgnewsubspecies.sbclose.caption"
+msgid "Cancel"
 msgstr ""
 
 #: tdlgsqlfilter.caption
@@ -652,6 +691,60 @@ msgctxt "tfrmtaxaeditor.menuitem3.caption"
 msgid "Import"
 msgstr ""
 
+#: tfrmtaxaeditor.pmgdel.caption
+msgctxt "tfrmtaxaeditor.pmgdel.caption"
+msgid "Delete"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgedit.caption
+msgctxt "tfrmtaxaeditor.pmgedit.caption"
+msgid "Edit"
+msgstr ""
+
+#: tfrmtaxaeditor.pmglump.caption
+msgctxt "tfrmtaxaeditor.pmglump.caption"
+msgid "Lump"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgmove.caption
+msgctxt "tfrmtaxaeditor.pmgmove.caption"
+msgid "Move"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgmovetofamily.caption
+msgctxt "tfrmtaxaeditor.pmgmovetofamily.caption"
+msgid "To family"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgmovetogenus.caption
+msgctxt "tfrmtaxaeditor.pmgmovetogenus.caption"
+msgid "To genus"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgmovetoorder.caption
+msgctxt "tfrmtaxaeditor.pmgmovetoorder.caption"
+msgid "To order"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgmovetospecies.caption
+msgctxt "tfrmtaxaeditor.pmgmovetospecies.caption"
+msgid "To species"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgnewsubspecies.caption
+msgctxt "tfrmtaxaeditor.pmgnewsubspecies.caption"
+msgid "New subspecies"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgrefresh.caption
+msgid "Refresh"
+msgstr ""
+
+#: tfrmtaxaeditor.pmgsplit.caption
+msgctxt "tfrmtaxaeditor.pmgsplit.caption"
+msgid "Split"
+msgstr ""
+
 #: tfrmtaxaeditor.pmtsortalphabetical.caption
 msgid "Alphabetical"
 msgstr ""
@@ -661,18 +754,22 @@ msgid "Taxonomic"
 msgstr ""
 
 #: tfrmtaxaeditor.pmvmovetofamily.caption
+msgctxt "tfrmtaxaeditor.pmvmovetofamily.caption"
 msgid "To family"
 msgstr ""
 
 #: tfrmtaxaeditor.pmvmovetogenus.caption
+msgctxt "tfrmtaxaeditor.pmvmovetogenus.caption"
 msgid "To genus"
 msgstr ""
 
 #: tfrmtaxaeditor.pmvmovetoorder.caption
+msgctxt "tfrmtaxaeditor.pmvmovetoorder.caption"
 msgid "To order"
 msgstr ""
 
 #: tfrmtaxaeditor.pmvmovetospecies.caption
+msgctxt "tfrmtaxaeditor.pmvmovetospecies.caption"
 msgid "To species"
 msgstr ""
 
@@ -707,10 +804,12 @@ msgid "Clear search"
 msgstr ""
 
 #: tfrmtaxaeditor.sbdelrecord.caption
+msgctxt "tfrmtaxaeditor.sbdelrecord.caption"
 msgid "Delete"
 msgstr ""
 
 #: tfrmtaxaeditor.sbeditrecord.caption
+msgctxt "tfrmtaxaeditor.sbeditrecord.caption"
 msgid "Edit"
 msgstr ""
 

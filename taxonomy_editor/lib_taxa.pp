@@ -399,9 +399,13 @@ const
 
   function GetKey(aTable, aKeyField, aNameField, aNameValue: String): Integer;
   function GetName(aTable, aNameField, aKeyField: String; aKeyValue: Integer): String;
+  function GetPrimaryKey(aDataSet: TDataSet): String;
 
   function GetLastInsertedKey(aTableType: TTableType): Integer;
   function RegistroExiste(aTabela: TTableType; aCampo, aValor: String): Boolean;
+
+  procedure DeleteRecord(aTable: TTableType; aDataSet: TDataSet);
+  procedure RestoreRecord(aTable: TTableType; aDataSet: TDataSet);
 
   { Taxonomies management }
   function GetRankType(aKey: Integer): TZooRank;
@@ -475,6 +479,12 @@ resourcestring
   rsInactiveRecordDuplicated = 'An inactive record with the same %s value already exists (%s).';
   rsSuccessfulImport = 'The selected file was sucessfully imported.';
   rsImportCanceledByUser = 'Import canceled by the user.';
+  rsDeleteRecordTitle = 'Delete record';
+  rsDeleteRecordPrompt = 'Do you really want to delete this record?';
+  rsDeleteRecordFooter = 'Deleted record stay in recycle bin for the time period defined in ' +
+    'Settings before being permanently deleted.';
+  rsRestoreRecordTitle = 'Restore record';
+  rsRestoreRecordPrompt = 'Do you really want to restore this record?';
 
 implementation
 
@@ -2659,6 +2669,125 @@ begin
     FreeAndNil(CSV);
     FreeAndNil(Qry);
     FreeAndNil(Range);
+  end;
+end;
+
+procedure DeleteRecord(aTable: TTableType; aDataSet: TDataSet);
+var
+  Qry: TSQLQuery;
+  aKeyField: String;
+  aKeyValue: Integer;
+begin
+  // Confirmation dialog
+  with dmTaxa.TaskDlg do
+  begin
+    Title := rsDeleteRecordTitle;
+    Text := rsDeleteRecordPrompt;
+    Caption := rsTitleConfirmation;
+    CommonButtons := [tcbYes, tcbNo];
+    MainIcon := tdiNone;
+    DefaultButton := tcbNo;
+    FooterIcon := tdiInformation;
+    FooterText := rsDeleteRecordFooter;
+    if Execute then
+      if ModalResult = mrNo then
+        Exit;
+  end;
+
+  aKeyField := GetPrimaryKey(aDataSet);
+  aKeyValue := aDataSet.FieldByName(aKeyField).AsInteger;
+
+  {$IFDEF DEBUG}
+  LogDebug(Format('Record %d from %s set inactive', [aKeyValue, TableNames[aTable]]));
+  {$ENDIF}
+  try
+    dmTaxa.sqlTrans.StartTransaction;
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      MacroCheck := True;
+      DataBase := dmTaxa.sqlCon;
+      Clear;
+      Add('UPDATE %tabname');
+      Add('SET active_status = 0,');
+      Add('update_date = datetime(''now'',''localtime''),');
+      Add('user_updated = :auser');
+      Add('WHERE %keyf = :cod');
+      MacroByName('TABNAME').Value := TableNames[aTable];
+      MacroByName('KEYF').Value := aKeyField;
+      ParamByName('AUSER').AsInteger := AdminId;
+      ParamByName('COD').AsInteger := aKeyValue;
+      {$IFDEF DEBUG}
+      LogSQL(SQL);
+      {$ENDIF}
+      ExecSQL;
+    finally
+      FreeAndNil(Qry);
+    end;
+    dmTaxa.sqlTrans.CommitRetaining;
+  except
+    dmTaxa.sqlTrans.RollbackRetaining;
+    raise;
+  end;
+end;
+
+procedure RestoreRecord(aTable: TTableType; aDataSet: TDataSet);
+var
+  Qry: TSQLQuery;
+  aKeyField: String;
+  aKeyValue: Integer;
+begin
+  if not MsgDlg(rsRestoreRecordTitle, rsRestoreRecordPrompt, mtConfirmation) then
+    Exit;
+
+  aKeyField := GetPrimaryKey(aDataSet);
+  aKeyValue := aDataSet.FieldByName(aKeyField).AsInteger;
+
+  {$IFDEF DEBUG}
+  LogDebug(Format('Record %d from %s set active', [aKeyValue, TableNames[aTable]]));
+  {$ENDIF}
+  try
+    dmTaxa.sqlTrans.StartTransaction;
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      MacroCheck := True;
+      DataBase := dmTaxa.sqlCon;
+      Clear;
+      Add('UPDATE %tabname');
+      Add('SET active_status = 1,');
+      Add('update_date = datetime(''now'',''localtime''),');
+      Add('user_updated = :auser');
+      Add('WHERE %keyf = :cod');
+      MacroByName('TABNAME').Value := TableNames[aTable];
+      MacroByName('KEYF').Value := aKeyField;
+      ParamByName('AUSER').AsInteger := AdminId;
+      ParamByName('COD').AsInteger := aKeyValue;
+      {$IFDEF DEBUG}
+      LogSQL(SQL);
+      {$ENDIF}
+      ExecSQL;
+    finally
+      FreeAndNil(Qry);
+    end;
+    dmTaxa.sqlTrans.CommitRetaining;
+  except
+    dmTaxa.sqlTrans.RollbackRetaining;
+    raise;
+  end;
+end;
+
+function GetPrimaryKey(aDataSet: TDataSet): String;
+var
+  i: Integer;
+begin
+  Result := EmptyStr;
+
+  for i := 0 to aDataSet.FieldCount - 1 do
+  begin
+    if pfInKey in aDataSet.Fields[i].ProviderFlags then
+      Result := aDataSet.Fields[i].FieldName;
+    Break;
   end;
 end;
 

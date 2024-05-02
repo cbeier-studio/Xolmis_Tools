@@ -12,7 +12,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms,
   rxnew,
-  ufrm_TaxaEditor, udm_taxa, lib_taxa, udlg_desttaxon, udlg_edithierarchy, udlg_sqlfilter, sdflaz;
+  ufrm_TaxaEditor, udm_taxa, lib_taxa, udlg_desttaxon, udlg_edithierarchy, udlg_sqlfilter, sdflaz, 
+udlg_newsubspecies;
 
 {$R *.res}
 

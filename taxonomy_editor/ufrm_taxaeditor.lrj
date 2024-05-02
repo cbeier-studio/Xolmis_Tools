@@ -113,5 +113,16 @@
 {"hash":113796393,"name":"tfrmtaxaeditor.pmvmovetofamily.caption","sourcebytes":[84,111,32,102,97,109,105,108,121],"value":"To family"},
 {"hash":24547186,"name":"tfrmtaxaeditor.pmvmovetoorder.caption","sourcebytes":[84,111,32,111,114,100,101,114],"value":"To order"},
 {"hash":258283891,"name":"tfrmtaxaeditor.pmtsorttaxonomic.caption","sourcebytes":[84,97,120,111,110,111,109,105,99],"value":"Taxonomic"},
-{"hash":206149388,"name":"tfrmtaxaeditor.pmtsortalphabetical.caption","sourcebytes":[65,108,112,104,97,98,101,116,105,99,97,108],"value":"Alphabetical"}
+{"hash":206149388,"name":"tfrmtaxaeditor.pmtsortalphabetical.caption","sourcebytes":[65,108,112,104,97,98,101,116,105,99,97,108],"value":"Alphabetical"},
+{"hash":310020,"name":"tfrmtaxaeditor.pmgedit.caption","sourcebytes":[69,100,105,116],"value":"Edit"},
+{"hash":117190931,"name":"tfrmtaxaeditor.pmgnewsubspecies.caption","sourcebytes":[78,101,119,32,115,117,98,115,112,101,99,105,101,115],"value":"New subspecies"},
+{"hash":5927684,"name":"tfrmtaxaeditor.pmgsplit.caption","sourcebytes":[83,112,108,105,116],"value":"Split"},
+{"hash":343104,"name":"tfrmtaxaeditor.pmglump.caption","sourcebytes":[76,117,109,112],"value":"Lump"},
+{"hash":345797,"name":"tfrmtaxaeditor.pmgmove.caption","sourcebytes":[77,111,118,101],"value":"Move"},
+{"hash":174993075,"name":"tfrmtaxaeditor.pmgmovetospecies.caption","sourcebytes":[84,111,32,115,112,101,99,105,101,115],"value":"To species"},
+{"hash":23969907,"name":"tfrmtaxaeditor.pmgmovetogenus.caption","sourcebytes":[84,111,32,103,101,110,117,115],"value":"To genus"},
+{"hash":113796393,"name":"tfrmtaxaeditor.pmgmovetofamily.caption","sourcebytes":[84,111,32,102,97,109,105,108,121],"value":"To family"},
+{"hash":24547186,"name":"tfrmtaxaeditor.pmgmovetoorder.caption","sourcebytes":[84,111,32,111,114,100,101,114],"value":"To order"},
+{"hash":146640072,"name":"tfrmtaxaeditor.pmgrefresh.caption","sourcebytes":[82,101,102,114,101,115,104],"value":"Refresh"},
+{"hash":78392485,"name":"tfrmtaxaeditor.pmgdel.caption","sourcebytes":[68,101,108,101,116,101],"value":"Delete"}
 ]}

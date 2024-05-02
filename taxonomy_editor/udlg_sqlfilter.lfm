@@ -2,18 +2,19 @@ object dlgSqlFilter: TdlgSqlFilter
   Left = 373
   Height = 410
   Top = 34
-  Width = 662
+  Width = 750
   BorderIcons = [biSystemMenu]
   Caption = 'SQL filter'
   ClientHeight = 410
-  ClientWidth = 662
+  ClientWidth = 750
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '3.2.0.0'
   object pBottom: TPanel
     Left = 0
     Height = 41
     Top = 369
-    Width = 662
+    Width = 750
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
@@ -21,13 +22,13 @@ object dlgSqlFilter: TdlgSqlFilter
     ChildSizing.TopBottomSpacing = 8
     ChildSizing.HorizontalSpacing = 8
     ClientHeight = 41
-    ClientWidth = 662
+    ClientWidth = 750
     Color = 15987699
     ParentBackground = False
     ParentColor = False
     TabOrder = 0
     object sbClose: TButton
-      Left = 542
+      Left = 630
       Height = 25
       Top = 8
       Width = 104
@@ -37,13 +38,14 @@ object dlgSqlFilter: TdlgSqlFilter
       TabOrder = 1
     end
     object sbApply: TBitBtn
-      Left = 430
+      Left = 518
       Height = 25
       Top = 8
       Width = 104
       Align = alRight
       Caption = 'Apply'
       ImageWidth = 24
+      OnClick = sbApplyClick
       TabOrder = 0
     end
   end
@@ -51,9 +53,9 @@ object dlgSqlFilter: TdlgSqlFilter
     Left = 0
     Height = 329
     Top = 40
-    Width = 662
+    Width = 750
     Align = alClient
-    Font.Height = -10
+    Font.Height = -13
     Font.Name = 'Fira Code'
     Font.Pitch = fpFixed
     Font.Quality = fqCleartype
@@ -62,7 +64,7 @@ object dlgSqlFilter: TdlgSqlFilter
     TabOrder = 1
     Gutter.Color = clWhite
     Gutter.RightOffset = 16
-    Gutter.Width = 55
+    Gutter.Width = 69
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -537,7 +539,7 @@ object dlgSqlFilter: TdlgSqlFilter
         MouseActions = <>
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
-        Width = 13
+        Width = 17
         MouseActions = <>
         MarkupInfo.Background = clWhite
         MarkupInfo.Foreground = clSilver
@@ -573,7 +575,7 @@ object dlgSqlFilter: TdlgSqlFilter
     Left = 0
     Height = 40
     Top = 0
-    Width = 662
+    Width = 750
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
@@ -582,7 +584,7 @@ object dlgSqlFilter: TdlgSqlFilter
     ChildSizing.HorizontalSpacing = 8
     ChildSizing.ControlsPerLine = 10
     ClientHeight = 40
-    ClientWidth = 662
+    ClientWidth = 750
     TabOrder = 2
     object sbReset: TSpeedButton
       Left = 16

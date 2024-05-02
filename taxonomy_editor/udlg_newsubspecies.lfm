@@ -1,0 +1,179 @@
+object dlgNewSubspecies: TdlgNewSubspecies
+  Left = 362
+  Height = 155
+  Top = 250
+  Width = 365
+  AutoSize = True
+  BorderStyle = bsDialog
+  Caption = 'New subspecies'
+  ClientHeight = 155
+  ClientWidth = 365
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PopupMode = pmAuto
+  Position = poScreenCenter
+  object lineBottom: TShapeLineBGRA
+    Left = 0
+    Height = 2
+    Top = 112
+    Width = 365
+    Align = alTop
+    LineColor = 9276813
+    ArrowColor = clBlack
+    LineWidth = 1
+  end
+  object pBottom: TPanel
+    Left = 0
+    Height = 41
+    Top = 114
+    Width = 365
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 8
+    ChildSizing.HorizontalSpacing = 8
+    ClientHeight = 41
+    ClientWidth = 365
+    Color = 15987699
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 1
+    object sbClose: TButton
+      Left = 245
+      Height = 25
+      Top = 8
+      Width = 104
+      Align = alRight
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object sbApply: TBitBtn
+      Left = 133
+      Height = 25
+      Top = 8
+      Width = 104
+      Align = alRight
+      Caption = 'Apply'
+      ImageWidth = 24
+      OnClick = sbApplyClick
+      TabOrder = 0
+    end
+  end
+  object pContent: TPanel
+    Left = 0
+    Height = 112
+    Top = 0
+    Width = 365
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 16
+    ChildSizing.HorizontalSpacing = 8
+    ChildSizing.VerticalSpacing = 8
+    ClientHeight = 112
+    ClientWidth = 365
+    TabOrder = 0
+    object cklTaxonomy: TCheckListBox
+      AnchorSideLeft.Control = pContent
+      AnchorSideTop.Control = pContent
+      AnchorSideBottom.Control = pContent
+      AnchorSideBottom.Side = asrBottom
+      Left = 16
+      Height = 80
+      Top = 16
+      Width = 100
+      Anchors = [akTop, akLeft, akBottom]
+      BorderStyle = bsNone
+      Color = clBtnFace
+      Items.Strings = (
+        'Clements'
+        'IOC'
+        'CBRO'
+      )
+      ItemHeight = 17
+      TabOrder = 0
+      OnKeyPress = eEpythetKeyPress
+      Data = {
+        03000000000000
+      }
+    end
+    object pApplyTo: TBCPanel
+      AnchorSideLeft.Control = cklTaxonomy
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cklTaxonomy
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = pContent
+      AnchorSideRight.Side = asrBottom
+      Left = 129
+      Height = 64
+      Top = 24
+      Width = 220
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderSpacing.Left = 13
+      BorderSpacing.Top = 13
+      BorderSpacing.Right = 13
+      ChildSizing.LeftRightSpacing = 16
+      ChildSizing.TopBottomSpacing = 8
+      ChildSizing.HorizontalSpacing = 8
+      ChildSizing.VerticalSpacing = 4
+      Background.Color = 16448250
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clBlack
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      BevelInner = bvNone
+      BevelOuter = bvRaised
+      BevelWidth = 1
+      Border.Color = 13750737
+      Border.Style = bboSolid
+      BorderBCStyle = bpsBorder
+      Constraints.MinWidth = 220
+      FontEx.Color = clDefault
+      FontEx.FontQuality = fqSystemClearType
+      FontEx.Shadow = False
+      FontEx.ShadowRadius = 5
+      FontEx.ShadowOffsetX = 5
+      FontEx.ShadowOffsetY = 5
+      FontEx.Style = []
+      ParentBackground = False
+      Rounding.RoundX = 8
+      Rounding.RoundY = 8
+      TabOrder = 1
+      object lblApplyTo: TLabel
+        Left = 17
+        Height = 15
+        Top = 9
+        Width = 186
+        Align = alTop
+        Caption = 'Subspecies epithet'
+        Constraints.MinWidth = 96
+        Layout = tlCenter
+      end
+      object eEpythet: TEdit
+        Left = 17
+        Height = 23
+        Top = 28
+        Width = 186
+        Align = alTop
+        TabOrder = 0
+        OnKeyPress = eEpythetKeyPress
+      end
+    end
+  end
+end

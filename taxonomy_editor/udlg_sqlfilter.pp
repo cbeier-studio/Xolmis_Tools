@@ -21,11 +21,12 @@ type
     sbReset: TSpeedButton;
     SynCompletion: TSynCompletion;
     SynSQLSyn: TSynSQLSyn;
+    procedure sbApplyClick(Sender: TObject);
     procedure sbResetClick(Sender: TObject);
   private
-
+    FFilterText: String;
   public
-
+    property FilterText: String read FFilterText write FFilterText;
   end;
 
 var
@@ -34,6 +35,13 @@ var
 implementation
 
 { TdlgSqlFilter }
+
+procedure TdlgSqlFilter.sbApplyClick(Sender: TObject);
+begin
+  FFilterText := seScript.Lines.Text;
+
+  ModalResult := mrOk;
+end;
 
 procedure TdlgSqlFilter.sbResetClick(Sender: TObject);
 begin
