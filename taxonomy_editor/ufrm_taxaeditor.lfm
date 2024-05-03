@@ -2,10 +2,10 @@ object frmTaxaEditor: TfrmTaxaEditor
   Left = -8
   Height = 1100
   Top = -8
-  Width = 1876
+  Width = 1940
   Caption = 'Xolmis Taxonomies Editor'
-  ClientHeight = 1100
-  ClientWidth = 1876
+  ClientHeight = 1061
+  ClientWidth = 1924
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -13,13 +13,12 @@ object frmTaxaEditor: TfrmTaxaEditor
   OnShow = FormShow
   Position = poDefault
   SnapOptions.SnapToMonitor = True
-  LCLVersion = '3.2.0.0'
   WindowState = wsMaximized
   object nbPages: TNotebook
     Left = 0
     Height = 1027
     Top = 34
-    Width = 1876
+    Width = 1924
     PageIndex = 0
     Align = alClient
     TabOrder = 0
@@ -62,7 +61,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ParentBackground = False
         Rounding.RoundX = 1
         Rounding.RoundY = 1
-        TabOrder = 0
+        TabOrder = 1
         OnResize = pTaxaListResize
         object gridTaxa: TDBGrid
           Left = 7
@@ -87,7 +86,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             item
               ReadOnly = True
               Title.Caption = 'Scientific name'
-              Width = 474
+              Width = 453
               FieldName = 'full_name'
             end          
             item
@@ -115,7 +114,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         end
       end
       object pTaxaRightBar: TBCPanel
-        Left = 1830
+        Left = 1878
         Height = 939
         Top = 48
         Width = 46
@@ -156,7 +155,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ParentBackground = False
         Rounding.RoundX = 1
         Rounding.RoundY = 1
-        TabOrder = 1
+        TabOrder = 6
         object sbShowQuickFilters: TSpeedButton
           Tag = 1
           Left = 9
@@ -213,7 +212,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 0
         Height = 48
         Top = 0
-        Width = 1876
+        Width = 1924
         Align = alTop
         AutoSize = True
         ChildSizing.LeftRightSpacing = 8
@@ -251,7 +250,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ParentBackground = False
         Rounding.RoundX = 1
         Rounding.RoundY = 1
-        TabOrder = 2
+        TabOrder = 0
         object pFindTaxa: TBCPanel
           Left = 9
           Height = 30
@@ -426,7 +425,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           OnClick = sbCancelRecordClick
         end
         object sbFirstRecord: TSpeedButton
-          Left = 1547
+          Left = 1595
           Height = 30
           Top = 9
           Width = 28
@@ -442,7 +441,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbPriorRecord: TSpeedButton
-          Left = 1579
+          Left = 1627
           Height = 30
           Top = 9
           Width = 28
@@ -457,7 +456,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbNextRecord: TSpeedButton
-          Left = 1611
+          Left = 1659
           Height = 30
           Top = 9
           Width = 28
@@ -474,7 +473,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbLastRecord: TSpeedButton
-          Left = 1643
+          Left = 1691
           Height = 30
           Top = 9
           Width = 28
@@ -490,7 +489,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbRefreshRecords: TSpeedButton
-          Left = 1684
+          Left = 1732
           Height = 30
           Top = 9
           Width = 28
@@ -507,7 +506,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbSortRecords: TSpeedButton
-          Left = 1725
+          Left = 1773
           Height = 30
           Top = 9
           Width = 28
@@ -522,7 +521,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbAdvancedFilters: TSpeedButton
-          Left = 1766
+          Left = 1814
           Height = 30
           Top = 9
           Width = 28
@@ -538,7 +537,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbClearFilters: TSpeedButton
-          Left = 1798
+          Left = 1846
           Height = 30
           Top = 9
           Width = 28
@@ -552,7 +551,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbMoreOptions: TSpeedButton
-          Left = 1839
+          Left = 1887
           Height = 30
           Hint = 'Mais opções'
           Top = 9
@@ -575,7 +574,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 5
       end
       object splitTaxaRight: TSplitter
-        Left = 1513
+        Left = 1561
         Height = 939
         Top = 48
         Width = 5
@@ -583,13 +582,13 @@ object frmTaxaEditor: TfrmTaxaEditor
         ResizeAnchor = akRight
       end
       object nbTaxaSide: TNotebook
-        Left = 1518
+        Left = 1566
         Height = 939
         Top = 48
         Width = 312
         PageIndex = 0
         Align = alRight
-        TabOrder = 5
+        TabOrder = 3
         object pgTaxaFilters: TPage
           object sboxTaxaFilters: TScrollBox
             Left = 0
@@ -994,7 +993,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 4
+              TabOrder = 6
               object icoTaxonomiesFilter: TImage
                 Left = 16
                 Height = 28
@@ -1073,7 +1072,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 5
+              TabOrder = 7
               object icoBandSizeFilter9: TImage
                 Left = 16
                 Height = 28
@@ -1149,7 +1148,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 6
+              TabOrder = 8
               object icoBandSizeFilter11: TImage
                 Left = 16
                 Height = 28
@@ -1224,7 +1223,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 7
+              TabOrder = 4
               object icoSynonymsFilter: TImage
                 Left = 16
                 Height = 28
@@ -1304,7 +1303,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 8
+              TabOrder = 5
               object icoBandSizeFilter12: TImage
                 Left = 16
                 Height = 28
@@ -1343,7 +1342,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 517
         Height = 939
         Top = 48
-        Width = 996
+        Width = 1044
         Align = alClient
         Background.Color = 15066599
         Background.Gradient1.StartColor = clWhite
@@ -1377,32 +1376,32 @@ object frmTaxaEditor: TfrmTaxaEditor
         ParentBackground = False
         Rounding.RoundX = 1
         Rounding.RoundY = 1
-        TabOrder = 6
+        TabOrder = 2
         object sboxTaxa: TScrollBox
           Left = 1
-          Height = 775
-          Top = 163
-          Width = 994
+          Height = 624
+          Top = 314
+          Width = 1042
           HorzScrollBar.Page = 214
           VertScrollBar.Increment = 86
-          VertScrollBar.Page = 775
+          VertScrollBar.Page = 624
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 775
-          ClientWidth = 977
-          TabOrder = 0
+          ClientHeight = 624
+          ClientWidth = 1025
+          TabOrder = 5
           object peTaxa: TPanel
             Left = 0
-            Height = 1294
+            Height = 1145
             Top = 0
-            Width = 977
+            Width = 1025
             Align = alTop
             AutoSize = True
             BevelOuter = bvNone
             ChildSizing.LeftRightSpacing = 16
             ChildSizing.TopBottomSpacing = 8
-            ClientHeight = 1294
-            ClientWidth = 977
+            ClientHeight = 1145
+            ClientWidth = 1025
             Color = 15066599
             ParentBackground = False
             ParentColor = False
@@ -1410,7 +1409,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             object cktClements: TDBCheckBox
               Left = 16
               Height = 25
-              Top = 410
+              Top = 261
               Width = 160
               Align = alTop
               AutoSize = True
@@ -1422,14 +1421,14 @@ object frmTaxaEditor: TfrmTaxaEditor
               Font.Height = -16
               Font.Name = 'Segoe UI Semibold'
               ParentFont = False
-              TabOrder = 8
+              TabOrder = 5
               ValueChecked = 'True'
               ValueUnchecked = 'False'
             end
             object cktIoc: TDBCheckBox
               Left = 16
               Height = 25
-              Top = 666
+              Top = 517
               Width = 160
               Align = alTop
               AutoSize = True
@@ -1442,14 +1441,14 @@ object frmTaxaEditor: TfrmTaxaEditor
               Font.Name = 'Segoe UI Semibold'
               OnClick = cktIocClick
               ParentFont = False
-              TabOrder = 13
+              TabOrder = 10
               ValueChecked = 'True'
               ValueUnchecked = 'False'
             end
             object cktCbro: TDBCheckBox
               Left = 16
               Height = 25
-              Top = 1018
+              Top = 869
               Width = 160
               Align = alTop
               AutoSize = True
@@ -1462,153 +1461,15 @@ object frmTaxaEditor: TfrmTaxaEditor
               Font.Name = 'Segoe UI Semibold'
               OnClick = cktCbroClick
               ParentFont = False
-              TabOrder = 20
+              TabOrder = 17
               ValueChecked = 'True'
               ValueUnchecked = 'False'
             end
             object ptEnglishName: TBCPanel
               Left = 16
               Height = 47
-              Top = 157
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 3
-              object lbltEnglishName: TLabel
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 71
-                Align = alLeft
-                Caption = 'English name'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etEnglishName: TDBEdit
-                Left = 211
-                Height = 23
-                Top = 12
-                Width = 718
-                DataField = 'english_name'
-                DataSource = dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BorderSpacing.Bottom = 6
-                MaxLength = 0
-                TabOrder = 0
-              end
-            end
-            object ptSpanishName: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 251
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 5
-              object lbltSpanishName: TLabel
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 74
-                Align = alLeft
-                Caption = 'Spanish name'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etSpanishName: TDBEdit
-                Left = 211
-                Height = 23
-                Top = 12
-                Width = 718
-                DataField = 'spanish_name'
-                DataSource = dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                MaxLength = 0
-                TabOrder = 0
-              end
-            end
-            object ptRank: TBCPanel
-              Left = 16
-              Height = 47
               Top = 8
-              Width = 945
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1649,98 +1510,22 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
               TabOrder = 0
-              object lbltRank: TLabel
+              object lbltEnglishName: TLabel
                 Left = 16
                 Height = 23
                 Top = 12
-                Width = 26
+                Width = 71
                 Align = alLeft
-                Caption = 'Rank'
+                Caption = 'English name'
                 Layout = tlCenter
                 ParentColor = False
               end
-              object cbtRank: TDBLookupComboBox
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 529
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                AutoComplete = True
-                BorderSpacing.Bottom = 6
-                DataField = 'rank_id'
-                DataSource = dsTaxa
-                DropDownRows = 12
-                KeyField = 'rank_id'
-                ListField = 'rank_name'
-                ListFieldIndex = 0
-                ListSource = dmTaxa.dslookRanks
-                LookupCache = False
-                Style = csDropDownList
-                TabOrder = 0
-              end
-            end
-            object ptPortugueseName: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 204
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 4
-              object lbltPortugueseName: TLabel
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 93
-                Align = alLeft
-                Caption = 'Portuguese name'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etPortugueseName: TDBEdit
+              object etEnglishName: TDBEdit
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 718
-                DataField = 'portuguese_name'
+                Width = 766
+                DataField = 'english_name'
                 DataSource = dsTaxa
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1749,93 +1534,11 @@ object frmTaxaEditor: TfrmTaxaEditor
                 TabOrder = 0
               end
             end
-            object ptParentTaxon: TBCPanel
+            object ptSpanishName: TBCPanel
               Left = 16
-              Height = 48
-              Top = 55
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 1
-              object lbltParentTaxon: TLabel
-                Left = 16
-                Height = 24
-                Top = 12
-                Width = 67
-                Align = alLeft
-                Caption = 'Parent taxon'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etParentTaxon: TDBEditButton
-                Left = 211
-                Height = 24
-                Top = 12
-                Width = 718
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BevelOuter = bvNone
-                ClientHeight = 24
-                ClientWidth = 718
-                Color = 16448250
-                Constraints.MaxHeight = 28
-                ParentBackground = False
-                ParentColor = False
-                TabOrder = 0
-                ButtonWidth = 24
-                ImageIndex = 6
-                Images = bMenu
-                ImageWidth = 20
-                DataField = 'parent_taxon_name'
-                DataSource = dsTaxa
-                CharCase = ecNormal
-                OnButtonClick = etParentTaxonButtonClick
-                OnDBEditKeyPress = etParentTaxonKeyPress
-                OnKeyPress = etParentTaxonKeyPress
-              end
-            end
-            object ptValidName: TBCPanel
-              Left = 16
-              Height = 48
-              Top = 103
-              Width = 945
+              Height = 47
+              Top = 102
+              Width = 993
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1877,246 +1580,22 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
               TabOrder = 2
-              object lbltValidName: TLabel
+              object lbltSpanishName: TLabel
                 Left = 16
-                Height = 24
+                Height = 23
                 Top = 12
-                Width = 58
+                Width = 74
                 Align = alLeft
-                Caption = 'Valid name'
+                Caption = 'Spanish name'
                 Layout = tlCenter
                 ParentColor = False
               end
-              object etValidName: TDBEditButton
+              object etSpanishName: TDBEdit
                 Left = 211
-                Height = 24
-                Top = 12
-                Width = 718
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BevelOuter = bvNone
-                ClientHeight = 24
-                ClientWidth = 718
-                Color = 16448250
-                Constraints.MaxHeight = 28
-                ParentBackground = False
-                ParentColor = False
-                TabOrder = 0
-                ButtonWidth = 24
-                ImageIndex = 6
-                Images = bMenu
-                ImageWidth = 20
-                DataField = 'valid_name'
-                DataSource = dsTaxa
-                CharCase = ecNormal
-                OnButtonClick = etValidNameButtonClick
-                OnDBEditKeyPress = etValidNameKeyPress
-                OnKeyPress = etValidNameKeyPress
-              end
-            end
-            object ptQuickCode: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 304
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              TabOrder = 6
-              object lbltQuickCode: TLabel
-                Left = 16
                 Height = 23
                 Top = 12
-                Width = 60
-                Align = alLeft
-                Caption = 'Quick code'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etQuickcode: TDBEdit
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 529
-                DataField = 'quick_code'
-                DataSource = dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                MaxLength = 0
-                TabOrder = 0
-                TextHint = 'AAA AAA'
-              end
-            end
-            object ptExtinct: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 357
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              TabOrder = 7
-              object cktExtinct: TDBCheckBox
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 54
-                Align = alLeft
-                AutoSize = True
-                Caption = 'Extinct'
-                DataField = 'extinct'
-                DataSource = dsTaxa
-                TabOrder = 0
-                ValueChecked = 'True'
-                ValueUnchecked = 'False'
-              end
-              object etExtinctionYear: TDBEdit
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 529
-                DataField = 'extinction_year'
-                DataSource = dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                MaxLength = 0
-                TabOrder = 1
-                TextHint = 'Extinction year'
-              end
-            end
-            object ptSortNr: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 441
-              Width = 945
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 9
-              object lbltSortNr: TLabel
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 83
-                Align = alLeft
-                Caption = 'Sorting number'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etSortNr: TDBEdit
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 529
-                DataField = 'sort_num'
+                Width = 766
+                DataField = 'spanish_name'
                 DataSource = dsTaxa
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
@@ -2124,11 +1603,11 @@ object frmTaxaEditor: TfrmTaxaEditor
                 TabOrder = 0
               end
             end
-            object ptSubspecificGroup: TBCPanel
+            object ptPortugueseName: TBCPanel
               Left = 16
               Height = 47
-              Top = 488
-              Width = 945
+              Top = 55
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2168,7 +1647,286 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 10
+              TabOrder = 1
+              object lbltPortugueseName: TLabel
+                Left = 16
+                Height = 23
+                Top = 12
+                Width = 93
+                Align = alLeft
+                Caption = 'Portuguese name'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object etPortugueseName: TDBEdit
+                Left = 211
+                Height = 23
+                Top = 12
+                Width = 766
+                DataField = 'portuguese_name'
+                DataSource = dsTaxa
+                Align = alRight
+                Anchors = [akTop, akLeft, akRight, akBottom]
+                BorderSpacing.Bottom = 6
+                MaxLength = 0
+                TabOrder = 0
+              end
+            end
+            object ptQuickCode: TBCPanel
+              Left = 16
+              Height = 47
+              Top = 155
+              Width = 993
+              Align = alTop
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 12
+              ChildSizing.HorizontalSpacing = 8
+              Background.Color = 16448250
+              Background.Gradient1.StartColor = clWhite
+              Background.Gradient1.EndColor = clBlack
+              Background.Gradient1.GradientType = gtLinear
+              Background.Gradient1.Point1XPercent = 0
+              Background.Gradient1.Point1YPercent = 0
+              Background.Gradient1.Point2XPercent = 0
+              Background.Gradient1.Point2YPercent = 100
+              Background.Gradient2.StartColor = clWhite
+              Background.Gradient2.EndColor = clBlack
+              Background.Gradient2.GradientType = gtLinear
+              Background.Gradient2.Point1XPercent = 0
+              Background.Gradient2.Point1YPercent = 0
+              Background.Gradient2.Point2XPercent = 0
+              Background.Gradient2.Point2YPercent = 100
+              Background.Gradient1EndPercent = 35
+              Background.Style = bbsColor
+              BevelInner = bvNone
+              BevelOuter = bvNone
+              BevelWidth = 1
+              Border.Color = 13750737
+              Border.Style = bboSolid
+              BorderBCStyle = bpsBorder
+              FontEx.Color = clDefault
+              FontEx.FontQuality = fqSystemClearType
+              FontEx.Shadow = False
+              FontEx.ShadowRadius = 5
+              FontEx.ShadowOffsetX = 5
+              FontEx.ShadowOffsetY = 5
+              FontEx.Style = []
+              ParentBackground = False
+              Rounding.RoundX = 8
+              Rounding.RoundY = 8
+              TabOrder = 3
+              object lbltQuickCode: TLabel
+                Left = 16
+                Height = 23
+                Top = 12
+                Width = 60
+                Align = alLeft
+                Caption = 'Quick code'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object etQuickcode: TDBEdit
+                Left = 400
+                Height = 23
+                Top = 12
+                Width = 577
+                DataField = 'quick_code'
+                DataSource = dsTaxa
+                Align = alRight
+                Anchors = [akTop, akLeft, akRight, akBottom]
+                MaxLength = 0
+                TabOrder = 0
+                TextHint = 'AAA AAA'
+              end
+            end
+            object ptExtinct: TBCPanel
+              Left = 16
+              Height = 47
+              Top = 208
+              Width = 993
+              Align = alTop
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 12
+              ChildSizing.HorizontalSpacing = 8
+              Background.Color = 16448250
+              Background.Gradient1.StartColor = clWhite
+              Background.Gradient1.EndColor = clBlack
+              Background.Gradient1.GradientType = gtLinear
+              Background.Gradient1.Point1XPercent = 0
+              Background.Gradient1.Point1YPercent = 0
+              Background.Gradient1.Point2XPercent = 0
+              Background.Gradient1.Point2YPercent = 100
+              Background.Gradient2.StartColor = clWhite
+              Background.Gradient2.EndColor = clBlack
+              Background.Gradient2.GradientType = gtLinear
+              Background.Gradient2.Point1XPercent = 0
+              Background.Gradient2.Point1YPercent = 0
+              Background.Gradient2.Point2XPercent = 0
+              Background.Gradient2.Point2YPercent = 100
+              Background.Gradient1EndPercent = 35
+              Background.Style = bbsColor
+              BevelInner = bvNone
+              BevelOuter = bvNone
+              BevelWidth = 1
+              Border.Color = 13750737
+              Border.Style = bboSolid
+              BorderBCStyle = bpsBorder
+              FontEx.Color = clDefault
+              FontEx.FontQuality = fqSystemClearType
+              FontEx.Shadow = False
+              FontEx.ShadowRadius = 5
+              FontEx.ShadowOffsetX = 5
+              FontEx.ShadowOffsetY = 5
+              FontEx.Style = []
+              ParentBackground = False
+              Rounding.RoundX = 8
+              Rounding.RoundY = 8
+              TabOrder = 4
+              object cktExtinct: TDBCheckBox
+                Left = 16
+                Height = 23
+                Top = 12
+                Width = 54
+                Align = alLeft
+                AutoSize = True
+                Caption = 'Extinct'
+                DataField = 'extinct'
+                DataSource = dsTaxa
+                TabOrder = 0
+                ValueChecked = 'True'
+                ValueUnchecked = 'False'
+              end
+              object etExtinctionYear: TDBEdit
+                Left = 400
+                Height = 23
+                Top = 12
+                Width = 577
+                DataField = 'extinction_year'
+                DataSource = dsTaxa
+                Align = alRight
+                Anchors = [akTop, akLeft, akRight, akBottom]
+                MaxLength = 0
+                TabOrder = 1
+                TextHint = 'Extinction year'
+              end
+            end
+            object ptSortNr: TBCPanel
+              Left = 16
+              Height = 47
+              Top = 292
+              Width = 993
+              Align = alTop
+              AutoSize = True
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 12
+              ChildSizing.HorizontalSpacing = 8
+              Background.Color = 16448250
+              Background.Gradient1.StartColor = clWhite
+              Background.Gradient1.EndColor = clBlack
+              Background.Gradient1.GradientType = gtLinear
+              Background.Gradient1.Point1XPercent = 0
+              Background.Gradient1.Point1YPercent = 0
+              Background.Gradient1.Point2XPercent = 0
+              Background.Gradient1.Point2YPercent = 100
+              Background.Gradient2.StartColor = clWhite
+              Background.Gradient2.EndColor = clBlack
+              Background.Gradient2.GradientType = gtLinear
+              Background.Gradient2.Point1XPercent = 0
+              Background.Gradient2.Point1YPercent = 0
+              Background.Gradient2.Point2XPercent = 0
+              Background.Gradient2.Point2YPercent = 100
+              Background.Gradient1EndPercent = 35
+              Background.Style = bbsColor
+              BevelInner = bvNone
+              BevelOuter = bvNone
+              BevelWidth = 1
+              Border.Color = 13750737
+              Border.Style = bboSolid
+              BorderBCStyle = bpsBorder
+              FontEx.Color = clDefault
+              FontEx.FontQuality = fqSystemClearType
+              FontEx.Shadow = False
+              FontEx.ShadowRadius = 5
+              FontEx.ShadowOffsetX = 5
+              FontEx.ShadowOffsetY = 5
+              FontEx.Style = []
+              ParentBackground = False
+              Rounding.RoundX = 8
+              Rounding.RoundY = 8
+              Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
+              TabOrder = 6
+              object lbltSortNr: TLabel
+                Left = 16
+                Height = 23
+                Top = 12
+                Width = 83
+                Align = alLeft
+                Caption = 'Sorting number'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object etSortNr: TDBEdit
+                Left = 400
+                Height = 23
+                Top = 12
+                Width = 577
+                DataField = 'sort_num'
+                DataSource = dsTaxa
+                Align = alRight
+                Anchors = [akTop, akLeft, akRight, akBottom]
+                MaxLength = 0
+                TabOrder = 0
+              end
+            end
+            object ptSubspecificGroup: TBCPanel
+              Left = 16
+              Height = 47
+              Top = 339
+              Width = 993
+              Align = alTop
+              AutoSize = True
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 12
+              ChildSizing.HorizontalSpacing = 8
+              Background.Color = 16448250
+              Background.Gradient1.StartColor = clWhite
+              Background.Gradient1.EndColor = clBlack
+              Background.Gradient1.GradientType = gtLinear
+              Background.Gradient1.Point1XPercent = 0
+              Background.Gradient1.Point1YPercent = 0
+              Background.Gradient1.Point2XPercent = 0
+              Background.Gradient1.Point2YPercent = 100
+              Background.Gradient2.StartColor = clWhite
+              Background.Gradient2.EndColor = clBlack
+              Background.Gradient2.GradientType = gtLinear
+              Background.Gradient2.Point1XPercent = 0
+              Background.Gradient2.Point1YPercent = 0
+              Background.Gradient2.Point2XPercent = 0
+              Background.Gradient2.Point2YPercent = 100
+              Background.Gradient1EndPercent = 35
+              Background.Style = bbsColor
+              BevelInner = bvNone
+              BevelOuter = bvNone
+              BevelWidth = 1
+              Border.Color = 13750737
+              Border.Style = bboSolid
+              BorderBCStyle = bpsBorder
+              FontEx.Color = clDefault
+              FontEx.FontQuality = fqSystemClearType
+              FontEx.Shadow = False
+              FontEx.ShadowRadius = 5
+              FontEx.ShadowOffsetX = 5
+              FontEx.ShadowOffsetY = 5
+              FontEx.Style = []
+              ParentBackground = False
+              Rounding.RoundX = 8
+              Rounding.RoundY = 8
+              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
+              TabOrder = 7
               object lbltSubspecificGroup: TLabel
                 Left = 16
                 Height = 23
@@ -2183,7 +1941,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 529
+                Width = 577
                 DataField = 'group_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2195,8 +1953,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptDistribution: TBCPanel
               Left = 16
               Height = 78
-              Top = 582
-              Width = 945
+              Top = 433
+              Width = 993
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2237,7 +1995,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 12
+              TabOrder = 9
               object lbltDistribution: TLabel
                 Left = 16
                 Height = 54
@@ -2252,7 +2010,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 54
                 Top = 12
-                Width = 718
+                Width = 766
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 Constraints.MinHeight = 54
@@ -2265,8 +2023,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptEbirdCode: TBCPanel
               Left = 16
               Height = 47
-              Top = 535
-              Width = 945
+              Top = 386
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2306,7 +2064,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 11
+              TabOrder = 8
               object lbltEbirdCode: TLabel
                 Left = 16
                 Height = 23
@@ -2321,7 +2079,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 529
+                Width = 577
                 DataField = 'ebird_code'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2333,8 +2091,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptIocEnglishName: TBCPanel
               Left = 16
               Height = 47
-              Top = 697
-              Width = 945
+              Top = 548
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2374,7 +2132,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 14
+              TabOrder = 11
               object lbltIocEnglishName: TLabel
                 Left = 16
                 Height = 23
@@ -2389,7 +2147,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 718
+                Width = 766
                 DataField = 'ioc_english_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2401,8 +2159,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptIocRank: TBCPanel
               Left = 16
               Height = 47
-              Top = 791
-              Width = 945
+              Top = 642
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2442,7 +2200,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 16
+              TabOrder = 13
               object lbltIocRank: TLabel
                 Left = 16
                 Height = 23
@@ -2457,7 +2215,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 529
+                Width = 577
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 DataField = 'ioc_rank_id'
@@ -2475,8 +2233,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptIocParentTaxon: TBCPanel
               Left = 16
               Height = 48
-              Top = 838
-              Width = 945
+              Top = 689
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2516,7 +2274,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 17
+              TabOrder = 14
               object lbltIocParentTaxon: TLabel
                 Left = 16
                 Height = 24
@@ -2531,12 +2289,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 718
+                Width = 766
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 718
+                ClientWidth = 766
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2557,8 +2315,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptIocDistribution: TBCPanel
               Left = 16
               Height = 78
-              Top = 934
-              Width = 945
+              Top = 785
+              Width = 993
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2599,7 +2357,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 19
+              TabOrder = 16
               object lbltIocDistribution: TLabel
                 Left = 16
                 Height = 54
@@ -2614,7 +2372,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 54
                 Top = 12
-                Width = 718
+                Width = 766
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 Constraints.MinHeight = 54
@@ -2627,8 +2385,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptIocSortNr: TBCPanel
               Left = 16
               Height = 47
-              Top = 744
-              Width = 945
+              Top = 595
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2668,7 +2426,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 15
+              TabOrder = 12
               object lbltIocSortNr: TLabel
                 Left = 16
                 Height = 23
@@ -2683,7 +2441,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 529
+                Width = 577
                 DataField = 'ioc_sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2695,8 +2453,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptIocValidName: TBCPanel
               Left = 16
               Height = 48
-              Top = 886
-              Width = 945
+              Top = 737
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2736,7 +2494,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 18
+              TabOrder = 15
               object lbltIocValidName: TLabel
                 Left = 16
                 Height = 24
@@ -2751,12 +2509,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 718
+                Width = 766
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 718
+                ClientWidth = 766
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2777,8 +2535,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptCbroOtherPtNames: TBCPanel
               Left = 16
               Height = 47
-              Top = 1049
-              Width = 945
+              Top = 900
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2818,7 +2576,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 21
+              TabOrder = 18
               object lbltCbroOtherPtNames: TLabel
                 Left = 16
                 Height = 23
@@ -2833,7 +2591,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 718
+                Width = 766
                 DataField = 'other_portuguese_names'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2845,8 +2603,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptCbroSortNr: TBCPanel
               Left = 16
               Height = 47
-              Top = 1096
-              Width = 945
+              Top = 947
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2886,7 +2644,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 22
+              TabOrder = 19
               object lbltCbroSortNr: TLabel
                 Left = 16
                 Height = 23
@@ -2901,7 +2659,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 529
+                Width = 577
                 DataField = 'cbro_sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2913,8 +2671,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptCbroRank: TBCPanel
               Left = 16
               Height = 47
-              Top = 1143
-              Width = 945
+              Top = 994
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2954,7 +2712,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 23
+              TabOrder = 20
               object lbltCbroRank: TLabel
                 Left = 16
                 Height = 23
@@ -2969,7 +2727,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 529
+                Width = 577
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 DataField = 'cbro_rank_id'
@@ -2987,8 +2745,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptCbroParentTaxon: TBCPanel
               Left = 16
               Height = 48
-              Top = 1190
-              Width = 945
+              Top = 1041
+              Width = 993
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -3028,7 +2786,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 24
+              TabOrder = 21
               object lbltCbroParentTaxon: TLabel
                 Left = 16
                 Height = 24
@@ -3043,12 +2801,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 718
+                Width = 766
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 718
+                ClientWidth = 766
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -3069,8 +2827,8 @@ object frmTaxaEditor: TfrmTaxaEditor
             object ptCbroValidName: TBCPanel
               Left = 16
               Height = 48
-              Top = 1238
-              Width = 945
+              Top = 1089
+              Width = 993
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -3111,7 +2869,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Rounding.RoundX = 8
               Rounding.RoundY = 8
               Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 25
+              TabOrder = 22
               object lbltCbroValidName: TLabel
                 Left = 16
                 Height = 24
@@ -3126,12 +2884,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 718
+                Width = 766
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 718
+                ClientWidth = 766
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -3155,7 +2913,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 9
           Height = 44
           Top = 9
-          Width = 978
+          Width = 1026
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 8
@@ -3167,8 +2925,8 @@ object frmTaxaEditor: TfrmTaxaEditor
           ChildSizing.TopBottomSpacing = 8
           ChildSizing.HorizontalSpacing = 4
           ClientHeight = 44
-          ClientWidth = 978
-          TabOrder = 1
+          ClientWidth = 1026
+          TabOrder = 0
           object sbEditRecord: TSpeedButton
             Left = 16
             Height = 28
@@ -3241,7 +2999,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             ParentShowHint = False
           end
           object sbDelRecord: TSpeedButton
-            Left = 897
+            Left = 945
             Height = 28
             Top = 8
             Width = 65
@@ -3262,7 +3020,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 61
-          Width = 946
+          Width = 994
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3305,7 +3063,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Rounding.RoundX = 8
           Rounding.RoundY = 8
           Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-          TabOrder = 2
+          TabOrder = 1
           object lbltFullname: TLabel
             Left = 16
             Height = 23
@@ -3320,7 +3078,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 719
+            Width = 767
             DataField = 'full_name'
             DataSource = dsTaxa
             Align = alRight
@@ -3334,7 +3092,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 108
-          Width = 946
+          Width = 994
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3378,7 +3136,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Rounding.RoundX = 8
           Rounding.RoundY = 8
           Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-          TabOrder = 3
+          TabOrder = 2
           object lbltAuthorship: TLabel
             Left = 16
             Height = 23
@@ -3393,7 +3151,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 719
+            Width = 767
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             AutoDropDown = True
@@ -3410,18 +3168,269 @@ object frmTaxaEditor: TfrmTaxaEditor
             ItemHeight = 15
           end
         end
+        object ptRank: TBCPanel
+          Left = 17
+          Height = 47
+          Top = 163
+          Width = 994
+          Align = alTop
+          AutoSize = True
+          BorderSpacing.Left = 16
+          BorderSpacing.Right = 32
+          ChildSizing.LeftRightSpacing = 16
+          ChildSizing.TopBottomSpacing = 12
+          ChildSizing.HorizontalSpacing = 8
+          Background.Color = 16448250
+          Background.Gradient1.StartColor = clWhite
+          Background.Gradient1.EndColor = clBlack
+          Background.Gradient1.GradientType = gtLinear
+          Background.Gradient1.Point1XPercent = 0
+          Background.Gradient1.Point1YPercent = 0
+          Background.Gradient1.Point2XPercent = 0
+          Background.Gradient1.Point2YPercent = 100
+          Background.Gradient2.StartColor = clWhite
+          Background.Gradient2.EndColor = clBlack
+          Background.Gradient2.GradientType = gtLinear
+          Background.Gradient2.Point1XPercent = 0
+          Background.Gradient2.Point1YPercent = 0
+          Background.Gradient2.Point2XPercent = 0
+          Background.Gradient2.Point2YPercent = 100
+          Background.Gradient1EndPercent = 35
+          Background.Style = bbsColor
+          BevelInner = bvNone
+          BevelOuter = bvNone
+          BevelWidth = 1
+          Border.Color = 13750737
+          Border.Style = bboSolid
+          BorderBCStyle = bpsBorder
+          FontEx.Color = clDefault
+          FontEx.FontQuality = fqSystemClearType
+          FontEx.Shadow = False
+          FontEx.ShadowRadius = 5
+          FontEx.ShadowOffsetX = 5
+          FontEx.ShadowOffsetY = 5
+          FontEx.Style = []
+          ParentBackground = False
+          Rounding.RoundX = 8
+          Rounding.RoundY = 8
+          Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
+          TabOrder = 3
+          object lbltRank: TLabel
+            Left = 16
+            Height = 23
+            Top = 12
+            Width = 26
+            Align = alLeft
+            Caption = 'Rank'
+            Layout = tlCenter
+            ParentColor = False
+          end
+          object cbtRank: TDBLookupComboBox
+            Left = 400
+            Height = 23
+            Top = 12
+            Width = 578
+            Align = alRight
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            AutoComplete = True
+            BorderSpacing.Bottom = 6
+            DataField = 'rank_id'
+            DataSource = dsTaxa
+            DropDownRows = 12
+            KeyField = 'rank_id'
+            ListField = 'rank_name'
+            ListFieldIndex = 0
+            ListSource = dmTaxa.dslookRanks
+            LookupCache = False
+            Style = csDropDownList
+            TabOrder = 0
+          end
+        end
+        object ptParentTaxon: TBCPanel
+          AnchorSideTop.Control = ptRank
+          AnchorSideTop.Side = asrBottom
+          Left = 17
+          Height = 48
+          Top = 210
+          Width = 994
+          Align = alTop
+          AutoSize = True
+          BorderSpacing.Left = 16
+          BorderSpacing.Right = 32
+          ChildSizing.LeftRightSpacing = 16
+          ChildSizing.TopBottomSpacing = 12
+          ChildSizing.HorizontalSpacing = 8
+          Background.Color = 16448250
+          Background.Gradient1.StartColor = clWhite
+          Background.Gradient1.EndColor = clBlack
+          Background.Gradient1.GradientType = gtLinear
+          Background.Gradient1.Point1XPercent = 0
+          Background.Gradient1.Point1YPercent = 0
+          Background.Gradient1.Point2XPercent = 0
+          Background.Gradient1.Point2YPercent = 100
+          Background.Gradient2.StartColor = clWhite
+          Background.Gradient2.EndColor = clBlack
+          Background.Gradient2.GradientType = gtLinear
+          Background.Gradient2.Point1XPercent = 0
+          Background.Gradient2.Point1YPercent = 0
+          Background.Gradient2.Point2XPercent = 0
+          Background.Gradient2.Point2YPercent = 100
+          Background.Gradient1EndPercent = 35
+          Background.Style = bbsColor
+          BevelInner = bvNone
+          BevelOuter = bvNone
+          BevelWidth = 1
+          Border.Color = 13750737
+          Border.Style = bboSolid
+          BorderBCStyle = bpsBorder
+          FontEx.Color = clDefault
+          FontEx.FontQuality = fqSystemClearType
+          FontEx.Shadow = False
+          FontEx.ShadowRadius = 5
+          FontEx.ShadowOffsetX = 5
+          FontEx.ShadowOffsetY = 5
+          FontEx.Style = []
+          ParentBackground = False
+          Rounding.RoundX = 8
+          Rounding.RoundY = 8
+          Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
+          TabOrder = 4
+          object lbltParentTaxon: TLabel
+            Left = 16
+            Height = 24
+            Top = 12
+            Width = 67
+            Align = alLeft
+            Caption = 'Parent taxon'
+            Layout = tlCenter
+            ParentColor = False
+          end
+          object etParentTaxon: TDBEditButton
+            Left = 211
+            Height = 24
+            Top = 12
+            Width = 767
+            Align = alRight
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            BevelOuter = bvNone
+            ClientHeight = 24
+            ClientWidth = 767
+            Color = 16448250
+            Constraints.MaxHeight = 28
+            ParentBackground = False
+            ParentColor = False
+            TabOrder = 0
+            ButtonWidth = 24
+            ImageIndex = 6
+            Images = bMenu
+            ImageWidth = 20
+            DataField = 'parent_taxon_name'
+            DataSource = dsTaxa
+            CharCase = ecNormal
+            OnButtonClick = etParentTaxonButtonClick
+            OnDBEditKeyPress = etParentTaxonKeyPress
+            OnKeyPress = etParentTaxonKeyPress
+          end
+        end
+        object ptValidName: TBCPanel
+          AnchorSideTop.Control = ptParentTaxon
+          AnchorSideTop.Side = asrBottom
+          Left = 17
+          Height = 48
+          Top = 258
+          Width = 994
+          Align = alTop
+          AutoSize = True
+          BorderSpacing.Left = 16
+          BorderSpacing.Right = 32
+          BorderSpacing.Bottom = 8
+          ChildSizing.LeftRightSpacing = 16
+          ChildSizing.TopBottomSpacing = 12
+          ChildSizing.HorizontalSpacing = 8
+          Background.Color = 16448250
+          Background.Gradient1.StartColor = clWhite
+          Background.Gradient1.EndColor = clBlack
+          Background.Gradient1.GradientType = gtLinear
+          Background.Gradient1.Point1XPercent = 0
+          Background.Gradient1.Point1YPercent = 0
+          Background.Gradient1.Point2XPercent = 0
+          Background.Gradient1.Point2YPercent = 100
+          Background.Gradient2.StartColor = clWhite
+          Background.Gradient2.EndColor = clBlack
+          Background.Gradient2.GradientType = gtLinear
+          Background.Gradient2.Point1XPercent = 0
+          Background.Gradient2.Point1YPercent = 0
+          Background.Gradient2.Point2XPercent = 0
+          Background.Gradient2.Point2YPercent = 100
+          Background.Gradient1EndPercent = 35
+          Background.Style = bbsColor
+          BevelInner = bvNone
+          BevelOuter = bvNone
+          BevelWidth = 1
+          Border.Color = 13750737
+          Border.Style = bboSolid
+          BorderBCStyle = bpsBorder
+          FontEx.Color = clDefault
+          FontEx.FontQuality = fqSystemClearType
+          FontEx.Shadow = False
+          FontEx.ShadowRadius = 5
+          FontEx.ShadowOffsetX = 5
+          FontEx.ShadowOffsetY = 5
+          FontEx.Style = []
+          ParentBackground = False
+          Rounding.RoundX = 8
+          Rounding.RoundY = 8
+          Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
+          TabOrder = 6
+          object lbltValidName: TLabel
+            Left = 16
+            Height = 24
+            Top = 12
+            Width = 58
+            Align = alLeft
+            Caption = 'Valid name'
+            Layout = tlCenter
+            ParentColor = False
+          end
+          object etValidName: TDBEditButton
+            Left = 211
+            Height = 24
+            Top = 12
+            Width = 767
+            Align = alRight
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            BevelOuter = bvNone
+            ClientHeight = 24
+            ClientWidth = 767
+            Color = 16448250
+            Constraints.MaxHeight = 28
+            ParentBackground = False
+            ParentColor = False
+            TabOrder = 0
+            ButtonWidth = 24
+            ImageIndex = 6
+            Images = bMenu
+            ImageWidth = 20
+            DataField = 'valid_name'
+            DataSource = dsTaxa
+            CharCase = ecNormal
+            OnButtonClick = etValidNameButtonClick
+            OnDBEditKeyPress = etValidNameKeyPress
+            OnKeyPress = etValidNameKeyPress
+          end
+        end
       end
       object pProgress: TPanel
         Left = 0
         Height = 40
         Top = 987
-        Width = 1876
+        Width = 1924
         Align = alBottom
         ChildSizing.LeftRightSpacing = 16
         ChildSizing.TopBottomSpacing = 4
         ChildSizing.HorizontalSpacing = 16
         ClientHeight = 40
-        ClientWidth = 1876
+        ClientWidth = 1924
         TabOrder = 7
         Visible = False
         object lblProgress: TLabel
@@ -3434,7 +3443,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Layout = tlCenter
         end
         object btnCancelProgress: TBitBtn
-          Left = 1784
+          Left = 1832
           Height = 30
           Top = 5
           Width = 75
@@ -3443,17 +3452,17 @@ object frmTaxaEditor: TfrmTaxaEditor
           Images = bMenu
           ImageIndex = 75
           ImageWidth = 20
-          TabOrder = 0
+          TabOrder = 1
         end
         object PBar: TProgressBar
           Left = 78
           Height = 22
           Top = 9
-          Width = 1690
+          Width = 1738
           Align = alClient
           BorderSpacing.Top = 8
           BorderSpacing.Bottom = 8
-          TabOrder = 1
+          TabOrder = 0
         end
       end
     end
@@ -4406,7 +4415,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     Left = 0
     Height = 34
     Top = 0
-    Width = 1876
+    Width = 1924
     Align = alTop
     Background.Color = 15066599
     Background.Gradient1.StartColor = clWhite
@@ -4446,7 +4455,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       Left = 67
       Height = 34
       Top = 0
-      Width = 1809
+      Width = 1857
       Align = alClient
       ParentColor = False
       Tabs = <      

@@ -40,7 +40,6 @@ type
     eFindTaxa1: TEdit;
     eFindTaxa2: TEdit;
     etFullname: TDBEdit;
-    etParentTaxon: TDBEditButton;
     etCbroOtherPtNames: TDBEdit;
     etCbroSortNr: TDBEdit;
     etEbirdCode: TDBEdit;
@@ -52,12 +51,13 @@ type
     etIocValidName: TDBEditButton;
     etCbroParentTaxon: TDBEditButton;
     etCbroValidName: TDBEditButton;
-    etValidName: TDBEditButton;
+    etParentTaxon: TDBEditButton;
     etPortugueseName: TDBEdit;
     etQuickcode: TDBEdit;
     etSortNr: TDBEdit;
     etSpanishName: TDBEdit;
     etSubspecificGroup: TDBEdit;
+    etValidName: TDBEditButton;
     gridTaxa1: TDBGrid;
     gridTaxa2: TDBGrid;
     gridTaxa3: TDBGrid;
@@ -110,6 +110,8 @@ type
     pSplash: TPanel;
     ptAuthorship: TBCPanel;
     ptFullName: TBCPanel;
+    ptParentTaxon: TBCPanel;
+    ptRank: TBCPanel;
     ptToolbar: TPanel;
     pmtSortTaxonomic: TMenuItem;
     pmtSortAlphabetical: TMenuItem;
@@ -147,10 +149,8 @@ type
     ptIocRank: TBCPanel;
     ptIocSortNr: TBCPanel;
     ptIocValidName: TBCPanel;
-    ptParentTaxon: TBCPanel;
     ptPortugueseName: TBCPanel;
     ptQuickCode: TBCPanel;
-    ptRank: TBCPanel;
     ptSortNr: TBCPanel;
     ptSpanishName: TBCPanel;
     ptSubspecificGroup: TBCPanel;
@@ -370,6 +370,8 @@ procedure TfrmTaxaEditor.actImportIOCNamesExecute(Sender: TObject);
 begin
   if OpenDlg.Execute then
     ImportIocData(OpenDlg.FileName);
+
+  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.AddSortedField(aFieldName: String; aDirection: TSortDirection; aCollation: String;

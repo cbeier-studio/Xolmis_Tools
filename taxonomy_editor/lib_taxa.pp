@@ -2578,6 +2578,7 @@ var
   CSV: TSdfDataSet;
   Qry: TSQLQuery;
   Range: TStrings;
+  nRank: Integer;
 begin
   if not FileExists(aFilename) then
   begin
@@ -2619,8 +2620,10 @@ begin
         CSV.First;
         repeat
           Range.Clear;
+          Qry.Close;
           Qry.ParamByName('ANAME').AsString := CSV.FieldByName('Scientific Name').AsString;
           Qry.Open;
+
           if Qry.RecordCount > 0 then
           begin
             Qry.Edit;
@@ -2638,8 +2641,55 @@ begin
             Qry.FieldByName('ioc_distribution').AsString := Range.Text;
 
             Qry.Post;
+          end
+          else
+          begin
+            Qry.Append;
+
+            if CSV.FieldByName('Rank').AsString = 'Genus' then
+              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'g.')
+            else
+            if CSV.FieldByName('Rank').AsString = 'Species' then
+              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'sp.')
+            else
+            if CSV.FieldByName('Rank').AsString = 'ssp' then
+              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ssp.');
+
+            Qry.FieldByName('full_name').AsString := CSV.FieldByName('Scientific Name').AsString;
+            Qry.FieldByName('formatted_name').AsString := FormattedBirdName(CSV.FieldByName('Scientific Name').AsString, nRank);
+            Qry.FieldByName('rank_id').AsInteger := nRank;
+
+            if CSV.FieldByName('Rank').AsString = 'Species' then
+              Qry.FieldByName('parent_taxon_id').AsInteger :=
+                GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                  ExtractWord(0, CSV.FieldByName('Scientific Name').AsString, [' ']))
+            else
+            if CSV.FieldByName('Rank').AsString = 'ssp' then
+              Qry.FieldByName('parent_taxon_id').AsInteger :=
+                GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                  ExtractWord(0, CSV.FieldByName('Scientific Name').AsString, [' ']) + ' ' +
+                  ExtractWord(1, CSV.FieldByName('Scientific Name').AsString, [' ']));
+
+            Qry.FieldByName('ioc_taxonomy').AsBoolean := True;
+            Qry.FieldByName('ioc_parent_taxon_id').AsInteger := Qry.FieldByName('parent_taxon_id').AsInteger;
+            Qry.FieldByName('extinct').AsBoolean := Pos('†', CSV.Fields[3].AsString) > 0;
+
+            if CSV.Fields[0].AsString <> EmptyStr then
+              Qry.FieldByName('ioc_sort_num').AsFloat := CSV.Fields[0].AsFloat;
+
+            Qry.FieldByName('english_name').AsString := CSV.FieldByName('English name').AsString;
+            Qry.FieldByName('authorship').AsString := CSV.FieldByName('Authority').AsString;
+
+            if CSV.FieldByName('Breeding Range').AsString <> EmptyStr then
+              Range.Add('Breeding: ' + CSV.FieldByName('Breeding Range').AsString);
+            if CSV.FieldByName('Nonbreeding Range').AsString <> EmptyStr then
+              Range.Add('Nonbreeding: ' + CSV.FieldByName('Nonbreeding Range').AsString);
+            Qry.FieldByName('ioc_distribution').AsString := Range.Text;
+
+            Qry.Post;
           end;
 
+          Qry.ApplyUpdates;
           frmTaxaEditor.PBar.Position := CSV.RecNo;
           Application.ProcessMessages;
           CSV.Next;
