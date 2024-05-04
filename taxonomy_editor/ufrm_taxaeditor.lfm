@@ -3426,6 +3426,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Top = 987
         Width = 1924
         Align = alBottom
+        BevelOuter = bvLowered
         ChildSizing.LeftRightSpacing = 16
         ChildSizing.TopBottomSpacing = 4
         ChildSizing.HorizontalSpacing = 16
@@ -11118,6 +11119,11 @@ object frmTaxaEditor: TfrmTaxaEditor
     object actImportClements: TAction
       Category = 'Import'
       Caption = 'Clements Checklist'
+      OnExecute = actImportClementsExecute
+    end
+    object actRewriteHierarchy: TAction
+      Category = 'Batch'
+      Caption = 'Rewrite taxa hierarchy'
     end
   end
   object pmMain: TPopupMenu
@@ -11142,6 +11148,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       Action = actBatchActions
       object mmFormatSciNames: TMenuItem
         Action = actFormatSciNames
+      end
+      object mmRewriteHierarchy: TMenuItem
+        Action = actRewriteHierarchy
       end
     end
     object Separator1: TMenuItem

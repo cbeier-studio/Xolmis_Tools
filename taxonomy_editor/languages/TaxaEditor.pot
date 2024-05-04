@@ -81,6 +81,10 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
+#: lib_taxa.rsworkingonit
+msgid "Working on it..."
+msgstr ""
+
 #: tdlgabout.caption
 msgid "Sobre o Xolmis"
 msgstr ""
@@ -344,6 +348,10 @@ msgstr ""
 
 #: tfrmtaxaeditor.actimportiocnames.caption
 msgid "IOC Names"
+msgstr ""
+
+#: tfrmtaxaeditor.actrewritehierarchy.caption
+msgid "Rewrite taxa hierarchy"
 msgstr ""
 
 #: tfrmtaxaeditor.btncancelprogress.caption

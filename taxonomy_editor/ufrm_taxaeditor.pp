@@ -22,6 +22,7 @@ type
     actAbout: TAction;
     actImportIOCNames: TAction;
     actImportClements: TAction;
+    actRewriteHierarchy: TAction;
     actList: TActionList;
     AppProperties: TApplicationProperties;
     btnCancelProgress: TBitBtn;
@@ -90,6 +91,7 @@ type
     lbltSpanishName: TLabel;
     lbltSubspecificGroup: TLabel;
     lbltValidName: TLabel;
+    mmRewriteHierarchy: TMenuItem;
     pmgRefresh: TMenuItem;
     pmgNewSubspecies: TMenuItem;
     pmgMove: TMenuItem;
@@ -275,6 +277,7 @@ type
     tsTaxonomyIoc: TRxSwitch;
     procedure actAboutExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
+    procedure actImportClementsExecute(Sender: TObject);
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
@@ -364,6 +367,14 @@ end;
 procedure TfrmTaxaEditor.actExitExecute(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TfrmTaxaEditor.actImportClementsExecute(Sender: TObject);
+begin
+  if OpenDlg.Execute then
+    ImportClementsData(OpenDlg.FileName);
+
+  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.actImportIOCNamesExecute(Sender: TObject);
