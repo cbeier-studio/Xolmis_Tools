@@ -899,6 +899,7 @@ object dmTaxa: TdmTaxa
     Top = 145
   end
   object qRanks: TSQLQuery
+    PacketRecords = -1
     FieldDefs = <    
       item
         Name = 'rank_id'
@@ -994,6 +995,7 @@ object dmTaxa: TdmTaxa
       'WHERE (active_status = 1)'
       'ORDER BY rank_seq ASC'
     )
+    Options = [sqoKeepOpenOnCommit, sqoAutoApplyUpdates]
     Params = <>
     Macros = <>
     Left = 70

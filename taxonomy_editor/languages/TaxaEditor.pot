@@ -49,6 +49,15 @@ msgstr ""
 msgid "An inactive record with the same %s value already exists (%s)."
 msgstr ""
 
+#: lib_taxa.rsrecnoempty
+msgid "record 0 of 0"
+msgstr ""
+
+#: lib_taxa.rsrecordnumber
+#, object-pascal-format
+msgid "record %d of %d"
+msgstr ""
+
 #: lib_taxa.rsrestorerecordprompt
 msgid "Do you really want to restore this record?"
 msgstr ""
@@ -383,13 +392,14 @@ msgctxt "tfrmtaxaeditor.cktioc.caption"
 msgid "IOC"
 msgstr ""
 
+#: tfrmtaxaeditor.efindranks.texthint
+msgctxt "tfrmtaxaeditor.efindranks.texthint"
+msgid "Search taxon rank"
+msgstr ""
+
 #: tfrmtaxaeditor.efindtaxa.texthint
 msgctxt "tfrmtaxaeditor.efindtaxa.texthint"
 msgid "Search taxon"
-msgstr ""
-
-#: tfrmtaxaeditor.efindtaxa1.texthint
-msgid "Search taxon rank"
 msgstr ""
 
 #: tfrmtaxaeditor.efindtaxa2.texthint
@@ -402,6 +412,61 @@ msgstr ""
 
 #: tfrmtaxaeditor.etquickcode.texthint
 msgid "AAA AAA"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[0].title.caption"
+msgid "Marked"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[10].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[10].title.caption"
+msgid "ID"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[1].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[1].title.caption"
+msgid "Name"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[2].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[2].title.caption"
+msgid "Acronym"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[3].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[3].title.caption"
+msgid "Sequence"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[4].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[4].title.caption"
+msgid "Zoological"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[5].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[5].title.caption"
+msgid "Botanical"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[6].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[6].title.caption"
+msgid "Main"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[7].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[7].title.caption"
+msgid "Subrank"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[8].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[8].title.caption"
+msgid "Infrarank"
+msgstr ""
+
+#: tfrmtaxaeditor.gridranks.columns[9].title.caption
+msgctxt "tfrmtaxaeditor.gridranks.columns[9].title.caption"
+msgid "Infraspecific"
 msgstr ""
 
 #: tfrmtaxaeditor.gridtaxa.columns[0].title.caption
@@ -482,56 +547,13 @@ msgctxt "tfrmtaxaeditor.gridtaxa2.columns[6].title.caption"
 msgid "ID"
 msgstr ""
 
-#: tfrmtaxaeditor.gridtaxa3.columns[0].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa3.columns[0].title.caption"
-msgid "Marked"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[10].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa3.columns[10].title.caption"
-msgid "ID"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[1].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa3.columns[1].title.caption"
-msgid "Name"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[2].title.caption
-msgid "Acronym"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[3].title.caption
-msgid "Sequence"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[4].title.caption
-msgid "Zoological"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[5].title.caption
-msgid "Botanical"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[6].title.caption
-msgid "Main"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[7].title.caption
-msgid "Subrank"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[8].title.caption
-msgid "Infrarank"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa3.columns[9].title.caption
-msgid "Infraspecific"
-msgstr ""
-
 #: tfrmtaxaeditor.lblclementsfilter.caption
 msgctxt "tfrmtaxaeditor.lblclementsfilter.caption"
 msgid "Clements/eBird"
+msgstr ""
+
+#: tfrmtaxaeditor.lblcounttaxa.caption
+msgid "0 of 0 record"
 msgstr ""
 
 #: tfrmtaxaeditor.lblcounttaxonranksfilter.caption
@@ -781,13 +803,13 @@ msgctxt "tfrmtaxaeditor.pmvmovetospecies.caption"
 msgid "To species"
 msgstr ""
 
-#: tfrmtaxaeditor.sbcancelrecord.caption
-msgctxt "tfrmtaxaeditor.sbcancelrecord.caption"
+#: tfrmtaxaeditor.sbcancelrank.caption
+msgctxt "tfrmtaxaeditor.sbcancelrank.caption"
 msgid "Cancel"
 msgstr ""
 
-#: tfrmtaxaeditor.sbcancelrecord1.caption
-msgctxt "tfrmtaxaeditor.sbcancelrecord1.caption"
+#: tfrmtaxaeditor.sbcancelrecord.caption
+msgctxt "tfrmtaxaeditor.sbcancelrecord.caption"
 msgid "Cancel"
 msgstr ""
 
@@ -796,13 +818,13 @@ msgctxt "tfrmtaxaeditor.sbcancelrecord2.caption"
 msgid "Cancel"
 msgstr ""
 
-#: tfrmtaxaeditor.sbclearfindtaxa.hint
-msgctxt "tfrmtaxaeditor.sbclearfindtaxa.hint"
+#: tfrmtaxaeditor.sbclearfindranks.hint
+msgctxt "tfrmtaxaeditor.sbclearfindranks.hint"
 msgid "Clear search"
 msgstr ""
 
-#: tfrmtaxaeditor.sbclearfindtaxa1.hint
-msgctxt "tfrmtaxaeditor.sbclearfindtaxa1.hint"
+#: tfrmtaxaeditor.sbclearfindtaxa.hint
+msgctxt "tfrmtaxaeditor.sbclearfindtaxa.hint"
 msgid "Clear search"
 msgstr ""
 
@@ -825,13 +847,13 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: tfrmtaxaeditor.sbinsertrecord.caption
-msgctxt "tfrmtaxaeditor.sbinsertrecord.caption"
+#: tfrmtaxaeditor.sbinsertrank.caption
+msgctxt "tfrmtaxaeditor.sbinsertrank.caption"
 msgid "New"
 msgstr ""
 
-#: tfrmtaxaeditor.sbinsertrecord1.caption
-msgctxt "tfrmtaxaeditor.sbinsertrecord1.caption"
+#: tfrmtaxaeditor.sbinsertrecord.caption
+msgctxt "tfrmtaxaeditor.sbinsertrecord.caption"
 msgid "New"
 msgstr ""
 
@@ -854,13 +876,13 @@ msgctxt "tfrmtaxaeditor.sbmoreoptions.hint"
 msgid "Mais opções"
 msgstr ""
 
-#: tfrmtaxaeditor.sbmoreoptions1.hint
-msgctxt "tfrmtaxaeditor.sbmoreoptions1.hint"
+#: tfrmtaxaeditor.sbmoreoptions2.hint
+msgctxt "tfrmtaxaeditor.sbmoreoptions2.hint"
 msgid "Mais opções"
 msgstr ""
 
-#: tfrmtaxaeditor.sbmoreoptions2.hint
-msgctxt "tfrmtaxaeditor.sbmoreoptions2.hint"
+#: tfrmtaxaeditor.sbmorerankoptions.hint
+msgctxt "tfrmtaxaeditor.sbmorerankoptions.hint"
 msgid "Mais opções"
 msgstr ""
 
@@ -873,13 +895,13 @@ msgstr ""
 msgid "Move taxon into other order, family, genus or species"
 msgstr ""
 
-#: tfrmtaxaeditor.sbsaverecord.caption
-msgctxt "tfrmtaxaeditor.sbsaverecord.caption"
+#: tfrmtaxaeditor.sbsaverank.caption
+msgctxt "tfrmtaxaeditor.sbsaverank.caption"
 msgid "Save"
 msgstr ""
 
-#: tfrmtaxaeditor.sbsaverecord1.caption
-msgctxt "tfrmtaxaeditor.sbsaverecord1.caption"
+#: tfrmtaxaeditor.sbsaverecord.caption
+msgctxt "tfrmtaxaeditor.sbsaverecord.caption"
 msgid "Save"
 msgstr ""
 

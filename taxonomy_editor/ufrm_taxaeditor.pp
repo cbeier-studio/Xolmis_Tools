@@ -38,7 +38,7 @@ type
     dsRanks: TDataSource;
     dsTaxa: TDataSource;
     dsTaxaUpdates: TDataSource;
-    eFindTaxa1: TEdit;
+    eFindRanks: TEdit;
     eFindTaxa2: TEdit;
     etFullname: TDBEdit;
     etCbroOtherPtNames: TDBEdit;
@@ -61,10 +61,11 @@ type
     etValidName: TDBEditButton;
     gridTaxa1: TDBGrid;
     gridTaxa2: TDBGrid;
-    gridTaxa3: TDBGrid;
-    iconFindTaxa1: TImage;
+    gridRanks: TDBGrid;
+    iconFindRanks: TImage;
     iconFindTaxa2: TImage;
     imgSplash: TImage;
+    lblCountTaxa: TLabel;
     lblLoading: TLabel;
     lblProgress: TLabel;
     lbltAuthorship: TLabel;
@@ -124,12 +125,12 @@ type
     mtDistribution: TDBMemo;
     mtIocDistribution: TDBMemo;
     peTaxa: TPanel;
-    pFindTaxa1: TBCPanel;
+    pFindRanks: TBCPanel;
     pFindTaxa2: TBCPanel;
     pmMove: TPopupMenu;
     pmSortTaxa: TPopupMenu;
     pTaxaList1: TBCPanel;
-    pTaxaToolbar1: TBCPanel;
+    pRanksToolbar: TBCPanel;
     pTaxaToolbar2: TBCPanel;
     ptCbroOtherPtNames: TBCPanel;
     ptCbroParentTaxon: TBCPanel;
@@ -157,39 +158,37 @@ type
     ptSpanishName: TBCPanel;
     ptSubspecificGroup: TBCPanel;
     ptValidName: TBCPanel;
-    sbAdvancedFilters1: TSpeedButton;
     sbAdvancedFilters2: TSpeedButton;
-    sbCancelRecord1: TSpeedButton;
+    sbCancelRank: TSpeedButton;
     sbCancelRecord2: TSpeedButton;
-    sbClearFilters1: TSpeedButton;
+    sbClearRankFilters: TSpeedButton;
     sbClearFilters2: TSpeedButton;
     sbClearFindTaxa: TColorSpeedButton;
-    sbClearFindTaxa1: TColorSpeedButton;
+    sbClearFindRanks: TColorSpeedButton;
     sbClearFindTaxa2: TColorSpeedButton;
     sbDelRecord: TSpeedButton;
     sbEditRecord: TSpeedButton;
-    sbFirstRecord1: TSpeedButton;
+    sbFirstRank: TSpeedButton;
     sbFirstRecord2: TSpeedButton;
-    sbGroupRecords1: TSpeedButton;
     sbGroupRecords2: TSpeedButton;
-    sbInsertRecord1: TSpeedButton;
+    sbInsertRank: TSpeedButton;
     sbInsertRecord2: TSpeedButton;
-    sbLastRecord1: TSpeedButton;
+    sbLastRank: TSpeedButton;
     sbLastRecord2: TSpeedButton;
     sbLumpTaxon: TSpeedButton;
-    sbMoreOptions1: TSpeedButton;
+    sbMoreRankOptions: TSpeedButton;
     sbMoreOptions2: TSpeedButton;
     sbMoveTaxon: TSpeedButton;
-    sbNextRecord1: TSpeedButton;
+    sbNextRank: TSpeedButton;
     sbNextRecord2: TSpeedButton;
     sboxTaxa: TScrollBox;
-    sbPriorRecord1: TSpeedButton;
+    sbPriorRank: TSpeedButton;
     sbPriorRecord2: TSpeedButton;
-    sbRefreshRecords1: TSpeedButton;
+    sbRefreshRanks: TSpeedButton;
     sbRefreshRecords2: TSpeedButton;
-    sbSaveRecord1: TSpeedButton;
+    sbSaveRank: TSpeedButton;
     sbSaveRecord2: TSpeedButton;
-    sbSortRecords1: TSpeedButton;
+    sbSortRanks: TSpeedButton;
     sbSortRecords2: TSpeedButton;
     sbSplitTaxon: TSpeedButton;
     Separator2: TMenuItem;
@@ -281,6 +280,7 @@ type
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
+    procedure dsTaxaDataChange(Sender: TObject; Field: TField);
     procedure dsTaxaStateChange(Sender: TObject);
     procedure eFindTaxaChange(Sender: TObject);
     procedure eFindTaxaEnter(Sender: TObject);
@@ -418,6 +418,11 @@ begin
       dsTaxa.DataSet.FieldByName('ioc_parent_taxon_name').AsString := dsTaxa.DataSet.FieldByName('parent_taxon_name').AsString;
       dsTaxa.DataSet.FieldByName('ioc_english_name').AsString := dsTaxa.DataSet.FieldByName('english_name').AsString;
     end;
+end;
+
+procedure TfrmTaxaEditor.dsTaxaDataChange(Sender: TObject; Field: TField);
+begin
+  UpdateButtons(dsTaxa.DataSet);
 end;
 
 procedure TfrmTaxaEditor.dsTaxaStateChange(Sender: TObject);
@@ -1124,6 +1129,7 @@ begin
   begin
     navTabs.OptScalePercents := (Self.PixelsPerInch * 100) div 96;
   end;
+  ptParentTaxon.Top := ptRank.Top + ptRank.Height - 2;
 
   UpdateButtons(dsTaxa.DataSet);
   CanToggle := True;
@@ -1148,6 +1154,10 @@ begin
     begin
       if GetRankType(TDBGrid(Sender).Columns[3].Field.AsInteger) = trSpecies then
         TDBGrid(Sender).Canvas.Font.Color := clNavy;
+
+      if GetRankType(TDBGrid(Sender).Columns[3].Field.AsInteger) in [trMonotypicGroup, trPolitypicGroup,
+                                                trForm, trSpuh, trHybrid, trIntergrade, trDomestic, trSlash] then
+        TDBGrid(Sender).Canvas.Font.Color := clGreen;
 
       if (TDBGrid(Sender).Columns[2].Field.AsInteger > 0) then
         TDBGrid(Sender).Canvas.Font.Color := $00646464;
@@ -1348,7 +1358,11 @@ begin
   with dlgSqlFilter do
   try
     if ShowModal = mrOk then
+    begin
+      dsTaxa.DataSet.Close;
       TSQLQuery(dsTaxa.DataSet).SQL.Text := FilterText;
+      dsTaxa.DataSet.Open;
+    end;
   finally
     FreeAndNil(dlgSqlFilter);
   end;
@@ -1803,13 +1817,10 @@ begin
   pmgLump.Enabled := sbLumpTaxon.Enabled;
   pmgMove.Enabled := sbMoveTaxon.Enabled;
 
-  //if dsLink.DataSet.RecordCount = 1 then
-  //  lblRecordStatus.Caption := Format(rsRecordsFound, [dsLink.DataSet.RecordCount, rsRecords])
-  //else
-  //if dsLink.DataSet.RecordCount > 1 then
-  //  lblRecordStatus.Caption := Format(rsRecordsFound, [dsLink.DataSet.RecordCount, rsRecordsPlural])
-  //else
-  //  lblRecordStatus.Caption := rsNoRecordsFound;
+  if dsTaxa.DataSet.RecordCount > 0 then
+    lblCountTaxa.Caption := Format(rsRecordNumber, [dsTaxa.DataSet.RecNo, dsTaxa.DataSet.RecordCount])
+  else
+    lblCountTaxa.Caption := rsRecNoEmpty;
 end;
 
 function TfrmTaxaEditor.ValidateTaxon: Boolean;

@@ -487,6 +487,8 @@ resourcestring
   rsRestoreRecordTitle = 'Restore record';
   rsRestoreRecordPrompt = 'Do you really want to restore this record?';
   rsWorkingOnIt = 'Working on it...';
+  rsRecordNumber = 'record %d of %d';
+  rsRecNoEmpty = 'record 0 of 0';
 
 implementation
 
