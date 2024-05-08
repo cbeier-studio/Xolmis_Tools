@@ -5,9 +5,10 @@ unit ufrm_TaxaEditor;
 interface
 
 uses
-  Classes, SysUtils, LCLType, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, Menus, DB, DBCtrls,
+  Classes, SysUtils, LCLType, LCLIntf, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, Menus, DB, DBCtrls,
   ActnList, StdCtrls, attabs, BCPanel, BCButton, ColorSpeedButton, StrUtils, RegExpr, Character,
-  BGRABitmap, SQLDB, CheckLst, rxswitch, Grids, DBGrids, ComCtrls, DBEditButton, lib_taxa, IBLookupComboEditBox;
+  BGRABitmap, SQLDB, CheckLst, rxswitch, Grids, DBGrids, ComCtrls, DBEditButton, lib_taxa,
+  IBLookupComboEditBox, Types;
 
 type
 
@@ -22,6 +23,7 @@ type
     actAbout: TAction;
     actImportIOCNames: TAction;
     actImportClements: TAction;
+    actSspVernacularNames: TAction;
     actRewriteHierarchy: TAction;
     actList: TActionList;
     AppProperties: TApplicationProperties;
@@ -34,6 +36,10 @@ type
     cktClements: TDBCheckBox;
     cktExtinct: TDBCheckBox;
     cktIoc: TDBCheckBox;
+    gridChildTaxa: TDBGrid;
+    dsSynonyms: TDataSource;
+    dsChildTaxa: TDataSource;
+    gridSynonyms: TDBGrid;
     dsPacks: TDataSource;
     dsRanks: TDataSource;
     dsTaxa: TDataSource;
@@ -65,6 +71,7 @@ type
     iconFindRanks: TImage;
     iconFindTaxa2: TImage;
     imgSplash: TImage;
+    lblTitleSynonyms: TLabel;
     lblCountTaxa: TLabel;
     lblLoading: TLabel;
     lblProgress: TLabel;
@@ -84,6 +91,7 @@ type
     lbltIocRank: TLabel;
     lbltIocSortNr: TLabel;
     lbltIocValidName: TLabel;
+    lblTitleChilds: TLabel;
     lbltParentTaxon: TLabel;
     lbltPortugueseName: TLabel;
     lbltQuickCode: TLabel;
@@ -92,7 +100,9 @@ type
     lbltSpanishName: TLabel;
     lbltSubspecificGroup: TLabel;
     lbltValidName: TLabel;
+    mmSspVernacularNames: TMenuItem;
     mmRewriteHierarchy: TMenuItem;
+    pDetails: TPanel;
     pmgRefresh: TMenuItem;
     pmgNewSubspecies: TMenuItem;
     pmgMove: TMenuItem;
@@ -266,6 +276,7 @@ type
     splitTaxaLeft1: TSplitter;
     splitTaxaRight: TSplitter;
     TimerFind: TTimer;
+    tvHierarchy: TTreeView;
     tsfMarked: TRxSwitch;
     tsfUnmarked: TRxSwitch;
     tsHasSynonyms: TRxSwitch;
@@ -276,8 +287,11 @@ type
     tsTaxonomyIoc: TRxSwitch;
     procedure actAboutExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
+    procedure actFormatSciNamesExecute(Sender: TObject);
     procedure actImportClementsExecute(Sender: TObject);
     procedure actImportIOCNamesExecute(Sender: TObject);
+    procedure actRewriteHierarchyExecute(Sender: TObject);
+    procedure actSspVernacularNamesExecute(Sender: TObject);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
     procedure dsTaxaDataChange(Sender: TObject; Field: TField);
@@ -302,6 +316,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
+    procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+      var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
     procedure navTabsTabChanged(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
@@ -369,6 +385,32 @@ begin
   Close;
 end;
 
+procedure TfrmTaxaEditor.actFormatSciNamesExecute(Sender: TObject);
+begin
+  with dsTaxa.DataSet do
+  try
+    First;
+    DisableControls;
+    PBar.Position := 0;
+    PBar.Max := RecordCount;
+    pProgress.Visible := True;
+    repeat
+      Edit;
+      FieldByName('formatted_name').AsString := FormattedBirdName(FieldByName('full_name').AsString, FieldByName('rank_id').AsInteger);
+      Post;
+
+      PBar.Position := RecNo;
+      Application.ProcessMessages;
+      Next;
+    until Eof or Parar;
+  finally
+    First;
+    EnableControls;
+    pProgress.Visible := False;
+  end;
+
+end;
+
 procedure TfrmTaxaEditor.actImportClementsExecute(Sender: TObject);
 begin
   if OpenDlg.Execute then
@@ -383,6 +425,177 @@ begin
     ImportIocData(OpenDlg.FileName);
 
   dsTaxa.DataSet.Refresh;
+end;
+
+procedure TfrmTaxaEditor.actRewriteHierarchyExecute(Sender: TObject);
+var
+  Qry: TSQLQuery;
+  iOrder, iFamily, iSubfamily, iGenus, iSpecies, iMonoGroup, iPoliGroup, iSubspecies: Integer;
+begin
+  try
+    PBar.Style := pbstMarquee;
+    pProgress.Visible := True;
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      DataBase := dmTaxa.sqlCon;
+      Transaction := dmTaxa.sqlTrans;
+      MacroCheck := True;
+
+      iOrder := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ord.');
+      iFamily := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'fam.');
+      iSubfamily := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'subfam.');
+      iGenus := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'g.');
+      iSpecies := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'sp.');
+      iMonoGroup := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'grp. (mono)');
+      iPoliGroup := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'grp. (poli)');
+      iSubspecies := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ssp.');
+
+      PBar.Position := 0;
+      PBar.Max := 8;
+      PBar.Style := pbstNormal;
+      if not dmTaxa.sqlTrans.Active then
+        dmTaxa.sqlTrans.StartTransaction;
+      try
+        { Order }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET order_id = taxon_id');
+        Add('WHERE zoo_taxa.rank_id = :rank_id');
+        ParamByName('RANK_ID').AsInteger := iOrder;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        { Family }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET family_id = zoo_taxa.taxon_id, order_id = parent.order_id');
+        Add('FROM (SELECT taxon_id, order_id FROM zoo_taxa) AS parent');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id) AND (zoo_taxa.parent_taxon_id = parent.taxon_id)');
+        ParamByName('RANK_ID').AsInteger := iFamily;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        { Subfamily }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET subfamily_id = zoo_taxa.taxon_id, family_id = parent.family_id, order_id = parent.order_id');
+        Add('FROM (SELECT taxon_id, order_id, family_id FROM zoo_taxa) AS parent');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id) AND (zoo_taxa.parent_taxon_id = parent.taxon_id)');
+        ParamByName('RANK_ID').AsInteger := iSubfamily;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        { Genus }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET genus_id = zoo_taxa.taxon_id, subfamily_id = parent.subfamily_id, ');
+        Add('family_id = parent.family_id, order_id = parent.order_id');
+        Add('FROM (SELECT taxon_id, order_id, family_id, subfamily_id FROM zoo_taxa) AS parent');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id) AND (zoo_taxa.parent_taxon_id = parent.taxon_id)');
+        ParamByName('RANK_ID').AsInteger := iGenus;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        { Species }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET species_id = zoo_taxa.taxon_id, genus_id = parent.genus_id, ');
+        Add('subfamily_id = parent.subfamily_id, family_id = parent.family_id, order_id = parent.order_id');
+        Add('FROM (SELECT taxon_id, order_id, family_id, subfamily_id, genus_id FROM zoo_taxa) AS parent');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id) AND (zoo_taxa.parent_taxon_id = parent.taxon_id)');
+        ParamByName('RANK_ID').AsInteger := iSpecies;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        { Mono and politypic groups }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET subspecies_group_id = zoo_taxa.taxon_id, species_id = parent.species_id, genus_id = parent.genus_id, ');
+        Add('subfamily_id = parent.subfamily_id, family_id = parent.family_id, order_id = parent.order_id');
+        Add('FROM (SELECT taxon_id, order_id, family_id, subfamily_id, genus_id, species_id FROM zoo_taxa) AS parent');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id) AND (zoo_taxa.parent_taxon_id = parent.taxon_id)');
+        ParamByName('RANK_ID').AsInteger := iMonoGroup;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+        ParamByName('RANK_ID').AsInteger := iPoliGroup;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        { Subspecies, domestic, form }
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET subspecies_group_id = parent.subspecies_group_id, species_id = parent.species_id, ' +
+          'genus_id = parent.genus_id, subfamily_id = parent.subfamily_id, family_id = parent.family_id, ' +
+          'order_id = parent.order_id');
+        Add('FROM (SELECT taxon_id, order_id, family_id, subfamily_id, genus_id, species_id, ' +
+          'subspecies_group_id FROM zoo_taxa) AS parent');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id) AND (zoo_taxa.parent_taxon_id = parent.taxon_id)');
+        ParamByName('RANK_ID').AsInteger := iSubspecies;
+        ExecSQL;
+        PBar.Position := PBar.Position + 1;
+        Application.ProcessMessages;
+
+        dmTaxa.sqlTrans.CommitRetaining;
+      except
+        dmTaxa.sqlTrans.RollbackRetaining;
+        raise Exception.Create(rsErrorRewritingHierarchy);
+      end;
+    finally
+      FreeAndNil(Qry);
+    end;
+  finally
+    pProgress.Visible := False;
+    PBar.Style := pbstNormal;
+  end;
+end;
+
+procedure TfrmTaxaEditor.actSspVernacularNamesExecute(Sender: TObject);
+var
+  Sp: Integer;
+begin
+  with dsTaxa.DataSet do
+  try
+    First;
+    DisableControls;
+    PBar.Position := 0;
+    PBar.Max := RecordCount;
+    pProgress.Visible := True;
+    repeat
+      if GetRankType(FieldByName('rank_id').AsInteger) = trSubspecies then
+      begin
+        Sp := GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                      ExtractWord(1, FieldByName('full_name').AsString, [' ']) + ' ' +
+                      ExtractWord(2, FieldByName('full_name').AsString, [' ']));
+        Edit;
+        FieldByName('english_name').AsString := GetName('zoo_taxa', 'english_name', 'taxon_id', Sp) + ' (' +
+            ExtractWord(3, FieldByName('full_name').AsString, [' ']) + ')';
+        if GetName('zoo_taxa', 'portuguese_name', 'taxon_id', Sp) <> EmptyStr then
+          FieldByName('portuguese_name').AsString := GetName('zoo_taxa', 'portuguese_name', 'taxon_id', Sp) + ' (' +
+            ExtractWord(3, FieldByName('full_name').AsString, [' ']) + ')';
+        if GetName('zoo_taxa', 'spanish_name', 'taxon_id', Sp) <> EmptyStr then
+          FieldByName('spanish_name').AsString := GetName('zoo_taxa', 'spanish_name', 'taxon_id', Sp) + ' (' +
+            ExtractWord(3, FieldByName('full_name').AsString, [' ']) + ')';
+        Post;
+
+      end;
+
+      PBar.Position := RecNo;
+      Application.ProcessMessages;
+      Next;
+    until Eof or Parar;
+  finally
+    First;
+    EnableControls;
+    pProgress.Visible := False;
+  end;
 end;
 
 procedure TfrmTaxaEditor.AddSortedField(aFieldName: String; aDirection: TSortDirection; aCollation: String;
@@ -421,8 +634,33 @@ begin
 end;
 
 procedure TfrmTaxaEditor.dsTaxaDataChange(Sender: TObject; Field: TField);
+var
+  nOrder, nFamily, nGenus, nSpecies, nGroup: TTreeNode;
 begin
   UpdateButtons(dsTaxa.DataSet);
+
+  tvHierarchy.Items.Clear;
+  if dsTaxa.DataSet.FieldByName('order_id').AsInteger > 0 then
+  begin
+    nOrder := tvHierarchy.Items.Add(nil, GetName('zoo_taxa', 'full_name', 'taxon_id', dsTaxa.DataSet.FieldByName('order_id').AsInteger));
+    if dsTaxa.DataSet.FieldByName('family_id').AsInteger > 0 then
+    begin
+      nFamily := tvHierarchy.Items.AddChild(nOrder, GetName('zoo_taxa', 'full_name', 'taxon_id', dsTaxa.DataSet.FieldByName('family_id').AsInteger));
+      if dsTaxa.DataSet.FieldByName('genus_id').AsInteger > 0 then
+      begin
+        nGenus := tvHierarchy.Items.AddChild(nFamily, GetName('zoo_taxa', 'full_name', 'taxon_id', dsTaxa.DataSet.FieldByName('genus_id').AsInteger));
+        if dsTaxa.DataSet.FieldByName('species_id').AsInteger > 0 then
+        begin
+          nSpecies := tvHierarchy.Items.AddChild(nGenus, GetName('zoo_taxa', 'full_name', 'taxon_id', dsTaxa.DataSet.FieldByName('species_id').AsInteger));
+          if dsTaxa.DataSet.FieldByName('subspecies_group_id').AsInteger > 0 then
+          begin
+            nGroup := tvHierarchy.Items.AddChild(nSpecies, GetName('zoo_taxa', 'full_name', 'taxon_id', dsTaxa.DataSet.FieldByName('subspecies_group_id').AsInteger));
+          end;
+        end;
+      end;
+    end;
+    tvHierarchy.FullExpand;
+  end;
 end;
 
 procedure TfrmTaxaEditor.dsTaxaStateChange(Sender: TObject);
@@ -1627,6 +1865,31 @@ begin
   CanToggle := True;
 end;
 
+procedure TfrmTaxaEditor.gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
+  MousePos: TPoint; var Handled: Boolean);
+
+  function GetNumScrollLines: Integer;
+  begin
+    SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, @Result, 0);
+  end;
+
+var
+  Direction: Shortint;
+begin
+  Direction := 1;
+  if WheelDelta = 0 then
+    Exit
+  else if WheelDelta > 0 then
+    Direction := -1;
+
+  with TDBGrid(Sender) do
+  begin
+    if Assigned(DataSource) and Assigned(DataSource.DataSet) then
+      DataSource.DataSet.MoveBy(Direction * GetNumScrollLines);
+    Invalidate;
+  end;
+end;
+
 function TfrmTaxaEditor.SearchTaxa(aValue: String): Boolean;
 var
   Crit: TCriteriaType;
@@ -1821,6 +2084,8 @@ begin
     lblCountTaxa.Caption := Format(rsRecordNumber, [dsTaxa.DataSet.RecNo, dsTaxa.DataSet.RecordCount])
   else
     lblCountTaxa.Caption := rsRecNoEmpty;
+  lblTitleSynonyms.Caption := Format('Synonyms (%d)', [dsSynonyms.DataSet.RecordCount]);
+  lblTitleChilds.Caption := Format('ChildTaxa (%d)', [dsChildTaxa.DataSet.RecordCount]);
 end;
 
 function TfrmTaxaEditor.ValidateTaxon: Boolean;

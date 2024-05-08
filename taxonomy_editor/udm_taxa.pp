@@ -22,6 +22,9 @@ type
     lookAuthors: TSQLQuery;
     lookRanksrank_id: TLongintField;
     lookRanksrank_name: TStringField;
+    qChildTaxa: TSQLQuery;
+    qChildTaxaformatted_name: TStringField;
+    qChildTaxafull_name: TStringField;
     qPacks: TSQLQuery;
     qPacksactive_status: TBooleanField;
     qPacksinsert_date: TDateTimeField;
@@ -51,6 +54,10 @@ type
     qRanksuser_inserted: TLongintField;
     qRanksuser_updated: TLongintField;
     qRankszoological_code: TBooleanField;
+    qSynonymTaxa: TSQLQuery;
+    qSynonymTaxaformatted_name: TStringField;
+    qSynonymTaxafull_name: TStringField;
+    qSynonymTaxavalid_id: TLargeintField;
     qTaxa: TSQLQuery;
     qTaxaactive_status: TBooleanField;
     qTaxaauthorship: TStringField;
@@ -125,6 +132,8 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure qTaxaAfterInsert(DataSet: TDataSet);
+    procedure qTaxaAfterOpen(DataSet: TDataSet);
+    procedure qTaxaBeforeClose(DataSet: TDataSet);
     procedure UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;
       const Parameters: array of String);
   private
@@ -160,6 +169,18 @@ begin
   DataSet.FieldByName('clements_taxonomy').AsBoolean:= False;
   DataSet.FieldByName('ioc_taxonomy').AsBoolean:= False;
   DataSet.FieldByName('cbro_taxonomy').AsBoolean:= False;
+end;
+
+procedure TdmTaxa.qTaxaAfterOpen(DataSet: TDataSet);
+begin
+  qSynonymTaxa.Open;
+  qChildTaxa.Open;
+end;
+
+procedure TdmTaxa.qTaxaBeforeClose(DataSet: TDataSet);
+begin
+  qChildTaxa.Close;
+  qSynonymTaxa.Close;
 end;
 
 procedure TdmTaxa.UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;

@@ -110,6 +110,8 @@ object frmTaxaEditor: TfrmTaxaEditor
           Scrollbars = ssVertical
           TabOrder = 0
           TitleStyle = tsNative
+          OnKeyPress = FormKeyPress
+          OnMouseWheel = gridTaxaMouseWheel
           OnPrepareCanvas = gridTaxaPrepareCanvas
         end
       end
@@ -1342,7 +1344,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 517
         Height = 939
         Top = 48
-        Width = 1044
+        Width = 682
         Align = alClient
         Background.Color = 15066599
         Background.Gradient1.StartColor = clWhite
@@ -1381,27 +1383,27 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 1
           Height = 624
           Top = 314
-          Width = 1042
+          Width = 680
           HorzScrollBar.Page = 214
           VertScrollBar.Increment = 86
           VertScrollBar.Page = 624
           Align = alClient
           BorderStyle = bsNone
           ClientHeight = 624
-          ClientWidth = 1025
+          ClientWidth = 663
           TabOrder = 6
           object peTaxa: TPanel
             Left = 0
             Height = 1145
             Top = 0
-            Width = 1025
+            Width = 663
             Align = alTop
             AutoSize = True
             BevelOuter = bvNone
             ChildSizing.LeftRightSpacing = 16
             ChildSizing.TopBottomSpacing = 8
             ClientHeight = 1145
-            ClientWidth = 1025
+            ClientWidth = 663
             Color = 14408667
             ParentBackground = False
             ParentColor = False
@@ -1469,7 +1471,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 8
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1524,7 +1526,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 766
+                Width = 404
                 DataField = 'english_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1538,7 +1540,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 102
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1594,7 +1596,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 766
+                Width = 404
                 DataField = 'spanish_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1607,7 +1609,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 55
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1662,7 +1664,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 766
+                Width = 404
                 DataField = 'portuguese_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1676,7 +1678,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 155
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1731,7 +1733,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'quick_code'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1745,7 +1747,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 208
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1804,7 +1806,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'extinction_year'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1818,7 +1820,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 292
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1873,7 +1875,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1886,7 +1888,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 339
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1941,7 +1943,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'group_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1954,7 +1956,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 78
               Top = 433
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2010,7 +2012,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 54
                 Top = 12
-                Width = 766
+                Width = 404
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 Constraints.MinHeight = 54
@@ -2024,7 +2026,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 386
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2079,7 +2081,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'ebird_code'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2092,7 +2094,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 548
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2147,7 +2149,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 766
+                Width = 404
                 DataField = 'ioc_english_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2160,7 +2162,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 642
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2215,7 +2217,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 DataField = 'ioc_rank_id'
@@ -2234,7 +2236,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 48
               Top = 689
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2289,12 +2291,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 766
+                Width = 404
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 766
+                ClientWidth = 404
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2316,7 +2318,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 78
               Top = 785
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2372,7 +2374,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 54
                 Top = 12
-                Width = 766
+                Width = 404
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 Constraints.MinHeight = 54
@@ -2386,7 +2388,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 595
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2441,7 +2443,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'ioc_sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2454,7 +2456,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 48
               Top = 737
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2509,12 +2511,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 766
+                Width = 404
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 766
+                ClientWidth = 404
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2536,7 +2538,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 900
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2591,7 +2593,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 766
+                Width = 404
                 DataField = 'other_portuguese_names'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2604,7 +2606,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 947
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2659,7 +2661,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 DataField = 'cbro_sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2672,7 +2674,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 994
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2727,7 +2729,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 577
+                Width = 215
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 DataField = 'cbro_rank_id'
@@ -2746,7 +2748,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 48
               Top = 1041
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2801,12 +2803,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 766
+                Width = 404
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 766
+                ClientWidth = 404
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2828,7 +2830,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 48
               Top = 1089
-              Width = 993
+              Width = 631
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2884,12 +2886,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 766
+                Width = 404
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 766
+                ClientWidth = 404
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2913,7 +2915,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 9
           Height = 44
           Top = 9
-          Width = 1026
+          Width = 664
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 8
@@ -2925,7 +2927,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ChildSizing.TopBottomSpacing = 8
           ChildSizing.HorizontalSpacing = 4
           ClientHeight = 44
-          ClientWidth = 1026
+          ClientWidth = 664
           TabOrder = 0
           object sbEditRecord: TSpeedButton
             Left = 16
@@ -2999,7 +3001,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             ParentShowHint = False
           end
           object sbDelRecord: TSpeedButton
-            Left = 945
+            Left = 583
             Height = 28
             Top = 8
             Width = 65
@@ -3016,7 +3018,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             OnClick = sbDelRecordClick
           end
           object lblCountTaxa: TLabel
-            Left = 866
+            Left = 504
             Height = 28
             Top = 8
             Width = 66
@@ -3029,7 +3031,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 61
-          Width = 994
+          Width = 632
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3087,7 +3089,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 767
+            Width = 405
             DataField = 'full_name'
             DataSource = dsTaxa
             Align = alRight
@@ -3101,7 +3103,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 108
-          Width = 994
+          Width = 632
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3160,7 +3162,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 767
+            Width = 405
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             AutoDropDown = True
@@ -3181,7 +3183,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 163
-          Width = 994
+          Width = 632
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3239,7 +3241,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 400
             Height = 23
             Top = 12
-            Width = 578
+            Width = 216
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             AutoComplete = True
@@ -3261,7 +3263,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 48
           Top = 258
-          Width = 994
+          Width = 632
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3320,12 +3322,12 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 24
             Top = 12
-            Width = 767
+            Width = 405
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvNone
             ClientHeight = 24
-            ClientWidth = 767
+            ClientWidth = 405
             Color = 16448250
             Constraints.MaxHeight = 28
             ParentBackground = False
@@ -3349,7 +3351,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 48
           Top = 210
-          Width = 994
+          Width = 632
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3407,12 +3409,12 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 24
             Top = 12
-            Width = 767
+            Width = 405
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvNone
             ClientHeight = 24
-            ClientWidth = 767
+            ClientWidth = 405
             Color = 16448250
             Constraints.MaxHeight = 28
             ParentBackground = False
@@ -3475,6 +3477,94 @@ object frmTaxaEditor: TfrmTaxaEditor
           BorderSpacing.Top = 8
           BorderSpacing.Bottom = 8
           TabOrder = 0
+        end
+      end
+      object pDetails: TPanel
+        Left = 1199
+        Height = 939
+        Top = 48
+        Width = 362
+        Align = alRight
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 8
+        ChildSizing.TopBottomSpacing = 16
+        ChildSizing.VerticalSpacing = 8
+        ClientHeight = 939
+        ClientWidth = 362
+        Color = 15066599
+        ParentBackground = False
+        ParentColor = False
+        TabOrder = 8
+        object gridSynonyms: TDBGrid
+          Left = 8
+          Height = 236
+          Top = 197
+          Width = 346
+          Align = alTop
+          AutoFillColumns = True
+          Color = clWindow
+          Columns = <          
+            item
+              Title.Caption = 'Synonym'
+              Width = 325
+              FieldName = 'full_name'
+            end>
+          DataSource = dsSynonyms
+          FixedCols = 0
+          Options = [dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgDisableInsert]
+          Scrollbars = ssVertical
+          TabOrder = 0
+          TitleStyle = tsNative
+        end
+        object gridChildTaxa: TDBGrid
+          Left = 8
+          Height = 344
+          Top = 470
+          Width = 346
+          Align = alTop
+          AutoFillColumns = True
+          Color = clWindow
+          Columns = <          
+            item
+              Title.Caption = 'Child taxa'
+              Width = 325
+              FieldName = 'full_name'
+            end>
+          DataSource = dsChildTaxa
+          FixedCols = 0
+          Options = [dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgDisableInsert]
+          Scrollbars = ssVertical
+          TabOrder = 1
+          TitleStyle = tsNative
+        end
+        object tvHierarchy: TTreeView
+          Left = 8
+          Height = 144
+          Top = 16
+          Width = 346
+          Align = alTop
+          ScrollBars = ssAutoVertical
+          TabOrder = 2
+        end
+        object lblTitleSynonyms: TLabel
+          Left = 8
+          Height = 21
+          Top = 168
+          Width = 346
+          Align = alTop
+          Caption = 'Synonyms'
+          Font.Height = -16
+          ParentFont = False
+        end
+        object lblTitleChilds: TLabel
+          Left = 8
+          Height = 21
+          Top = 441
+          Width = 346
+          Align = alTop
+          Caption = 'Child taxa'
+          Font.Height = -16
+          ParentFont = False
         end
       end
     end
@@ -11066,6 +11156,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     object actFormatSciNames: TAction
       Category = 'Batch'
       Caption = 'Format scientific names'
+      OnExecute = actFormatSciNamesExecute
     end
     object actImport: TAction
       Category = 'Main'
@@ -11104,9 +11195,15 @@ object frmTaxaEditor: TfrmTaxaEditor
       Caption = 'Clements Checklist'
       OnExecute = actImportClementsExecute
     end
+    object actSspVernacularNames: TAction
+      Category = 'Batch'
+      Caption = 'Subspecies'' vernacular names'
+      OnExecute = actSspVernacularNamesExecute
+    end
     object actRewriteHierarchy: TAction
       Category = 'Batch'
       Caption = 'Rewrite taxa hierarchy'
+      OnExecute = actRewriteHierarchyExecute
     end
   end
   object pmMain: TPopupMenu
@@ -11128,9 +11225,13 @@ object frmTaxaEditor: TfrmTaxaEditor
       Action = actExport
     end
     object mmBatchActions: TMenuItem
-      Action = actBatchActions
+      Caption = 'Batch actions'
+      ImageIndex = 73
       object mmFormatSciNames: TMenuItem
         Action = actFormatSciNames
+      end
+      object mmSspVernacularNames: TMenuItem
+        Action = actSspVernacularNames
       end
       object mmRewriteHierarchy: TMenuItem
         Action = actRewriteHierarchy
@@ -11278,5 +11379,17 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 76
       OnClick = sbDelRecordClick
     end
+  end
+  object dsSynonyms: TDataSource
+    AutoEdit = False
+    DataSet = dmTaxa.qSynonymTaxa
+    Left = 261
+    Top = 186
+  end
+  object dsChildTaxa: TDataSource
+    AutoEdit = False
+    DataSet = dmTaxa.qChildTaxa
+    Left = 320
+    Top = 186
   end
 end

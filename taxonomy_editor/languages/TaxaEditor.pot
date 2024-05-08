@@ -330,6 +330,7 @@ msgid "About"
 msgstr ""
 
 #: tfrmtaxaeditor.actbatchactions.caption
+msgctxt "tfrmtaxaeditor.actbatchactions.caption"
 msgid "Batch actions"
 msgstr ""
 
@@ -361,6 +362,10 @@ msgstr ""
 
 #: tfrmtaxaeditor.actrewritehierarchy.caption
 msgid "Rewrite taxa hierarchy"
+msgstr ""
+
+#: tfrmtaxaeditor.actsspvernacularnames.caption
+msgid "Subspecies' vernacular names"
 msgstr ""
 
 #: tfrmtaxaeditor.btncancelprogress.caption
@@ -412,6 +417,11 @@ msgstr ""
 
 #: tfrmtaxaeditor.etquickcode.texthint
 msgid "AAA AAA"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchildtaxa.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.gridchildtaxa.columns[0].title.caption"
+msgid "Child taxa"
 msgstr ""
 
 #: tfrmtaxaeditor.gridranks.columns[0].title.caption
@@ -467,6 +477,10 @@ msgstr ""
 #: tfrmtaxaeditor.gridranks.columns[9].title.caption
 msgctxt "tfrmtaxaeditor.gridranks.columns[9].title.caption"
 msgid "Infraspecific"
+msgstr ""
+
+#: tfrmtaxaeditor.gridsynonyms.columns[0].title.caption
+msgid "Synonym"
 msgstr ""
 
 #: tfrmtaxaeditor.gridtaxa.columns[0].title.caption
@@ -676,6 +690,15 @@ msgctxt "tfrmtaxaeditor.lbltiocvalidname.caption"
 msgid "Valid name"
 msgstr ""
 
+#: tfrmtaxaeditor.lbltitlechilds.caption
+msgctxt "tfrmtaxaeditor.lbltitlechilds.caption"
+msgid "Child taxa"
+msgstr ""
+
+#: tfrmtaxaeditor.lbltitlesynonyms.caption
+msgid "Synonyms"
+msgstr ""
+
 #: tfrmtaxaeditor.lbltparenttaxon.caption
 msgctxt "tfrmtaxaeditor.lbltparenttaxon.caption"
 msgid "Parent taxon"
@@ -719,6 +742,11 @@ msgstr ""
 #: tfrmtaxaeditor.menuitem3.caption
 msgctxt "tfrmtaxaeditor.menuitem3.caption"
 msgid "Import"
+msgstr ""
+
+#: tfrmtaxaeditor.mmbatchactions.caption
+msgctxt "tfrmtaxaeditor.mmbatchactions.caption"
+msgid "Batch actions"
 msgstr ""
 
 #: tfrmtaxaeditor.pmgdel.caption

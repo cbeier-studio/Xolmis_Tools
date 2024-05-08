@@ -5,7 +5,7 @@ object dmTaxa: TdmTaxa
   Height = 418
   HorizontalOffset = 382
   VerticalOffset = 32
-  Width = 586
+  Width = 707
   object qTaxa: TSQLQuery
     PacketRecords = -1
     FieldDefs = <    
@@ -301,6 +301,8 @@ object dmTaxa: TdmTaxa
         Size = 100
       end>
     AfterInsert = qTaxaAfterInsert
+    AfterOpen = qTaxaAfterOpen
+    BeforeClose = qTaxaBeforeClose
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -315,7 +317,7 @@ object dmTaxa: TdmTaxa
       'WHERE (active_status = 1)'
       'ORDER BY z.full_name ASC'
     )
-    Options = [sqoAutoApplyUpdates]
+    Options = [sqoKeepOpenOnCommit, sqoAutoApplyUpdates]
     Params = <>
     Macros = <>
     MacroCheck = True
@@ -868,8 +870,8 @@ object dmTaxa: TdmTaxa
     )
     Params = <>
     Macros = <>
-    Left = 320
-    Top = 145
+    Left = 416
+    Top = 144
     object lookRanksrank_id: TLongintField
       DisplayLabel = 'Id'
       FieldKind = fkData
@@ -895,8 +897,8 @@ object dmTaxa: TdmTaxa
   object dslookRanks: TDataSource
     AutoEdit = False
     DataSet = lookRanks
-    Left = 424
-    Top = 145
+    Left = 496
+    Top = 144
   end
   object qRanks: TSQLQuery
     PacketRecords = -1
@@ -1189,6 +1191,7 @@ object dmTaxa: TdmTaxa
     end
   end
   object qPacks: TSQLQuery
+    PacketRecords = -1
     FieldDefs = <    
       item
         Name = 'package_id'
@@ -1249,6 +1252,7 @@ object dmTaxa: TdmTaxa
       'SELECT * FROM packages'
       'WHERE (active_status = 1)'
     )
+    Options = [sqoKeepOpenOnCommit, sqoAutoApplyUpdates]
     Params = <>
     Macros = <>
     Left = 70
@@ -1365,6 +1369,7 @@ object dmTaxa: TdmTaxa
     end
   end
   object qTaxaUpdates: TSQLQuery
+    PacketRecords = 200
     FieldDefs = <    
       item
         Name = 'change_id'
@@ -1433,6 +1438,7 @@ object dmTaxa: TdmTaxa
       'WHERE (package_id = :package_id)'
       'AND (active_status = 1)'
     )
+    Options = [sqoAutoApplyUpdates]
     Params = <    
       item
         DataType = ftUnknown
@@ -1624,8 +1630,8 @@ object dmTaxa: TdmTaxa
     )
     Params = <>
     Macros = <>
-    Left = 320
-    Top = 216
+    Left = 416
+    Top = 215
     object lookAuthorsauthorship: TStringField
       DisplayLabel = 'Authorship'
       FieldKind = fkData
@@ -1641,14 +1647,14 @@ object dmTaxa: TdmTaxa
   object dslookAuthors: TDataSource
     AutoEdit = False
     DataSet = lookAuthors
-    Left = 424
-    Top = 216
+    Left = 496
+    Top = 215
   end
   object iLogos: TImageList
     Height = 256
     Width = 256
-    Left = 172
-    Top = 139
+    Left = 536
+    Top = 32
     Bitmap = {
       4C7A020000000001000000010000E58900000000000078DAEC9D077815C7D5F7
       0DEE716CC74E9CC47112C72976BAFD3979D3701237100244B7008329EE05B071
@@ -2755,5 +2761,139 @@ object dmTaxa: TdmTaxa
       2828282828282828282828282828282828282828282828282828282828282828
       28282828282828282828282828282828282828A231FE1FBB8B3D59
     }
+  end
+  object qSynonymTaxa: TSQLQuery
+    PacketRecords = -1
+    FieldDefs = <    
+      item
+        Name = 'valid_id'
+        DataType = ftLargeint
+        Precision = -1
+      end    
+      item
+        Name = 'full_name'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end    
+      item
+        Name = 'formatted_name'
+        DataType = ftString
+        Precision = -1
+        Size = 250
+      end>
+    Database = sqlCon
+    Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT valid_id, full_name, formatted_name FROM zoo_taxa'
+      'WHERE (valid_id = :taxon_id) AND (active_status = 1)'
+      'ORDER BY full_name ASC'
+      ''
+    )
+    Options = [sqoAutoApplyUpdates]
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'taxon_id'
+        ParamType = ptInput
+      end>
+    Macros = <>
+    DataSource = frmTaxaEditor.dsTaxa
+    Left = 144
+    Top = 145
+    object qSynonymTaxavalid_id: TLargeintField
+      DisplayLabel = 'ID'
+      FieldKind = fkData
+      FieldName = 'valid_id'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qSynonymTaxafull_name: TStringField
+      DisplayLabel = 'Synonym'
+      DisplayWidth = 40
+      FieldKind = fkData
+      FieldName = 'full_name'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 100
+    end
+    object qSynonymTaxaformatted_name: TStringField
+      DisplayLabel = 'Synonym'
+      DisplayWidth = 40
+      FieldKind = fkData
+      FieldName = 'formatted_name'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 250
+    end
+  end
+  object qChildTaxa: TSQLQuery
+    PacketRecords = -1
+    FieldDefs = <    
+      item
+        Name = 'full_name'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end    
+      item
+        Name = 'formatted_name'
+        DataType = ftString
+        Precision = -1
+        Size = 250
+      end>
+    Database = sqlCon
+    Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT full_name, formatted_name'
+      'FROM zoo_taxa'
+      'WHERE (parent_taxon_id = :taxon_id) AND (active_status = 1)'
+      'ORDER BY full_name ASC'
+      ''
+    )
+    Options = [sqoAutoApplyUpdates]
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'taxon_id'
+        ParamType = ptInput
+      end>
+    Macros = <>
+    DataSource = frmTaxaEditor.dsTaxa
+    Left = 224
+    Top = 145
+    object qChildTaxafull_name: TStringField
+      DisplayLabel = 'Child taxa'
+      DisplayWidth = 40
+      FieldKind = fkData
+      FieldName = 'full_name'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 100
+    end
+    object qChildTaxaformatted_name: TStringField
+      DisplayLabel = 'Child taxa'
+      DisplayWidth = 40
+      FieldKind = fkData
+      FieldName = 'formatted_name'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 250
+    end
   end
 end
