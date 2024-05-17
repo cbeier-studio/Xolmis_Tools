@@ -90,13 +90,12 @@ object dlgDestTaxon: TdlgDestTaxon
       Items.Strings = (
         'Clements'
         'IOC'
-        'CBRO'
       )
       ItemHeight = 17
       TabOrder = 1
       OnKeyPress = eDestinationTaxonKeyPress
       Data = {
-        03000000000000
+        020000000000
       }
     end
     object pDestinationTaxon: TBCPanel

@@ -593,8 +593,8 @@ begin
     Add('(SELECT v.full_name FROM zoo_taxa AS v WHERE v.taxon_id = z.valid_id) AS valid_name,');
     Add('(SELECT ui.full_name FROM zoo_taxa AS ui WHERE ui.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_taxon_name,');
     Add('(SELECT vi.full_name FROM zoo_taxa AS vi WHERE vi.taxon_id = z.ioc_valid_id) AS ioc_valid_name,');
-    Add('(SELECT uc.full_name FROM zoo_taxa AS uc WHERE uc.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,');
-    Add('(SELECT vc.full_name FROM zoo_taxa AS vc WHERE vc.taxon_id = z.cbro_valid_id) AS cbro_valid_name,');
+    //Add('(SELECT uc.full_name FROM zoo_taxa AS uc WHERE uc.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,');
+    //Add('(SELECT vc.full_name FROM zoo_taxa AS vc WHERE vc.taxon_id = z.cbro_valid_id) AS cbro_valid_name,');
     Add('(SELECT o.full_name FROM zoo_taxa AS o WHERE o.taxon_id = z.order_id) AS order_name,');
     Add('(SELECT f.full_name FROM zoo_taxa AS f WHERE f.taxon_id = z.family_id) AS family_name,');
     Add('(SELECT s.full_name FROM zoo_taxa AS s WHERE s.taxon_id = z.subfamily_id) AS subfamily_name,');

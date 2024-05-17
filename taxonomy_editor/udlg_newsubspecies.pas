@@ -80,8 +80,8 @@ begin
     FTaxonomies := FTaxonomies + [btClements];
   if cklTaxonomy.Checked[1] then
     FTaxonomies := FTaxonomies + [btIoc];
-  if cklTaxonomy.Checked[2] then
-    FTaxonomies := FTaxonomies + [btCbro];
+  //if cklTaxonomy.Checked[2] then
+  //  FTaxonomies := FTaxonomies + [btCbro];
 
   FEpythet := eEpythet.Text;
 

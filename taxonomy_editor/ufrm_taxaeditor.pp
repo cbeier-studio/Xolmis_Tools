@@ -29,13 +29,13 @@ type
     AppProperties: TApplicationProperties;
     btnCancelProgress: TBitBtn;
     cbAuthorship: TIBLookupComboEditBox;
-    cbtCbroRank: TDBLookupComboBox;
     cbtIocRank: TDBLookupComboBox;
     cbtRank: TDBLookupComboBox;
     cktCbro: TDBCheckBox;
     cktClements: TDBCheckBox;
     cktExtinct: TDBCheckBox;
     cktIoc: TDBCheckBox;
+    cbtIucnStatus: TDBComboBox;
     gridChildTaxa: TDBGrid;
     dsSynonyms: TDataSource;
     dsChildTaxa: TDataSource;
@@ -48,7 +48,6 @@ type
     eFindTaxa2: TEdit;
     etFullname: TDBEdit;
     etCbroOtherPtNames: TDBEdit;
-    etCbroSortNr: TDBEdit;
     etEbirdCode: TDBEdit;
     etEnglishName: TDBEdit;
     etExtinctionYear: TDBEdit;
@@ -56,8 +55,6 @@ type
     etIocSortNr: TDBEdit;
     etIocParentTaxon: TDBEditButton;
     etIocValidName: TDBEditButton;
-    etCbroParentTaxon: TDBEditButton;
-    etCbroValidName: TDBEditButton;
     etParentTaxon: TDBEditButton;
     etPortugueseName: TDBEdit;
     etQuickcode: TDBEdit;
@@ -70,6 +67,7 @@ type
     gridRanks: TDBGrid;
     iconFindRanks: TImage;
     iconFindTaxa2: TImage;
+    iIucnStatus: TImageList;
     imgSplash: TImage;
     lblTitleSynonyms: TLabel;
     lblCountTaxa: TLabel;
@@ -77,10 +75,6 @@ type
     lblProgress: TLabel;
     lbltAuthorship: TLabel;
     lbltCbroOtherPtNames: TLabel;
-    lbltCbroParentTaxon: TLabel;
-    lbltCbroRank: TLabel;
-    lbltCbroSortNr: TLabel;
-    lbltCbroValidName: TLabel;
     lbltDistribution: TLabel;
     lbltEbirdCode: TLabel;
     lbltEnglishName: TLabel;
@@ -95,6 +89,7 @@ type
     lbltParentTaxon: TLabel;
     lbltPortugueseName: TLabel;
     lbltQuickCode: TLabel;
+    lbltIucnStatus: TLabel;
     lbltRank: TLabel;
     lbltSortNr: TLabel;
     lbltSpanishName: TLabel;
@@ -124,6 +119,7 @@ type
     ptAuthorship: TBCPanel;
     ptFullName: TBCPanel;
     ptParentTaxon: TBCPanel;
+    ptIucnStatus: TBCPanel;
     ptRank: TBCPanel;
     ptToolbar: TPanel;
     pmtSortTaxonomic: TMenuItem;
@@ -143,10 +139,6 @@ type
     pRanksToolbar: TBCPanel;
     pTaxaToolbar2: TBCPanel;
     ptCbroOtherPtNames: TBCPanel;
-    ptCbroParentTaxon: TBCPanel;
-    ptCbroRank: TBCPanel;
-    ptCbroSortNr: TBCPanel;
-    ptCbroValidName: TBCPanel;
     ptContent: TBCPanel;
     gridTaxa: TDBGrid;
     MenuItem1: TMenuItem;
@@ -292,16 +284,14 @@ type
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure actRewriteHierarchyExecute(Sender: TObject);
     procedure actSspVernacularNamesExecute(Sender: TObject);
+    procedure cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
+    procedure clbTaxonRanksFilterClickCheck(Sender: TObject);
     procedure dsTaxaDataChange(Sender: TObject; Field: TField);
     procedure dsTaxaStateChange(Sender: TObject);
     procedure eFindTaxaChange(Sender: TObject);
     procedure eFindTaxaEnter(Sender: TObject);
-    procedure etCbroParentTaxonButtonClick(Sender: TObject);
-    procedure etCbroParentTaxonKeyPress(Sender: TObject; var Key: char);
-    procedure etCbroValidNameButtonClick(Sender: TObject);
-    procedure etCbroValidNameKeyPress(Sender: TObject; var Key: char);
     procedure etFullnameExit(Sender: TObject);
     procedure etIocParentTaxonButtonClick(Sender: TObject);
     procedure etIocParentTaxonKeyPress(Sender: TObject; var Key: char);
@@ -343,6 +333,10 @@ type
     procedure sbSortRecordsClick(Sender: TObject);
     procedure sbSplitTaxonClick(Sender: TObject);
     procedure TimerFindTimer(Sender: TObject);
+    procedure tsfMarkedOff(Sender: TObject);
+    procedure tsfMarkedOn(Sender: TObject);
+    procedure tsTaxonExtinctOff(Sender: TObject);
+    procedure tsTaxonExtinctOn(Sender: TObject);
   private
     FSearch: TCustomSearch;
     SkipCompleteAutor: Boolean;
@@ -610,6 +604,20 @@ begin
   FSearch.SortFields.Items[p].Lookup := IsAnAlias;
 end;
 
+procedure TfrmTaxaEditor.cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+  State: TOwnerDrawState);
+var
+  aTextStyle: TTextStyle;
+begin
+  aTextStyle := cbtIucnStatus.Canvas.TextStyle;
+  aTextStyle.Layout := tlCenter;
+  cbtIucnStatus.Canvas.FillRect(ARect);
+  cbtIucnStatus.Canvas.TextStyle := aTextStyle;
+  cbtIucnStatus.Canvas.TextRect(ARect, 24, ARect.Top, cbtIucnStatus.Items[Index]);
+  if Index < cbtIucnStatus.Items.Count - 1 then
+    iIucnStatus.DrawForControl(cbtIucnStatus.Canvas, ARect.Left + 1, ARect.Top + 1, Index, 20, cbtIucnStatus);
+end;
+
 procedure TfrmTaxaEditor.cktCbroClick(Sender: TObject);
 begin
   if (dsTaxa.DataSet.State in [dsInsert, dsEdit]) then
@@ -631,6 +639,11 @@ begin
       dsTaxa.DataSet.FieldByName('ioc_parent_taxon_name').AsString := dsTaxa.DataSet.FieldByName('parent_taxon_name').AsString;
       dsTaxa.DataSet.FieldByName('ioc_english_name').AsString := dsTaxa.DataSet.FieldByName('english_name').AsString;
     end;
+end;
+
+procedure TfrmTaxaEditor.clbTaxonRanksFilterClickCheck(Sender: TObject);
+begin
+  SearchTaxa(eFindTaxa.Text);
 end;
 
 procedure TfrmTaxaEditor.dsTaxaDataChange(Sender: TObject; Field: TField);
@@ -680,143 +693,6 @@ procedure TfrmTaxaEditor.eFindTaxaEnter(Sender: TObject);
 begin
   if eFindTaxa.Text <> EmptyStr then
     eFindTaxa.SelectAll;
-end;
-
-procedure TfrmTaxaEditor.etCbroParentTaxonButtonClick(Sender: TObject);
-var
-  FRank: TZooRank;
-  FFilter: TTaxonFilters;
-begin
-  FRank := GetRankType(dmTaxa.qTaxa.FieldByName('cbro_rank_id').AsInteger);
-  FFilter := [tfAll];
-
-  case FRank of
-    trSuborder,
-    trInfraorder,
-    trParvorder,
-    trSection,
-    trSubsection:     FFilter := [tfOrders];
-    trSuperfamily,
-    trFamily:         FFilter := [tfOrders];
-    trSubfamily,
-    trInfrafamily,
-    trSupertribe,
-    trTribe:          FFilter := [tfFamilies];
-    trSubtribe,
-    trInfratribe:     FFilter := [tfTribes];
-    trSupergenus,
-    trGenus:          FFilter := [tfFamilies, tfTribes];
-    trSubgenus,
-    trSuperspecies,
-    trSpecies:        FFilter := [tfTribes, tfGenera];
-    trSubspecies,
-    trMonotypicGroup,
-    trPolitypicGroup: FFilter := [tfSpecies];
-    trSpuh:           FFilter := [tfGenera];
-    trDomestic:       FFilter := [tfSpecies];
-    trForm,
-    trHybrid,
-    trIntergrade,
-    trSlash:          FFilter := [tfMain];
-  end;
-
-  if FindTaxonDlg(FFilter, etCbroParentTaxon, dmTaxa.qTaxa, 'cbro_parent_taxon_id', 'cbro_parent_taxon_name', True, False) then
-    SelectNext(Sender as TWinControl, True, True);
-end;
-
-procedure TfrmTaxaEditor.etCbroParentTaxonKeyPress(Sender: TObject; var Key: char);
-var
-  FRank: TZooRank;
-  FFilter: TTaxonFilters;
-begin
-  FormKeyPress(Sender, Key);
-
-  FRank := GetRankType(dmTaxa.qTaxa.FieldByName('cbro_rank_id').AsInteger);
-  FFilter := [tfAll];
-
-  case FRank of
-    trSuborder,
-    trInfraorder,
-    trParvorder,
-    trSection,
-    trSubsection:     FFilter := [tfOrders];
-    trSuperfamily,
-    trFamily:         FFilter := [tfOrders];
-    trSubfamily,
-    trInfrafamily,
-    trSupertribe,
-    trTribe:          FFilter := [tfFamilies];
-    trSubtribe,
-    trInfratribe:     FFilter := [tfTribes];
-    trSupergenus,
-    trGenus:          FFilter := [tfFamilies, tfTribes];
-    trSubgenus,
-    trSuperspecies,
-    trSpecies:        FFilter := [tfTribes, tfGenera];
-    trSubspecies,
-    trMonotypicGroup,
-    trPolitypicGroup: FFilter := [tfSpecies];
-    trSpuh:           FFilter := [tfGenera];
-    trDomestic:       FFilter := [tfSpecies];
-    trForm,
-    trHybrid,
-    trIntergrade,
-    trSlash:          FFilter := [tfMain];
-  end;
-
-  { Alphabetic search in numeric field }
-  if (IsLetter(Key) or IsNumber(Key) or IsPunctuation(Key) or IsSeparator(Key) or IsSymbol(Key)) then
-  begin
-    if FindTaxonDlg(FFilter, etCbroParentTaxon, dmTaxa.qTaxa, 'cbro_parent_taxon_id', 'cbro_parent_taxon_name', True, False, Key) then
-      SelectNext(Sender as TWinControl, True, True);
-    Key := #0;
-  end;
-  { CLEAR FIELD VALUE = Backspace }
-  if (Key = #8) then
-  begin
-    dsTaxa.DataSet.FieldByName('cbro_parent_taxon_id').Clear;
-    dsTaxa.DataSet.FieldByName('cbro_parent_taxon_name').Clear;
-    Key := #0;
-  end;
-  { <ENTER/RETURN> key }
-  if (Key = #13) then
-  begin
-    SelectNext(Sender as TWinControl, True, True);
-    Key := #0;
-  end;
-
-end;
-
-procedure TfrmTaxaEditor.etCbroValidNameButtonClick(Sender: TObject);
-begin
-  if FindTaxonDlg([tfAll], etCbroValidName, dmTaxa.qTaxa, 'cbro_valid_id', 'cbro_valid_name', True, False) then
-    SelectNext(Sender as TWinControl, True, True);
-end;
-
-procedure TfrmTaxaEditor.etCbroValidNameKeyPress(Sender: TObject; var Key: char);
-begin
-  FormKeyPress(Sender, Key);
-
-  { Alphabetic search in numeric field }
-  if (IsLetter(Key) or IsNumber(Key) or IsPunctuation(Key) or IsSeparator(Key) or IsSymbol(Key)) then
-  begin
-    if FindTaxonDlg([tfAll], etCbroValidName, dmTaxa.qTaxa, 'cbro_valid_id', 'cbro_valid_name', True, False, Key) then
-      SelectNext(Sender as TWinControl, True, True);
-    Key := #0;
-  end;
-  { CLEAR FIELD VALUE = Backspace }
-  if (Key = #8) then
-  begin
-    dsTaxa.DataSet.FieldByName('cbro_valid_id').Clear;
-    dsTaxa.DataSet.FieldByName('cbro_valid_name').Clear;
-    Key := #0;
-  end;
-  { <ENTER/RETURN> key }
-  if (Key = #13) then
-  begin
-    SelectNext(Sender as TWinControl, True, True);
-    Key := #0;
-  end;
 end;
 
 procedure TfrmTaxaEditor.etFullnameExit(Sender: TObject);
@@ -1800,9 +1676,29 @@ begin
   SearchTaxa(eFindTaxa.Text);
 end;
 
+procedure TfrmTaxaEditor.tsfMarkedOff(Sender: TObject);
+begin
+  SearchTaxa(eFindTaxa.Text);
+end;
+
+procedure TfrmTaxaEditor.tsfMarkedOn(Sender: TObject);
+begin
+  SearchTaxa(eFindTaxa.Text);
+end;
+
+procedure TfrmTaxaEditor.tsTaxonExtinctOff(Sender: TObject);
+begin
+  SearchTaxa(eFindTaxa.Text);
+end;
+
+procedure TfrmTaxaEditor.tsTaxonExtinctOn(Sender: TObject);
+begin
+  SearchTaxa(eFindTaxa.Text);
+end;
+
 procedure TfrmTaxaEditor.GetTaxaFilters;
 var
-  sf: Integer;
+  sf, cc, i: Integer;
 begin
   if not CanToggle then
     Exit;
@@ -1821,6 +1717,19 @@ begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
       crEqual, False, '0'));
+  end;
+
+  cc := 0;
+  for i := 0 to clbTaxonRanksFilter.Count - 1 do
+    if clbTaxonRanksFilter.Checked[i] then
+      Inc(cc);
+  if cc > 0 then
+  begin
+    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
+    for i := 0 to clbTaxonRanksFilter.Count - 1 do
+      if clbTaxonRanksFilter.Checked[i] then
+        FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('rank_id', 'Rank', sdtInteger,
+          crEqual, False, IntToStr(GetKey('taxon_ranks', 'rank_id', 'rank_name', clbTaxonRanksFilter.Items[i]))));
   end;
 
   if tsTaxonomyClements.StateOn = sw_on then

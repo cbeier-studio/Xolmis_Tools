@@ -61,13 +61,7 @@ type
     qTaxa: TSQLQuery;
     qTaxaactive_status: TBooleanField;
     qTaxaauthorship: TStringField;
-    qTaxacbro_parent_taxon_id: TLongintField;
-    qTaxacbro_parent_taxon_name: TStringField;
-    qTaxacbro_rank_id: TLongintField;
-    qTaxacbro_sort_num: TFloatField;
     qTaxacbro_taxonomy: TBooleanField;
-    qTaxacbro_valid_id: TLongintField;
-    qTaxacbro_valid_name: TStringField;
     qTaxaclements_taxonomy: TBooleanField;
     qTaxadistribution: TMemoField;
     qTaxaebird_code: TStringField;
@@ -78,7 +72,6 @@ type
     qTaxafamily_id: TLongintField;
     qTaxaformatted_name: TStringField;
     qTaxafull_name: TStringField;
-    qTaxagenus_epithet: TStringField;
     qTaxagenus_id: TLongintField;
     qTaxagroup_name: TStringField;
     qTaxaincertae_sedis: TLongintField;
@@ -92,6 +85,7 @@ type
     qTaxaioc_taxonomy: TBooleanField;
     qTaxaioc_valid_id: TLongintField;
     qTaxaioc_valid_name: TStringField;
+    qTaxaiucn_status: TStringField;
     qTaxamarked_status: TBooleanField;
     qTaxaorder_id: TLongintField;
     qTaxaother_portuguese_names: TStringField;
@@ -102,10 +96,8 @@ type
     qTaxarank_id: TLongintField;
     qTaxasort_num: TFloatField;
     qTaxaspanish_name: TStringField;
-    qTaxaspecies_epithet: TStringField;
     qTaxaspecies_id: TLongintField;
     qTaxasubfamily_id: TLongintField;
-    qTaxasubspecies_epithet: TStringField;
     qTaxasubspecies_group_id: TLongintField;
     qTaxataxon_id: TLongintField;
     qTaxaUpdates: TSQLQuery;
@@ -134,6 +126,8 @@ type
     procedure qTaxaAfterInsert(DataSet: TDataSet);
     procedure qTaxaAfterOpen(DataSet: TDataSet);
     procedure qTaxaBeforeClose(DataSet: TDataSet);
+    procedure qTaxaiucn_statusGetText(Sender: TField; var aText: string; DisplayText: Boolean);
+    procedure qTaxaiucn_statusSetText(Sender: TField; const aText: string);
     procedure UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;
       const Parameters: array of String);
   private
@@ -181,6 +175,44 @@ procedure TdmTaxa.qTaxaBeforeClose(DataSet: TDataSet);
 begin
   qChildTaxa.Close;
   qSynonymTaxa.Close;
+end;
+
+procedure TdmTaxa.qTaxaiucn_statusGetText(Sender: TField; var aText: string; DisplayText: Boolean);
+begin
+  if Sender.AsString = EmptyStr then
+    Exit;
+
+  case Sender.AsString of
+    'LC': aText := 'Least Concern';
+    'NT': aText := 'Near Threatened';
+    'VU': aText := 'Vulnerable';
+    'EN': aText := 'Endangered';
+    'CR': aText := 'Critically Endangered';
+    'EW': aText := 'Extinct in the Wild';
+    'EX': aText := 'Extinct';
+    'DD': aText := 'Data Deficient';
+    'NE': aText := 'Not Evaluated';
+  end;
+
+  DisplayText := True;
+end;
+
+procedure TdmTaxa.qTaxaiucn_statusSetText(Sender: TField; const aText: string);
+begin
+  if aText = EmptyStr then
+    Exit;
+
+  case aText of
+    'Least Concern':          Sender.AsString := 'LC';
+    'Near Threatened':        Sender.AsString := 'NT';
+    'Vulnerable':             Sender.AsString := 'VU';
+    'Endangered':             Sender.AsString := 'EN';
+    'Critically Endangered':  Sender.AsString := 'CR';
+    'Extinct in the Wild':    Sender.AsString := 'EW';
+    'Extinct':                Sender.AsString := 'EX';
+    'Data Deficient':         Sender.AsString := 'DD';
+    'Not Evaluated':          Sender.AsString := 'NE';
+  end;
 end;
 
 procedure TdmTaxa.UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;

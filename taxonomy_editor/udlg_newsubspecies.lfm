@@ -91,13 +91,12 @@ object dlgNewSubspecies: TdlgNewSubspecies
       Items.Strings = (
         'Clements'
         'IOC'
-        'CBRO'
       )
       ItemHeight = 17
       TabOrder = 0
       OnKeyPress = eEpythetKeyPress
       Data = {
-        03000000000000
+        020000000000
       }
     end
     object pApplyTo: TBCPanel

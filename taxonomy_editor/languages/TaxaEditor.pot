@@ -621,26 +621,6 @@ msgstr ""
 msgid "Other portuguese names"
 msgstr ""
 
-#: tfrmtaxaeditor.lbltcbroparenttaxon.caption
-msgctxt "tfrmtaxaeditor.lbltcbroparenttaxon.caption"
-msgid "Parent taxon"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltcbrorank.caption
-msgctxt "tfrmtaxaeditor.lbltcbrorank.caption"
-msgid "Rank"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltcbrosortnr.caption
-msgctxt "tfrmtaxaeditor.lbltcbrosortnr.caption"
-msgid "Sorting number"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltcbrovalidname.caption
-msgctxt "tfrmtaxaeditor.lbltcbrovalidname.caption"
-msgid "Valid name"
-msgstr ""
-
 #: tfrmtaxaeditor.lbltdistribution.caption
 msgctxt "tfrmtaxaeditor.lbltdistribution.caption"
 msgid "Geographical distribution"
@@ -697,6 +677,10 @@ msgstr ""
 
 #: tfrmtaxaeditor.lbltitlesynonyms.caption
 msgid "Synonyms"
+msgstr ""
+
+#: tfrmtaxaeditor.lbltiucnstatus.caption
+msgid "Conservation status"
 msgstr ""
 
 #: tfrmtaxaeditor.lbltparenttaxon.caption

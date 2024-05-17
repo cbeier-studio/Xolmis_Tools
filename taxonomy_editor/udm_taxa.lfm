@@ -72,6 +72,12 @@ object dmTaxa: TdmTaxa
         Precision = -1
       end    
       item
+        Name = 'iucn_status'
+        DataType = ftString
+        Precision = -1
+        Size = 5
+      end    
+      item
         Name = 'extinct'
         DataType = ftBoolean
         Precision = -1
@@ -182,44 +188,6 @@ object dmTaxa: TdmTaxa
         Size = 150
       end    
       item
-        Name = 'cbro_rank_id'
-        DataType = ftInteger
-        Precision = -1
-      end    
-      item
-        Name = 'cbro_parent_taxon_id'
-        DataType = ftInteger
-        Precision = -1
-      end    
-      item
-        Name = 'cbro_valid_id'
-        DataType = ftInteger
-        Precision = -1
-      end    
-      item
-        Name = 'cbro_sort_num'
-        DataType = ftFloat
-        Precision = -1
-      end    
-      item
-        Name = 'genus_epithet'
-        DataType = ftString
-        Precision = -1
-        Size = 50
-      end    
-      item
-        Name = 'species_epithet'
-        DataType = ftString
-        Precision = -1
-        Size = 50
-      end    
-      item
-        Name = 'subspecies_epithet'
-        DataType = ftString
-        Precision = -1
-        Size = 50
-      end    
-      item
         Name = 'user_inserted'
         DataType = ftInteger
         Precision = -1
@@ -287,18 +255,6 @@ object dmTaxa: TdmTaxa
         DataType = ftString
         Precision = -1
         Size = 100
-      end    
-      item
-        Name = 'cbro_parent_taxon_name'
-        DataType = ftString
-        Precision = -1
-        Size = 100
-      end    
-      item
-        Name = 'cbro_valid_name'
-        DataType = ftString
-        Precision = -1
-        Size = 100
       end>
     AfterInsert = qTaxaAfterInsert
     AfterOpen = qTaxaAfterOpen
@@ -310,9 +266,7 @@ object dmTaxa: TdmTaxa
       '(SELECT ep.full_name FROM zoo_taxa AS ep WHERE ep.taxon_id = z.parent_taxon_id) AS parent_taxon_name,'
       '(SELECT ev.full_name FROM zoo_taxa AS ev WHERE ev.valid_id = z.valid_id) AS valid_name,'
       '(SELECT ip.full_name FROM zoo_taxa AS ip WHERE ip.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_taxon_name,'
-      '(SELECT iv.full_name FROM zoo_taxa AS iv WHERE iv.valid_id = z.ioc_valid_id) AS ioc_valid_name,'
-      '(SELECT cp.full_name FROM zoo_taxa AS cp WHERE cp.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,'
-      '(SELECT cv.full_name FROM zoo_taxa AS cv WHERE cv.valid_id = z.cbro_valid_id) AS cbro_valid_name'
+      '(SELECT iv.full_name FROM zoo_taxa AS iv WHERE iv.valid_id = z.ioc_valid_id) AS ioc_valid_name'
       'FROM zoo_taxa AS z'
       'WHERE (active_status = 1)'
       'ORDER BY z.full_name ASC'
@@ -459,10 +413,22 @@ object dmTaxa: TdmTaxa
       Required = False
       Size = 100
     end
+    object qTaxaiucn_status: TStringField
+      FieldKind = fkData
+      FieldName = 'iucn_status'
+      Index = 14
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      OnGetText = qTaxaiucn_statusGetText
+      OnSetText = qTaxaiucn_statusSetText
+      Size = 5
+    end
     object qTaxaextinct: TBooleanField
       FieldKind = fkData
       FieldName = 'extinct'
-      Index = 14
+      Index = 15
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -472,7 +438,7 @@ object dmTaxa: TdmTaxa
     object qTaxaextinction_year: TStringField
       FieldKind = fkData
       FieldName = 'extinction_year'
-      Index = 15
+      Index = 16
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -483,7 +449,7 @@ object dmTaxa: TdmTaxa
       Alignment = taLeftJustify
       FieldKind = fkData
       FieldName = 'sort_num'
-      Index = 16
+      Index = 17
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -493,7 +459,7 @@ object dmTaxa: TdmTaxa
     object qTaxagroup_name: TStringField
       FieldKind = fkData
       FieldName = 'group_name'
-      Index = 17
+      Index = 18
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -503,7 +469,7 @@ object dmTaxa: TdmTaxa
     object qTaxaorder_id: TLongintField
       FieldKind = fkData
       FieldName = 'order_id'
-      Index = 18
+      Index = 19
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -512,7 +478,7 @@ object dmTaxa: TdmTaxa
     object qTaxafamily_id: TLongintField
       FieldKind = fkData
       FieldName = 'family_id'
-      Index = 19
+      Index = 20
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -521,7 +487,7 @@ object dmTaxa: TdmTaxa
     object qTaxasubfamily_id: TLongintField
       FieldKind = fkData
       FieldName = 'subfamily_id'
-      Index = 20
+      Index = 21
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -530,7 +496,7 @@ object dmTaxa: TdmTaxa
     object qTaxagenus_id: TLongintField
       FieldKind = fkData
       FieldName = 'genus_id'
-      Index = 21
+      Index = 22
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -539,7 +505,7 @@ object dmTaxa: TdmTaxa
     object qTaxaspecies_id: TLongintField
       FieldKind = fkData
       FieldName = 'species_id'
-      Index = 22
+      Index = 23
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -548,7 +514,7 @@ object dmTaxa: TdmTaxa
     object qTaxasubspecies_group_id: TLongintField
       FieldKind = fkData
       FieldName = 'subspecies_group_id'
-      Index = 23
+      Index = 24
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -557,7 +523,7 @@ object dmTaxa: TdmTaxa
     object qTaxaincertae_sedis: TLongintField
       FieldKind = fkData
       FieldName = 'incertae_sedis'
-      Index = 24
+      Index = 25
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -566,7 +532,7 @@ object dmTaxa: TdmTaxa
     object qTaxaebird_code: TStringField
       FieldKind = fkData
       FieldName = 'ebird_code'
-      Index = 25
+      Index = 26
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -575,7 +541,7 @@ object dmTaxa: TdmTaxa
     object qTaxaclements_taxonomy: TBooleanField
       FieldKind = fkData
       FieldName = 'clements_taxonomy'
-      Index = 26
+      Index = 27
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -585,7 +551,7 @@ object dmTaxa: TdmTaxa
     object qTaxadistribution: TMemoField
       FieldKind = fkData
       FieldName = 'distribution'
-      Index = 27
+      Index = 28
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -596,7 +562,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_taxonomy: TBooleanField
       FieldKind = fkData
       FieldName = 'ioc_taxonomy'
-      Index = 28
+      Index = 29
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -606,7 +572,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_rank_id: TLongintField
       FieldKind = fkData
       FieldName = 'ioc_rank_id'
-      Index = 29
+      Index = 30
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -615,7 +581,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_parent_taxon_id: TLongintField
       FieldKind = fkData
       FieldName = 'ioc_parent_taxon_id'
-      Index = 30
+      Index = 31
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -624,7 +590,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_parent_taxon_name: TStringField
       FieldKind = fkData
       FieldName = 'ioc_parent_taxon_name'
-      Index = 31
+      Index = 32
       LookupCache = False
       ProviderFlags = [pfInWhere]
       ReadOnly = False
@@ -634,7 +600,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_valid_id: TLongintField
       FieldKind = fkData
       FieldName = 'ioc_valid_id'
-      Index = 32
+      Index = 33
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -643,7 +609,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_valid_name: TStringField
       FieldKind = fkData
       FieldName = 'ioc_valid_name'
-      Index = 33
+      Index = 34
       LookupCache = False
       ProviderFlags = [pfInWhere]
       ReadOnly = False
@@ -654,7 +620,7 @@ object dmTaxa: TdmTaxa
       Alignment = taLeftJustify
       FieldKind = fkData
       FieldName = 'ioc_sort_num'
-      Index = 34
+      Index = 35
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -664,7 +630,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_english_name: TStringField
       FieldKind = fkData
       FieldName = 'ioc_english_name'
-      Index = 35
+      Index = 36
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -674,7 +640,7 @@ object dmTaxa: TdmTaxa
     object qTaxaioc_distribution: TMemoField
       FieldKind = fkData
       FieldName = 'ioc_distribution'
-      Index = 36
+      Index = 37
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -685,7 +651,7 @@ object dmTaxa: TdmTaxa
     object qTaxacbro_taxonomy: TBooleanField
       FieldKind = fkData
       FieldName = 'cbro_taxonomy'
-      Index = 37
+      Index = 38
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -695,105 +661,17 @@ object dmTaxa: TdmTaxa
     object qTaxaother_portuguese_names: TStringField
       FieldKind = fkData
       FieldName = 'other_portuguese_names'
-      Index = 38
+      Index = 39
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
       Required = False
       Size = 150
     end
-    object qTaxacbro_rank_id: TLongintField
-      FieldKind = fkData
-      FieldName = 'cbro_rank_id'
-      Index = 39
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-    end
-    object qTaxacbro_parent_taxon_id: TLongintField
-      FieldKind = fkData
-      FieldName = 'cbro_parent_taxon_id'
-      Index = 40
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-    end
-    object qTaxacbro_parent_taxon_name: TStringField
-      FieldKind = fkData
-      FieldName = 'cbro_parent_taxon_name'
-      Index = 41
-      LookupCache = False
-      ProviderFlags = [pfInWhere]
-      ReadOnly = False
-      Required = False
-      Size = 100
-    end
-    object qTaxacbro_valid_id: TLongintField
-      FieldKind = fkData
-      FieldName = 'cbro_valid_id'
-      Index = 42
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-    end
-    object qTaxacbro_valid_name: TStringField
-      FieldKind = fkData
-      FieldName = 'cbro_valid_name'
-      Index = 43
-      LookupCache = False
-      ProviderFlags = [pfInWhere]
-      ReadOnly = False
-      Required = False
-      Size = 100
-    end
-    object qTaxacbro_sort_num: TFloatField
-      Alignment = taLeftJustify
-      FieldKind = fkData
-      FieldName = 'cbro_sort_num'
-      Index = 44
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-      Precision = -1
-    end
-    object qTaxagenus_epithet: TStringField
-      FieldKind = fkData
-      FieldName = 'genus_epithet'
-      Index = 45
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-      Size = 50
-    end
-    object qTaxaspecies_epithet: TStringField
-      FieldKind = fkData
-      FieldName = 'species_epithet'
-      Index = 46
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-      Size = 50
-    end
-    object qTaxasubspecies_epithet: TStringField
-      FieldKind = fkData
-      FieldName = 'subspecies_epithet'
-      Index = 47
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-      Size = 50
-    end
     object qTaxauser_inserted: TLongintField
       FieldKind = fkData
       FieldName = 'user_inserted'
-      Index = 48
+      Index = 40
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -802,7 +680,7 @@ object dmTaxa: TdmTaxa
     object qTaxauser_updated: TLongintField
       FieldKind = fkData
       FieldName = 'user_updated'
-      Index = 49
+      Index = 41
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -811,7 +689,7 @@ object dmTaxa: TdmTaxa
     object qTaxainsert_date: TDateTimeField
       FieldKind = fkData
       FieldName = 'insert_date'
-      Index = 50
+      Index = 42
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -820,7 +698,7 @@ object dmTaxa: TdmTaxa
     object qTaxaupdate_date: TDateTimeField
       FieldKind = fkData
       FieldName = 'update_date'
-      Index = 51
+      Index = 43
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -829,7 +707,7 @@ object dmTaxa: TdmTaxa
     object qTaxaexported_status: TBooleanField
       FieldKind = fkData
       FieldName = 'exported_status'
-      Index = 52
+      Index = 44
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
@@ -839,7 +717,7 @@ object dmTaxa: TdmTaxa
     object qTaxaactive_status: TBooleanField
       FieldKind = fkData
       FieldName = 'active_status'
-      Index = 53
+      Index = 45
       LookupCache = False
       ProviderFlags = [pfInUpdate, pfInWhere]
       ReadOnly = False
