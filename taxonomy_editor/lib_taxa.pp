@@ -309,11 +309,8 @@ type
     FEbirdCode: String;
     FClementsTaxonomy: Boolean;
     FSubfamilyId: Integer;
-    FGenusEpithet: String;
-    FSpeciesEpithet: String;
     FSubspeciesGroupId: Integer;
     FSubspeciesGroupEpithet: String;
-    FSubspeciesEpithet: String;
     FIncertaeSedis: Integer;
     FIocTaxonomy: Boolean;
     FIocEnglishName: String;
@@ -324,10 +321,6 @@ type
     FIocSortNum: Double;
     FCbroTaxonomy: Boolean;
     FOtherPortugueseNames: String;
-    FCbroParentTaxonId: Integer;
-    FCbroRankId: Integer;
-    FCbroValidId: Integer;
-    FCbroSortNum: Double;
   public
     constructor Create(aValue: Integer = 0);
     procedure Clear; override;
@@ -345,11 +338,8 @@ type
     property EbirdCode: String read FEbirdCode write FEbirdCode;
     property ClementsTaxonomy: Boolean read FClementsTaxonomy write FClementsTaxonomy;
     property SubfamilyId: Integer read FSubfamilyId write FSubfamilyId;
-    property GenusEpithet: String read FGenusEpithet write FGenusEpithet;
-    property SpeciesEpithet: String read FSpeciesEpithet write FSpeciesEpithet;
     property SubspeciesGroupId: Integer read FSubspeciesGroupId write FSubspeciesGroupId;
     property SubspeciesGroupEpithet: String read FSubspeciesGroupEpithet write FSubspeciesGroupEpithet;
-    property SubspeciesEpithet: String read FSubspeciesEpithet write FSubspeciesEpithet;
     property IncertaeSedis: Integer read FIncertaeSedis write FIncertaeSedis;
     property IocTaxonomy: Boolean read FIocTaxonomy write FIocTaxonomy;
     property IocEnglishName: String read FIocEnglishName write FIocEnglishName;
@@ -360,10 +350,6 @@ type
     property IocSortNum: Double read FIocSortNum write FIocSortNum;
     property CbroTaxonomy: Boolean read FCbroTaxonomy write FCbroTaxonomy;
     property OtherPortugueseNames: String read FOtherPortugueseNames write FOtherPortugueseNames;
-    property CbroParentTaxonId: Integer read FCbroParentTaxonId write FCbroParentTaxonId;
-    property CbroRankId: Integer read FCbroRankId write FCbroRankId;
-    property CbroValidId: Integer read FCbroValidId write FCbroValidId;
-    property CbroSortNum: Double read FCbroSortNum write FCbroSortNum;
   end;
 
 const
@@ -1846,8 +1832,6 @@ begin
         ParamByName('ASUBFAMILY').AsInteger := MoveToSp.SubfamilyId;
         ParamByName('AFAMILY').AsInteger := MoveToSp.FamilyId;
         ParamByName('AORDER').AsInteger := MoveToSp.OrderId;
-        ParamByName('AGENUSNAME').AsString := MoveToSp.GenusEpithet;
-        ParamByName('AEPITHET').AsString := MoveToSp.SpeciesEpithet;
         ParamByName('ASSPEPITHET').AsString := ExtractWord(3, NewName, [' ']);
         if (btClements in aTaxonomy) then
         begin
@@ -1863,11 +1847,11 @@ begin
           ParamByName('GEODISTIOC').DataType := ftMemo;
           ParamByName('GEODISTIOC').AsString := Ssp.IocDistribution;
         end;
-        if (btCBRO in aTaxonomy) then
-        begin
-          ParamByName('ANIVELCBRO').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ssp.');
-          ParamByName('ASUPCBRO').AsInteger := ParentSp;
-        end;
+        //if (btCBRO in aTaxonomy) then
+        //begin
+        //  ParamByName('ANIVELCBRO').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ssp.');
+        //  ParamByName('ASUPCBRO').AsInteger := ParentSp;
+        //end;
         ParamByName('AUSER').AsInteger := AdminId;
 
         if ExecNow then
@@ -1896,12 +1880,12 @@ begin
         SQL.Add('ioc_rank_id = :arank,');
         SQL.Add('ioc_valid_id = :avalid,');
       end;
-      if (btCBRO in aTaxonomy) then { CBRO }
-      begin
-        SQL.Add('cbro_taxonomy = 0,');
-        SQL.Add('cbro_rank_id = :arank,');
-        SQL.Add('cbro_valid_id = :avalid,');
-      end;
+      //if (btCBRO in aTaxonomy) then { CBRO }
+      //begin
+      //  SQL.Add('cbro_taxonomy = 0,');
+      //  SQL.Add('cbro_rank_id = :arank,');
+      //  SQL.Add('cbro_valid_id = :avalid,');
+      //end;
       SQL.Add('update_date = datetime(''now'',''localtime''), user_updated = :auser');
       SQL.Add('WHERE taxon_id = :ataxon;');
       if (Params.FindParam('ARANK') <> nil) then
@@ -1968,12 +1952,12 @@ begin
           SQL.Add('ioc_parent_taxon_id = :asup,');
           SQL.Add('ioc_distribution = :geodistioc,');
         end;
-        if (btCBRO in aTaxonomy) then { CBRO }
-        begin
-          SQL.Add('cbro_taxonomy = 1,');
-          SQL.Add('cbro_rank_id = :arank,');
-          SQL.Add('cbro_parent_taxon_id = :asup,');
-        end;
+        //if (btCBRO in aTaxonomy) then { CBRO }
+        //begin
+        //  SQL.Add('cbro_taxonomy = 1,');
+        //  SQL.Add('cbro_rank_id = :arank,');
+        //  SQL.Add('cbro_parent_taxon_id = :asup,');
+        //end;
         SQL.Add('update_date = datetime(''now'',''localtime''), user_updated = :auser');
         SQL.Add('WHERE taxon_id = :ataxon;');
 
@@ -2017,8 +2001,8 @@ begin
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
           SQL.Add('ioc_taxonomy, ioc_rank_id, ioc_parent_taxon_id, ioc_english_name, ioc_distribution,');
-        if (btCBRO in aTaxonomy) then
-          SQL.Add('cbro_taxonomy, cbro_rank_id, cbro_parent_taxon_id,');
+        //if (btCBRO in aTaxonomy) then
+        //  SQL.Add('cbro_taxonomy, cbro_rank_id, cbro_parent_taxon_id,');
         SQL.Add('insert_date, user_inserted) ');
         // List values
         SQL.Add('VALUES (:aname, :aformattedname, :autoria, :aenglish, :anivel, :asup,');
@@ -2032,10 +2016,10 @@ begin
         begin
           SQL.Add('1, :anivelioc, :asupioc, :aenglishioc, :geodistioc,');
         end;
-        if (btCBRO in aTaxonomy) then
-        begin
-          SQL.Add('1, :anivelcbro, :asupcbro,');
-        end;
+        //if (btCBRO in aTaxonomy) then
+        //begin
+        //  SQL.Add('1, :anivelcbro, :asupcbro,');
+        //end;
         SQL.Add('datetime(''now'',''localtime''), :auser);');
         ParamByName('ANAME').AsString := NewName;
         ParamByName('AFORMATTEDNAME').AsString := FormattedBirdName(NewName, SpRank);
@@ -2066,11 +2050,11 @@ begin
           ParamByName('GEODISTIOC').DataType := ftMemo;
           ParamByName('GEODISTIOC').AsString := Ssp.IocDistribution;
         end;
-        if (btCBRO in aTaxonomy) then
-        begin
-          ParamByName('ANIVELCBRO').AsInteger := SpRank;
-          ParamByName('ASUPCBRO').AsInteger := ParentGenus;
-        end;
+        //if (btCBRO in aTaxonomy) then
+        //begin
+        //  ParamByName('ANIVELCBRO').AsInteger := SpRank;
+        //  ParamByName('ASUPCBRO').AsInteger := ParentGenus;
+        //end;
         ParamByName('AUSER').AsInteger := AdminId;
 
         if ExecNow then
@@ -2099,12 +2083,12 @@ begin
         SQL.Add('ioc_rank_id = :arank,');
         SQL.Add('ioc_valid_id = :avalid,');
       end;
-      if (btCBRO in aTaxonomy) then { CBRO }
-      begin
-        SQL.Add('cbro_taxonomy = 0,');
-        SQL.Add('cbro_rank_id = :arank,');
-        SQL.Add('cbro_valid_id = :avalid,');
-      end;
+      //if (btCBRO in aTaxonomy) then { CBRO }
+      //begin
+      //  SQL.Add('cbro_taxonomy = 0,');
+      //  SQL.Add('cbro_rank_id = :arank,');
+      //  SQL.Add('cbro_valid_id = :avalid,');
+      //end;
       SQL.Add('update_date = datetime(''now'',''localtime''), user_updated = :auser');
       SQL.Add('WHERE taxon_id = :ataxon;');
       if (Params.FindParam('ARANK') <> nil) then
@@ -3493,11 +3477,8 @@ begin
   FEbirdCode := EmptyStr;
   FClementsTaxonomy := False;
   FSubfamilyId := 0;
-  FGenusEpithet := EmptyStr;
-  FSpeciesEpithet := EmptyStr;
   FSubspeciesGroupId := 0;
   FSubspeciesGroupEpithet := EmptyStr;
-  FSubspeciesEpithet := EmptyStr;
   FIncertaeSedis := 0;
   FIocTaxonomy := False;
   FIocEnglishName := EmptyStr;
@@ -3508,10 +3489,6 @@ begin
   FIocSortNum := 0.0;
   FCbroTaxonomy := False;
   FOtherPortugueseNames := EmptyStr;
-  FCbroParentTaxonId := 0;
-  FCbroRankId := 0;
-  FCbroValidId := 0;
-  FCbroSortNum := 0.0;
 end;
 
 function TTaxon.Diff(aOld: TTaxon; var aList: TStrings): Boolean;
@@ -3555,12 +3532,9 @@ begin
       FFamilyId := FieldByName('family_id').AsInteger;
       FSubfamilyId := FieldByName('subfamily_id').AsInteger;
       FGenusId := FieldByName('genus_id').AsInteger;
-      FGenusEpithet := FieldByName('genus_epithet').AsString;
       FSpeciesId := FieldByName('species_id').AsInteger;
-      FSpeciesEpithet := FieldByName('species_epithet').AsString;
       FSubspeciesGroupId := FieldByName('subspecies_group_id').AsInteger;
       FSubspeciesGroupEpithet := FieldByName('group_name').AsString;
-      FSubspeciesEpithet := FieldByName('subspecies_epithet').AsString;
       FIncertaeSedis := FieldByName('incertae_sedis').AsInteger;
       FIocTaxonomy := FieldByName('ioc_taxonomy').AsBoolean;
       FIocEnglishName := FieldByName('ioc_english_name').AsString;
@@ -3571,10 +3545,6 @@ begin
       FIocSortNum := FieldByName('ioc_sort_num').AsFloat;
       FCbroTaxonomy := FieldByName('cbro_taxonomy').AsBoolean;
       FOtherPortugueseNames := FieldByName('other_portuguese_names').AsString;
-      FCbroParentTaxonId := FieldByName('cbro_parent_taxon_id').AsInteger;
-      FCbroRankId := FieldByName('cbro_rank_id').AsInteger;
-      FCbroValidId := FieldByName('cbro_valid_id').AsInteger;
-      FCbroSortNum := FieldByName('cbro_sort_num').AsFloat;
       FUserInserted := FieldByName('user_inserted').AsInteger;
       FUserUpdated := FieldByName('user_updated').AsInteger;
       FInsertDate := FieldByName('insert_date').AsDateTime;
