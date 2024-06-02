@@ -56,11 +56,7 @@ begin
     Add('(SELECT ip.full_name FROM zoo_taxa AS ip');
     Add('  WHERE ip.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_taxon_name,');
     Add('(SELECT iv.full_name FROM zoo_taxa AS iv');
-    Add('  WHERE iv.valid_id = z.ioc_valid_id) AS ioc_valid_name,');
-    Add('(SELECT cp.full_name FROM zoo_taxa AS cp');
-    Add('  WHERE cp.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,');
-    Add('(SELECT cv.full_name FROM zoo_taxa AS cv');
-    Add('  WHERE cv.valid_id = z.cbro_valid_id) AS cbro_valid_name');
+    Add('  WHERE iv.valid_id = z.ioc_valid_id) AS ioc_valid_name');
     Add('FROM zoo_taxa AS z');
     Add('');
   end;

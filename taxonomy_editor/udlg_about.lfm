@@ -49,11 +49,11 @@ object dlgAbout: TdlgAbout
       TabOrder = 0
     end
     object sbCopy: TBitBtn
-      Left = 108
+      Left = 16
       Height = 34
       Top = 8
       Width = 89
-      Align = alRight
+      Align = alLeft
       AutoSize = True
       Caption = 'Copiar'
       Images = frmTaxaEditor.bMenu

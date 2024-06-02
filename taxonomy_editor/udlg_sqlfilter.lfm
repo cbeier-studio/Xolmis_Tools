@@ -9,7 +9,6 @@ object dlgSqlFilter: TdlgSqlFilter
   ClientWidth = 750
   PopupMode = pmAuto
   Position = poScreenCenter
-  LCLVersion = '3.2.0.0'
   object pBottom: TPanel
     Left = 0
     Height = 41
@@ -64,7 +63,7 @@ object dlgSqlFilter: TdlgSqlFilter
     TabOrder = 1
     Gutter.Color = clWhite
     Gutter.RightOffset = 16
-    Gutter.Width = 69
+    Gutter.Width = 59
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -502,11 +501,7 @@ object dlgSqlFilter: TdlgSqlFilter
       '  (SELECT ip.full_name FROM zoo_taxa AS ip '
       '    WHERE ip.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_taxon_name,'
       '  (SELECT iv.full_name FROM zoo_taxa AS iv '
-      '    WHERE iv.valid_id = z.ioc_valid_id) AS ioc_valid_name,'
-      '  (SELECT cp.full_name FROM zoo_taxa AS cp '
-      '    WHERE cp.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,'
-      '  (SELECT cv.full_name FROM zoo_taxa AS cv '
-      '    WHERE cv.valid_id = z.cbro_valid_id) AS cbro_valid_name'
+      '    WHERE iv.valid_id = z.ioc_valid_id) AS ioc_valid_name'
       'FROM zoo_taxa AS z'
     )
     Options = [eoAutoIndent, eoBracketHighlight, eoEnhanceHomeKey, eoGroupUndo, eoShowScrollHint, eoTabsToSpaces, eoTrimTrailingSpaces, eoDoubleClickSelectsLine]

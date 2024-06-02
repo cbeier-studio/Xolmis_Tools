@@ -1289,10 +1289,12 @@ var
   Qry: TSQLQuery;
   NewName: String;
   SspRank: Integer;
+  BM: TBookmark;
 begin
   dlgNewSubspecies := TdlgNewSubspecies.Create(nil);
   with dlgNewSubspecies do
   try
+    BM := dsTaxa.DataSet.Bookmark;
     if ShowModal = mrOK then
     begin
       NewName := dsTaxa.DataSet.FieldByName('full_name').AsString + ' ' + Epythet;
@@ -1359,9 +1361,9 @@ begin
     end;
   finally
     FreeAndNil(dlgNewSubspecies);
+    dsTaxa.DataSet.Refresh;
+    dsTaxa.DataSet.Bookmark := BM;
   end;
-
-  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.pmtSortClick(Sender: TObject);
@@ -1374,10 +1376,12 @@ end;
 procedure TfrmTaxaEditor.pmvMoveToGenusClick(Sender: TObject);
 var
   Qry: TSQLQuery;
+  BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
+    BM := dsTaxa.DataSet.Bookmark;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
     begin
@@ -1411,18 +1415,20 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.Refresh;
+    dsTaxa.DataSet.Bookmark := BM;
   end;
-
-  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.pmvMoveToSpeciesClick(Sender: TObject);
 var
   Qry: TSQLQuery;
+  BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
+    BM := dsTaxa.DataSet.Bookmark;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
     begin
@@ -1456,9 +1462,9 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.Refresh;
+    dsTaxa.DataSet.Bookmark := BM;
   end;
-
-  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.pTaxaListResize(Sender: TObject);
@@ -1526,10 +1532,12 @@ end;
 procedure TfrmTaxaEditor.sbLumpTaxonClick(Sender: TObject);
 var
   Qry: TSQLQuery;
+  BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
+    BM := dsTaxa.DataSet.Bookmark;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
     begin
@@ -1563,9 +1571,9 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.Refresh;
+    dsTaxa.DataSet.Bookmark := BM;
   end;
-
-  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.sbMoveTaxonClick(Sender: TObject);
@@ -1625,10 +1633,12 @@ end;
 procedure TfrmTaxaEditor.sbSplitTaxonClick(Sender: TObject);
 var
   Qry: TSQLQuery;
+  BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
+    BM := dsTaxa.DataSet.Bookmark;
     TaxonomyAction:= taSplit;
     if ShowModal = mrOK then
     begin
@@ -1662,9 +1672,9 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.Refresh;
+    dsTaxa.DataSet.Bookmark := BM;
   end;
-
-  dsTaxa.DataSet.Refresh;
 end;
 
 procedure TfrmTaxaEditor.TimerFindTimer(Sender: TObject);
