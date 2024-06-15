@@ -13,6 +13,7 @@ type
   { TdlgEditHierarchy }
 
   TdlgEditHierarchy = class(TForm)
+    iButtons: TImageList;
     pParentTaxon: TBCPanel;
     pOrder: TBCPanel;
     pFamily: TBCPanel;

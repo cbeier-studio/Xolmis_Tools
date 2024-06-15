@@ -27,6 +27,7 @@ type
     actRewriteHierarchy: TAction;
     actList: TActionList;
     AppProperties: TApplicationProperties;
+    bMenu: TImageList;
     btnCancelProgress: TBitBtn;
     cbAuthorship: TIBLookupComboEditBox;
     cbtIocRank: TDBLookupComboBox;
@@ -65,10 +66,12 @@ type
     gridTaxa1: TDBGrid;
     gridTaxa2: TDBGrid;
     gridRanks: TDBGrid;
+    icoMarkedFilter: TImage;
     iconFindRanks: TImage;
     iconFindTaxa2: TImage;
     iIucnStatus: TImageList;
     imgSplash: TImage;
+    lblMarkedFilter: TLabel;
     lblTitleSynonyms: TLabel;
     lblCountTaxa: TLabel;
     lblLoading: TLabel;
@@ -98,6 +101,7 @@ type
     mmSspVernacularNames: TMenuItem;
     mmRewriteHierarchy: TMenuItem;
     pDetails: TPanel;
+    pMarkedFilter: TBCPanel;
     pmgRefresh: TMenuItem;
     pmgNewSubspecies: TMenuItem;
     pmgMove: TMenuItem;
@@ -160,6 +164,18 @@ type
     ptSpanishName: TBCPanel;
     ptSubspecificGroup: TBCPanel;
     ptValidName: TBCPanel;
+    rbMarkedAll: TRadioButton;
+    rbExtinctAll: TRadioButton;
+    rbIsSynonymAll: TRadioButton;
+    rbHasSynonymsAll: TRadioButton;
+    rbExtinctNo: TRadioButton;
+    rbIsSynonymNo: TRadioButton;
+    rbHasSynonymsNo: TRadioButton;
+    rbMarkedYes: TRadioButton;
+    rbMarkedNo: TRadioButton;
+    rbExtinctYes: TRadioButton;
+    rbIsSynonymYes: TRadioButton;
+    rbHasSynonymsYes: TRadioButton;
     sbAdvancedFilters2: TSpeedButton;
     sbCancelRank: TSpeedButton;
     sbCancelRecord2: TSpeedButton;
@@ -172,14 +188,11 @@ type
     sbEditRecord: TSpeedButton;
     sbFirstRank: TSpeedButton;
     sbFirstRecord2: TSpeedButton;
-    sbGroupRecords2: TSpeedButton;
     sbInsertRank: TSpeedButton;
     sbInsertRecord2: TSpeedButton;
     sbLastRank: TSpeedButton;
     sbLastRecord2: TSpeedButton;
     sbLumpTaxon: TSpeedButton;
-    sbMoreRankOptions: TSpeedButton;
-    sbMoreOptions2: TSpeedButton;
     sbMoveTaxon: TSpeedButton;
     sbNextRank: TSpeedButton;
     sbNextRecord2: TSpeedButton;
@@ -190,8 +203,6 @@ type
     sbRefreshRecords2: TSpeedButton;
     sbSaveRank: TSpeedButton;
     sbSaveRecord2: TSpeedButton;
-    sbSortRanks: TSpeedButton;
-    sbSortRecords2: TSpeedButton;
     sbSplitTaxon: TSpeedButton;
     Separator2: TMenuItem;
     mmBatchActions: TMenuItem;
@@ -204,22 +215,18 @@ type
     icoBandSizeFilter12: TImage;
     icoBandSizeFilter9: TImage;
     icoExtinctFilter: TImage;
-    icoMarkedFilter: TImage;
     iconFindTaxa: TImage;
     icoSynonymsFilter: TImage;
     icoTaxonomiesFilter: TImage;
     icoTaxonRanksFilter: TImage;
-    icoUnmarkedFilter: TImage;
     lblClementsFilter: TLabel;
     lblCountTaxonRanksFilter: TLabel;
     lblExtinctFilter: TLabel;
     lblHasSynonymsFilter: TLabel;
-    lblMarkedFilter: TLabel;
     lblSynonymFilter: TLabel;
     lblTaxonomyCbroFilter: TLabel;
     lblTaxonomyIocFilter: TLabel;
     lblTaxonRanksFilter: TLabel;
-    lblUnmarkedFilter: TLabel;
     navTabs: TATTabs;
     nbTaxaSide: TNotebook;
     pFindTaxa: TBCPanel;
@@ -228,12 +235,10 @@ type
     pHasSynonymsFilter: TBCPanel;
     pIsSynonymFilter: TBCPanel;
     pMainMenu: TBCPanel;
-    bMenu: TImageList;
     nbPages: TNotebook;
     pgRanks: TPage;
     pgTaxonomies: TPage;
     pgTaxa: TPage;
-    pMarkedFilter: TBCPanel;
     pTaxaList: TBCPanel;
     pTaxaRightBar: TBCPanel;
     pTaxaToolbar: TBCPanel;
@@ -242,7 +247,6 @@ type
     pTaxonomyIocFilter: TBCPanel;
     pTaxonRanksFilters: TBCPanel;
     pTitleTaxonRanksFilter: TPanel;
-    pUnmarkedFilter: TBCPanel;
     sbAdvancedFilters: TSpeedButton;
     sbCancelRecord: TSpeedButton;
     sbClearFilters: TSpeedButton;
@@ -269,11 +273,6 @@ type
     splitTaxaRight: TSplitter;
     TimerFind: TTimer;
     tvHierarchy: TTreeView;
-    tsfMarked: TRxSwitch;
-    tsfUnmarked: TRxSwitch;
-    tsHasSynonyms: TRxSwitch;
-    tsIsSynonym: TRxSwitch;
-    tsTaxonExtinct: TRxSwitch;
     tsTaxonomyCbro: TRxSwitch;
     tsTaxonomyClements: TRxSwitch;
     tsTaxonomyIoc: TRxSwitch;
@@ -1388,7 +1387,7 @@ begin
       case ApplyTo of
         acSelected:
         begin
-          MoveToGenus(dsTaxa.DataSet.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+          MoveToGenus(dsTaxa.DataSet.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, ChangeSuffix, True);
         end;
         acMarked:
         begin
@@ -1400,7 +1399,7 @@ begin
             Open;
             First;
             repeat
-              MoveToGenus(Qry.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+              MoveToGenus(Qry.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, ChangeSuffix, True);
               Next;
             until Eof;
             Close;
@@ -1435,7 +1434,7 @@ begin
       case ApplyTo of
         acSelected:
         begin
-          MoveToSpecies(dsTaxa.DataSet.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+          MoveToSpecies(dsTaxa.DataSet.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, ChangeSuffix, True);
         end;
         acMarked:
         begin
@@ -1447,7 +1446,7 @@ begin
             Open;
             First;
             repeat
-              MoveToSpecies(Qry.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, True);
+              MoveToSpecies(Qry.FieldByName('taxon_id').AsInteger, Taxon, Taxonomies, ChangeSuffix, True);
               Next;
             until Eof;
             Close;
@@ -1715,14 +1714,14 @@ begin
 
   CanToggle := False;
 
-  if (tsfMarked.StateOn = sw_on) then
+  if (rbMarkedYes.Checked) then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
       crEqual, False, '1'));
   end
   else
-  if (tsfUnmarked.StateOn = sw_on) then
+  if (rbMarkedNo.Checked) then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
@@ -1761,18 +1760,30 @@ begin
       crEqual, False, '1'));
   end;
 
-  if tsTaxonExtinct.StateOn = sw_on then
+  if rbExtinctYes.Checked then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('extinct', 'Extinct', sdtBoolean,
       crEqual, False, '1'));
   end;
+  if rbExtinctNo.Checked then
+  begin
+    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
+    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('extinct', 'Extinct', sdtBoolean,
+      crEqual, False, '0'));
+  end;
 
-  if tsIsSynonym.StateOn = sw_on then
+  if rbIsSynonymYes.Checked then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('valid_id', 'Valid name', sdtInteger,
       crDistinct, False, '0'));
+  end;
+  if rbIsSynonymNo.Checked then
+  begin
+    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
+    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('valid_id', 'Valid name', sdtInteger,
+      crEqual, False, '0'));
   end;
   //if tsHasSynonyms.StateOn = sw_on then
   //begin

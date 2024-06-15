@@ -14,11 +14,12 @@ type
   { TdlgFind }
 
   TdlgFind = class(TForm)
+    iButtons: TImageList;
     uList: TDBGrid;
     dsFind: TDataSource;
     EP: TEdit;
     pEP: TBCPanel;
-    sbClearSearch: TSpeedButton;
+    sbOptions: TSpeedButton;
     sbClose: TSpeedButton;
     pHeader: TPanel;
     qFind: TSQLQuery;
@@ -29,7 +30,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
-    procedure sbClearSearchClick(Sender: TObject);
+    procedure sbOptionsClick(Sender: TObject);
     procedure sbCloseClick(Sender: TObject);
     procedure TimerFindTimer(Sender: TObject);
     procedure uListCellClick(Column: TColumn);
@@ -76,11 +77,11 @@ begin
 
   if Length(EP.Text) = 0 then
   begin
-    sbClearSearch.Visible := True;
+    sbOptions.Visible := True;
   end
   else
   begin
-    sbClearSearch.Visible := False;
+    sbOptions.Visible := False;
     qFind.Close;
   end;
 end;
@@ -390,7 +391,7 @@ begin
   Result := qFind.RecordCount > 0;
 end;
 
-procedure TdlgFind.sbClearSearchClick(Sender: TObject);
+procedure TdlgFind.sbOptionsClick(Sender: TObject);
 begin
   {$IFDEF DEBUG}
   LogDebug('Clear search');

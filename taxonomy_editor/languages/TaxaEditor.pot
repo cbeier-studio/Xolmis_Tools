@@ -156,8 +156,32 @@ msgctxt "tdlgdesttaxon.lblapplyto.caption"
 msgid "Apply changes to"
 msgstr ""
 
+#: tdlgdesttaxon.lblchangesuffix.caption
+msgid "Change suffix to"
+msgstr ""
+
 #: tdlgdesttaxon.lbldestinationtaxon.caption
 msgid "Destination taxon"
+msgstr ""
+
+#: tdlgdesttaxon.rbsuffixa.caption
+msgid "-a"
+msgstr ""
+
+#: tdlgdesttaxon.rbsuffixi.caption
+msgid "-i"
+msgstr ""
+
+#: tdlgdesttaxon.rbsuffixkeep.caption
+msgid "Keep"
+msgstr ""
+
+#: tdlgdesttaxon.rbsuffixum.caption
+msgid "-um"
+msgstr ""
+
+#: tdlgdesttaxon.rbsuffixus.caption
+msgid "-us"
 msgstr ""
 
 #: tdlgdesttaxon.sbapply.caption
@@ -719,10 +743,6 @@ msgctxt "tfrmtaxaeditor.lbltvalidname.caption"
 msgid "Valid name"
 msgstr ""
 
-#: tfrmtaxaeditor.lblunmarkedfilter.caption
-msgid "Unmarked records"
-msgstr ""
-
 #: tfrmtaxaeditor.menuitem3.caption
 msgctxt "tfrmtaxaeditor.menuitem3.caption"
 msgid "Import"
@@ -779,6 +799,7 @@ msgid "New subspecies"
 msgstr ""
 
 #: tfrmtaxaeditor.pmgrefresh.caption
+msgctxt "tfrmtaxaeditor.pmgrefresh.caption"
 msgid "Refresh"
 msgstr ""
 
@@ -815,6 +836,70 @@ msgctxt "tfrmtaxaeditor.pmvmovetospecies.caption"
 msgid "To species"
 msgstr ""
 
+#: tfrmtaxaeditor.rbextinctall.caption
+msgctxt "tfrmtaxaeditor.rbextinctall.caption"
+msgid "All"
+msgstr ""
+
+#: tfrmtaxaeditor.rbextinctno.caption
+msgctxt "tfrmtaxaeditor.rbextinctno.caption"
+msgid "No"
+msgstr ""
+
+#: tfrmtaxaeditor.rbextinctyes.caption
+msgctxt "tfrmtaxaeditor.rbextinctyes.caption"
+msgid "Yes"
+msgstr ""
+
+#: tfrmtaxaeditor.rbhassynonymsall.caption
+msgctxt "tfrmtaxaeditor.rbhassynonymsall.caption"
+msgid "All"
+msgstr ""
+
+#: tfrmtaxaeditor.rbhassynonymsno.caption
+msgctxt "tfrmtaxaeditor.rbhassynonymsno.caption"
+msgid "No"
+msgstr ""
+
+#: tfrmtaxaeditor.rbhassynonymsyes.caption
+msgctxt "tfrmtaxaeditor.rbhassynonymsyes.caption"
+msgid "Yes"
+msgstr ""
+
+#: tfrmtaxaeditor.rbissynonymall.caption
+msgctxt "tfrmtaxaeditor.rbissynonymall.caption"
+msgid "All"
+msgstr ""
+
+#: tfrmtaxaeditor.rbissynonymno.caption
+msgctxt "tfrmtaxaeditor.rbissynonymno.caption"
+msgid "No"
+msgstr ""
+
+#: tfrmtaxaeditor.rbissynonymyes.caption
+msgctxt "tfrmtaxaeditor.rbissynonymyes.caption"
+msgid "Yes"
+msgstr ""
+
+#: tfrmtaxaeditor.rbmarkedall.caption
+msgctxt "tfrmtaxaeditor.rbmarkedall.caption"
+msgid "All"
+msgstr ""
+
+#: tfrmtaxaeditor.rbmarkedno.caption
+msgctxt "tfrmtaxaeditor.rbmarkedno.caption"
+msgid "No"
+msgstr ""
+
+#: tfrmtaxaeditor.rbmarkedyes.caption
+msgctxt "tfrmtaxaeditor.rbmarkedyes.caption"
+msgid "Yes"
+msgstr ""
+
+#: tfrmtaxaeditor.sbadvancedfilters.hint
+msgid "Advanced filters"
+msgstr ""
+
 #: tfrmtaxaeditor.sbcancelrank.caption
 msgctxt "tfrmtaxaeditor.sbcancelrank.caption"
 msgid "Cancel"
@@ -828,6 +913,10 @@ msgstr ""
 #: tfrmtaxaeditor.sbcancelrecord2.caption
 msgctxt "tfrmtaxaeditor.sbcancelrecord2.caption"
 msgid "Cancel"
+msgstr ""
+
+#: tfrmtaxaeditor.sbclearfilters.hint
+msgid "Clear filters"
 msgstr ""
 
 #: tfrmtaxaeditor.sbclearfindranks.hint
@@ -859,6 +948,10 @@ msgstr ""
 msgid "File"
 msgstr ""
 
+#: tfrmtaxaeditor.sbfirstrecord.hint
+msgid "First record"
+msgstr ""
+
 #: tfrmtaxaeditor.sbinsertrank.caption
 msgctxt "tfrmtaxaeditor.sbinsertrank.caption"
 msgid "New"
@@ -874,6 +967,10 @@ msgctxt "tfrmtaxaeditor.sbinsertrecord2.caption"
 msgid "New"
 msgstr ""
 
+#: tfrmtaxaeditor.sblastrecord.hint
+msgid "Last record"
+msgstr ""
+
 #: tfrmtaxaeditor.sblumptaxon.caption
 msgctxt "tfrmtaxaeditor.sblumptaxon.caption"
 msgid "Lump"
@@ -885,17 +982,7 @@ msgstr ""
 
 #: tfrmtaxaeditor.sbmoreoptions.hint
 msgctxt "tfrmtaxaeditor.sbmoreoptions.hint"
-msgid "Mais opções"
-msgstr ""
-
-#: tfrmtaxaeditor.sbmoreoptions2.hint
-msgctxt "tfrmtaxaeditor.sbmoreoptions2.hint"
-msgid "Mais opções"
-msgstr ""
-
-#: tfrmtaxaeditor.sbmorerankoptions.hint
-msgctxt "tfrmtaxaeditor.sbmorerankoptions.hint"
-msgid "Mais opções"
+msgid "More options"
 msgstr ""
 
 #: tfrmtaxaeditor.sbmovetaxon.caption
@@ -905,6 +992,19 @@ msgstr ""
 
 #: tfrmtaxaeditor.sbmovetaxon.hint
 msgid "Move taxon into other order, family, genus or species"
+msgstr ""
+
+#: tfrmtaxaeditor.sbnextrecord.hint
+msgid "Next record"
+msgstr ""
+
+#: tfrmtaxaeditor.sbpriorrecord.hint
+msgid "Previous record"
+msgstr ""
+
+#: tfrmtaxaeditor.sbrefreshrecords.hint
+msgctxt "tfrmtaxaeditor.sbrefreshrecords.hint"
+msgid "Refresh"
 msgstr ""
 
 #: tfrmtaxaeditor.sbsaverank.caption
@@ -920,6 +1020,22 @@ msgstr ""
 #: tfrmtaxaeditor.sbsaverecord2.caption
 msgctxt "tfrmtaxaeditor.sbsaverecord2.caption"
 msgid "Save"
+msgstr ""
+
+#: tfrmtaxaeditor.sbshowimages.hint
+msgid "Images"
+msgstr ""
+
+#: tfrmtaxaeditor.sbshowquickfilters.hint
+msgid "Quick filters"
+msgstr ""
+
+#: tfrmtaxaeditor.sbshowrecycle.hint
+msgid "Recycle bin"
+msgstr ""
+
+#: tfrmtaxaeditor.sbsortrecords.hint
+msgid "Sort records"
 msgstr ""
 
 #: tfrmtaxaeditor.sbsplittaxon.caption

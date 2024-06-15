@@ -13,6 +13,7 @@ type
   { TdlgSqlFilter }
 
   TdlgSqlFilter = class(TForm)
+    iButtons: TImageList;
     Panel1: TPanel;
     pBottom: TPanel;
     sbApply: TBitBtn;

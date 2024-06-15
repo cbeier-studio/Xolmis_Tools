@@ -13,6 +13,9 @@ type
   { TdlgDestTaxon }
 
   TdlgDestTaxon = class(TForm)
+    iButtons: TImageList;
+    lblChangeSuffix: TLabel;
+    pChangeSuffix: TBCPanel;
     pDestinationTaxon: TBCPanel;
     cklTaxonomy: TCheckListBox;
     eDestinationTaxon: TEditButton;
@@ -22,6 +25,11 @@ type
     pContent: TPanel;
     pApplyTo: TBCPanel;
     pBottom: TPanel;
+    rbSuffixKeep: TRadioButton;
+    rbSuffixA: TRadioButton;
+    rbSuffixUs: TRadioButton;
+    rbSuffixUm: TRadioButton;
+    rbSuffixI: TRadioButton;
     sbApplyToMarked: TSpeedButton;
     sbApplyToSelected: TSpeedButton;
     sbClose: TButton;
@@ -31,17 +39,20 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
+    procedure rbSuffixKeepClick(Sender: TObject);
     procedure sbApplyClick(Sender: TObject);
     procedure sbApplyToSelectedClick(Sender: TObject);
   private
     FTaxonomyAction: TTaxonomyAction;
     FApplyTo: TApplyChangesTo;
+    FChangeSuffix: TChangeSuffix;
     FTaxonomies: TBirdTaxonomies;
     FTaxon: Integer;
     function ValidateFields: Boolean;
   public
     property TaxonomyAction: TTaxonomyAction read FTaxonomyAction write FTaxonomyAction;
     property ApplyTo: TApplyChangesTo read FApplyTo write FApplyTo;
+    property ChangeSuffix: TChangeSuffix read FChangeSuffix write FChangeSuffix;
     property Taxonomies: TBirdTaxonomies read FTaxonomies write FTaxonomies;
     property Taxon: Integer read FTaxon write FTaxon;
   end;
@@ -115,6 +126,24 @@ procedure TdlgDestTaxon.FormShow(Sender: TObject);
 begin
   eDestinationTaxon.Enabled := FTaxonomyAction <> taSplit;
   lblDestinationTaxon.Enabled := eDestinationTaxon.Enabled;
+end;
+
+procedure TdlgDestTaxon.rbSuffixKeepClick(Sender: TObject);
+begin
+  if rbSuffixKeep.Checked then
+    FChangeSuffix := csKeep
+  else
+  if rbSuffixA.Checked then
+    FChangeSuffix := csA
+  else
+  if rbSuffixUs.Checked then
+    FChangeSuffix := csUs
+  else
+  if rbSuffixUm.Checked then
+    FChangeSuffix := csUm
+  else
+  if rbSuffixI.Checked then
+    FChangeSuffix := csI;
 end;
 
 procedure TdlgDestTaxon.eDestinationTaxonButtonClick(Sender: TObject);

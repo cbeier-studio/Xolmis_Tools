@@ -14,6 +14,7 @@ type
 
   TdlgAbout = class(TForm)
     BCPanel1: TBCPanel;
+    iButtons: TImageList;
     pAppVersion: TLabel;
     lblAppName1: TLabel;
     lblAppVersion: TLabel;

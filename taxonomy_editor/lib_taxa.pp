@@ -99,6 +99,7 @@ type
 
   TTaxonomyAction = (taNew, taSplit, taLump, taMove, taUpdate);
   TApplyChangesTo = (acSelected, acMarked);
+  TChangeSuffix   = (csKeep, csA, csUs, csUm, csI);
 
   TTableType = (tbNone,
     tbTaxonRanks,
@@ -371,6 +372,7 @@ const
   SearchDataTypes: array[TFilterType] of String = ('Text', 'Integer', 'Float', 'Date', 'Time',
     'DateTime', 'Boolean', 'List', 'Lookup');
   SQLAndOrStr: array [TSQLAndOr] of String = ('', 'AND', 'OR');
+  Suffixes: array [TChangeSuffix] of String = ('', 'a', 'us', 'um', 'i');
 
   { System variables }
   function InstallDir: String;
@@ -388,7 +390,7 @@ const
   function GetPrimaryKey(aDataSet: TDataSet): String;
 
   function GetLastInsertedKey(aTableType: TTableType): Integer;
-  function RegistroExiste(aTabela: TTableType; aCampo, aValor: String): Boolean;
+  function RecordExists(aTable: TTableType; aField, aValue: String): Boolean;
 
   procedure DeleteRecord(aTable: TTableType; aDataSet: TDataSet);
   procedure RestoreRecord(aTable: TTableType; aDataSet: TDataSet);
@@ -406,8 +408,8 @@ const
   procedure SplitTaxon(aSubspecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
   procedure LumpTaxon(aSpecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
 
-  procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
-  procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
+  procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; Suffix: TChangeSuffix = csKeep; ExecNow: Boolean = True);
+  procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; Suffix: TChangeSuffix = csKeep; ExecNow: Boolean = True);
   procedure MoveToFamily(aFamily: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
   procedure MoveToOrder(aOrder: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean = True);
 
@@ -697,7 +699,7 @@ begin
   end;
 end;
 
-function RegistroExiste(aTabela: TTableType; aCampo, aValor: String): Boolean;
+function RecordExists(aTable: TTableType; aField, aValue: String): Boolean;
 var
   i: Integer;
   Qry: TSQLQuery;
@@ -710,9 +712,9 @@ begin
     DataBase := dmTaxa.sqlCon;
     Clear;
     Add('SELECT count(%afield) FROM %tabname WHERE %afield = :keyv');
-    MacroByName('AFIELD').Value := aCampo;
-    MacroByName('TABNAME').Value := TableNames[aTabela];
-    ParamByName('KEYV').AsString := aValor;
+    MacroByName('AFIELD').Value := aField;
+    MacroByName('TABNAME').Value := TableNames[aTable];
+    ParamByName('KEYV').AsString := aValue;
     // GravaLogSQL(SQL);
     Open;
     i := Fields[0].AsInteger;
@@ -1303,7 +1305,7 @@ begin
   aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
-    if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
+    if RecordExists(tbZooTaxa, 'full_name', NewName) = True then
     begin
       ExistingId := GetKey('zoo_taxa', 'taxon_id', 'full_name', NewName);
       with aDataset do
@@ -1493,7 +1495,7 @@ begin
   aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
-    if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
+    if RecordExists(tbZooTaxa, 'full_name', NewName) = True then
     begin
       ExistingId := GetKey('zoo_taxa', 'taxon_id', 'full_name', NewName);
       with aDataset do
@@ -1674,7 +1676,7 @@ begin
   end;
 end;
 
-procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
+procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; aTaxonomy: TBirdTaxonomies; Suffix: TChangeSuffix; ExecNow: Boolean);
 var
   OldName, MoveToName, NewName: String;
   OldRankId, ParentSp, ValidSsp, ExistingId: Integer;
@@ -1695,12 +1697,19 @@ begin
   Ssp := TTaxon.Create(aSubspecies);
   MoveToSp := TTaxon.Create(ToSpecies);
   //GravaLog('MOVE TO SPECIES', OldName + ' -> ' + MoveToName + ' = ' + NewName);
+  case Suffix of
+    csKeep: ;
+    csA:  NewName := ReplaceRegExpr('(us|um|i)\b', NewName, 'a');
+    csUs: NewName := ReplaceRegExpr('(a|um|i)\b', NewName, 'us');
+    csUm: NewName := ReplaceRegExpr('(a|us|i)\b', NewName, 'um');
+    csI:  NewName := ReplaceRegExpr('(a|us|um)\b', NewName, 'i');
+  end;
 
   aDataSet := TSQLQuery.Create(dmTaxa.sqlCon);
   aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
-    if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
+    if RecordExists(tbZooTaxa, 'full_name', NewName) = True then
     begin
       ExistingId := GetKey('zoo_taxa', 'taxon_id', 'full_name', NewName);
       with aDataset do
@@ -1910,7 +1919,7 @@ begin
   end;
 end;
 
-procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; ExecNow: Boolean);
+procedure MoveToGenus(aSpecies, ToGenus: Integer; aTaxonomy: TBirdTaxonomies; Suffix: TChangeSuffix; ExecNow: Boolean);
 var
   OldName, MoveToName, NewName: String;
   SpRank, ParentGenus, ValidSp, ExistingId: Integer;
@@ -1925,12 +1934,19 @@ begin
   ParentGenus := ToGenus;
   Ssp := TTaxon.Create(aSpecies);
   Gen := TTaxon.Create(ToGenus);
+  case Suffix of
+    csKeep: ;
+    csA:  NewName := ReplaceRegExpr('(us|um|i)\b', NewName, 'a');
+    csUs: NewName := ReplaceRegExpr('(a|um|i)\b', NewName, 'us');
+    csUm: NewName := ReplaceRegExpr('(a|us|i)\b', NewName, 'um');
+    csI:  NewName := ReplaceRegExpr('(a|us|um)\b', NewName, 'i');
+  end;
 
   aDataSet := TSQLQuery.Create(dmTaxa.sqlCon);
   aDataSet.SQLConnection := dmTaxa.sqlCon;
   try
     // If taxon exists
-    if RegistroExiste(tbZooTaxa, 'full_name', NewName) = True then
+    if RecordExists(tbZooTaxa, 'full_name', NewName) = True then
     begin
       ExistingId := GetKey('zoo_taxa', 'taxon_id', 'full_name', NewName);
       with aDataset do
