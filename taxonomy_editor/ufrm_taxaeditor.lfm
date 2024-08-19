@@ -2,10 +2,10 @@ object frmTaxaEditor: TfrmTaxaEditor
   Left = -8
   Height = 1100
   Top = -8
-  Width = 1677
+  Width = 1821
   Caption = 'Xolmis Taxonomies Editor'
-  ClientHeight = 1061
-  ClientWidth = 1677
+  ClientHeight = 1100
+  ClientWidth = 1821
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -13,12 +13,13 @@ object frmTaxaEditor: TfrmTaxaEditor
   OnShow = FormShow
   Position = poDefault
   SnapOptions.SnapToMonitor = True
+  LCLVersion = '3.4.0.0'
   WindowState = wsMaximized
   object nbPages: TNotebook
     Left = 0
     Height = 1027
     Top = 34
-    Width = 1677
+    Width = 1821
     PageIndex = 0
     Align = alClient
     TabOrder = 1
@@ -86,7 +87,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             item
               ReadOnly = True
               Title.Caption = 'Scientific name'
-              Width = 352
+              Width = 373
               FieldName = 'full_name'
             end          
             item
@@ -116,7 +117,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         end
       end
       object pTaxaRightBar: TBCPanel
-        Left = 1631
+        Left = 1775
         Height = 939
         Top = 48
         Width = 46
@@ -217,7 +218,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 0
         Height = 48
         Top = 0
-        Width = 1677
+        Width = 1821
         Align = alTop
         ChildSizing.LeftRightSpacing = 8
         ChildSizing.TopBottomSpacing = 8
@@ -305,9 +306,10 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 4
             Height = 28
             Top = 1
-            Width = 19
+            Width = 16
             AntialiasingMode = amOn
             Align = alLeft
+            AutoSize = True
             Center = True
             ImageIndex = 10
             Images = bMenu
@@ -315,11 +317,16 @@ object frmTaxaEditor: TfrmTaxaEditor
             Transparent = True
           end
           object eFindTaxa: TEdit
-            Left = 31
-            Height = 24
-            Top = 3
-            Width = 340
-            Align = alClient
+            AnchorSideLeft.Control = iconFindTaxa
+            AnchorSideLeft.Side = asrBottom
+            AnchorSideTop.Control = pFindTaxa
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Control = sbClearFindTaxa
+            Left = 28
+            Height = 20
+            Top = 5
+            Width = 343
+            Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 3
             BorderSpacing.Bottom = 3
             BorderStyle = bsNone
@@ -395,12 +402,12 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 522
           Height = 28
           Top = 10
-          Width = 56
+          Width = 82
           AutoSize = True
           BorderSpacing.Right = 6
+          Constraints.MinWidth = 82
           Caption = 'Save'
           DisabledImageIndex = 7
-          Flat = True
           Images = bMenu
           ImageIndex = 6
           ImageWidth = 24
@@ -412,14 +419,14 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = sbSaveRecord
           AnchorSideTop.Side = asrCenter
-          Left = 584
+          Left = 610
           Height = 28
           Top = 10
-          Width = 68
+          Width = 82
           AutoSize = True
+          Constraints.MinWidth = 82
           Caption = 'Cancel'
           DisabledImageIndex = 9
-          Flat = True
           Images = bMenu
           ImageIndex = 8
           ImageWidth = 24
@@ -427,7 +434,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           OnClick = sbCancelRecordClick
         end
         object sbFirstRecord: TSpeedButton
-          Left = 1348
+          Left = 1492
           Height = 30
           Hint = 'First record'
           Top = 9
@@ -444,7 +451,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbPriorRecord: TSpeedButton
-          Left = 1380
+          Left = 1524
           Height = 30
           Hint = 'Previous record'
           Top = 9
@@ -460,7 +467,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbNextRecord: TSpeedButton
-          Left = 1412
+          Left = 1556
           Height = 30
           Hint = 'Next record'
           Top = 9
@@ -478,7 +485,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbLastRecord: TSpeedButton
-          Left = 1444
+          Left = 1588
           Height = 30
           Hint = 'Last record'
           Top = 9
@@ -495,7 +502,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbRefreshRecords: TSpeedButton
-          Left = 1485
+          Left = 1629
           Height = 30
           Hint = 'Refresh'
           Top = 9
@@ -513,7 +520,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbSortRecords: TSpeedButton
-          Left = 1526
+          Left = 1670
           Height = 30
           Hint = 'Sort records'
           Top = 9
@@ -529,7 +536,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbAdvancedFilters: TSpeedButton
-          Left = 1567
+          Left = 1711
           Height = 30
           Hint = 'Advanced filters'
           Top = 9
@@ -546,7 +553,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowCaption = False
         end
         object sbClearFilters: TSpeedButton
-          Left = 1599
+          Left = 1743
           Height = 30
           Hint = 'Clear filters'
           Top = 9
@@ -558,10 +565,11 @@ object frmTaxaEditor: TfrmTaxaEditor
           Images = bMenu
           ImageIndex = 38
           ImageWidth = 24
+          OnClick = sbClearFiltersClick
           ShowCaption = False
         end
         object sbMoreOptions: TSpeedButton
-          Left = 1640
+          Left = 1784
           Height = 30
           Hint = 'More options'
           Top = 9
@@ -584,7 +592,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 5
       end
       object splitTaxaRight: TSplitter
-        Left = 1314
+        Left = 1458
         Height = 939
         Top = 48
         Width = 5
@@ -592,7 +600,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ResizeAnchor = akRight
       end
       object nbTaxaSide: TNotebook
-        Left = 1319
+        Left = 1463
         Height = 939
         Top = 48
         Width = 312
@@ -796,6 +804,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'All'
                 TabOrder = 0
+                OnClick = rbMarkedYesClick
               end
               object rbExtinctYes: TRadioButton
                 Left = 202
@@ -805,6 +814,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'Yes'
                 TabOrder = 1
+                OnClick = rbMarkedYesClick
               end
               object rbExtinctNo: TRadioButton
                 Left = 246
@@ -814,6 +824,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'No'
                 TabOrder = 2
+                OnClick = rbMarkedYesClick
               end
             end
             object pTaxonomyClementsFilter: TBCPanel
@@ -1125,6 +1136,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'All'
                 TabOrder = 0
+                OnClick = rbMarkedYesClick
               end
               object rbIsSynonymYes: TRadioButton
                 Left = 202
@@ -1134,6 +1146,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'Yes'
                 TabOrder = 1
+                OnClick = rbMarkedYesClick
               end
               object rbIsSynonymNo: TRadioButton
                 Left = 246
@@ -1143,6 +1156,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'No'
                 TabOrder = 2
+                OnClick = rbMarkedYesClick
               end
             end
             object pHasSynonymsFilter: TBCPanel
@@ -1218,6 +1232,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'All'
                 TabOrder = 0
+                OnClick = rbMarkedYesClick
               end
               object rbHasSynonymsYes: TRadioButton
                 Left = 202
@@ -1227,6 +1242,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'Yes'
                 TabOrder = 1
+                OnClick = rbMarkedYesClick
               end
               object rbHasSynonymsNo: TRadioButton
                 Left = 246
@@ -1236,6 +1252,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'No'
                 TabOrder = 2
+                OnClick = rbMarkedYesClick
               end
             end
             object pMarkedFilter: TBCPanel
@@ -1312,6 +1329,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'All'
                 TabOrder = 0
+                OnClick = rbMarkedYesClick
               end
               object rbMarkedYes: TRadioButton
                 Left = 202
@@ -1321,6 +1339,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'Yes'
                 TabOrder = 1
+                OnClick = rbMarkedYesClick
               end
               object rbMarkedNo: TRadioButton
                 Left = 246
@@ -1330,6 +1349,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Caption = 'No'
                 TabOrder = 2
+                OnClick = rbMarkedYesClick
               end
             end
           end
@@ -1339,7 +1359,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 416
         Height = 939
         Top = 48
-        Width = 536
+        Width = 680
         Align = alClient
         Background.Color = 15066599
         Background.Gradient1.StartColor = clWhite
@@ -1378,27 +1398,27 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 1
           Height = 626
           Top = 312
-          Width = 534
+          Width = 678
           HorzScrollBar.Page = 214
           VertScrollBar.Increment = 86
           VertScrollBar.Page = 626
           Align = alClient
           BorderStyle = bsNone
           ClientHeight = 626
-          ClientWidth = 517
+          ClientWidth = 661
           TabOrder = 6
           object peTaxa: TPanel
             Left = 0
             Height = 1006
             Top = 0
-            Width = 517
+            Width = 661
             Align = alTop
             AutoSize = True
             BevelOuter = bvNone
             ChildSizing.LeftRightSpacing = 16
             ChildSizing.TopBottomSpacing = 8
             ClientHeight = 1006
-            ClientWidth = 517
+            ClientWidth = 661
             Color = 14408667
             ParentBackground = False
             ParentColor = False
@@ -1466,7 +1486,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 8
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1521,7 +1541,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 258
+                Width = 402
                 DataField = 'english_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1535,7 +1555,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 102
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1591,7 +1611,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 258
+                Width = 402
                 DataField = 'spanish_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1604,7 +1624,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 55
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1659,7 +1679,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 258
+                Width = 402
                 DataField = 'portuguese_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1673,7 +1693,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 155
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1728,7 +1748,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 DataField = 'quick_code'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1742,7 +1762,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 259
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -1802,7 +1822,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 DataField = 'extinction_year'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1816,7 +1836,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 343
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1871,7 +1891,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 DataField = 'sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1884,7 +1904,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 390
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -1939,7 +1959,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 DataField = 'group_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -1952,7 +1972,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 78
               Top = 484
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2008,7 +2028,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 54
                 Top = 12
-                Width = 258
+                Width = 402
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 Constraints.MinHeight = 54
@@ -2022,7 +2042,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 437
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2077,7 +2097,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 DataField = 'ebird_code'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2090,7 +2110,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 599
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2145,7 +2165,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 258
+                Width = 402
                 DataField = 'ioc_english_name'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2158,7 +2178,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 693
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2213,7 +2233,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 DataField = 'ioc_rank_id'
@@ -2232,7 +2252,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 48
               Top = 740
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2287,12 +2307,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 258
+                Width = 402
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 258
+                ClientWidth = 402
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2315,7 +2335,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 78
               Top = 836
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               BorderSpacing.Bottom = 6
@@ -2371,7 +2391,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 54
                 Top = 12
-                Width = 258
+                Width = 402
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 Constraints.MinHeight = 54
@@ -2385,7 +2405,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 646
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2440,7 +2460,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 23
                 Top = 12
-                Width = 69
+                Width = 213
                 DataField = 'ioc_sort_num'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2453,7 +2473,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 48
               Top = 788
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2508,12 +2528,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 24
                 Top = 12
-                Width = 258
+                Width = 402
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 BevelOuter = bvNone
                 ClientHeight = 24
-                ClientWidth = 258
+                ClientWidth = 402
                 Color = 16448250
                 Constraints.MaxHeight = 28
                 ParentBackground = False
@@ -2536,7 +2556,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 47
               Top = 951
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2590,7 +2610,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 211
                 Height = 23
                 Top = 12
-                Width = 258
+                Width = 402
                 DataField = 'other_portuguese_names'
                 DataSource = dsTaxa
                 Align = alRight
@@ -2603,7 +2623,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               Left = 16
               Height = 51
               Top = 208
-              Width = 485
+              Width = 629
               Align = alTop
               AutoSize = True
               ChildSizing.LeftRightSpacing = 16
@@ -2658,7 +2678,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 400
                 Height = 27
                 Top = 12
-                Width = 69
+                Width = 213
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 DataField = 'iucn_status'
@@ -2688,7 +2708,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 9
           Height = 44
           Top = 9
-          Width = 518
+          Width = 662
           Align = alTop
           BorderSpacing.Left = 8
           BorderSpacing.Top = 8
@@ -2699,7 +2719,8 @@ object frmTaxaEditor: TfrmTaxaEditor
           ChildSizing.TopBottomSpacing = 8
           ChildSizing.HorizontalSpacing = 4
           ClientHeight = 44
-          ClientWidth = 518
+          ClientWidth = 662
+          Constraints.MinWidth = 500
           TabOrder = 0
           object sbEditRecord: TSpeedButton
             Left = 16
@@ -2774,7 +2795,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             ParentShowHint = False
           end
           object sbDelRecord: TSpeedButton
-            Left = 437
+            Left = 581
             Height = 28
             Top = 8
             Width = 65
@@ -2791,7 +2812,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             OnClick = sbDelRecordClick
           end
           object lblCountTaxa: TLabel
-            Left = 358
+            Left = 502
             Height = 28
             Top = 8
             Width = 66
@@ -2804,7 +2825,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 61
-          Width = 486
+          Width = 630
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -2862,7 +2883,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 259
+            Width = 403
             DataField = 'full_name'
             DataSource = dsTaxa
             Align = alRight
@@ -2876,7 +2897,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 108
-          Width = 486
+          Width = 630
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -2935,7 +2956,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 259
+            Width = 403
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             AutoDropDown = True
@@ -2956,7 +2977,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 163
-          Width = 486
+          Width = 630
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3014,7 +3035,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 400
             Height = 23
             Top = 12
-            Width = 70
+            Width = 214
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             AutoComplete = True
@@ -3036,7 +3057,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 257
-          Width = 486
+          Width = 630
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3095,12 +3116,12 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 259
+            Width = 403
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvNone
             ClientHeight = 23
-            ClientWidth = 259
+            ClientWidth = 403
             Color = 16448250
             Constraints.MaxHeight = 28
             ParentBackground = False
@@ -3124,7 +3145,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 17
           Height = 47
           Top = 210
-          Width = 486
+          Width = 630
           Align = alTop
           AutoSize = True
           BorderSpacing.Left = 16
@@ -3182,12 +3203,12 @@ object frmTaxaEditor: TfrmTaxaEditor
             Left = 211
             Height = 23
             Top = 12
-            Width = 259
+            Width = 403
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvNone
             ClientHeight = 23
-            ClientWidth = 259
+            ClientWidth = 403
             Color = 16448250
             Constraints.MaxHeight = 28
             ParentBackground = False
@@ -3210,14 +3231,14 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 0
         Height = 40
         Top = 987
-        Width = 1677
+        Width = 1821
         Align = alBottom
         BevelOuter = bvLowered
         ChildSizing.LeftRightSpacing = 16
         ChildSizing.TopBottomSpacing = 4
         ChildSizing.HorizontalSpacing = 16
         ClientHeight = 40
-        ClientWidth = 1677
+        ClientWidth = 1821
         TabOrder = 7
         Visible = False
         object lblProgress: TLabel
@@ -3230,7 +3251,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Layout = tlCenter
         end
         object btnCancelProgress: TBitBtn
-          Left = 1585
+          Left = 1729
           Height = 30
           Top = 5
           Width = 75
@@ -3245,7 +3266,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Left = 78
           Height = 22
           Top = 9
-          Width = 1491
+          Width = 1635
           Align = alClient
           BorderSpacing.Top = 8
           BorderSpacing.Bottom = 8
@@ -3253,7 +3274,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         end
       end
       object pDetails: TPanel
-        Left = 952
+        Left = 1096
         Height = 939
         Top = 48
         Width = 362
@@ -3279,7 +3300,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Columns = <          
             item
               Title.Caption = 'Synonym'
-              Width = 325
+              Width = 346
               FieldName = 'full_name'
             end>
           DataSource = dsSynonyms
@@ -3300,7 +3321,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Columns = <          
             item
               Title.Caption = 'Child taxa'
-              Width = 325
+              Width = 346
               FieldName = 'full_name'
             end>
           DataSource = dsChildTaxa
@@ -3716,12 +3737,12 @@ object frmTaxaEditor: TfrmTaxaEditor
             end          
             item
               Title.Caption = 'Package name'
-              Width = 184
+              Width = 186
               FieldName = 'package_name'
             end          
             item
               Title.Caption = 'Taxonomy'
-              Width = 183
+              Width = 185
               FieldName = 'taxonomy'
             end          
             item
@@ -3780,12 +3801,12 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Action'
-            Width = 169
+            Width = 170
             FieldName = 'action_type'
           end        
           item
             Title.Caption = 'Taxon'
-            Width = 169
+            Width = 170
             FieldName = 'taxon_name'
           end        
           item
@@ -3795,12 +3816,12 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Trait'
-            Width = 168
+            Width = 169
             FieldName = 'trait_name'
           end        
           item
             Title.Caption = 'New value'
-            Width = 168
+            Width = 169
             FieldName = 'new_value'
           end        
           item
@@ -4140,7 +4161,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Name'
-            Width = 392
+            Width = 396
             FieldName = 'rank_name'
           end        
           item
@@ -4209,7 +4230,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     Left = 0
     Height = 34
     Top = 0
-    Width = 1677
+    Width = 1821
     Align = alTop
     Background.Color = 15066599
     Background.Gradient1.StartColor = clWhite
@@ -4249,7 +4270,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       Left = 67
       Height = 34
       Top = 0
-      Width = 1610
+      Width = 1754
       Align = alClient
       ParentColor = False
       Tabs = <      
@@ -4722,279 +4743,279 @@ object frmTaxaEditor: TfrmTaxaEditor
     Top = 186
   end
   object iIucnStatus: TImageList
-    Height = 24
-    Width = 24
+    OnGetWidthForPPI = iIucnStatusGetWidthForPPI
     Left = 86
     Top = 478
     Bitmap = {
-      4C7A090000001800000018000000DE0C00000000000078DAED9A095014571AC7
-      67C00DB55BB556B26B8C22684465134F0C6E8C2466E315C42B5AE6C0B5567248
-      065049A2211203A844B22AC6C4E001218705122531221A841814501115818082
-      37D7881C8A9CA260D66FFFDD333D17DD7437ED90758BAEFA95D3EFBDFEBD7ED7
-      F7B5962AD5FFF195E4FB109805424132B80EAE82BDE0233019A83BE91E01F200
-      89701038CAF0DA8240D026C1CDD100BC24FA0365782D992BE21E065A15F86BC0
-      A302EE1E20DBD076BF0FA97EF2E9D8B74FC3571E2FE0F7306BF7F26852AD9BCD
-      EF5DFB12A9C6F427D5C87EA41AFB38A9223D2DDB38F3F88325F937BF4AAABF0F
-      2055D43CDD7DFC9BA4DAE165D96E1E8F7FAF24BFF7B3A4F27F416C1D36F0F8B5
-      92FC139D49F5F95C317F5AA7FD539E20D5C64EF9A5CD8FDF7852F93CD799F991
-      B6BE5FFD9354A31D48153E5BB78713DE2655CC0229EB6BBE3F178C25D5B0BEA4
-      727130B27BA1AE6E0BF690C750528DB02795FB93A4DAF4B2A57F88C0F93AA5E0
-      EC767CBE747D0CB55A7CE88AF8668CCFCB658E437A7C36CF2FB9F73DBFB4CF8F
-      33C16A90A49FDF72B007AC50941FBBAFDFFDB2394F0F815920142483EBE02AD8
-      0B3E029381BA93EE11200F90080781A30CAF2D08046D12DC1C0DC04BA23F5086
-      D792B922EE61A05581BF063C2AE0EE01B215B839E205FC1E5C1BF5FBEB48ED17
-      62F69CFAD39DA4DE9C403685BF917ABC3BA99F9948AAE16348E53C9CFDCD6093
-      5ACCB577E6F1071B5C7EC1C85DAE64B3EBB8D1BF218ED4113F9AF7F9E50152BF
-      17C63786793CFEBDA67EF5370749ED36856CF29AF5EFFF9D1CFF061EBFD6D46F
-      B3FF2CA937FD40EA80F5C6F991EE4F13F79F219B22CCF58C79EC6FF5C65D4AFD
-      66F363B3AF40D7166BA69E3083D46BB72B9D1FB3F5B549CC377AD67C45AA275C
-      94AEAF717F2E5E697C7F86B36DA49EF412A9BF4A31F7E35EBD6C2D9F7F88C0F9
-      3A65ADF3A5EF63A8B5E24357C43793F8BC5CE63824C7678BFC927BBFF30B4F7E
-      9C09568324FDFC96833D608592FCD87DFD0F5C6BC806B8017F10038A401E8806
-      1AE0A2C0ED04D20189B00BF492E155031FD02CC1CD510D664BF4FBCBF05A324D
-      C4ED0C5A14F82BC023026E5B90A9C0CD112BE07767EAEDC2882E5513CDF9DAFC
-      B95FCB89DE8C23728B20AAAC37AF9BBC8D487BD3AC6C308F3F88ABDF934B1493
-      656C3F7E3351FD2DA2873F31FE36F5BF184974BDC9ACCC93C79FC0D5FF2B86A8
-      EC86B1FDD674A2C45FCDFB12F187F3F8B55C3D3347D50D441E51BAFB0B55440B
-      6265F9D33AF233C46713451F259AB095A8AA41D72753CECC7F438BB99F798F9A
-      46517F82E933AF7EAB5BE7C80CA2B893C6726E6CCC38B8B2953F111D3E273A3F
-      41A67EC6537153E79A116DFEBEDF636C8979447FFB5437BE7C2D51C01ED1F575
-      B7DCCBDF6662EE2BDBEF71D74D44C72E11DD6C26AA6DD6F5F7D77F8BEE4FD9E7
-      8B5B1349E74BD7C710ABC587AE886FC6F8ACB15A7C36F63390DDC7E2EE9DB2F2
-      4BFBFC380E2C01DB4121C80151C01B8CEAFE887880FFFDE78F6403DC803F8801
-      45200F44030D7051E07602E98044D8057AC9F0AA810F6896E0E6A806B325FAFD
-      65782D9926E276062D0AFC15E01101B72DC854E0E68815F0BB736DC23710D5D5
-      E13BA7CAC88B53757579C85BDF6E37771E48265AE26F563698C71FC4D5472087
-      271DE07FBF9212E42DE4CD39738D65870E13BDB7D4AC9D278F3F41AA7FD56AA2
-      8B17897AFE4557967AA89D3F9CC7AF35F59795E13B2E41C7FB01E6FEA79F214A
-      F999685BA4DE9FDACE9F26E6CFCDD5791966CE32F78F1D47F4E470E3BAFCF28B
-      24BFE4F919F7ACEEF7F240A2336778FDE14AD6D7ED39E3FDD163444D4D92D6D7
-      6C7F327BA4B2D288C6475777EE9CF1FD19C63C8D6FB01A22EFB745F7A755CF97
-      BE8F21D68A0F5D11DF4CE2B3C65AF1D9A49F81CC3E96E0DE2927BFF0E4C77160
-      09D80E0A410E8802DEA0FBFBE7C1FE0F4036C00DF883185004F24034D0001705
-      6E27900E48845D40C6FE4C52031FD02CC1CD510D249E2F762EA89388C4872467
-      D0A2C05F0104E25B922DC854E0E61088CF49EEA6EDECED532839598BDCD2026E
-      516262195BFEC20B69C83D77D8F2A2A23ADAB1E30A0D1FFE8B651F8379FC41A6
-      6D3233ABE9C0012DB9B91DA6FEFD53E8DD774FB3E553A6A4D38D1BB7D9DFAEAE
-      A99492A2A5B8B82B967E4F1E7F0257EFECFC33DDBB778F5C5CDABD97999FC1CF
-      EF141517375AB60BE7F16BB97A6FEF93545EDEC43BBF8C9F999FF1E30F534040
-      0E5DB8504F5BB79EB76C97D6915FA33949A5A5C2FEBB77FFC3BEF39D3BBFD1C2
-      8527F8DAA575343F8307EBE667CC9854C1F9E9D9F300E5E7D75254D4053E7FB8
-      D8FA666454E2BBA982DD2FCCFDF4E947E8E1870F98CDFFD8B187D8B9E21983A7
-      D8FEECDD3B99DD93CCDE2C2969A463C7AAC8CE2E89264E4CA3AB579B0DEDFCFD
-      B3B156CDEC1E13D99F82E78BF12A3F5F6C1F43AC171FBA22BE19E2B3C67AF1D9
-      D0CF40DD3E1675EF94975FDAE5C7716009D80E0A410E8802DEA0FBFBE701BE56
-      A9DEB2016EC01FC480229007A28106B828703B81744022EC02BD6478D5C00734
-      4B70735483D912FDFE32BC964C13713B831605FE0AF08880DB16642A7073C40A
-      F8DD99FA8AA252AAAFBA49F595B52C85A939EC73B98999F4C3FBD1064F7AD44F
-      94119D64B8FF31F06BCADE9DC1DD0FE6F10731758C33724668BBF7627CA7E2D3
-      0CF7B5DA1AAA29BE66B83FBDE7281DDCB89BBBF7E4F12774E48F7DEB73D29E29
-      667F6F991242E50557A8A1BA8E3E770B64CBAE9D2FA32FE78471EDC379FC5ACE
-      9F9F7482B2E20EB1AC75F6679FF9A4FF22BAD3DC42A13DBD293522810E6F49A4
-      BC7DC729795D3CADE9ED43B7EA9A68F59FBC397F5A47FEB46DFB2831248625CC
-      C1CF3086EACB1514F5D21A2ACBBB445B3D5651FCBB9174E9F859FA66DE7A2ACE
-      3E6F3ADE34B9F3C3C0BC2FF3EE37CAAAD8FB307B5FBA55DFC48EE5C8D7C9A66D
-      C3E5AE2FC3FED01DD478BD9E4EFF78C45076F94411BB0EB10B3799B6F514DA9F
-      CCBE601CDCFE2CCFBF62788E59577CD8D177BE1186B2E4F5F1F45BDB5DB37914
-      D89F92CED76ABB856265B11DC48721D68A0F5D11DF4CE2B3C65AF1D9A49F81CC
-      3E96E0DE2927BFF0E4C7716009D80E0A410E8802DEA0FBFBE701BEFAF6EAA506
-      43C102F005380ED24038780D0C54E0EE031201891005FE2CF39D3D41AD043747
-      099820D1FF960CAF251344DC0340A3027F89D05CE9E72555819B2352C03F896B
-      33E1F9E7A9A6A686AAAAAA0C447CF105B98C1841A5A5A53467D62C836FFDBA75
-      949A9A6AD9C7E33CFE0FB9FAC9132752434303EFFB7DB6712315141450BFDEBD
-      69BC9B1BD5D6D6D2CCE9D32DDBBDC2E3DF2DC5CF78CFC0BFE6E38F29233D9DB6
-      6CDECCD76E2D8FBFD4D4DFDADA4ADFC5C5B16CDBBAD5ECF919D3A6515D5D1D15
-      9E3D4B8E7DFBF2F95379FCD74CFDB76FDFA64FC2C2585604069A3DFFE2A44974
-      F3E64D2A2A2C14F21FE1F1EF973A3FA7B3B3296CCD1A3A9195459B2322F8DA7D
-      C6E35F29C5FF7168283B2F4C3F4C3B669EA64F9D6AD96E3E8F7FBAA9FFEEDDBB
-      54595969E0FBF87872757161F7CB6BAFBC6270454546B2E3B1F03FC1E3FF03C8
-      113B3F03FAF56B375F0C26657B98B32A70C68683360567F73AE82D12833E54E0
-      7F5942FCB405CB41AB0C6F3DF092995F8681D312DC29C0A193398C59730F100C
-      F6820A7005C48300F00FA1B5ECBE1E807FFF59B5EA21300B848264701D5C057B
-      C14760325077D23D02E40112E1207094E1B50581A04D829BA3017849F407CAF0
-      5A3257C43D0CB42AF0D7804705DC3D40B6023747BC80DF83A95FBC7831F5454E
-      757272220707077AEAA9A7C8C7C7C7F0FC071F7CC0D60F1A3488AD1F397224BD
-      FEFAEB967D38F3F883993A5F5F5F1A3D7A34DB2E242484FCFCFC589F46A361CB
-      020202C8D1D191FDBD72E54A7AE79D77D8BEE6CF9F6FEA9FC7E3DF6BE9E7F0F2
-      F262C761E9E758B468110D1830C0B46C038F5F2BE45FBA7429F5E9D347D01F14
-      1444767676EC9FFAB23439FE65CB96D1638F3D26E80F0E0E96E2EF707EB83205
-      F3C3BBBECCFD7D5A5FC3FEB4B7B737EC4F5757D70EF7E7A851A3E88D37DEB0DC
-      9F4304CED7296B9D2F7D1F43AD151FBA22BE99C4E7E532C721393E5BE497DCFB
-      9D5F78F2E34CB01A24E9E7B71CEC012B94E4C7EEEBF7BF0AB2B27A80696025D8
-      0F2AC135B00F84000F60DB49B733C8026D674E9E3C77313FFF484549C9D1AB25
-      254798DF283BCFD4816360B00CAF1AF88396C2ECECBCE6A6A68AB6B636E2A3B9
-      B1517BF6D4A95FD1F616F0639E95E0F70577B4972F6708794DC1DFF3EF955FBA
-      9481675AC19B22EE81A099692FC56D4AE9850BE978B601380AB86DC0618CB780
-      7927B97E3CF39FB3274F16C291C2374F287303D4D4D0502AD7CDD1585F7F9971
-      80313C7EFF821327CA3AEBE680A702F8F0F863CEE7E61E57EA3F97937302AE68
-      1E7F61D9C58BE94AFDFA75CEFD1DFCD69E1F6BAF2FB73F4B3AEB6EA8ABBBD4C1
-      FEB4EAF9BA8FF1C1414A7C2B9717DFD2A5C43793F8BC444A7C6E6A6C2C3789CF
-      BE52E2B3407E396FC82FC5C54C7E39AACF2F77C15130A89339CC569F1F43F439
-      B152BFFF12413098DAD9FCF8A05CFF05D4A73A93
+      4C7A090000001000000010000000290800000000000078DAD5986D5054D719C7
+      77D722B41F9C34B19950A746D88C316926A3F543DE88339DB1512A6D964E3B30
+      7117ACB4551B2A633381068125DC051688818B31626A8704B55319D380B00E82
+      AC80BB0194250EAF36B490D860AA66329D7E11374BFE7DCE7D59EE5EEF5D2E85
+      CEE89DF9CD9E3DE7F99DFBDC739EB3EC6232FD1F2ECF1E2B9141D44A64087DF3
+      7B714405314B4005EB730B31FA6E40C35313D09C43BC2F0CE2D6785E31E7BC1F
+      45C6B6EC86E9D5CD30ED7C06A6375295CF6255F88E70FCCF3744FAFB7E085395
+      4D6CFF65A772CCAEF0795DFFC527616ADDADF50CBC21DFF6A4F80CD17DFDFCD9
+      7A14FF589CA3314B2FFFC8F5DB9524F2769A983BF37727E9AFDF62F76F29EA67
+      6E0E7794FA2DD775EFAC27BBB42FBCD4B69AEE91CB7205562283A895606DAB01
+      2F8EA8206609A8607D6E1613C50D68786A025A7348F78541DC1ACF3B6B69BA0C
+      4B635F38CE7CC4034BD75598F36B607EC50DF31F0EC05CFA27F959AC0ADF21C4
+      BFF501CCA93B6019F8B7E8EF2B9B9B8B7B07969E69650E7685CFCBBEE5D42598
+      73AB44E7F7E5D17C5ED3EFFC44CC9B9E83E56CD077CCF953B08C7F0D73B613E6
+      1CCE68FEE2FABD3F00CB8737C4F10BD7603E7C7A2EFE58172CFD5F2A6BC1BA54
+      FBB714F5A398C31DA57ECBF55C8D7AB24BFBC24BED7BE6FC9B5C88276C844BC2
+      26F4CDEFC510854490808AA03416A3E32E27FC1A9E1A9F107BA7CF1970654A54
+      6E021172B6021B7931E6A95AA0A805D8711CD8FE9ED8F7AD5280EF14DA21C199
+      F31D6CFCD5BF026F7488B107BDC0CB2781120FB0BF59EC5B5106F827C239D815
+      3ECFFA1E72033D1F8BE3BE09313E8ACFAB7DC69921E017F5C0FB01F1FD6B4D00
+      77466C2756019DE39ABE43F6B31B81C99B40FABBE2FB470F005D54FFAB2B81AA
+      76714D34F24F94D604F79589F78E2D9D5B6F4703D07849741F280FAF5FA26A0F
+      5C0BD83F6E11F5E3D7AC1F63F55BA05BBFDAE7879330767EEE96BFFFDF443C61
+      235C12AC1D6FC08B210A8920011541692C46C75D4EF8353C353E16ABE173065C
+      9912959B40846C3F033C74569A4F037F3C2AC6D6D33958F7B8D8CEC804580C8B
+      658EC277B0F1DFED05DEAC8EBCD7E020F04193D82E2E1663A431BBC2E765BF93
+      3E374AE90C6D4D16E3DACE027575C09EDF024E6784CF6BF927E93327FD2560FD
+      0FC4B8B37466BFFD1DA0BB1B2877EBFABAF9B7B78BAFECB9AFFE5337FFC4F0FA
+      D1E755337D5E1D3F21C65556CECDE5AE00B6FD24BC7E89AA3D702D60FFB845D4
+      8F5FAB7E0CD66F815EFDEA9C1F4EC2D0F9B97B2E0FE5EAB1112E099BD837AF47
+      6BE3292482045404A5319DF5F3D09E78FC1A9E1A9F187B87CF1970654A542E9D
+      654F888D3DFFBC178D8D5338756A0A9B36799199D98BD6D6ABA8AF9F404A4A8F
+      EC874427EC3B587F6CAC87CEFB17484EEEC6638FB563E3C673282D1D425EDE20
+      366C3887FEFE1B428C34875DE1F3AC8FDDAFADEDB3885C99CF7143D8B9B30F03
+      03379563BC51DFEFFF172627FF83356BDAF4FC88FCB76DEBC18A1567F0C4131D
+      E1FC2B2B4770F0E0B8D257E69F28AFDFB3CF7AE933685280CDC3F24E4FF70B73
+      1F3DFAB19C43487422F6C0B580FDE316513F7EEDFA3154BF05FAF5AB797E3809
+      83E7E7EEB88A4D59F1848D7049B076BC012F86282482045404A5B1181D7739E1
+      D7F0D4F858AC86CF1970654A546EC2A12DCED047A73FC460B31F17EADB50B6FA
+      659C2E3E26C4BF6373E1F8AF79A1DDB8EF086A9EC90B3147E13B8E65D5E03CFD
+      DE95EFF17AECAFF0B70B4342BBFFE4798CB45F12DA231D03703DB487B5ED0A9F
+      67FED8F98FD05CD480B7938B8558F69E7B60172EB7F662CC3B8892FB7E83D173
+      01F91EBCDA67F937FCB21AD54FE50931E7EB5A68BEF7E03DD48CB3074EA1A9E0
+      5DF49EE8D4F2EFC89FC1E6FAF2B31B38F48213FC73AFE18BABD77132E7B03CAE
+      CC3FB12EA52434DC765158BF8BF4BC2CA6F4BB7B70D9D3179E2FD0E443C5A339
+      ACCDD62F51B507AE05EC1FB788FAF16BD58FC1FA2DD0AB5F9DF3C349183A3F77
+      CB15BF72E5FDC40B44BE046BDF6FC05B46BC42DC22A0E29634B64CC7FD06D1A9
+      E1A939C76235FC0203AECC7E95FB30F1D5E36BD7D2F7570F5A5B5A04D65AAD38
+      425FBE573DF8A040DDE1C3C22BC50699A3F0B7B37937AE5F0F6F6767C4BD985F
+      B87F3FAAE88B705969A972EC25855F2DFB63A3A3789D7E28ECC8C810E21E5EB5
+      0A3E9F0F1D1D1DF2BD65DE54F86FC9FE20FDE0D8BD6B177E9A9222C47D2F3E1E
+      DD5D5D425E2AFFA0C2CFD4CBBFA6BA1ACEC242D4F23C5C1CA71CCB50F88F105F
+      7F7FDD3A78BDDEF0FA3DF7F4D338D6D020DC97E5F1E71327845716CB1CD51E54
+      2D60FF2A35F63F8E081870594C9C4E0DB239CA89590D8FF59511B106CE4102DB
+      5FE280046B27DC337FFF8B8BAD4406512BC1DA56035E1C5141CC1250C1FADC2C
+      268A1BD0F0D404B4E690EE0B83B8359E7736353595BEBB27C3E170203F3F5F88
+      CDCECEC6962D5B60B3D9B077EF5EE5B35815BE83F527252509E3797979F45D7C
+      93D0CECCCC445656168A8A8A90969626B4A539EC0A9F57FA0C169B939313F659
+      9FD3E9C4E6CD9BE5183E9A9F9E9E2EE46BD08FC83F373777A1F9475DBFAD5BB7
+      465DBFC5EEDF52D48F620E7794FA2DD77335EAC92EED0B2FB5EF99FFFF0FF5F6
+      3E42641007891AC24EAC31E0C51115C3FDFD135357AE74DDFCFCF34B37AE5DBB
+      38393EDE35DCD7F7098D3989181D3796B8CCBCDBB76F8782C12094DC9E9909FE
+      636CAC8B622E10CB347C1773D59E9ABF8F8C74536CAECA5D4DF94DD13DBE9ACF
+      9F9999B945F1D789950A3F6D92729BCF9599181E6639242BFCAAEBD3D37D46FD
+      6B9F7EEA23A76009FDC5E6BFA8F55BECFE19AE9FD151563F3D5AF5A398C31D51
+      BFD3D3FD8AFA2DD2AB5FD53C56C241D412D5C47623E7E77FB9FE0B6795CB31
     }
     BitmapAdv = {
-      4C69020000004C7A090000001000000010000000290800000000000078DAD598
-      6D5054D719C777D722B41F9C34B19950A746D88C316926A3F543DE88339DB151
-      2A6D964E3B307117ACB4551B2A633381068125DC051688818B31626A8704B553
-      19D380B00E82AC80BB0194250EAF36B490D860AA66329D7E11374BFE7DCE7D59
-      EE5EEF5D2E85CEE89DF9CD9E3DE7F99DFBDC739EB3EC6232FD1F2ECF1E2B9141
-      D44A64087DF37B714405314B4005EB730B31FA6E40C35313D09C43BC2F0CE2D6
-      785E31E7BC1F45C6B6EC86E9D5CD30ED7C06A6375295CF6255F88E70FCCF3744
-      FAFB7E0853954D6CFF65A772CCAEF0795DFFC527616ADDADF50CBC21DFF6A4F8
-      0CD17DFDFCD97A14FF589CA3314B2FFFC8F5DB9524F2769A983BF37727E9AFDF
-      62F76F29EA676E0E7794FA2DD775EFAC27BBB42FBCD4B69AEE91CB7205562283
-      A895606DAB012F8EA8206609A8607D6E1613C50D68786A025A7348F78541DC1A
-      CF3B6B69BA0C4B635F38CE7CC4034BD75598F36B607EC50DF31F0EC05CFA27F9
-      59AC0ADF21C4BFF501CCA93B6019F8B7E8EF2B9B9B8B7B07969E69650E7685CF
-      CBBEE5D4259873AB44E7F7E5D17C5ED3EFFC44CC9B9E83E56CD077CCF953B08C
-      7F0D73B613E61CCE68FEE2FABD3F00CB8737C4F10BD7603E7C7A2EFE58172CFD
-      5F2A6BC1BA54FBB714F5A398C31DA57ECBF55C8D7AB24BFBC24BED7BE6FC9B5C
-      88276C844BC226F4CDEFC510854490808AA03416A3E32E27FC1A9E1A9F107BA7
-      CF1970654A546E021172B6021B7931E6A95AA0A805D8711CD8FE9ED8F7AD5280
-      EF14DA21C199F31D6CFCD5BF026F7488B107BDC0CB2781120FB0BF59EC5B5106
-      F827C239D8153ECFFA1E72033D1F8BE3BE09313E8ACFAB7DC69921E017F5C0FB
-      01F1FD6B4D0077466C2756019DE39ABE43F6B31B81C99B40FABBE2FB470F005D
-      54FFAB2B81AA76714D34F24F94D604F79589F78E2D9D5B6F4703D07849741F28
-      0FAF5FA26A0F5C0BD83F6E11F5E3D7AC1F63F55BA05BBFDAE7879330767EEE96
-      BFFFDF443C61235C12AC1D6FC08B210A8920011541692C46C75D4EF8353C353E
-      16ABE173065C9912959B40846C3F033C74569A4F037F3C2AC6D6D33958F7B8D8
-      CEC804580C8B658EC277B0F1DFED05DEAC8EBCD7E020F04193D82E2E1663A431
-      BBC2E765BF933E374AE90C6D4D16E3DACE027575C09EDF024E6784CF6BF927E9
-      3327FD2560FD0FC4B8B37466BFFD1DA0BB1B2877EBFABAF9B7B78BAFECB9AFFE
-      5337FFC4F0FAD1E755337D5E1D3F21C65556CECDE5AE00B6FD24BC7E89AA3D70
-      2D60FFB845D48F5FAB7E0CD66F815EFDEA9C1F4EC2D0F9B97B2E0FE5EAB1112E
-      099BD837AF476BE3292482045404A5319DF5F3D09E78FC1A9E1A9F187B87CF19
-      70654A542E9D654F888D3DFFBC178D8D5338756A0A9B36799199D98BD6D6ABA8
-      AF9F404A4A8FEC874427EC3B587F6CAC87CEFB17484EEEC6638FB563E3C67328
-      2D1D425EDE20366C3887FEFE1B428C34875DE1F3AC8FDDAFADEDB3885C99CF71
-      43D8B9B30F0303379563BC51DFEFFF172627FF83356BDAF4FC88FCB76DEBC18A
-      1567F0C4131DE1FC2B2B4770F0E0B8D257E69F28AFDFB3CF7AE933685280CDC3
-      F24E4FF70B731F3DFAB19C43487422F6C0B580FDE316513F7EEDFA3154BF05FA
-      F5AB797E380983E7E7EEB88A4D59F1848D7049B076BC012F86282482045404A5
-      B1181D7739E1D7F0D4F858AC86CF1970654A546EC2A12DCED047A73FC460B31F
-      17EADB50B6FA659C2E3E26C4BF6373E1F8AF79A1DDB8EF086A9EC90B3147E13B
-      8E65D5E03CFDDE95EFF17AECAFF0B70B4342BBFFE4798CB45F12DA231D03703D
-      B487B5ED0A9F67FED8F98FD05CD480B7938B8558F69E7B60172EB7F662CC3B88
-      92FB7E83D17301F91EBCDA67F937FCB21AD54FE50931E7EB5A68BEF7E03DD48C
-      B3074EA1A9E05DF49EE8D4F2EFC89FC1E6FAF2B31B38F48213FC73AFE18BABD7
-      7132E7B03CAECC3FB12EA52434DC765158BF8BF4BC2CA6F4BB7B70D9D3179E2F
-      D0E443C5A339ACCDD62F51B507AE05EC1FB788FAF16BD58FC1FA2DD0AB5F9DF3
-      C349183A3F77CB15BF72E5FDC40B44BE046BDF6FC05B46BC42DC22A0E29634B6
-      4CC7FD06D1A9E1A939C76235FC0203AECC7E95FB30F1D5E36BD7D2F7570F5A5B
-      5A04D65AAD38425FBE573DF8A040DDE1C3C22BC50699A3F0B7B37937AE5F0F6F
-      6767C4BD985FB87F3FAAE88B705969A972EC25855F2DFB63A3A3789D7E28ECC8
-      C810E21E5EB50A3E9F0F1D1D1DF2BD65DE54F86FC9FE20FDE0D8BD6B177E9A92
-      22C47D2F3E1EDD5D5D425E2AFFA0C2CFD4CBBFA6BA1ACEC242D4F23C5C1CA71C
-      CB50F88F105F7F7FDD3A78BDDEF0FA3DF7F4D338D6D020DC97E5F1E713278457
-      16CB1CD51E542D60FF2A35F63F8E081870594C9C4E0DB239CA89590D8FF59511
-      B106CE4102DB5FE280046B27DC337FFF8B8BAD4406512BC1DA56035E1C5141CC
-      1250C1FADC2C268A1BD0F0D404B4E690EE0B83B8359E7736353595BEBB27C3E1
-      70203F3F5F88CDCECEC6962D5B60B3D9B077EF5EE5B35815BE83F527252509E3
-      797979F45D7C93D0CECCCC445656168A8A8A90969626B4A539EC0A9F57FA0C16
-      9B939313F6599FD3E9C4E6CD9BE5183E9A9F9E9E2EE46BD08FC83F373777A1F9
-      475DBFAD5BB7465DBFC5EEDF52D48F620E7794FA2DD77335EAC92EED0B2FB5EF
-      99FFFF0FF5F63E42641007891AC24EAC31E0C51115C3FDFD135357AE74DDFCFC
-      F34B37AE5DBB38393EDE35DCD7F7098D3989181D3796B8CCBCDBB76F8782C120
-      94DC9E9909FE636CAC8B622E10CB347C1773D59E9ABF8F8C74536CAECA5D4DF9
-      4DD13DBE9ACF9F9999B945F1D789950A3F6D92729BCF9599181E6639242BFCAA
-      EBD3D37D46FD6B9F7EEA23A76009FDC5E6BFA8F55BECFE19AE9FD151563F3D5A
-      F5A398C31D51BFD3D3FD8AFA2DD2AB5FD53C56C241D412D5C47623E7E77FB9FE
-      0B6795CB314C7A090000001400000014000000540B00000000000078DADD9A7D
-      5454651EC78701D74DDDD63F3A9DD5545CA41D10F1B88BA74C25C94D0BDBACCE
-      5AA999A6A240089B480AC1FA526AD9A66EBA19BDA81DB4CED145EDC5D1345E86
-      41792F140414C417C877AD9160400BBEFB7BEE9D7BE799E1DE993BE3B4E7E89C
-      F33973EFF3F2B9CFEF797EF7378773D0E9FECF1F637C6F622C1149F4F1D21140
-      A411D54427011B5D440D9141F4D0E80A21CA38871A15C45037AE60A255834BC2
-      4A18545C7AC2EC814BA298F057F025C86332A742B72BA6FBDCDDF3A07B778AC8
-      9EF97C5FB282AF40EE9F1A01DD96198EAE1D73A01B773F7489E3A05BFC28742B
-      9E705C63F7585B5CFA92A2A05B3EC9D53E06703E8343BF92EF8961D07DF2A2AB
-      7D0CF7C8F7D470E8B6CED0EA731F6FF278E85E7B4C5BBC4AE7111F095DDA4491
-      AC99E2D94E08816EE603D0A5525BC6E3EAE7E19C2F2CAEFF3C6727DB963B5FC5
-      41F7F174E83E9C06DD97B1EEF2C5B7F9ECEBF7CDB11E94FAA41E38D6AB54A2CA
-      A95E75DA6A58BAE67AD5DDDD8B186DABA9BD7577F8477F1CBD89B14424D1C74B
-      4700914654139D046C7411354406D143A32B8428E31C6A541043DDB88289560D
-      2E092B615071E909B3072E8962C25FC19720F41FBE047DE179FBF8A356E8BF69
-      84BEE617E8779676E7D84D362E59C157C0E6FBBDF329FC464F80BEAA43F4999A
-      E0F7EADBD01FB1C26FD31702BA9011F2B56D5CB142AC2DB22F650DFC5664DA7C
-      CDA28F8BD12FF231A57D0CE07C06792CF9F4BBBF83DFBC25D01F6C80BEE07B2D
-      3E46B82B9FBEE42AFCA6CC853EFFAC373E8778F5BBBF15E765EE85DFC2D51EC7
-      EB7C1EFA5D15E2B8BA2E618D1A7CC5AAF9623E077DB9C53E96E2667BE8307F4F
-      A5B32FF9D7CE675FBF6F4EF5A0D417F5C0A95EA512554EF5AAD356C3D2B5D62B
-      05772F62B4ADA6DEF1BF1FBA95940B2B69DF57224CB8F6CEA127E20833D14AC0
-      461B5148240863B4B90613B99C438D0222C88D2B90B0687049B4A83AC518733D
-      70F1EBD42BF86259FFB35B81C16FDBC73FB801989809FCE91DE0B9ADF6F6BEAB
-      81D99FCAF7890A3E13EBDB590E2CDF6B9F975D01A47D2EBACCF5F6F6A07F01A7
-      2ECBF7450AB1B2BDC0D44F80C30DE2B89EAB80335781FE6BDCFAAC4400E73348
-      E398E3F4156010C53C731B70B0466C77E363842BF9189F968A31D2CF08127688
-      6D4F6F068A4EDAC784AD03EA2FAAFAE478A5B926AA270D34FEEED5621BFB6EBC
-      2CAE9FDD2FCC063E2B5589973B0F893357C4F5F16DEF1700C5B4C6AC62A0FA7B
-      E06F1FA99C07972F12CF6C1673C539DF42D7022F6D077AAD72684F54C9E71C9F
-      E5B3AFDF37C77A90A7C16572EB728C3DDE45BD5AA0B95E29D7D3D05BAAA7B7D3
-      DF1F77C19F184A84B16B2F1D7A228E3013AD046CB4118544021BA3D13598C8E5
-      1C6A1410416E5C818445834BA245CD698B31D70317BF4EBD822F96F58FF80BB0
-      20D1CEE3D1E2BCE79E07820D76CFA31380910FC8F7890A3E13EB7B6521504335
-      79D3FB22F3E68B738E533D341AEDBE0F3E0096A4CAF7450AB1B648BE3D9F778F
-      EB183D232F0F981F2BDE67663AF8AC4400E73348F398AFAE0EF8F02391DEBFB7
-      FBD85EB0BE0181545B1D7D8C7035DFE1C3406C9C48CF3E623BDB03F6BD6C19B0
-      63A7B8172E7C6EE3ADAD15BF99BF88EA7DBE493D5EA5F3786F93C8A2149BAFCE
-      EE1E1B0958ADEAE7E19C2F894976263F25CE99F592E37A9FF93BFD6686BBCC17
-      16738EAFF2D9D7EF9B533DC8D3E032B97339C51EEFA25E2DD05AAF54EA69E8AD
-      D4D3DBEB63A4188DF4779F314CBCF6CA417B6D8C23CC442B011B6D442191208E
-      D1E41A4CE4720E350A0837F9620C242C1A5C122DEA4E21C65C0F5CFC3A156237
-      C6F2E32222729094548EA8A87CE13E38F8005E7EB90C3131251830E06B6767A2
-      82CF24F52F59F21D9A9A7EC2962DF5309B2F60FCF87CCC985184C6C6EB425B45
-      C5156CD850CBFB8A1462657B819E3D8DF8E1870E04051D705803F3E5E79F17AE
-      D9FACE9D6BE5FBAD04574F8D06A9EFE187F370E284A5DB3E31DFA14317111D5D
-      80AD5B1B643747B8928FEDD7F1E3CABE4B97ACC23E64679F46DFBEFB5CF91CE2
-      BD76AD0306C341C578C78CC9C399333F09E7A51EAFE379242757A0B9B9159B37
-      D763C78E539832E590C3FEA5A47C8BCACAABB8FBEE7D2AE7D13D5F860FFF0689
-      89E59838D124AC3934F4209E7DF690DC3F674E09060DFADA55BEB098737C97CF
-      BE7EDF1CEA419E0697C9BDCB21F67817F56A81F67AA5584F436FAD9EDE3E9FE5
-      BAB9FEC450228C5D7BE9D013718499682560A38D282412D8188DAEC1442EE750
-      A3800872E30A242C1A5C122D6A4E5B8CB91EB8F875EA157CB1EF46A6216BCE7A
-      99B57F4E1160EDD2FC4DD1CBE5EBB511D43746E84B54F0990AB7EC47C3E16360
-      DF8C0F9E5A896D73FF8DA3C61261FE9B8317E0979B3F634354BA706FFE781FBE
-      589AC5AE8B14626D610EE3AACF1CE2593D280117EA9B85EBFFA67C84CBA72FE0
-      E0BA6CE1FE6449ADB43E2B11C0F90CAC9FF9EAF22B91B3710FBE5AB15D765E38
-      D18C55035EC6D17DA5C27A1BCBEAB0A2670CCE9F68E29F1DAEE42BDF65C68E57
-      3285FD93C6567E5984ACD9EB71E6BB7AE1FE5CED19611F6BE9D92A3ED578195F
-      BDBE1D3539DFA26CA749B82FDE9E83EA03E538B0365B1AE3102F7F1E6C1E1BC7
-      D8FCFC5BC2F8F7262C45575717B6C5BC2BDC7FF2E23BE8EAECC4874FAF947C45
-      4AF9C262C85EFCB1CCC6F119C278B657BBD3B6E0F5BEF3C5FB5EF3847BF66DF3
-      25AAE4738EAFF2D9D7EF9B533DC8D3E032B97339C51EEFA25E2DD05AAF54EA69
-      E8ADD4D3DBE9D3EF9E7BFC88414420BBBE05C70B8491B844C0C615623F3153AB
-      9BC6FD81F88273A8C19ED5DF8DAB3F7159834BE21A31D0458C7B3D70491C508A
-      9DDA66B1FE81FDFA61FEBC79322F4C9B863F0E1C889766CE941DF7DD7B2FE6CE
-      9E2D7CDBDAE62BF87259DF90C0405CBF7E1DDBB2B204D6AF5D2BCCAB282FC73F
-      929284F92BDF7803FBF7EDE3D758A810AB45F2353737778BEBAF8F3C82930D0D
-      18171989FAFA7A8C080FE7FBDB087FCE172CF5319FC562C17B1B370A3C3E71A2
-      3C6F1DADF5EAD5ABF23A9D18CAF942791F9BB364F16281310F3D24CF79EBCD37
-      E96FA71FD47C23389F3FD1EA2ADEC8D1A3517FE2041E1D3F1EA74E9DC2F0B030
-      BEBF83E8E1B48766C9F7E38F3F62FDBA75026FAF5923CC29349B91B268911CB7
-      71EF5EDE57A270BE4952BEFC333D5D665172B2F00C16BB349F8D792D3595CF97
-      57157C2CE6435EE4732911A0F28EDC2FEDA346AC44889B773884ED870657399F
-      236E9C01C462A292F89973FC421C21D2D462D4E0FE2DF100318AB8EB8EFFFB63
-      F9F2DEC4582292E8E3A523804823AA894E0236BA881A2283E8A1D1154294710E
-      352A88A16E5CC144AB0697849530A8B8F484D903974431E1AFE04B60FD717171
-      88898941424202D2A91E48F3D8756C6CACD09744F56FE9D2A5BC3359C157C0FA
-      FAF7EF8FE9D3A763F2E4C918366C98309FB5334738D5F869F4FB3469D2248451
-      FD4BA6DA23AD5121D616D6171C1C2C3F37956AD290214384B5305F545494DC17
-      1F1F8F51A346F1FB18C0F90CD238DEC788888810D6E1EC5BB66C1902A92E7263
-      C3B5F8468E1CE98D4F31DEB4B434AFE2553A8F279F7C52F53CA2A3A35D9E079F
-      2FECB94AF9929191E169BEF8349F7DFDBE39D583525FD403A77A954A5439D5AB
-      4E5B0D4BD75AAF14DCBD88D1B69A7AC7FFFF555571F15DC443C438E2775E3AFC
-      8964E228D159555272B6BAA4A491AE41D4116F103D35BA8208737569E9F12B17
-      2F56B45BAD969B376F82D1D1DEDE76EDF2E52335E5E59534A69A18E1C63580B8
-      7EAAAECE74A3A3E367C9A344F3C9930534B64BCD49ED7EC4FE93C78E995C7978
-      9A44E711E2370ABE59B447A73B3A3ADAB5FA18C7CACAD81E2F55F019CF9F3D7B
-      C81317E3DAA54BC25E2AC47AB1C56269F4D4D7DEDEFE936D1F7B71BEFB88B61B
-      376E7479EA63B07D6239FA2BFA7C1AAFAFCFE357CA179FE6B3C3FB565BEBF67D
-      6B72F3BE79540FCACAD89E55B97339D5AB85B65858BD6AE2EA55AD27F54AA59E
-      3E483CEC6D3DBD95CFFF00FE62873F
+      4C69020000004C7A090000001400000014000000540B00000000000078DADD9A
+      7D5454651EC78701D74DDDD63F3A9DD5545CA41D10F1B88BA74C25C94D0BDBAC
+      CE5AA999A6A240089B480AC1FA526AD9A66EBA19BDA81DB4CED145EDC5D1345E
+      8641792F140414C417C877AD9160400BBEFB7BEE9D7BE799E1DE993BE3B4E7E8
+      9CF33973EFF3F2B9CFEF797EF7378773D0E9FECF1F637C6F622C1149F4F1D211
+      40A411D54427011B5D440D9141F4D0E80A21CA38871A15C45037AE60A255834B
+      C24A18545C7AC2EC814BA298F057F025C86332A742B72BA6FBDCDDF3A07B778A
+      C89EF97C5FB282AF40EE9F1A01DD96198EAE1D73A01B773F7489E3A05BFC2874
+      2B9E705C63F7585B5CFA92A2A05B3EC9D53E06703E8343BF92EF8961D07DF2A2
+      AB7D0CF7C8F7D470E8B6CED0EA731F6FF278E85E7B4C5BBC4AE7111F095DDA44
+      91AC99E2D94E08816EE603D0A5525BC6E3EAE7E19C2F2CAEFF3C6727DB963B5F
+      C541F7F174E83E9C06DD97B1EEF2C5B7F9ECEBF7CDB11E94FAA41E38D6AB54A2
+      CAA95E75DA6A58BAE67AD5DDDD8B186DABA9BD7577F8477F1CBD89B14424D1C7
+      4B4700914654139D046C7411354406D143A32B8428E31C6A541043DDB8828956
+      0D2E092B615071E909B3072E8962C25FC19720F41FBE047DE179FBF8A356E8BF
+      6984BEE617E8779676E7D84D362E59C157C0E6FBBDF329FC464F80BEAA43F499
+      9AE0F7EADBD01FB1C26FD31702BA9011F2B56D5CB142AC2DB22F650DFC5664DA
+      7CCDA28F8BD12FF231A57D0CE07C06792CF9F4BBBF83DFBC25D01F6C80BEE07B
+      2D3E46B82B9FBEE42AFCA6CC853EFFAC373E8778F5BBBF15E765EE85DFC2D51E
+      C7EB7C1EFA5D15E2B8BA2E618D1A7CC5AAF9623E077DB9C53E96E2667BE8307F
+      4FA5B32FF9D7CE675FBF6F4EF5A0D417F5C0A95EA512554EF5AAD356C3D2B5D6
+      2B05772F62B4ADA6DEF1BF1FBA95940B2B69DF57224CB8F6CEA127E20833D14A
+      C0461B5148240863B4B90613B99C438D0222C88D2B90B0687049B4A83AC51873
+      3D70F1EBD42BF86259FFB35B81C16FDBC73FB801989809FCE91DE0B9ADF6F6BE
+      AB81D99FCAF7890A3E13EBDB590E2CDF6B9F975D01A47D2EBACCF5F6F6A07F01
+      A72ECBF7450AB1B2BDC0D44F80C30DE2B89EAB80335781FE6BDCFAAC4400E733
+      48E398E3F4156010C53C731B70B0466C77E363842BF9189F968A31D2CF081276
+      886D4F6F068A4EDAC784AD03EA2FAAFAE478A5B926AA270D34FEEED5621BFB6E
+      BC2CAE9FDD2FCC063E2B5589973B0F893357C4F5F16DEF1700C5B4C6AC62A0FA
+      7BE06F1FA99C07972F12CF6C1673C539DF42D7022F6D077AAD72684F54C9E71C
+      9FE5B3AFDF37C77A90A7C16572EB728C3DDE45BD5AA0B95E29D7D3D05BAAA7B7
+      D3DF1F77C19F184A84B16B2F1D7A228E3013AD046CB4118544021BA3D13598C8
+      E51C6A1410416E5C818445834BA245CD698B31D70317BF4EBD822F96F58FF80B
+      B020D1CEE3D1E2BCE79E07820D76CFA31380910FC8F7890A3E13EB7B65215043
+      3579D3FB22F3E68B738E533D341AEDBE0F3E0096A4CAF7450AB1B648BE3D9F77
+      8FEB183D232F0F981F2BDE67663AF8AC4400E73348F398AFAE0EF8F02391DEBF
+      B7FBD85EB0BE0181545B1D7D8C7035DFE1C3406C9C48CF3E623BDB03F6BD6C19
+      B063A7B8172E7C6EE3ADAD15BF99BF88EA7DBE493D5EA5F3786F93C8A2149BAF
+      CEEE1E1B0958ADEAE7E19C2F894976263F25CE99F592E37A9FF93BFD6686BBCC
+      1716738EAFF2D9D7EF9B533DC8D3E032B97339C51EEFA25E2DD05AAF54EA69E8
+      ADD4D3DBEB63A4188DF4779F314CBCF6CA417B6D8C23CC442B011B6D44219120
+      8ED1E41A4CE4720E350A0837F9620C242C1A5C122DEA4E21C65C0F5CFC3A1562
+      37C6F2E32222729094548EA8A87CE13E38F8005E7EB90C3131251830E06B6767
+      A282CF24F52F59F21D9A9A7EC2962DF5309B2F60FCF87CCC985184C6C6EB425B
+      45C5156CD850CBFB8A1462657B819E3D8DF8E1870E04051D705803F3E5E79F17
+      AED9FACE9D6BE5FBAD04574F8D06A9EFE187F370E284A5DB3E31DFA14317111D
+      5D80AD5B1B643747B8928FEDD7F1E3CABE4B97ACC23E64679F46DFBEFB5CF91C
+      E2BD76AD0306C341C578C78CC9C399333F09E7A51EAFE379242757A0B9B9159B
+      37D763C78E539832E590C3FEA5A47C8BCACAABB8FBEE7D2AE7D13D5F860FFF06
+      8989E59838D124AC3934F4209E7DF690DC3F674E09060DFADA55BEB098737C97
+      CFBE7EDF1CEA419E0697C9BDCB21F67817F56A81F67AA5584F436FAD9EDE3E9F
+      E5BAB9FEC450228C5D7BE9D013718499682560A38D282412D8188DAEC1442EE7
+      50A3800872E30A242C1A5C122D6A4E5B8CB91EB8F875EA157CB1EF46A6216BCE
+      7A99B57F4E1160EDD2FC4DD1CBE5EBB511D43746E84B54F0990AB7EC47C3E163
+      60DF8C0F9E5A896D73FF8DA3C61261FE9B8317E0979B3F634354BA706FFE781F
+      BE589AC5AE8B14626D610EE3AACF1CE2593D280117EA9B85EBFFA67C84CBA72F
+      E0E0BA6CE1FE6449ADB43E2B11C0F90CAC9FF9EAF22B91B3710FBE5AB15D765E
+      38D18C55035EC6D17DA5C27A1BCBEAB0A2670CCE9F68E29F1DAEE42BDF65C68E
+      573285FD93C6567E5984ACD9EB71E6BB7AE1FE5CED19611F6BE9D92A3ED57819
+      5FBDBE1D3539DFA26CA749B82FDE9E83EA03E538B0365B1AE3102F7F1E6C1E1B
+      C7D8FCFC5BC2F8F7262C45575717B6C5BC2BDC7FF2E23BE8EAECC4874FAF947C
+      454AF9C262C85EFCB1CCC6F119C278B657BBD3B6E0F5BEF3C5FB5EF3847BF66D
+      F325AAE4738EAFF2D9D7EF9B533DC8D3E032B97339C51EEFA25E2DD05AAF54EA
+      69E8ADD4D3DBE9D3EF9E7BFC88414420BBBE05C70B8491B844C0C615623F3153
+      AB9BC6FD81F88273A8C19ED5DF8DAB3F7159834BE21A31D0458C7B3D70491C50
+      8A9DDA66B1FE81FDFA61FEBC79322F4C9B863F0E1C889766CE941DF7DD7B2FE6
+      CE9E2D7CDBDAE62BF87259DF90C0405CBF7E1DDBB2B204D6AF5D2BCCAB282FC7
+      3F929284F92BDF7803FBF7EDE3D758A810AB45F2353737778BEBAF8F3C82930D
+      0D18171989FAFA7A8C080FE7FBDB087FCE172CF5319FC562C17B1B370A3C3E71
+      A23C6F1DADF5EAD5ABF23A9D18CAF942791F9BB364F16281310F3D24CF79EBCD
+      37E96FA71FD47C23389F3FD1EA2ADEC8D1A3517FE2041E1D3F1EA74E9DC2F0B0
+      30BEBF83E8E1B48766C9F7E38F3F62FDBA75026FAF5923CC29349B91B268911C
+      B771EF5EDE57A270BE4952BEFC333D5D665172B2F00C16BB349F8D792D3595CF
+      9757157C2CE6435EE4732911A0F28EDC2FEDA346AC44889B773884ED87065739
+      9F236E9C01C462A292F89973FC421C21D2D462D4E0FE2DF100318AB8EB8EFFFB
+      63F9F2DEC4582292E8E3A523804823AA894E0236BA881A2283E8A1D115429471
+      0E352A88A16E5CC144AB0697849530A8B8F484D903974431E1AFE04B60FD7171
+      7188898941424202D2A91E48F3D8756C6CACD09744F56FE9D2A5BC3359C157C0
+      FAFAF7EF8FE9D3A763F2E4C918366C98309FB5334738D5F869F4FB3469D22484
+      51FD4BA6DA23AD5121D616D6171C1C2C3F37956AD290214384B5305F545494DC
+      171F1F8F51A346F1FB18C0F90CD238DEC788888810D6E1EC5BB66C1902A92E72
+      63C3B5F8468E1CE98D4F31DEB4B434AFE2553A8F279F7C52F53CA2A3A35D9E07
+      9F2FECB94AF9929191E169BEF8349F7DFDBE39D583525FD403A77A954A5439D5
+      AB4E5B0D4BD75AAF14DCBD88D1B69A7AC7FFFF555571F15DC443C438E2775E3A
+      FC8964E228D159555272B6BAA4A491AE41D4116F103D35BA8208737569E9F12B
+      172F56B45BAD969B376F82D1D1DEDE76EDF2E52335E5E59534A69A18E1C63580
+      B87EAAAECE74A3A3E367C9A344F3C9930534B64BCD49ED7EC4FE93C78E995C79
+      789A44E711E2370ABE59B447A73B3A3ADAB5FA18C7CACAD81E2F55F019CF9F3D
+      7BC81317E3DAA54BC25E2AC47AB1C56269F4D4D7DEDEFE936D1F7B71BEFB88B6
+      1B376E7479EA63B07D6239FA2BFA7C1AAFAFCFE357CA179FE6B3C3FB565BEBF6
+      7D6B72F3BE79540FCACAD89E55B97339D5AB85B65858BD6AE2EA55AD27F54AA5
+      9E3E483CEC6D3DBD95CFFF00FE62873F4C7A090000001800000018000000DE0C
+      00000000000078DAED9A095014571AC767C00DB55BB556B26B8C22684465134F
+      0C6E8C2466E315C42B5AE6C0B5567248065049A2211203A844B22AC6C4E00121
+      8705122531221A84181450111581808237D7881C8A9CA260D66FFFDD333D17DD
+      7437ED90758BAEFA95D3EFBDFEBD7ED7F7B5962AD5FFF195E4FB109805424132
+      B80EAE82BDE0233019A83BE91E01F20089701038CAF0DA8240D026C1CDD100BC
+      24FA0365782D992BE21E065A15F86BC0A302EE1E20DBD076BF0FA97EF2E9D8B7
+      4FC3571E2FE0F7306BF7F26852AD9BCDEF5DFB12A9C6F427D5C87EA41AFB38A9
+      223D2DDB38F3F88325F937BF4AAABF0F2055D43CDD7DFC9BA4DAE165D96E1E8F
+      7FAF24BFF7B3A4F27F416C1D36F0F8B592FC139D49F5F95C317F5AA7FD539E20
+      D5C64EF9A5CD8FDF7852F93CD799F991B6BE5FFD9354A31D48153E5BB78713DE
+      2655CC0229EB6BBE3F178C25D5B0BEA4727130B27BA1AE6E0BF690C750528DB0
+      2795FB93A4DAF4B2A57F88C0F93AA5E0EC767CBE747D0CB55A7CE88AF8668CCF
+      CB658E437A7C36CF2FB9F73DBFB4CF8F33C16A90A49FDF72B007AC50941FBBAF
+      DFFDB2394F0F815920142483EBE02AD80B3E029381BA93EE11200F90080781A3
+      0CAF2D08046D12DC1C0DC04BA23F5086D792B922EE61A05581BF063C2AE0EE01
+      B215B839E205FC1E5C1BF5FBEB48ED1762F69CFAD39DA4DE9C403685BF917ABC
+      3BA99F9948AAE16348E53C9CFDCD60935ACCB577E6F1071B5C7EC1C85DAE64B3
+      EBB8D1BF218ED4113F9AF7F9E50152BF17C63786793CFEBDA67EF5370749ED36
+      856CF29AF5EFFF9D1CFF061EBFD6D46FB3FF2CA937FD40EA80F5C6F991EE4F13
+      F79F219B22CCF58C79EC6FF5C65D4AFD66F363B3AF40D7166BA69E3083D46BB7
+      2B9D1FB3F5B549CC377AD67C45AA275C94AEAF717F2E5E697C7F86B36DA49EF4
+      12A9BF4A31F7E35EBD6C2D9F7F88C0F93A65ADF3A5EF63A8B5E24357C43793F8
+      BC5CE63824C7678BFC927BBFF30B4F7E9C09568324FDFC96833D608592FCD87D
+      FD0F5C6BC806B8017F10038A401E88061AE0A2C0ED04D20189B00BF492E15503
+      1FD02CC1CD510D664BF4FBCBF05A324DC4ED0C5A14F82BC023026E5B90A9C0CD
+      112BE07767EAEDC2882E5513CDF9DAFCB95FCB89DE8C23728B20AAAC37AF9BBC
+      8D487BD3AC6C308F3F88ABDF934B1493656C3F7E3351FD2DA2873F31FE36F5BF
+      184974BDC9ACCC93C79FC0D5FF2B86A8EC86B1FDD674A2C45FCDFB12F187F3F8
+      B55C3D3347D50D441E51BAFB0B55440B6265F9D33AF233C46713451F259AB095
+      A8AA41D72753CECC7F438BB99F798F9A46517F82E933AF7EAB5BE7C80CA2B893
+      C6726E6CCC38B8B2953F111D3E273A3F41A67EC6537153E79A116DFEBEDF636C
+      8979447FFB5437BE7C2D51C01ED1F575B7DCCBDF6662EE2BDBEF71D74D44C72E
+      11DD6C26AA6DD6F5F7D77F8BEE4FD9E78B5B1349E74BD7C710ABC587AE886FC6
+      F8ACB15A7C36F63390DDC7E2EE9DB2F24BFBFC380E2C01DB4121C80151C01B8C
+      EAFE887880FFFDE78F6403DC803F880145200F44030D7051E07602E98044D805
+      7AC9F0AA810F6896E0E6A806B325FAFD65782D9926E276062D0AFC15E01101B7
+      2DC854E0E68815F0BB736DC23710D5D5E13BA7CAC88B53757579C85BDF6E3777
+      1E48265AE26F563698C71FC4D5472087271DE07FBF9212E42DE4CD39738D6587
+      0E13BDB7D4AC9D278F3F41AA7FD56AA28B17897AFE4557967AA89D3F9CC7AF35
+      F59795E13B2E41C7FB01E6FEA79F214AF999685BA4DE9FDACE9F26E6CFCDD579
+      1966CE32F78F1D47F4E470E3BAFCF28B24BFE4F919F7ACEEF7F240A2336778FD
+      E14AD6D7ED39E3FDD163444D4D92D6D76C7F327BA4B2D288C6475777EE9CF1FD
+      19C63C8D6FB01A22EFB745F7A755CF97BE8F21D68A0F5D11DF4CE2B3C65AF1D9
+      A49F81CC3E96E0DE2927BFF0E4C7716009D80E0A410E8802DEA0FBFBE7C1FE0F
+      4036C00DF883185004F24034D00017056E27900E48845D40C6FE4C52031FD02C
+      C1CD510D249E2F762EA89388C4872467D0A2C05F0104E25B922DC854E0E61088
+      CF49EEA6EDECED532839598BDCD2026E516262195BFEC20B69C83D77D8F2A2A2
+      3ADAB1E30A0D1FFE8B651F8379FC41A66D3233ABE9C0012DB9B91DA6FEFD53E8
+      DD774FB3E553A6A4D38D1BB7D9DFAEAEA99492A2A5B8B82B967E4F1E7F0257EF
+      ECFC33DDBB778F5C5CDABD97999FC1CFEF141517375AB60BE7F16BB97A6FEF93
+      545EDEC43BBF8C9F999FF1E30F5340400E5DB8504F5BB79EB76C97D6915FA339
+      49A5A5C2FEBB77FFC3BEF39D3BBFD1C28527F8DAA575343F8307EBE667CC9854
+      C1F9E9D9F300E5E7D75254D4053E7FB8D8FA666454E2BBA982DD2FCCFDF4E947
+      E8E1870F98CDFFD8B187D8B9E21983A7D8FEECDD3B99DD93CCDE2C2969A463C7
+      AAC8CE2E89264E4CA3AB579B0DEDFCFDB3B156CDEC1E13D99F82E78BF12A3F5F
+      6C1F43AC171FBA22BE19E2B3C67AF1D9D0CF40DD3E1675EF94975FDAE5C77160
+      09D80E0A410E8802DEA0FBFBE701BE56A9DEB2016EC01FC480229007A28106B8
+      28703B81744022EC02BD6478D5C007344B70735483D912FDFE32BC964C13713B
+      831605FE0AF08880DB16642A7073C40AF8DD99FA8AA252AAAFBA49F595B52C85
+      A939EC73B98999F4C3FBD1064F7AD44F94119D64B8FF31F06BCADE9DC1DD0FE6
+      F10731758C33724668BBF7627CA7E2D30CF7B5DA1AAA29BE66B83FBDE7281DDC
+      B89BBBF7E4F12774E48F7DEB73D29E29667F6F991242E50557A8A1BA8E3E770B
+      64CBAE9D2FA32FE78471EDC379FC5ACE9F9F7482B2E20EB1AC75F6679FF9A4FF
+      22BAD3DC42A13DBD293522810E6F49A4BC7DC729795D3CADE9ED43B7EA9A68F5
+      9FBC397F5A47FEB46DFB2831248625CCC1CF3086EACB1514F5D21A2ACBBB445B
+      3D5651FCBB9174E9F859FA66DE7A2ACE3E6F3ADE34B9F3C3C0BC2FF3EE37CAAA
+      D8FB307B5FBA55DFC48EE5C8D7C9A66DC3E5AE2FC3FED01DD478BD9E4EFF78C4
+      5076F94411BB0EB10B3799B6F514DA9FCCBE601CDCFE2CCFBF62788E59577CD8
+      D177BE1186B2E4F5F1F45BDB5DB37914D89F92CED76ABB856265B11DC48721D6
+      8A0F5D11DF4CE2B3C65AF1D9A49F81CC3E96E0DE2927BFF0E4C7716009D80E0A
+      410E8802DEA0FBFBE701BEFAF6EAA50643C102F005380ED24038780D0C54E0EE
+      031201891005FE2CF39D3D41AD043747099820D1FF960CAF251344DC0340A302
+      7F89D05CE9E72555819B2352C03F896B33E1F9E7A9A6A686AAAAAA0C447CF105
+      B98C1841A5A5A53467D62C836FFDBA75949A9A6AD9C7E33CFE0FB9FAC9132752
+      434303EFFB7DB6712315141450BFDEBD69BC9B1BD5D6D6D2CCE9D32DDBBDC2E3
+      DF2DC5CF78CFC0BFE6E38F29233D9DB66CDECCD76E2D8FBFD4D4DFDADA4ADFC5
+      C5B16CDBBAD5ECF919D3A6515D5D1D159E3D4B8E7DFBF2F95379FCD74CFDB76F
+      DFA64FC2C2585604069A3DFFE2A44974F3E64D2A2A2C14F21FE1F1EF973A3FA7
+      B3B3296CCD1A3A9195459B2322F8DA7DC6E35F29C5FF7168283B2F4C3F4C3B66
+      9EA64F9D6AD96E3E8F7FBAA9FFEEDDBB54595969E0FBF87872757161F7CB6BAF
+      BC6270454546B2E3B1F03FC1E3FF03C8113B3F03FAF56B375F0C26657B98B32A
+      70C68683360567F73AE82D12833E54E07F5942FCB405CB41AB0C6F3DF092995F
+      8681D312DC29C0A193398C59730F100CF6820A7005C48300F00FA1B5ECBE1E80
+      7FFF59B5EA21300B848264701D5C057BC14760325077D23D02E40112E1207094
+      E1B50581A04D829BA3017849F407CAF05A3257C43D0CB42AF0D7804705DC3D40
+      B6023747BC80DF83A95FBC7831F5454E757272220707077AEAA9A7C8C7C7C7F0
+      FC071F7CC0D60F1A3488AD1F397224BDFEFAEB967D38F3F883993A5F5F5F1A3D
+      7A34DB2E242484FCFCFC589F46A361CB020202C8D1D191FDBD72E54A7AE79D77
+      D8BEE6CF9F6FEA9FC7E3DF6BE9E7F0F2F262C761E9E758B468110D1830C0B46C
+      038F5F2BE45FBA7429F5E9D347D01F141444767676EC9FFAB23439FE65CB96D1
+      638F3D26E80F0E0E96E2EF707EB83205F3C3BBBECCFD7D5A5FC3FEB4B7B737EC
+      4F5757D70EF7E7A851A3E88D37DEB0DC9F4304CED7296B9D2F7D1F43AD151FBA
+      22BE99C4E7E532C721393E5BE497DCFB9D5F78F2E34CB01A24E9E7B71CEC012B
+      94E4C7EEEBF7BF0AB2B27A80696025D80F2AC135B00F84000F60DB49B733C802
+      6D674E9E3C77313FFF484549C9D1AB25254798DF283BCFD4816360B00CAF1AF8
+      8396C2ECECBCE6A6A68AB6B636E2A3B9B1517BF6D4A95FD1F616F0639E95E0F7
+      0577B4972F6708794DC1DFF3EF955FBA9481675AC19B22EE81A099692FC56D4A
+      E9850BE978B601380AB86DC0618CB7807927B97E3CF39FB3274F16C291C2374F
+      287303D4D4D0502AD7CDD1585F7F997180313C7EFF821327CA3AEBE680A702F8
+      F0F863CEE7E61E57EA3F97937302AE681E7F61D9C58BE94AFDFA75CEFD1DFCD6
+      9E1F6BAF2FB73F4B3AEB6EA8ABBBD4C1FEB4EAF9BA8FF1C1414A7C2B9717DFD2
+      A5C43793F8BC444A7C6E6A6C2C3789CFBE52E2B3407E396FC82FC5C54C7E39AA
+      CF2F77C15130A89339CC569F1F43F439B152BFFF12413098DAD9FCF8A05CFF05
+      D4A73A93
     }
   end
   object bMenu: TImageList
     Scaled = True
+    OnGetWidthForPPI = bMenuGetWidthForPPI
     Left = 45
     Top = 312
     Bitmap = {

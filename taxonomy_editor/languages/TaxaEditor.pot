@@ -151,6 +151,10 @@ msgstr ""
 msgid "Lump/move taxon"
 msgstr ""
 
+#: tdlgdesttaxon.edestinationtaxon.texthint
+msgid "Select a taxon"
+msgstr ""
+
 #: tdlgdesttaxon.lblapplyto.caption
 msgctxt "tdlgdesttaxon.lblapplyto.caption"
 msgid "Apply changes to"

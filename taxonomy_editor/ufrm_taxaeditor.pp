@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, LCLType, LCLIntf, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, Menus, DB, DBCtrls,
   ActnList, StdCtrls, attabs, BCPanel, BCButton, ColorSpeedButton, StrUtils, RegExpr, Character,
   BGRABitmap, SQLDB, CheckLst, rxswitch, Grids, DBGrids, ComCtrls, DBEditButton, lib_taxa,
-  IBLookupComboEditBox, Types;
+  IBLookupComboEditBox, Types, ImgList;
 
 type
 
@@ -283,6 +283,8 @@ type
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure actRewriteHierarchyExecute(Sender: TObject);
     procedure actSspVernacularNamesExecute(Sender: TObject);
+    procedure bMenuGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
+      var AResultWidth: Integer);
     procedure cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
@@ -308,14 +310,18 @@ type
     procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
       var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
+    procedure iIucnStatusGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
+      var AResultWidth: Integer);
     procedure navTabsTabChanged(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
     procedure pTaxaListResize(Sender: TObject);
+    procedure rbMarkedYesClick(Sender: TObject);
     procedure sbAdvancedFiltersClick(Sender: TObject);
     procedure sbCancelRecordClick(Sender: TObject);
+    procedure sbClearFiltersClick(Sender: TObject);
     procedure sbClearFindTaxaClick(Sender: TObject);
     procedure sbDelRecordClick(Sender: TObject);
     procedure sbEditRecordClick(Sender: TObject);
@@ -332,8 +338,6 @@ type
     procedure sbSortRecordsClick(Sender: TObject);
     procedure sbSplitTaxonClick(Sender: TObject);
     procedure TimerFindTimer(Sender: TObject);
-    procedure tsfMarkedOff(Sender: TObject);
-    procedure tsfMarkedOn(Sender: TObject);
     procedure tsTaxonExtinctOff(Sender: TObject);
     procedure tsTaxonExtinctOn(Sender: TObject);
   private
@@ -343,6 +347,7 @@ type
     Working: Boolean;
     procedure AddSortedField(aFieldName: String; aDirection: TSortDirection; aCollation: String = '';
       IsAnAlias: Boolean = False);
+    procedure ClearTaxaFilters;
     procedure GetTaxaFilters;
     function SearchTaxa(aValue: String): Boolean;
     procedure UpdateButtons(aDataSet: TDataSet);
@@ -603,6 +608,12 @@ begin
   FSearch.SortFields.Items[p].Lookup := IsAnAlias;
 end;
 
+procedure TfrmTaxaEditor.bMenuGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
+  var AResultWidth: Integer);
+begin
+  AResultWidth := AImageWidth * APPI div 96;
+end;
+
 procedure TfrmTaxaEditor.cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
@@ -642,7 +653,28 @@ end;
 
 procedure TfrmTaxaEditor.clbTaxonRanksFilterClickCheck(Sender: TObject);
 begin
+  if not CanToggle then
+    Exit;
+
   SearchTaxa(eFindTaxa.Text);
+end;
+
+procedure TfrmTaxaEditor.ClearTaxaFilters;
+begin
+  CanToggle := False;
+
+  rbMarkedAll.Checked := True;
+  rbExtinctAll.Checked := True;
+  rbIsSynonymAll.Checked := True;
+  rbHasSynonymsAll.Checked := True;
+
+  tsTaxonomyClements.StateOn := sw_off;
+  tsTaxonomyIoc.StateOn := sw_off;
+  tsTaxonomyCbro.StateOn := sw_off;
+
+  clbTaxonRanksFilter.CheckAll(cbUnchecked);
+
+  CanToggle := True;
 end;
 
 procedure TfrmTaxaEditor.dsTaxaDataChange(Sender: TObject; Field: TField);
@@ -1248,7 +1280,7 @@ begin
   CanToggle := True;
 
   Application.ProcessMessages;
-  Sleep(500);
+  //Sleep(500);
 
   pSplash.Visible := False;
 end;
@@ -1276,6 +1308,12 @@ begin
         TDBGrid(Sender).Canvas.Font.Color := $00646464;
     end;
   end;
+end;
+
+procedure TfrmTaxaEditor.iIucnStatusGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
+  var AResultWidth: Integer);
+begin
+  AResultWidth := AImageWidth * APPI div 96;
 end;
 
 procedure TfrmTaxaEditor.navTabsTabChanged(Sender: TObject);
@@ -1361,7 +1399,8 @@ begin
   finally
     FreeAndNil(dlgNewSubspecies);
     dsTaxa.DataSet.Refresh;
-    dsTaxa.DataSet.Bookmark := BM;
+    if dsTaxa.DataSet.BookmarkValid(BM) then
+      dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1381,6 +1420,7 @@ begin
   with dlgDestTaxon do
   try
     BM := dsTaxa.DataSet.Bookmark;
+    dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
     begin
@@ -1414,8 +1454,10 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    dsTaxa.DataSet.Bookmark := BM;
+    if dsTaxa.DataSet.BookmarkValid(BM) then
+      dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1428,6 +1470,7 @@ begin
   with dlgDestTaxon do
   try
     BM := dsTaxa.DataSet.Bookmark;
+    dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
     begin
@@ -1461,14 +1504,24 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    dsTaxa.DataSet.Bookmark := BM;
+    if dsTaxa.DataSet.BookmarkValid(BM) then
+      dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
 procedure TfrmTaxaEditor.pTaxaListResize(Sender: TObject);
 begin
   pFindTaxa.Width := pTaxaList.Width - pFindTaxa.Left;
+end;
+
+procedure TfrmTaxaEditor.rbMarkedYesClick(Sender: TObject);
+begin
+  if not CanToggle then
+    Exit;
+
+  SearchTaxa(eFindTaxa.Text);
 end;
 
 procedure TfrmTaxaEditor.sbAdvancedFiltersClick(Sender: TObject);
@@ -1490,6 +1543,15 @@ end;
 procedure TfrmTaxaEditor.sbCancelRecordClick(Sender: TObject);
 begin
   dsTaxa.DataSet.Cancel;
+
+  UpdateButtons(dsTaxa.DataSet);
+end;
+
+procedure TfrmTaxaEditor.sbClearFiltersClick(Sender: TObject);
+begin
+  FSearch.QuickFilters.Clear;
+  ClearTaxaFilters;
+  SearchTaxa(eFindTaxa.Text);
 
   UpdateButtons(dsTaxa.DataSet);
 end;
@@ -1537,6 +1599,7 @@ begin
   with dlgDestTaxon do
   try
     BM := dsTaxa.DataSet.Bookmark;
+    dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
     begin
@@ -1570,8 +1633,10 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    dsTaxa.DataSet.Bookmark := BM;
+    if dsTaxa.DataSet.BookmarkValid(BM) then
+      dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1621,6 +1686,7 @@ begin
     nbTaxaSide.Visible := False;
     splitTaxaRight.Visible := False;
   end;
+  pDetails.Visible := not nbTaxaSide.Visible;
 end;
 
 procedure TfrmTaxaEditor.sbSortRecordsClick(Sender: TObject);
@@ -1638,6 +1704,7 @@ begin
   with dlgDestTaxon do
   try
     BM := dsTaxa.DataSet.Bookmark;
+    dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taSplit;
     if ShowModal = mrOK then
     begin
@@ -1671,8 +1738,10 @@ begin
     end;
   finally
     FreeAndNil(dlgDestTaxon);
+    dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    dsTaxa.DataSet.Bookmark := BM;
+    if dsTaxa.DataSet.BookmarkValid(BM) then
+      dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1685,23 +1754,19 @@ begin
   SearchTaxa(eFindTaxa.Text);
 end;
 
-procedure TfrmTaxaEditor.tsfMarkedOff(Sender: TObject);
-begin
-  SearchTaxa(eFindTaxa.Text);
-end;
-
-procedure TfrmTaxaEditor.tsfMarkedOn(Sender: TObject);
-begin
-  SearchTaxa(eFindTaxa.Text);
-end;
-
 procedure TfrmTaxaEditor.tsTaxonExtinctOff(Sender: TObject);
 begin
+  if not CanToggle then
+    Exit;
+
   SearchTaxa(eFindTaxa.Text);
 end;
 
 procedure TfrmTaxaEditor.tsTaxonExtinctOn(Sender: TObject);
 begin
+  if not CanToggle then
+    Exit;
+
   SearchTaxa(eFindTaxa.Text);
 end;
 
@@ -1950,7 +2015,7 @@ begin
       sbRefreshRecords.Enabled := True;
       sbSortRecords.Enabled := True;
       sbAdvancedFilters.Enabled := True;
-      sbClearFilters.Enabled := True;
+      sbClearFilters.Enabled := FSearch.QuickFilters.Count > 0;
       sbMoreOptions.Enabled := True;
 
       sbShowQuickFilters.Enabled := True;

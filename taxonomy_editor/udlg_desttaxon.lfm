@@ -169,6 +169,7 @@ object dlgDestTaxon: TdlgDestTaxon
         PasswordChar = #0
         Spacing = 0
         TabOrder = 0
+        TextHint = 'Select a taxon'
       end
     end
     object pApplyTo: TBCPanel

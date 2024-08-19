@@ -577,19 +577,27 @@ begin
   begin
     Clear;
     Add('SELECT z.*,');
-    Add('(SELECT u.full_name FROM zoo_taxa AS u WHERE u.taxon_id = z.parent_taxon_id) AS parent_taxon_name,');
-    Add('(SELECT v.full_name FROM zoo_taxa AS v WHERE v.taxon_id = z.valid_id) AS valid_name,');
-    Add('(SELECT ui.full_name FROM zoo_taxa AS ui WHERE ui.taxon_id = z.ioc_parent_taxon_id) AS ioc_parent_taxon_name,');
-    Add('(SELECT vi.full_name FROM zoo_taxa AS vi WHERE vi.taxon_id = z.ioc_valid_id) AS ioc_valid_name,');
-    //Add('(SELECT uc.full_name FROM zoo_taxa AS uc WHERE uc.taxon_id = z.cbro_parent_taxon_id) AS cbro_parent_taxon_name,');
-    //Add('(SELECT vc.full_name FROM zoo_taxa AS vc WHERE vc.taxon_id = z.cbro_valid_id) AS cbro_valid_name,');
-    Add('(SELECT o.full_name FROM zoo_taxa AS o WHERE o.taxon_id = z.order_id) AS order_name,');
-    Add('(SELECT f.full_name FROM zoo_taxa AS f WHERE f.taxon_id = z.family_id) AS family_name,');
-    Add('(SELECT s.full_name FROM zoo_taxa AS s WHERE s.taxon_id = z.subfamily_id) AS subfamily_name,');
-    Add('(SELECT n.full_name FROM zoo_taxa AS n WHERE n.taxon_id = z.genus_id) AS genero_name,');
-    Add('(SELECT e.full_name FROM zoo_taxa AS e WHERE e.taxon_id = z.species_id) AS species_name,');
-    Add('(SELECT g.full_name FROM zoo_taxa AS g WHERE g.taxon_id = z.subspecies_group_id) AS subspecies_group_name');
+    Add('    u.full_name AS parent_taxon_name,');
+    Add('    v.full_name AS valid_name,');
+    Add('    ui.full_name AS ioc_parent_taxon_name,');
+    Add('    vi.full_name AS ioc_valid_name,');
+    Add('    o.full_name AS order_name,');
+    Add('    f.full_name AS family_name,');
+    Add('    s.full_name AS subfamily_name,');
+    Add('    n.full_name AS genero_name,');
+    Add('    e.full_name AS species_name,');
+    Add('    g.full_name AS subspecies_group_name');
     Add('FROM zoo_taxa AS z');
+    Add('LEFT JOIN zoo_taxa AS u ON z.parent_taxon_id = u.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS v ON z.valid_id = v.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS ui ON z.ioc_parent_taxon_id = ui.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS vi ON z.ioc_valid_id = vi.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS o ON z.order_id = o.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS f ON z.family_id = f.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS s ON z.subfamily_id = s.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS n ON z.genus_id = n.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS e ON z.species_id = e.taxon_id');
+    Add('LEFT JOIN zoo_taxa AS g ON z.subspecies_group_id = g.taxon_id');
     case aFilter of
       fvNone:
         ; // do nothing
