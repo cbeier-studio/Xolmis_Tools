@@ -20,8 +20,8 @@ uses
 
 begin
   RequireDerivedFormResource := True;
-  Application.Title := 'Xolmis Developer Tools';
-  Application.Scaled := True;
+  Application.Title:='Xolmis Developer Tools';
+  Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TDMD, DMD);
   Application.CreateForm(TfrmDevTools, frmDevTools);

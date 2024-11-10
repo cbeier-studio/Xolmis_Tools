@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, LCLType, LCLIntf, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, Menus, DB, DBCtrls,
   ActnList, StdCtrls, attabs, BCPanel, BCButton, ColorSpeedButton, StrUtils, RegExpr, Character,
-  BGRABitmap, SQLDB, CheckLst, rxswitch, Grids, DBGrids, ComCtrls, DBEditButton, lib_taxa,
-  IBLookupComboEditBox, Types, ImgList;
+  BGRABitmap, SQLDB, CheckLst, Grids, DBGrids, ComCtrls, DBEditButton, ToggleSwitch, lib_taxa,
+  IBLookupComboEditBox, Types, ImgList, HtmlView;
 
 type
 
@@ -66,6 +66,7 @@ type
     gridTaxa1: TDBGrid;
     gridTaxa2: TDBGrid;
     gridRanks: TDBGrid;
+    HtmlView: THtmlViewer;
     icoMarkedFilter: TImage;
     iconFindRanks: TImage;
     iconFindTaxa2: TImage;
@@ -272,10 +273,10 @@ type
     splitTaxaLeft1: TSplitter;
     splitTaxaRight: TSplitter;
     TimerFind: TTimer;
+    tsTaxonomyClements: TToggleSwitch;
+    tsTaxonomyIoc: TToggleSwitch;
+    tsTaxonomyCbro: TToggleSwitch;
     tvHierarchy: TTreeView;
-    tsTaxonomyCbro: TRxSwitch;
-    tsTaxonomyClements: TRxSwitch;
-    tsTaxonomyIoc: TRxSwitch;
     procedure actAboutExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
     procedure actFormatSciNamesExecute(Sender: TObject);
@@ -283,8 +284,6 @@ type
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure actRewriteHierarchyExecute(Sender: TObject);
     procedure actSspVernacularNamesExecute(Sender: TObject);
-    procedure bMenuGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
-      var AResultWidth: Integer);
     procedure cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure cktCbroClick(Sender: TObject);
     procedure cktIocClick(Sender: TObject);
@@ -307,11 +306,11 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
+    procedure gridTaxaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
     procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
       var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
-    procedure iIucnStatusGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
-      var AResultWidth: Integer);
     procedure navTabsTabChanged(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
     procedure pmtSortClick(Sender: TObject);
@@ -608,12 +607,6 @@ begin
   FSearch.SortFields.Items[p].Lookup := IsAnAlias;
 end;
 
-procedure TfrmTaxaEditor.bMenuGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
-  var AResultWidth: Integer);
-begin
-  AResultWidth := AImageWidth * APPI div 96;
-end;
-
 procedure TfrmTaxaEditor.cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
@@ -668,9 +661,9 @@ begin
   rbIsSynonymAll.Checked := True;
   rbHasSynonymsAll.Checked := True;
 
-  tsTaxonomyClements.StateOn := sw_off;
-  tsTaxonomyIoc.StateOn := sw_off;
-  tsTaxonomyCbro.StateOn := sw_off;
+  tsTaxonomyClements.Checked := False;
+  tsTaxonomyIoc.Checked := False;
+  tsTaxonomyCbro.Checked := False;
 
   clbTaxonRanksFilter.CheckAll(cbUnchecked);
 
@@ -1211,6 +1204,12 @@ begin
   CanToggle := False;
 
   nbTaxaSide.Visible := False;
+
+  pSplash.Top := 0;
+  pSplash.Left := 0;
+  pSplash.Width := Self.ClientWidth;
+  pSplash.Height := Self.ClientHeight;
+  pSplash.Visible := True;
 end;
 
 procedure TfrmTaxaEditor.FormDestroy(Sender: TObject);
@@ -1251,12 +1250,12 @@ end;
 
 procedure TfrmTaxaEditor.FormShow(Sender: TObject);
 begin
-  pSplash.Top := 0;
-  pSplash.Left := 0;
-  pSplash.Width := Self.ClientWidth;
-  pSplash.Height := Self.ClientHeight;
-  pSplash.Visible := True;
-  Application.ProcessMessages;
+  //pSplash.Top := 0;
+  //pSplash.Left := 0;
+  //pSplash.Width := Self.ClientWidth;
+  //pSplash.Height := Self.ClientHeight;
+  //pSplash.Visible := True;
+  //Application.ProcessMessages;
 
   FSearch := TCustomSearch.Create(tbZooTaxa);
   FSearch.DataSet := TSQLQuery(dsTaxa.DataSet);
@@ -1290,30 +1289,24 @@ procedure TfrmTaxaEditor.gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer
 begin
   if (Column.FieldName = 'full_name') then
   begin
-    if GetRankType(TDBGrid(Sender).Columns[3].Field.AsInteger) >= trSuperGenus then
+    if GetRankType(TDBGrid(Sender).Columns[4].Field.AsInteger) >= trSuperGenus then
       TDBGrid(Sender).Canvas.Font.Style := [fsItalic]
     else
       TDBGrid(Sender).Canvas.Font.Style := [fsBold];
 
     if not (gdSelected in AState) then
     begin
-      if GetRankType(TDBGrid(Sender).Columns[3].Field.AsInteger) = trSpecies then
+      if GetRankType(TDBGrid(Sender).Columns[4].Field.AsInteger) = trSpecies then
         TDBGrid(Sender).Canvas.Font.Color := clNavy;
 
-      if GetRankType(TDBGrid(Sender).Columns[3].Field.AsInteger) in [trMonotypicGroup, trPolitypicGroup,
+      if GetRankType(TDBGrid(Sender).Columns[4].Field.AsInteger) in [trMonotypicGroup, trPolitypicGroup,
                                                 trForm, trSpuh, trHybrid, trIntergrade, trDomestic, trSlash] then
         TDBGrid(Sender).Canvas.Font.Color := clGreen;
 
-      if (TDBGrid(Sender).Columns[2].Field.AsInteger > 0) then
+      if (TDBGrid(Sender).Columns[3].Field.AsInteger > 0) then
         TDBGrid(Sender).Canvas.Font.Color := $00646464;
     end;
   end;
-end;
-
-procedure TfrmTaxaEditor.iIucnStatusGetWidthForPPI(Sender: TCustomImageList; AImageWidth, APPI: Integer;
-  var AResultWidth: Integer);
-begin
-  AResultWidth := AImageWidth * APPI div 96;
 end;
 
 procedure TfrmTaxaEditor.navTabsTabChanged(Sender: TObject);
@@ -1414,12 +1407,12 @@ end;
 procedure TfrmTaxaEditor.pmvMoveToGenusClick(Sender: TObject);
 var
   Qry: TSQLQuery;
-  BM: TBookmark;
+  //BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
-    BM := dsTaxa.DataSet.Bookmark;
+    //BM := dsTaxa.DataSet.Bookmark;
     dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
@@ -1456,20 +1449,20 @@ begin
     FreeAndNil(dlgDestTaxon);
     dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    if dsTaxa.DataSet.BookmarkValid(BM) then
-      dsTaxa.DataSet.Bookmark := BM;
+    //if dsTaxa.DataSet.BookmarkValid(BM) then
+    //  dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
 procedure TfrmTaxaEditor.pmvMoveToSpeciesClick(Sender: TObject);
 var
   Qry: TSQLQuery;
-  BM: TBookmark;
+  //BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
-    BM := dsTaxa.DataSet.Bookmark;
+    //BM := dsTaxa.DataSet.Bookmark;
     dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
@@ -1506,8 +1499,8 @@ begin
     FreeAndNil(dlgDestTaxon);
     dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    if dsTaxa.DataSet.BookmarkValid(BM) then
-      dsTaxa.DataSet.Bookmark := BM;
+    //if dsTaxa.DataSet.BookmarkValid(BM) then
+    //  dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1593,12 +1586,12 @@ end;
 procedure TfrmTaxaEditor.sbLumpTaxonClick(Sender: TObject);
 var
   Qry: TSQLQuery;
-  BM: TBookmark;
+  //BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
-    BM := dsTaxa.DataSet.Bookmark;
+    //BM := dsTaxa.DataSet.Bookmark;
     dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taLump;
     if ShowModal = mrOK then
@@ -1635,8 +1628,8 @@ begin
     FreeAndNil(dlgDestTaxon);
     dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    if dsTaxa.DataSet.BookmarkValid(BM) then
-      dsTaxa.DataSet.Bookmark := BM;
+    //if dsTaxa.DataSet.BookmarkValid(BM) then
+    //  dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1698,12 +1691,12 @@ end;
 procedure TfrmTaxaEditor.sbSplitTaxonClick(Sender: TObject);
 var
   Qry: TSQLQuery;
-  BM: TBookmark;
+  //BM: TBookmark;
 begin
   dlgDestTaxon := TdlgDestTaxon.Create(nil);
   with dlgDestTaxon do
   try
-    BM := dsTaxa.DataSet.Bookmark;
+    //BM := dsTaxa.DataSet.Bookmark;
     dsTaxa.DataSet.DisableControls;
     TaxonomyAction:= taSplit;
     if ShowModal = mrOK then
@@ -1740,8 +1733,8 @@ begin
     FreeAndNil(dlgDestTaxon);
     dsTaxa.DataSet.EnableControls;
     dsTaxa.DataSet.Refresh;
-    if dsTaxa.DataSet.BookmarkValid(BM) then
-      dsTaxa.DataSet.Bookmark := BM;
+    //if dsTaxa.DataSet.BookmarkValid(BM) then
+    //  dsTaxa.DataSet.Bookmark := BM;
   end;
 end;
 
@@ -1806,19 +1799,19 @@ begin
           crEqual, False, IntToStr(GetKey('taxon_ranks', 'rank_id', 'rank_name', clbTaxonRanksFilter.Items[i]))));
   end;
 
-  if tsTaxonomyClements.StateOn = sw_on then
+  if tsTaxonomyClements.Checked then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('clements_taxonomy', 'Clements/eBird', sdtBoolean,
       crEqual, False, '1'));
   end;
-  if tsTaxonomyIoc.StateOn = sw_on then
+  if tsTaxonomyIoc.Checked then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('ioc_taxonomy', 'IOC', sdtBoolean,
       crEqual, False, '1'));
   end;
-  if tsTaxonomyCbro.StateOn = sw_on then
+  if tsTaxonomyCbro.Checked then
   begin
     sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
     FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('cbro_taxonomy', 'CBRO', sdtBoolean,
@@ -1858,6 +1851,21 @@ begin
   //end;
 
   CanToggle := True;
+end;
+
+procedure TfrmTaxaEditor.gridTaxaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+  Column: TColumn; State: TGridDrawState);
+begin
+  if Column.FieldName = 'formatted_name' then
+  begin
+    HtmlView.Width := Column.Width;
+    HtmlView.LoadFromString(Column.Field.AsString);
+    HtmlView.PaintTo(gridTaxa.Canvas.Handle, Rect.Left, Rect.Top);
+  end
+  else
+  begin
+    gridTaxa.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  end;
 end;
 
 procedure TfrmTaxaEditor.gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;

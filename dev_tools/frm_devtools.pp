@@ -120,8 +120,17 @@ begin
 end;
 
 procedure TfrmDevTools.FormShow(Sender: TObject);
+var
+  OldPPI: Integer;
 begin
+  OldPPI := Self.PixelsPerInch;
+  if OldPPI <> 96 then
+  begin
+    navTabs.OptScalePercents := (OldPPI * 100) div 96;
+  end;
+
   PG.PageIndex := 0;
+
 end;
 
 procedure TfrmDevTools.navTabsTabChanged(Sender: TObject);

@@ -1811,7 +1811,7 @@ begin
         // List fields
         SQL.Add('INSERT INTO zoo_taxa (full_name, formatted_name, authorship, english_name,');
         SQL.Add('rank_id, parent_taxon_id, extinct, extinction_year, species_id, genus_id, subfamily_id,');
-        SQL.Add('family_id, order_id, subspecies_group_id, genus_epithet, species_epithet, subspecies_epithet,');
+        SQL.Add('family_id, order_id, subspecies_group_id, ');
         if (btClements in aTaxonomy) then
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
@@ -1822,7 +1822,6 @@ begin
         // List values
         SQL.Add('VALUES (:aname, :aformattedname, :autoria, :aenglish, :anivel, :asup,');
         SQL.Add(':aextinto, :anoextinto, :aspecies, :agenus, :asubfamily, :afamily, :aorder, 0,');
-        SQL.Add(':agenusname, :aepithet, :asspepithet,');
         if (btClements in aTaxonomy) then
         begin
           SQL.Add('1, :geodist, :aebirdcode,');
@@ -1849,7 +1848,6 @@ begin
         ParamByName('ASUBFAMILY').AsInteger := MoveToSp.SubfamilyId;
         ParamByName('AFAMILY').AsInteger := MoveToSp.FamilyId;
         ParamByName('AORDER').AsInteger := MoveToSp.OrderId;
-        ParamByName('ASSPEPITHET').AsString := ExtractWord(3, NewName, [' ']);
         if (btClements in aTaxonomy) then
         begin
           ParamByName('GEODIST').DataType := ftMemo;
@@ -2020,7 +2018,7 @@ begin
         // List fields
         SQL.Add('INSERT INTO zoo_taxa (full_name, formatted_name, authorship, english_name,');
         SQL.Add('rank_id, parent_taxon_id, extinct, extinction_year, species_id, genus_id, subfamily_id,');
-        SQL.Add('family_id, order_id, subspecies_group_id, genus_epithet, species_epithet, subspecies_epithet,');
+        SQL.Add('family_id, order_id, subspecies_group_id,');
         if (btClements in aTaxonomy) then
           SQL.Add('clements_taxonomy, distribution, ebird_code,');
         if (btIOC in aTaxonomy) then
@@ -2031,7 +2029,6 @@ begin
         // List values
         SQL.Add('VALUES (:aname, :aformattedname, :autoria, :aenglish, :anivel, :asup,');
         SQL.Add(':aextinto, :anoextinto, :aspecies, :agenus, :asubfamily, :afamily, :aorder, 0,');
-        SQL.Add(':agenusname, :aepithet, null,');
         if (btClements in aTaxonomy) then
         begin
           SQL.Add('1, :geodist, :aebirdcode,');
@@ -2058,8 +2055,6 @@ begin
         ParamByName('ASUBFAMILY').AsInteger := Gen.SubfamilyId;
         ParamByName('AFAMILY').AsInteger := Gen.FamilyId;
         ParamByName('AORDER').AsInteger := Gen.OrderId;
-        ParamByName('AGENUSNAME').AsString := Gen.FullName;
-        ParamByName('AEPITHET').AsString := ExtractWord(2, NewName, [' ']);
         if (btClements in aTaxonomy) then
         begin
           ParamByName('GEODIST').DataType := ftMemo;

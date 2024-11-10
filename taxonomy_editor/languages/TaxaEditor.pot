@@ -522,10 +522,17 @@ msgid "Scientific name"
 msgstr ""
 
 #: tfrmtaxaeditor.gridtaxa.columns[2].title.caption
-msgid "valid_id"
+msgctxt "tfrmtaxaeditor.gridtaxa.columns[2].title.caption"
+msgid "formatted_name"
 msgstr ""
 
 #: tfrmtaxaeditor.gridtaxa.columns[3].title.caption
+msgctxt "tfrmtaxaeditor.gridtaxa.columns[3].title.caption"
+msgid "valid_id"
+msgstr ""
+
+#: tfrmtaxaeditor.gridtaxa.columns[4].title.caption
+msgctxt "tfrmtaxaeditor.gridtaxa.columns[4].title.caption"
 msgid "rank_id"
 msgstr ""
 
