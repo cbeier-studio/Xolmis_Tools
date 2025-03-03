@@ -38,16 +38,10 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="SQLDBLaz"/>
-      </Item>
-      <Item>
-        <PackageName Value="atflatcontrols_package"/>
+        <PackageName Value="bgracontrols"/>
       </Item>
       <Item>
         <PackageName Value="FCL"/>
-      </Item>
-      <Item>
-        <PackageName Value="LazControls"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>
@@ -64,13 +58,6 @@
         <ComponentName Value="frmDevTools"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
-        <Filename Value="dm_dev.pp"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="DMD"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="DataModule"/>
       </Unit>
       <Unit>
         <Filename Value="dev_types.pp"/>

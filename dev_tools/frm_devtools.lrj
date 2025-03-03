@@ -1,3 +1,27 @@
 {"version":1,"strings":[
-{"hash":211460099,"name":"tfrmdevtools.caption","sourcebytes":[88,111,108,109,105,115,32,68,101,118,101,108,111,112,101,114,32,84,111,111,108,115],"value":"Xolmis Developer Tools"}
+{"hash":211460099,"name":"tfrmdevtools.caption","sourcebytes":[88,111,108,109,105,115,32,68,101,118,101,108,111,112,101,114,32,84,111,111,108,115],"value":"Xolmis Developer Tools"},
+{"hash":24101954,"name":"tfrmdevtools.titlecodegenerator.caption","sourcebytes":[67,111,100,101,32,71,101,110,101,114,97,116,111,114],"value":"Code Generator"},
+{"hash":115940894,"name":"tfrmdevtools.lblcodegenerator.caption","sourcebytes":[71,101,110,101,114,97,116,101,32,99,111,100,101,32,102,111,114,32,88,111,108,109,105,115,32,97,112,112,32,98,97,115,101,100,32,111,110,32,116,104,101,32,112,97,114,97,109,101,116,101,114,115,32,105,110,102,111,114,109,101,100,46,32,73,116,32,99,97,110,32,103,101,110,101,114,97,116,101,32,100,97,116,97,32,109,111,100,101,108,115,32,97,110,100,32,114,101,108,97,116,101,100,32,109,101,116,104,111,100,115,46],"value":"Generate code for Xolmis app based on the parameters informed. It can generate data models and related methods."},
+{"hash":353982,"name":"tfrmdevtools.btnopencodegenerator.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":97187922,"name":"tfrmdevtools.titlelogviewer.caption","sourcebytes":[76,111,103,32,86,105,101,119,101,114],"value":"Log Viewer"},
+{"hash":76800846,"name":"tfrmdevtools.lbllogviewer.caption","sourcebytes":[86,105,101,119,32,97,110,100,32,97,110,97,108,121,122,101,32,88,111,108,109,105,115,39,32,108,111,103,32,102,105,108,101,115,46],"value":"View and analyze Xolmis' log files."},
+{"hash":353982,"name":"tfrmdevtools.btnopenlogviewer.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":47829026,"name":"tfrmdevtools.titleusagedataviewer.caption","sourcebytes":[85,115,97,103,101,32,68,97,116,97,32,86,105,101,119,101,114],"value":"Usage Data Viewer"},
+{"hash":169002238,"name":"tfrmdevtools.lblusagedataviewer.caption","sourcebytes":[86,105,101,119,32,97,110,100,32,97,110,97,108,121,122,101,32,88,111,108,109,105,115,39,32,97,110,110,111,110,121,109,111,117,115,32,117,115,97,103,101,32,100,97,116,97,46],"value":"View and analyze Xolmis' annonymous usage data."},
+{"hash":353982,"name":"tfrmdevtools.btnopenusagedataviewer.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":252387058,"name":"tfrmdevtools.titlesettingseditor.caption","sourcebytes":[83,101,116,116,105,110,103,115,32,69,100,105,116,111,114],"value":"Settings Editor"},
+{"hash":66882526,"name":"tfrmdevtools.lblsettingseditor.caption","sourcebytes":[86,105,101,119,32,97,110,100,32,101,100,105,116,32,88,111,108,109,105,115,39,32,115,101,116,116,105,110,103,115,32,102,105,108,101,115,46],"value":"View and edit Xolmis' settings files."},
+{"hash":353982,"name":"tfrmdevtools.btnopensettingseditor.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":208389186,"name":"tfrmdevtools.titledatagenerator.caption","sourcebytes":[68,97,116,97,32,71,101,110,101,114,97,116,111,114],"value":"Data Generator"},
+{"hash":61214254,"name":"tfrmdevtools.lbldatagenerator.caption","sourcebytes":[71,101,110,101,114,97,116,101,32,116,101,115,116,32,100,97,116,97,32,102,111,114,32,88,111,108,109,105,115,39,32,100,97,116,97,98,97,115,101,32,116,97,98,108,101,115,46],"value":"Generate test data for Xolmis' database tables."},
+{"hash":353982,"name":"tfrmdevtools.btnopendatagenerator.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":103545102,"name":"tfrmdevtools.titledatamigration.caption","sourcebytes":[68,97,116,97,32,77,105,103,114,97,116,105,111,110],"value":"Data Migration"},
+{"hash":6582590,"name":"tfrmdevtools.lbldatamigration.caption","sourcebytes":[77,105,103,114,97,116,101,32,116,104,101,32,100,97,116,97,32,102,114,111,109,32,111,110,101,32,100,97,116,97,98,97,115,101,32,116,111,32,97,110,111,116,104,101,114,46],"value":"Migrate the data from one database to another."},
+{"hash":353982,"name":"tfrmdevtools.btnopendatamigration.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":150597026,"name":"tfrmdevtools.titledataschemaviewer.caption","sourcebytes":[68,97,116,97,32,83,99,104,101,109,97,32,86,105,101,119,101,114],"value":"Data Schema Viewer"},
+{"hash":211561246,"name":"tfrmdevtools.lbldataschemaviewer.caption","sourcebytes":[86,105,101,119,32,116,104,101,32,100,97,116,97,98,97,115,101,32,115,99,104,101,109,97,46],"value":"View the database schema."},
+{"hash":353982,"name":"tfrmdevtools.btnopenschemaviewer.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":240706761,"name":"tfrmdevtools.titlesqlquery.caption","sourcebytes":[83,81,76,32,81,117,101,114,121],"value":"SQL Query"},
+{"hash":148668830,"name":"tfrmdevtools.lblsqlquery.caption","sourcebytes":[85,115,101,32,83,81,76,32,116,111,32,113,117,101,114,121,32,100,97,116,97,32,102,114,111,109,32,97,32,88,111,108,109,105,115,32,100,97,116,97,98,97,115,101,46],"value":"Use SQL to query data from a Xolmis database."},
+{"hash":353982,"name":"tfrmdevtools.btnopensqlquery.caption","sourcebytes":[79,112,101,110],"value":"Open"}
 ]}

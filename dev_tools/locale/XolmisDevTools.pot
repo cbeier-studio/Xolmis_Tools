@@ -41,167 +41,127 @@ msgstr ""
 msgid "start with"
 msgstr ""
 
-#: tfrmdevtools.btnforeignnuminterno.caption
-msgid "Chaves estrangeiras Nº interno"
+#: tfrmdevtools.btnopencodegenerator.caption
+msgctxt "tfrmdevtools.btnopencodegenerator.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btnformatarnomes.caption
-msgid "Formatar nomes"
+#: tfrmdevtools.btnopendatagenerator.caption
+msgctxt "tfrmdevtools.btnopendatagenerator.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btngeneros.caption
-msgid "Gêneros"
+#: tfrmdevtools.btnopendatamigration.caption
+msgctxt "tfrmdevtools.btnopendatamigration.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btnhierarquia.caption
-msgid "Hierarquia"
+#: tfrmdevtools.btnopenlogviewer.caption
+msgctxt "tfrmdevtools.btnopenlogviewer.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btnnuminterno.caption
-msgid "Número interno"
+#: tfrmdevtools.btnopenschemaviewer.caption
+msgctxt "tfrmdevtools.btnopenschemaviewer.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btnparar.caption
-msgid "Parar"
+#: tfrmdevtools.btnopensettingseditor.caption
+msgctxt "tfrmdevtools.btnopensettingseditor.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btnquickcode.caption
-msgid "Quickcode"
+#: tfrmdevtools.btnopensqlquery.caption
+msgctxt "tfrmdevtools.btnopensqlquery.caption"
+msgid "Open"
 msgstr ""
 
-#: tfrmdevtools.btnsepararnomes.caption
-msgid "Separar nomes"
+#: tfrmdevtools.btnopenusagedataviewer.caption
+msgctxt "tfrmdevtools.btnopenusagedataviewer.caption"
+msgid "Open"
 msgstr ""
 
 #: tfrmdevtools.caption
 msgid "Xolmis Developer Tools"
 msgstr ""
 
-#: tfrmdevtools.ckalphabetickey.caption
-msgid "Alphabetic key"
+#: tfrmdevtools.lblcodegenerator.caption
+msgctxt "tfrmdevtools.lblcodegenerator.caption"
+msgid "Generate code for Xolmis app based on the parameters informed. It can generate data models and related methods."
 msgstr ""
 
-#: tfrmdevtools.ckfieldcansort.caption
-msgid "Can sort"
+#: tfrmdevtools.lbldatagenerator.caption
+msgctxt "tfrmdevtools.lbldatagenerator.caption"
+msgid "Generate test data for Xolmis' database tables."
 msgstr ""
 
-#: tfrmdevtools.ckfieldvisible.caption
-msgctxt "tfrmdevtools.ckfieldvisible.caption"
-msgid "Visible"
+#: tfrmdevtools.lbldatamigration.caption
+msgctxt "tfrmdevtools.lbldatamigration.caption"
+msgid "Migrate the data from one database to another."
 msgstr ""
 
-#: tfrmdevtools.cknumerickey.caption
-msgid "Numeric key"
+#: tfrmdevtools.lbldataschemaviewer.caption
+msgctxt "tfrmdevtools.lbldataschemaviewer.caption"
+msgid "View the database schema."
 msgstr ""
 
-#: tfrmdevtools.cktablecanexport.caption
-msgid "Can export"
+#: tfrmdevtools.lbllogviewer.caption
+msgctxt "tfrmdevtools.lbllogviewer.caption"
+msgid "View and analyze Xolmis' log files."
 msgstr ""
 
-#: tfrmdevtools.cktablecanfilter.caption
-msgid "Can filter"
+#: tfrmdevtools.lblsettingseditor.caption
+msgctxt "tfrmdevtools.lblsettingseditor.caption"
+msgid "View and edit Xolmis' settings files."
 msgstr ""
 
-#: tfrmdevtools.cktablecanimport.caption
-msgid "Can import"
+#: tfrmdevtools.lblsqlquery.caption
+msgctxt "tfrmdevtools.lblsqlquery.caption"
+msgid "Use SQL to query data from a Xolmis database."
 msgstr ""
 
-#: tfrmdevtools.cktablevisible.caption
-msgctxt "tfrmdevtools.cktablevisible.caption"
-msgid "Visible"
+#: tfrmdevtools.lblusagedataviewer.caption
+msgctxt "tfrmdevtools.lblusagedataviewer.caption"
+msgid "View and analyze Xolmis' annonymous usage data."
 msgstr ""
 
-#: tfrmdevtools.efindfield.texthint
-msgid "Find field"
+#: tfrmdevtools.titlecodegenerator.caption
+msgctxt "tfrmdevtools.titlecodegenerator.caption"
+msgid "Code Generator"
 msgstr ""
 
-#: tfrmdevtools.efindreport.texthint
-msgid "Find report"
+#: tfrmdevtools.titledatagenerator.caption
+msgctxt "tfrmdevtools.titledatagenerator.caption"
+msgid "Data Generator"
 msgstr ""
 
-#: tfrmdevtools.efindtable.texthint
-msgid "Find table"
+#: tfrmdevtools.titledatamigration.caption
+msgctxt "tfrmdevtools.titledatamigration.caption"
+msgid "Data Migration"
 msgstr ""
 
-#: tfrmdevtools.gridfields.columns[0].title.caption
-msgid "Field name"
+#: tfrmdevtools.titledataschemaviewer.caption
+msgctxt "tfrmdevtools.titledataschemaviewer.caption"
+msgid "Data Schema Viewer"
 msgstr ""
 
-#: tfrmdevtools.gridfields.columns[1].title.caption
-msgid "Position"
+#: tfrmdevtools.titlelogviewer.caption
+msgctxt "tfrmdevtools.titlelogviewer.caption"
+msgid "Log Viewer"
 msgstr ""
 
-#: tfrmdevtools.gridtables.columns[0].title.caption
-msgid "Table name"
+#: tfrmdevtools.titlesettingseditor.caption
+msgctxt "tfrmdevtools.titlesettingseditor.caption"
+msgid "Settings Editor"
 msgstr ""
 
-#: tfrmdevtools.lbldarwincorename.caption
-msgid "Darwin Core (DwC) field name:"
+#: tfrmdevtools.titlesqlquery.caption
+msgctxt "tfrmdevtools.titlesqlquery.caption"
+msgid "SQL Query"
 msgstr ""
 
-#: tfrmdevtools.lblfielddisplayname.caption
-msgctxt "tfrmdevtools.lblfielddisplayname.caption"
-msgid "Display name:"
-msgstr ""
-
-#: tfrmdevtools.lblfieldkind.caption
-msgid "Field kind:"
-msgstr ""
-
-#: tfrmdevtools.lblfieldname.caption
-msgid "Field name:"
-msgstr ""
-
-#: tfrmdevtools.lblfieldposition.caption
-msgid "Position:"
-msgstr ""
-
-#: tfrmdevtools.lblfieldtype.caption
-msgid "Field type:"
-msgstr ""
-
-#: tfrmdevtools.lbllookupkey.caption
-msgid "Lookup key field:"
-msgstr ""
-
-#: tfrmdevtools.lbllookupname.caption
-msgid "Lookup field name:"
-msgstr ""
-
-#: tfrmdevtools.lbllookupresultfield.caption
-msgid "Lookup result field:"
-msgstr ""
-
-#: tfrmdevtools.lbllookuptable.caption
-msgid "Lookup table:"
-msgstr ""
-
-#: tfrmdevtools.lblmaxvalue.caption
-msgid "Maximum value:"
-msgstr ""
-
-#: tfrmdevtools.lblminvalue.caption
-msgid "Minimum value:"
-msgstr ""
-
-#: tfrmdevtools.lblreccount.caption
-msgid "Registros:"
-msgstr ""
-
-#: tfrmdevtools.lbltablediplayname.caption
-msgctxt "tfrmdevtools.lbltablediplayname.caption"
-msgid "Display name:"
-msgstr ""
-
-#: tfrmdevtools.lbltablename.caption
-msgid "Table name:"
-msgstr ""
-
-#: tfrmdevtools.lblvalueslist.caption
-msgid "Values list:"
-msgstr ""
-
-#: tfrmdevtools.ls.caption
-msgid "Aguardando..."
+#: tfrmdevtools.titleusagedataviewer.caption
+msgctxt "tfrmdevtools.titleusagedataviewer.caption"
+msgid "Usage Data Viewer"
 msgstr ""
 

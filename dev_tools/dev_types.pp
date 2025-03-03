@@ -1,6 +1,6 @@
 unit dev_types;
 
-{$mode Delphi}
+{$mode ObjFPC}{$H+}
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, lcltype, lclintf, Windows;
 
 const
-  NomeApp: String = 'Xolmis Dev Tools'
+  NomeApp: String = 'Xolmis Dev Tools';
 
   { System variables }
   function InstallDir: String;
@@ -16,8 +16,6 @@ const
   function TempDir: String;
 
 implementation
-
-uses dm_dev;
 
 function InstallDir: String;
 var
