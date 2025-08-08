@@ -1,0 +1,10 @@
+{"version":1,"strings":[
+{"hash":97187922,"name":"tfrmlogviewer.caption","sourcebytes":[76,111,103,32,86,105,101,119,101,114],"value":"Log Viewer"},
+{"hash":353982,"name":"tfrmlogviewer.btnopen.caption","sourcebytes":[79,112,101,110],"value":"Open"},
+{"hash":366789,"name":"tfrmlogviewer.btnsave.caption","sourcebytes":[83,97,118,101],"value":"Save"},
+{"hash":4863637,"name":"tfrmlogviewer.btnclose.caption","sourcebytes":[67,108,111,115,101],"value":"Close"},
+{"hash":176481973,"name":"tfrmlogviewer.vstlog.header.columns[0].text","sourcebytes":[68,97,116,101,47,84,105,109,101],"value":"Date/Time"},
+{"hash":5426364,"name":"tfrmlogviewer.vstlog.header.columns[1].text","sourcebytes":[76,101,118,101,108],"value":"Level"},
+{"hash":63608709,"name":"tfrmlogviewer.vstlog.header.columns[2].text","sourcebytes":[77,101,115,115,97,103,101],"value":"Message"},
+{"hash":66767269,"name":"tfrmlogviewer.opendlg.title","sourcebytes":[79,112,101,110,32,108,111,103,32,102,105,108,101],"value":"Open log file"}
+]}

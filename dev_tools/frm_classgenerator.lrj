@@ -1,0 +1,11 @@
+{"version":1,"strings":[
+{"hash":208506562,"name":"tfrmclassgenerator.caption","sourcebytes":[67,108,97,115,115,32,71,101,110,101,114,97,116,111,114],"value":"Class Generator"},
+{"hash":87976746,"name":"tfrmclassgenerator.lblclassname.caption","sourcebytes":[67,108,97,115,115,32,110,97,109,101,58],"value":"Class name:"},
+{"hash":122559146,"name":"tfrmclassgenerator.lbltablename.caption","sourcebytes":[84,97,98,108,101,32,110,97,109,101,58],"value":"Table name:"},
+{"hash":4863637,"name":"tfrmclassgenerator.btnclose.caption","sourcebytes":[67,108,111,115,101],"value":"Close"},
+{"hash":206343285,"name":"tfrmclassgenerator.btngenerate.caption","sourcebytes":[71,101,110,101,114,97,116,101],"value":"Generate"},
+{"hash":113950410,"name":"tfrmclassgenerator.lblkeyfield.caption","sourcebytes":[75,101,121,32,102,105,101,108,100,58],"value":"Key field:"},
+{"hash":157732041,"name":"tfrmclassgenerator.gridmap.columns[0].title.caption","sourcebytes":[80,114,111,112,101,114,116,121],"value":"Property"},
+{"hash":376933,"name":"tfrmclassgenerator.gridmap.columns[1].title.caption","sourcebytes":[84,121,112,101],"value":"Type"},
+{"hash":204147909,"name":"tfrmclassgenerator.gridmap.columns[2].title.caption","sourcebytes":[70,105,101,108,100,110,97,109,101],"value":"Fieldname"}
+]}

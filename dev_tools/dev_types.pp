@@ -5,10 +5,21 @@ unit dev_types;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, lcltype, lclintf, Windows;
+  Classes, SysUtils, Forms, Controls, lcltype, lclintf, Windows, fgl;
 
 const
   NomeApp: String = 'Xolmis Dev Tools';
+
+type
+  TLogEntry = class
+    LogDate: TDateTime;
+    LogLevel: string; // Ex.: "Info", "Debug"
+    Message: string;  // Mensagem principal
+    Details: string;  // Detalhes adicionais (como SQL)
+  end;
+  PLogEntry = ^TLogEntry;
+
+  //TLogEntries = specialize TFPGList<TLogEntry>;
 
   { System variables }
   function InstallDir: String;

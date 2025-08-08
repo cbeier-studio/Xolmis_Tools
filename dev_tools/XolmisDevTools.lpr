@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms,
   frm_devtools,
-  dev_types;
+  dev_types, frm_classgenerator, frm_settingseditor, frm_logviewer;
 
 {$R *.res}
 

@@ -41,6 +41,46 @@ msgstr ""
 msgid "start with"
 msgstr ""
 
+#: tfrmclassgenerator.btnclose.caption
+msgctxt "tfrmclassgenerator.btnclose.caption"
+msgid "Close"
+msgstr ""
+
+#: tfrmclassgenerator.btngenerate.caption
+msgid "Generate"
+msgstr ""
+
+#: tfrmclassgenerator.caption
+msgid "Class Generator"
+msgstr ""
+
+#: tfrmclassgenerator.gridmap.columns[0].title.caption
+msgctxt "tfrmclassgenerator.gridmap.columns[0].title.caption"
+msgid "Property"
+msgstr ""
+
+#: tfrmclassgenerator.gridmap.columns[1].title.caption
+msgctxt "tfrmclassgenerator.gridmap.columns[1].title.caption"
+msgid "Type"
+msgstr ""
+
+#: tfrmclassgenerator.gridmap.columns[2].title.caption
+msgctxt "tfrmclassgenerator.gridmap.columns[2].title.caption"
+msgid "Fieldname"
+msgstr ""
+
+#: tfrmclassgenerator.lblclassname.caption
+msgid "Class name:"
+msgstr ""
+
+#: tfrmclassgenerator.lblkeyfield.caption
+msgid "Key field:"
+msgstr ""
+
+#: tfrmclassgenerator.lbltablename.caption
+msgid "Table name:"
+msgstr ""
+
 #: tfrmdevtools.btnopencodegenerator.caption
 msgctxt "tfrmdevtools.btnopencodegenerator.caption"
 msgid "Open"
@@ -163,5 +203,67 @@ msgstr ""
 #: tfrmdevtools.titleusagedataviewer.caption
 msgctxt "tfrmdevtools.titleusagedataviewer.caption"
 msgid "Usage Data Viewer"
+msgstr ""
+
+#: tfrmlogviewer.btnclose.caption
+msgctxt "tfrmlogviewer.btnclose.caption"
+msgid "Close"
+msgstr ""
+
+#: tfrmlogviewer.btnopen.caption
+msgctxt "tfrmlogviewer.btnopen.caption"
+msgid "Open"
+msgstr ""
+
+#: tfrmlogviewer.btnsave.caption
+msgctxt "tfrmlogviewer.btnsave.caption"
+msgid "Save"
+msgstr ""
+
+#: tfrmlogviewer.caption
+msgctxt "tfrmlogviewer.caption"
+msgid "Log Viewer"
+msgstr ""
+
+#: tfrmlogviewer.opendlg.title
+msgctxt "tfrmlogviewer.opendlg.title"
+msgid "Open log file"
+msgstr ""
+
+#: tfrmlogviewer.vstlog.header.columns[0].text
+msgid "Date/Time"
+msgstr ""
+
+#: tfrmlogviewer.vstlog.header.columns[1].text
+msgid "Level"
+msgstr ""
+
+#: tfrmlogviewer.vstlog.header.columns[2].text
+msgid "Message"
+msgstr ""
+
+#: tfrmsettingseditor.btnclose.caption
+msgctxt "tfrmsettingseditor.btnclose.caption"
+msgid "Close"
+msgstr ""
+
+#: tfrmsettingseditor.btnopen.caption
+msgctxt "tfrmsettingseditor.btnopen.caption"
+msgid "Open"
+msgstr ""
+
+#: tfrmsettingseditor.btnsave.caption
+msgctxt "tfrmsettingseditor.btnsave.caption"
+msgid "Save"
+msgstr ""
+
+#: tfrmsettingseditor.caption
+msgctxt "tfrmsettingseditor.caption"
+msgid "Settings Editor"
+msgstr ""
+
+#: tfrmsettingseditor.opendlg.title
+msgctxt "tfrmsettingseditor.opendlg.title"
+msgid "Open log file"
 msgstr ""
 

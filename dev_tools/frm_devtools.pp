@@ -54,6 +54,9 @@ type
     titleSettingsEditor: TLabel;
     lblSettingsEditor: TLabel;
     titleDataGenerator: TLabel;
+    procedure btnOpenCodeGeneratorClick(Sender: TObject);
+    procedure btnOpenLogViewerClick(Sender: TObject);
+    procedure btnOpenSettingsEditorClick(Sender: TObject);
   private
 
   public
@@ -65,7 +68,45 @@ var
 
 implementation
 
+uses
+  frm_classgenerator, frm_logviewer, frm_settingseditor;
+
 {$R *.lfm}
+
+{ TfrmDevTools }
+
+procedure TfrmDevTools.btnOpenCodeGeneratorClick(Sender: TObject);
+begin
+  frmClassGenerator := TfrmClassGenerator.Create(nil);
+  with frmClassGenerator do
+  try
+    ShowModal;
+  finally
+    FreeAndNil(frmClassGenerator);
+  end;
+end;
+
+procedure TfrmDevTools.btnOpenLogViewerClick(Sender: TObject);
+begin
+  frmLogViewer := TfrmLogViewer.Create(nil);
+  with frmLogViewer do
+  try
+    ShowModal;
+  finally
+    FreeAndNil(frmLogViewer);
+  end;
+end;
+
+procedure TfrmDevTools.btnOpenSettingsEditorClick(Sender: TObject);
+begin
+  frmSettingsEditor := TfrmSettingsEditor.Create(nil);
+  with frmSettingsEditor do
+  try
+    ShowModal;
+  finally
+    FreeAndNil(frmSettingsEditor);
+  end;
+end;
 
 end.
 
