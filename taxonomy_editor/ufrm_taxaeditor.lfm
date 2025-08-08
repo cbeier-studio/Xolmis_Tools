@@ -2342,7 +2342,6 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 ButtonCursor = crDefault
-                ButtonOnlyWhenFocused = False
                 ButtonWidth = 24
                 CharCase = ecNormal
                 Color = clDefault
@@ -2357,6 +2356,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 ImageWidth = 20
                 MaxLength = 0
                 ParentColor = False
+                ShowHint = False
                 Spacing = 0
                 TabOrder = 0
                 OnButtonClick = etIocParentTaxonButtonClick
@@ -2565,7 +2565,6 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Align = alRight
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 ButtonCursor = crDefault
-                ButtonOnlyWhenFocused = False
                 ButtonWidth = 24
                 CharCase = ecNormal
                 Color = clDefault
@@ -2580,6 +2579,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 ImageWidth = 20
                 MaxLength = 0
                 ParentColor = False
+                ShowHint = False
                 Spacing = 0
                 TabOrder = 0
                 OnButtonClick = etIocValidNameButtonClick
@@ -3155,7 +3155,6 @@ object frmTaxaEditor: TfrmTaxaEditor
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             ButtonCursor = crDefault
-            ButtonOnlyWhenFocused = False
             ButtonWidth = 24
             CharCase = ecNormal
             Color = clDefault
@@ -3169,6 +3168,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Images = bMenu
             MaxLength = 0
             ParentColor = False
+            ShowHint = False
             Spacing = 0
             TabOrder = 0
             OnButtonClick = etValidNameButtonClick
@@ -3244,7 +3244,6 @@ object frmTaxaEditor: TfrmTaxaEditor
             Align = alRight
             Anchors = [akTop, akLeft, akRight, akBottom]
             ButtonCursor = crDefault
-            ButtonOnlyWhenFocused = False
             ButtonWidth = 24
             CharCase = ecNormal
             Color = clDefault
@@ -3258,6 +3257,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Images = bMenu
             MaxLength = 0
             ParentColor = False
+            ShowHint = False
             Spacing = 0
             TabOrder = 0
             OnButtonClick = etParentTaxonButtonClick
@@ -4373,7 +4373,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       OptHintForUser2 = '2'
       OptHintForUser3 = '3'
       OptHintForUser4 = '4'
-      OnTabChanged = navTabsTabChanged
+      OnTabClick = navTabsTabClick
     end
     object sbFileMenu: TBCButton
       Left = 6

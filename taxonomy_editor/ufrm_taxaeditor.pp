@@ -311,7 +311,7 @@ type
     procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
       var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
-    procedure navTabsTabChanged(Sender: TObject);
+    procedure navTabsTabClick(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
@@ -1309,7 +1309,7 @@ begin
   end;
 end;
 
-procedure TfrmTaxaEditor.navTabsTabChanged(Sender: TObject);
+procedure TfrmTaxaEditor.navTabsTabClick(Sender: TObject);
 begin
   nbPages.PageIndex := navTabs.TabIndex;
 end;

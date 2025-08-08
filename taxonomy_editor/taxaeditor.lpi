@@ -134,9 +134,6 @@
         <PackageName Value="ibcontrols"/>
       </Item>
       <Item>
-        <PackageName Value="dclibx"/>
-      </Item>
-      <Item>
         <PackageName Value="uniqueinstance_package"/>
       </Item>
       <Item>
