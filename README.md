@@ -1,7 +1,8 @@
 # Xolmis Tools
-Set of developer tools for [Xolmis](https://github.com/cbeier-studio/Xolmis).
 
-Each folder contains a different tool:
-- **dev_tools**: Edit the system database, wich contains the schema configuration, saved connections, etc.
-- **taxonomy_editor**: Manage and update bird taxonomies used by Xolmis. It generates taxonomy update files.
+Applications with tools to help develop, manage and release [Xolmis Desktop](https://github.com/cbeier-studio/Xolmis) and [Xolmis Mobile](https://github.com/cbeier-studio/xolmis_mobile).
 
+## Applications
+
+- [Xolmis Developer Tools](https://github.com/cbeier-studio/Xolmis_Tools/tree/main/dev_tools): Developer and management tools for Xolmis Desktop.
+- [Xolmis Taxonomy Editor](https://github.com/cbeier-studio/Xolmis_Tools/tree/main/taxonomy_editor): Tool to manage and generate updates of bird taxonomy for Xolmis Desktop and Xolmis Mobile.
