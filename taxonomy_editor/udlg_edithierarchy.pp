@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, EditBtn, Buttons,
-  atshapelinebgra, BCPanel, lib_taxa;
+  atshapelinebgra, BCPanel, utils_taxonomy;
 
 type
 

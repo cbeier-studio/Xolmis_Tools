@@ -9,6 +9,7 @@ object dlgSqlFilter: TdlgSqlFilter
   ClientWidth = 750
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '4.2.0.0'
   object pBottom: TPanel
     Left = 0
     Height = 41
@@ -44,14 +45,14 @@ object dlgSqlFilter: TdlgSqlFilter
       Align = alRight
       Caption = 'Apply'
       ImageWidth = 24
-      OnClick = sbApplyClick
       TabOrder = 0
+      OnClick = sbApplyClick
     end
   end
   inline seScript: TSynEdit
     Left = 0
-    Height = 466
-    Top = 36
+    Height = 460
+    Top = 42
     Width = 750
     Align = alClient
     Font.Height = -13
@@ -63,7 +64,7 @@ object dlgSqlFilter: TdlgSqlFilter
     TabOrder = 1
     Gutter.Color = clWhite
     Gutter.RightOffset = 16
-    Gutter.Width = 59
+    Gutter.Width = 69
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -496,8 +497,6 @@ object dlgSqlFilter: TdlgSqlFilter
       'SELECT z.*,'
       '    u.full_name AS parent_taxon_name,'
       '    v.full_name AS valid_name,'
-      '    ui.full_name AS ioc_parent_taxon_name,'
-      '    vi.full_name AS ioc_valid_name,'
       '    o.full_name AS order_name,'
       '    f.full_name AS family_name,'
       '    s.full_name AS subfamily_name,'
@@ -507,8 +506,6 @@ object dlgSqlFilter: TdlgSqlFilter
       'FROM zoo_taxa AS z'
       'LEFT JOIN zoo_taxa AS u ON z.parent_taxon_id = u.taxon_id'
       'LEFT JOIN zoo_taxa AS v ON z.valid_id = v.taxon_id'
-      'LEFT JOIN zoo_taxa AS ui ON z.ioc_parent_taxon_id = ui.taxon_id'
-      'LEFT JOIN zoo_taxa AS vi ON z.ioc_valid_id = vi.taxon_id'
       'LEFT JOIN zoo_taxa AS o ON z.order_id = o.taxon_id'
       'LEFT JOIN zoo_taxa AS f ON z.family_id = f.taxon_id'
       'LEFT JOIN zoo_taxa AS s ON z.subfamily_id = s.taxon_id'
@@ -544,6 +541,8 @@ object dlgSqlFilter: TdlgSqlFilter
       object SynGutterMarks1: TSynGutterMarks
         Width = 24
         MouseActions = <>
+        MaxExtraMarksColums = 0
+        Options = [sgmoDeDuplicateMarksOnOverflow]
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
         Width = 17
@@ -578,9 +577,9 @@ object dlgSqlFilter: TdlgSqlFilter
       end
     end
   end
-  object Panel1: TPanel
+  object pToolbar: TPanel
     Left = 0
-    Height = 36
+    Height = 42
     Top = 0
     Width = 750
     Align = alTop
@@ -590,14 +589,14 @@ object dlgSqlFilter: TdlgSqlFilter
     ChildSizing.TopBottomSpacing = 8
     ChildSizing.HorizontalSpacing = 8
     ChildSizing.ControlsPerLine = 10
-    ClientHeight = 36
+    ClientHeight = 42
     ClientWidth = 750
     TabOrder = 2
     object sbReset: TSpeedButton
       Left = 16
-      Height = 20
+      Height = 26
       Top = 8
-      Width = 52
+      Width = 58
       Align = alLeft
       AutoSize = True
       Caption = 'Reset'

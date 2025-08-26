@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fpdoc-descriptions><package name="taxaeditor"><module name="utils_taxonomy"><element name="SplitTaxon"><short>Split a subspecies into species.</short><descr><p>When a subspecies is elevated to species we call it a split.</p><ul><li><var>aSubspeciesId</var>: A subspecies primary key value.</li>
+          </ul>
+        </descr>
+      </element><element name="LumpTaxon"><short>Lump a species to another species as a subspecies.</short><descr><p>When a species is relegated as subspecies to another species, we call it a lump.</p><ul><li><var>aSpecies</var>: The species primary key to be lumped.</li><li><var>ToSpecies</var>: The destination species primary key.</li>
+          </ul>
+        </descr>
+      </element><element name="MoveToSpecies"><short>Move a subspecies to another species.</short>
+      </element><element name="MoveToGenus"><short>Move a species to another genus.</short>
+      </element>
+    </module>
+  </package>
+</fpdoc-descriptions>

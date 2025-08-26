@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, CheckLst, EditBtn, StdCtrls,
-  Character, Buttons, atshapelinebgra, BCPanel, lib_taxa;
+  Character, Buttons, atshapelinebgra, BCPanel, utils_global, utils_taxonomy;
 
 type
 
@@ -17,7 +17,6 @@ type
     lblChangeSuffix: TLabel;
     pChangeSuffix: TBCPanel;
     pDestinationTaxon: TBCPanel;
-    cklTaxonomy: TCheckListBox;
     eDestinationTaxon: TEditButton;
     lblApplyTo: TLabel;
     lblDestinationTaxon: TLabel;
@@ -62,6 +61,9 @@ var
 
 implementation
 
+uses
+  utils_dialogs;
+
 { TdlgDestTaxon }
 
 procedure TdlgDestTaxon.sbApplyToSelectedClick(Sender: TObject);
@@ -78,11 +80,11 @@ begin
   Result:= True;
 
   // Required fields
-  if (cklTaxonomy.Checked[0] = False) and (cklTaxonomy.Checked[1] = False) and (cklTaxonomy.Checked[2] = False) then
-  begin
-    MsgDlg('', 'Select at least one taxonomy to update!', mtInformation);
-    Result:= False;
-  end;
+  //if (cklTaxonomy.Checked[0] = False) and (cklTaxonomy.Checked[1] = False) and (cklTaxonomy.Checked[2] = False) then
+  //begin
+  //  MsgDlg('', 'Select at least one taxonomy to update!', mtInformation);
+  //  Result:= False;
+  //end;
   if (TaxonomyAction <> taSplit) and (Taxon = 0) then
   begin
     MsgDlg('', 'Select a destination taxon to update!', mtInformation);
@@ -95,10 +97,10 @@ begin
   if not ValidateFields then
     Exit;
 
-  if cklTaxonomy.Checked[0] then
-    FTaxonomies := FTaxonomies + [btClements];
-  if cklTaxonomy.Checked[1] then
-    FTaxonomies := FTaxonomies + [btIoc];
+  //if cklTaxonomy.Checked[0] then
+  //  FTaxonomies := FTaxonomies + [btClements];
+  //if cklTaxonomy.Checked[1] then
+  //  FTaxonomies := FTaxonomies + [btIoc];
   //if cklTaxonomy.Checked[2] then
   //  FTaxonomies := FTaxonomies + [btCbro];
 

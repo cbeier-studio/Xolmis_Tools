@@ -9,7 +9,7 @@
       </Flags>
       <SessionStorage Value="InProjectDir"/>
       <AutoCreateForms Value="False"/>
-      <Title Value="Xolmis Taxonomies Editor"/>
+      <Title Value="Xolmis Taxonomy Editor"/>
       <Scaled Value="True"/>
       <UseXPManifest Value="True"/>
       <XPManifest>
@@ -17,7 +17,7 @@
       </XPManifest>
       <Icon Value="0"/>
     </General>
-    <LazDoc Paths="..\docs"/>
+    <LazDoc Paths=".\docs"/>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="languages"/>
@@ -25,10 +25,10 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <MinorVersionNr Value="1"/>
+      <MinorVersionNr Value="2"/>
       <BuildNr Value="65"/>
       <Attributes pvaPreRelease="True"/>
-      <StringTable CompanyName="Christian Beier Studio" LegalCopyright="© Christian Beier 2024" ProductName="Xolmis Taxonomies Editor" ProductVersion="0.1"/>
+      <StringTable CompanyName="Christian Beier Studio" LegalCopyright="© Christian Beier 2023-2025" ProductName="Xolmis Taxonomy Editor" ProductVersion="0.2"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -131,9 +131,6 @@
         <PackageName Value="SDFLaz"/>
       </Item>
       <Item>
-        <PackageName Value="ibcontrols"/>
-      </Item>
-      <Item>
         <PackageName Value="uniqueinstance_package"/>
       </Item>
       <Item>
@@ -183,14 +180,7 @@
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
-        <Filename Value="udm_taxa.pp"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="dmTaxa"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="DataModule"/>
-      </Unit>
-      <Unit>
-        <Filename Value="lib_taxa.pp"/>
+        <Filename Value="utils_global.pp"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -222,11 +212,92 @@
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
-        <Filename Value="udlg_newsubspecies.pas"/>
+        <Filename Value="udlg_newsubspecies.pp"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgNewSubspecies"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="udlg_loading.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgLoading"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uedt_database.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtDatabase"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_types.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_core.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils_dialogs.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils_conversions.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="io_clements.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="io_ioc.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_getvalue.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_select.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_crud.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_validations.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="models_base.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="models_rank.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="models_taxon.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils_taxonomy.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="udm_taxa.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dmTaxa"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="data_setparam.pp"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

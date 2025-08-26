@@ -8,16 +8,17 @@ object dlgFind: TdlgFind
   Caption = 'Buscar'
   ClientHeight = 266
   ClientWidth = 396
+  PopupMode = pmAuto
+  ShowInTaskBar = stNever
+  LCLVersion = '4.2.0.0'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
   OnShow = FormShow
-  PopupMode = pmAuto
-  ShowInTaskBar = stNever
   object pHeader: TPanel
     Left = 0
-    Height = 32
+    Height = 38
     Top = 0
     Width = 396
     Align = alTop
@@ -26,12 +27,12 @@ object dlgFind: TdlgFind
     ChildSizing.LeftRightSpacing = 4
     ChildSizing.TopBottomSpacing = 4
     ChildSizing.HorizontalSpacing = 4
-    ClientHeight = 32
+    ClientHeight = 38
     ClientWidth = 396
     TabOrder = 0
     object pEP: TBCPanel
       Left = 4
-      Height = 24
+      Height = 30
       Top = 4
       Width = 388
       Align = alClient
@@ -76,11 +77,14 @@ object dlgFind: TdlgFind
       Rounding.RoundY = 4
       TabOrder = 0
       object sbOptions: TSpeedButton
-        Left = 336
-        Height = 20
+        AnchorSideTop.Control = pEP
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = sbClose
+        Left = 324
+        Height = 26
         Top = 2
-        Width = 20
-        Align = alRight
+        Width = 26
+        Anchors = [akTop, akRight]
         AutoSize = True
         BorderSpacing.Top = 2
         BorderSpacing.Bottom = 2
@@ -91,11 +95,15 @@ object dlgFind: TdlgFind
         OnClick = sbOptionsClick
       end
       object EP: TEdit
+        AnchorSideLeft.Control = pEP
+        AnchorSideTop.Control = pEP
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = sbOptions
         Left = 4
-        Height = 16
-        Top = 4
-        Width = 324
-        Align = alClient
+        Height = 15
+        Top = 8
+        Width = 312
+        Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 4
         BorderSpacing.Bottom = 4
         BorderStyle = bsNone
@@ -106,11 +114,15 @@ object dlgFind: TdlgFind
         OnKeyPress = FormKeyPress
       end
       object sbClose: TSpeedButton
-        Left = 364
-        Height = 20
+        AnchorSideTop.Control = pEP
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = pEP
+        AnchorSideRight.Side = asrBottom
+        Left = 358
+        Height = 26
         Top = 2
-        Width = 20
-        Align = alRight
+        Width = 26
+        Anchors = [akTop, akRight]
         AutoSize = True
         BorderSpacing.Top = 2
         BorderSpacing.Bottom = 2
@@ -123,8 +135,8 @@ object dlgFind: TdlgFind
   end
   object uList: TDBGrid
     Left = 0
-    Height = 234
-    Top = 32
+    Height = 228
+    Top = 38
     Width = 396
     Align = alClient
     AlternateColor = cl3DLight
@@ -134,7 +146,7 @@ object dlgFind: TdlgFind
     Columns = <    
       item
         Title.Caption = 'Name'
-        Width = 375
+        Width = 396
       end>
     DataSource = dsFind
     FixedCols = 0

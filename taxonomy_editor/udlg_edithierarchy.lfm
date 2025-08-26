@@ -10,10 +10,11 @@ object dlgEditHierarchy: TdlgEditHierarchy
   ClientWidth = 577
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '4.2.0.0'
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
-    Top = 370
+    Top = 376
     Width = 577
     Align = alTop
     LineColor = 9276813
@@ -23,7 +24,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pBottom: TPanel
     Left = 0
     Height = 41
-    Top = 372
+    Top = 378
     Width = 577
     Align = alTop
     AutoSize = True
@@ -61,7 +62,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pParentTaxon: TBCPanel
     Left = 13
     Height = 40
-    Top = 64
+    Top = 70
     Width = 551
     Align = alTop
     AutoSize = True
@@ -147,7 +148,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pOrder: TBCPanel
     Left = 13
     Height = 40
-    Top = 117
+    Top = 123
     Width = 551
     Align = alTop
     AutoSize = True
@@ -234,7 +235,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pFamily: TBCPanel
     Left = 13
     Height = 40
-    Top = 157
+    Top = 163
     Width = 551
     Align = alTop
     AutoSize = True
@@ -320,7 +321,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pSubfamily: TBCPanel
     Left = 13
     Height = 40
-    Top = 197
+    Top = 203
     Width = 551
     Align = alTop
     AutoSize = True
@@ -406,7 +407,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pGenus: TBCPanel
     Left = 13
     Height = 40
-    Top = 237
+    Top = 243
     Width = 551
     Align = alTop
     AutoSize = True
@@ -492,7 +493,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pSpecies: TBCPanel
     Left = 13
     Height = 40
-    Top = 277
+    Top = 283
     Width = 551
     Align = alTop
     AutoSize = True
@@ -578,7 +579,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   object pSubspeciesGroup: TBCPanel
     Left = 13
     Height = 40
-    Top = 317
+    Top = 323
     Width = 551
     Align = alTop
     AutoSize = True
@@ -664,7 +665,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
   end
   object pApplyTo: TBCPanel
     Left = 13
-    Height = 38
+    Height = 44
     Top = 13
     Width = 551
     Align = alTop
@@ -712,7 +713,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
     TabOrder = 8
     object lblApplyTo: TLabel
       Left = 17
-      Height = 20
+      Height = 26
       Top = 9
       Width = 96
       Align = alLeft
@@ -722,7 +723,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
     end
     object sbApplyToMarked: TSpeedButton
       Left = 434
-      Height = 20
+      Height = 26
       Top = 9
       Width = 100
       Align = alRight
@@ -733,7 +734,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
     end
     object sbApplyToSelected: TSpeedButton
       Left = 326
-      Height = 20
+      Height = 26
       Top = 9
       Width = 100
       Align = alRight

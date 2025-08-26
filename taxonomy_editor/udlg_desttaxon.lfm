@@ -8,15 +8,16 @@ object dlgDestTaxon: TdlgDestTaxon
   Caption = 'Lump/move taxon'
   ClientHeight = 246
   ClientWidth = 556
+  PopupMode = pmAuto
+  Position = poScreenCenter
+  LCLVersion = '4.2.0.0'
   OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
-  PopupMode = pmAuto
-  Position = poScreenCenter
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
-    Top = 203
+    Top = 189
     Width = 556
     Align = alTop
     LineColor = 9276813
@@ -26,7 +27,7 @@ object dlgDestTaxon: TdlgDestTaxon
   object pBottom: TPanel
     Left = 0
     Height = 41
-    Top = 205
+    Top = 191
     Width = 556
     Align = alTop
     AutoSize = True
@@ -59,14 +60,14 @@ object dlgDestTaxon: TdlgDestTaxon
       Align = alRight
       Caption = 'Apply'
       ImageWidth = 24
+      TabOrder = 0
       OnClick = sbApplyClick
       OnKeyPress = FormKeyPress
-      TabOrder = 0
     end
   end
   object pContent: TPanel
     Left = 0
-    Height = 203
+    Height = 189
     Top = 0
     Width = 556
     Align = alTop
@@ -76,33 +77,14 @@ object dlgDestTaxon: TdlgDestTaxon
     ChildSizing.TopBottomSpacing = 16
     ChildSizing.HorizontalSpacing = 8
     ChildSizing.VerticalSpacing = 8
-    ClientHeight = 203
+    ClientHeight = 189
     ClientWidth = 556
     TabOrder = 0
-    object cklTaxonomy: TCheckListBox
-      Left = 16
-      Height = 80
-      Top = 62
-      Width = 100
-      Align = alLeft
-      BorderStyle = bsNone
-      Color = clBtnFace
-      Items.Strings = (
-        'Clements'
-        'IOC'
-      )
-      ItemHeight = 17
-      TabOrder = 1
-      OnKeyPress = eDestinationTaxonKeyPress
-      Data = {
-        020000000000
-      }
-    end
     object pDestinationTaxon: TBCPanel
-      Left = 124
-      Height = 80
-      Top = 62
-      Width = 416
+      Left = 16
+      Height = 60
+      Top = 68
+      Width = 524
       Align = alClient
       ChildSizing.LeftRightSpacing = 16
       ChildSizing.TopBottomSpacing = 8
@@ -141,12 +123,12 @@ object dlgDestTaxon: TdlgDestTaxon
       ParentBackground = False
       Rounding.RoundX = 8
       Rounding.RoundY = 8
-      TabOrder = 2
+      TabOrder = 1
       object lblDestinationTaxon: TLabel
         Left = 17
         Height = 15
         Top = 9
-        Width = 382
+        Width = 490
         Align = alTop
         Caption = 'Destination taxon'
         Layout = tlCenter
@@ -155,7 +137,7 @@ object dlgDestTaxon: TdlgDestTaxon
         Left = 17
         Height = 23
         Top = 28
-        Width = 382
+        Width = 490
         Align = alTop
         ButtonWidth = 23
         Constraints.MinWidth = 382
@@ -164,17 +146,17 @@ object dlgDestTaxon: TdlgDestTaxon
         ImageIndex = 0
         MaxLength = 0
         NumGlyphs = 1
-        OnButtonClick = eDestinationTaxonButtonClick
-        OnKeyPress = eDestinationTaxonKeyPress
         PasswordChar = #0
         Spacing = 0
         TabOrder = 0
         TextHint = 'Select a taxon'
+        OnButtonClick = eDestinationTaxonButtonClick
+        OnKeyPress = eDestinationTaxonKeyPress
       end
     end
     object pApplyTo: TBCPanel
       Left = 16
-      Height = 38
+      Height = 44
       Top = 16
       Width = 524
       Align = alTop
@@ -222,7 +204,7 @@ object dlgDestTaxon: TdlgDestTaxon
       TabOrder = 0
       object lblApplyTo: TLabel
         Left = 17
-        Height = 20
+        Height = 26
         Top = 9
         Width = 96
         Align = alLeft
@@ -232,7 +214,7 @@ object dlgDestTaxon: TdlgDestTaxon
       end
       object sbApplyToMarked: TSpeedButton
         Left = 407
-        Height = 20
+        Height = 26
         Top = 9
         Width = 100
         Align = alRight
@@ -244,7 +226,7 @@ object dlgDestTaxon: TdlgDestTaxon
       end
       object sbApplyToSelected: TSpeedButton
         Left = 299
-        Height = 20
+        Height = 26
         Top = 9
         Width = 100
         Align = alRight
@@ -259,7 +241,7 @@ object dlgDestTaxon: TdlgDestTaxon
     object pChangeSuffix: TBCPanel
       Left = 16
       Height = 37
-      Top = 150
+      Top = 136
       Width = 524
       Align = alBottom
       AutoSize = True
@@ -302,7 +284,7 @@ object dlgDestTaxon: TdlgDestTaxon
       ParentBackground = False
       Rounding.RoundX = 8
       Rounding.RoundY = 8
-      TabOrder = 3
+      TabOrder = 2
       object lblChangeSuffix: TLabel
         Left = 17
         Height = 19

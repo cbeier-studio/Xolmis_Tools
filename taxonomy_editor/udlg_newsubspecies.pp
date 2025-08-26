@@ -6,14 +6,13 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, CheckLst, Buttons,
-  atshapelinebgra, BCPanel, lib_taxa;
+  atshapelinebgra, BCPanel, utils_taxonomy;
 
 type
 
   { TdlgNewSubspecies }
 
   TdlgNewSubspecies = class(TForm)
-    cklTaxonomy: TCheckListBox;
     eEpythet: TEdit;
     lblApplyTo: TLabel;
     lineBottom: TShapeLineBGRA;
@@ -39,6 +38,9 @@ var
   dlgNewSubspecies: TdlgNewSubspecies;
 
 implementation
+
+uses
+  utils_dialogs;
 
 { TdlgNewSubspecies }
 
@@ -76,10 +78,10 @@ begin
   if not ValidateFields then
     Exit;
 
-  if cklTaxonomy.Checked[0] then
-    FTaxonomies := FTaxonomies + [btClements];
-  if cklTaxonomy.Checked[1] then
-    FTaxonomies := FTaxonomies + [btIoc];
+  //if cklTaxonomy.Checked[0] then
+  //  FTaxonomies := FTaxonomies + [btClements];
+  //if cklTaxonomy.Checked[1] then
+  //  FTaxonomies := FTaxonomies + [btIoc];
   //if cklTaxonomy.Checked[2] then
   //  FTaxonomies := FTaxonomies + [btCbro];
 
@@ -93,11 +95,11 @@ begin
   Result:= True;
 
   // Required fields
-  if (cklTaxonomy.Checked[0] = False) and (cklTaxonomy.Checked[1] = False) and (cklTaxonomy.Checked[2] = False) then
-  begin
-    MsgDlg('', 'Select at least one taxonomy to update!', mtInformation);
-    Result:= False;
-  end;
+  //if (cklTaxonomy.Checked[0] = False) and (cklTaxonomy.Checked[1] = False) and (cklTaxonomy.Checked[2] = False) then
+  //begin
+  //  MsgDlg('', 'Select at least one taxonomy to update!', mtInformation);
+  //  Result:= False;
+  //end;
   if (eEpythet.Text = EmptyStr) then
   begin
     MsgDlg('', 'Inform the epythet for the new subspecies!', mtInformation);

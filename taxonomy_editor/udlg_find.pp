@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, DB, SQLDB, Forms, Controls, Graphics, Dialogs, ExtCtrls, LCLType,
   StdCtrls, Buttons, Grids, DBGrids, BCPanel, RegExpr, StrUtils,
-  lib_taxa;
+  data_types, utils_taxonomy;
 
 type
 
@@ -65,6 +65,9 @@ var
   dlgFind: TdlgFind;
 
 implementation
+
+uses
+  utils_global, utils_dialogs, utils_conversions, data_getvalue;
 
 {$R *.lfm}
 

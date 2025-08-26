@@ -5,8 +5,7 @@ unit udm_taxa;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Dialogs, Controls, UniqueInstance, SQLDBLib, SQLDB, DB, SdfData,
-  SQLite3Conn;
+  Classes, SysUtils, SQLDB, SQLDBLib, DB, LResources, Forms, Dialogs, UniqueInstance, Controls, SQLite3Conn;
 
 type
 
@@ -14,17 +13,41 @@ type
 
   TdmTaxa = class(TDataModule)
     dbLibLoader: TSQLDBLibraryLoader;
+    dsChildTaxa: TDataSource;
+    dsCountries: TDataSource;
+    dsLanguages: TDataSource;
     dslookRanks: TDataSource;
-    dslookAuthors: TDataSource;
-    iLogos: TImageList;
-    lookAuthorsauthorship: TStringField;
+    dsPacks: TDataSource;
+    dsRanks: TDataSource;
+    dsSynonyms: TDataSource;
+    dsTaxa: TDataSource;
+    dsTaxaChanges: TDataSource;
+    dsTaxonCountries: TDataSource;
+    dsVernacular: TDataSource;
     lookRanks: TSQLQuery;
-    lookAuthors: TSQLQuery;
     lookRanksrank_id: TLongintField;
     lookRanksrank_name: TStringField;
     qChildTaxa: TSQLQuery;
     qChildTaxaformatted_name: TStringField;
     qChildTaxafull_name: TStringField;
+    qCountries: TSQLQuery;
+    qCountriesactive_status: TBooleanField;
+    qCountriescountry_code: TStringField;
+    qCountriescountry_id: TLongintField;
+    qCountriescountry_name: TStringField;
+    qCountriesinsert_date: TDateTimeField;
+    qCountriesmarked_status: TBooleanField;
+    qCountriesupdate_date: TDateTimeField;
+    qLanguages: TSQLQuery;
+    qLanguagesactive_status: TBooleanField;
+    qLanguagescountry_code: TStringField;
+    qLanguagesinsert_date: TDateTimeField;
+    qLanguageslanguage_id: TLongintField;
+    qLanguageslanguage_name: TStringField;
+    qLanguagesmacrolanguage_code: TStringField;
+    qLanguagesmarked_status: TBooleanField;
+    qLanguagesupdate_date: TDateTimeField;
+    qLanguagesvariation_code: TStringField;
     qPacks: TSQLQuery;
     qPacksactive_status: TBooleanField;
     qPacksinsert_date: TDateTimeField;
@@ -33,13 +56,12 @@ type
     qPackspackage_month: TLongintField;
     qPackspackage_name: TStringField;
     qPackspackage_year: TLongintField;
-    qPackstaxonomy: TStringField;
+    qPackspending_status: TBooleanField;
     qPacksupdate_date: TDateTimeField;
     qPacksversion: TStringField;
     qRanks: TSQLQuery;
     qRanksactive_status: TBooleanField;
     qRanksbotanical_code: TBooleanField;
-    qRanksexported_status: TBooleanField;
     qRanksinfrarank: TBooleanField;
     qRanksinfraspecific: TBooleanField;
     qRanksinsert_date: TDateTimeField;
@@ -51,72 +73,74 @@ type
     qRanksrank_seq: TLongintField;
     qRankssubrank: TBooleanField;
     qRanksupdate_date: TDateTimeField;
-    qRanksuser_inserted: TLongintField;
-    qRanksuser_updated: TLongintField;
     qRankszoological_code: TBooleanField;
-    qSynonymTaxa: TSQLQuery;
-    qSynonymTaxaformatted_name: TStringField;
-    qSynonymTaxafull_name: TStringField;
-    qSynonymTaxavalid_id: TLargeintField;
+    qSynonyms: TSQLQuery;
+    qSynonymsactive_status: TBooleanField;
+    qSynonymsfull_name: TStringField;
+    qSynonymsinsert_date: TDateTimeField;
+    qSynonymsmarked_status: TBooleanField;
+    qSynonymssynonym_id: TLongintField;
+    qSynonymstaxon_id: TLongintField;
+    qSynonymsupdate_date: TDateTimeField;
     qTaxa: TSQLQuery;
+    qTaxaaccepted_status: TBooleanField;
     qTaxaactive_status: TBooleanField;
     qTaxaauthorship: TStringField;
-    qTaxacbro_taxonomy: TBooleanField;
-    qTaxaclements_taxonomy: TBooleanField;
+    qTaxaChanges: TSQLQuery;
+    qTaxaChangesaction_type: TStringField;
+    qTaxaChangesactive_status: TBooleanField;
+    qTaxaChangeschange_id: TLongintField;
+    qTaxaChangesinsert_date: TDateTimeField;
+    qTaxaChangesmarked_status: TBooleanField;
+    qTaxaChangesnew_value: TStringField;
+    qTaxaChangespackage_id: TLongintField;
+    qTaxaChangestaxon_name: TStringField;
+    qTaxaChangestaxon_new_name: TStringField;
+    qTaxaChangestrait_name: TStringField;
+    qTaxaChangesupdate_date: TDateTimeField;
     qTaxadistribution: TMemoField;
     qTaxaebird_code: TStringField;
-    qTaxaenglish_name: TStringField;
-    qTaxaexported_status: TBooleanField;
     qTaxaextinct: TBooleanField;
     qTaxaextinction_year: TStringField;
     qTaxafamily_id: TLongintField;
     qTaxaformatted_name: TStringField;
     qTaxafull_name: TStringField;
     qTaxagenus_id: TLongintField;
-    qTaxagroup_name: TStringField;
     qTaxaincertae_sedis: TLongintField;
     qTaxainsert_date: TDateTimeField;
-    qTaxaioc_distribution: TMemoField;
-    qTaxaioc_english_name: TStringField;
-    qTaxaioc_parent_taxon_id: TLongintField;
-    qTaxaioc_parent_taxon_name: TStringField;
-    qTaxaioc_rank_id: TLongintField;
-    qTaxaioc_sort_num: TFloatField;
-    qTaxaioc_taxonomy: TBooleanField;
-    qTaxaioc_valid_id: TLongintField;
-    qTaxaioc_valid_name: TStringField;
     qTaxaiucn_status: TStringField;
     qTaxamarked_status: TBooleanField;
     qTaxaorder_id: TLongintField;
-    qTaxaother_portuguese_names: TStringField;
     qTaxaparent_taxon_id: TLongintField;
     qTaxaparent_taxon_name: TStringField;
-    qTaxaportuguese_name: TStringField;
     qTaxaquick_code: TStringField;
     qTaxarank_id: TLongintField;
     qTaxasort_num: TFloatField;
-    qTaxaspanish_name: TStringField;
     qTaxaspecies_id: TLongintField;
     qTaxasubfamily_id: TLongintField;
     qTaxasubspecies_group_id: TLongintField;
     qTaxataxon_id: TLongintField;
-    qTaxaUpdates: TSQLQuery;
-    qTaxaUpdatesaction_type: TStringField;
-    qTaxaUpdatesactive_status: TBooleanField;
-    qTaxaUpdateschange_id: TLongintField;
-    qTaxaUpdatesinsert_date: TDateTimeField;
-    qTaxaUpdatesmarked_status: TBooleanField;
-    qTaxaUpdatesnew_value: TStringField;
-    qTaxaUpdatespackage_id: TLongintField;
-    qTaxaUpdatestaxon_name: TStringField;
-    qTaxaUpdatestaxon_new_name: TStringField;
-    qTaxaUpdatestrait_name: TStringField;
-    qTaxaUpdatesupdate_date: TDateTimeField;
     qTaxaupdate_date: TDateTimeField;
-    qTaxauser_inserted: TLongintField;
-    qTaxauser_updated: TLongintField;
-    qTaxavalid_id: TLongintField;
-    qTaxavalid_name: TStringField;
+    qTaxonCountries: TSQLQuery;
+    qTaxonCountriesactive_status: TBooleanField;
+    qTaxonCountriescountry_id: TLongintField;
+    qTaxonCountriescountry_name: TStringField;
+    qTaxonCountriesinsert_date: TDateTimeField;
+    qTaxonCountriesmarked_status: TBooleanField;
+    qTaxonCountriestaxon_country_id: TLongintField;
+    qTaxonCountriestaxon_id: TLongintField;
+    qTaxonCountriesupdate_date: TDateTimeField;
+    qVernacular: TSQLQuery;
+    qVernacularactive_status: TBooleanField;
+    qVernacularinsert_date: TDateTimeField;
+    qVernacularlanguage_id: TLongintField;
+    qVernacularlanguage_name: TStringField;
+    qVernacularmarked_status: TBooleanField;
+    qVernacularpreferred: TBooleanField;
+    qVernaculartaxon_id: TLongintField;
+    qVernacularupdate_date: TDateTimeField;
+    qVernacularvernacular_id: TLongintField;
+    qVernacularvernacular_name: TStringField;
     sqlCon: TSQLConnector;
     sqlTrans: TSQLTransaction;
     TaskDlg: TTaskDialog;
@@ -141,40 +165,75 @@ var
 
 implementation
 
-uses lib_taxa;
+uses
+  utils_global, utils_dialogs, data_types, uedt_database;
 
 { TdmTaxa }
 
 procedure TdmTaxa.DataModuleCreate(Sender: TObject);
+var
+  canOpen: Boolean;
 begin
-  dbLibLoader.LibraryName := ConcatPaths([InstallDir, 'sqlite3.dll']);
+  dbLibLoader.LibraryName := ConcatPaths([InstallDir, SQLITE_LIBRARY]);
   dbLibLoader.Enabled := True;
-  sqlCon.Open;
+
+  canOpen := False;
+
+  databaseConnection.LoadParams;
+
+  if databaseConnection.Database = EmptyStr then
+  begin
+    edtDatabase := TedtDatabase.Create(nil);
+    try
+      edtDatabase.IsNew := True;
+      if edtDatabase.ShowModal = mrOK then
+        canOpen := True;
+    finally
+      FreeAndNil(edtDatabase);
+    end;
+  end
+  else
+    canOpen := True;
+
+  if canOpen then
+  begin
+    sqlCon.DatabaseName := databaseConnection.Database;
+    //sqlCon.UserName := databaseConnection.UserName;
+    //sqlCon.Password := databaseConnection.Password;
+    sqlCon.Open;
+  end
+  else
+  begin
+    MsgDlg('Error', 'Cannot open the database. The application will be terminated.', mtError);
+    Application.Terminate;
+  end;
 end;
 
 procedure TdmTaxa.DataModuleDestroy(Sender: TObject);
 begin
-  sqlCon.Close;
+  if sqlCon.Connected then
+    sqlCon.Close;
 end;
 
 procedure TdmTaxa.qTaxaAfterInsert(DataSet: TDataSet);
 begin
   DataSet.FieldByName('extinct').AsBoolean:= False;
-  DataSet.FieldByName('clements_taxonomy').AsBoolean:= False;
-  DataSet.FieldByName('ioc_taxonomy').AsBoolean:= False;
-  DataSet.FieldByName('cbro_taxonomy').AsBoolean:= False;
 end;
 
 procedure TdmTaxa.qTaxaAfterOpen(DataSet: TDataSet);
 begin
-  qSynonymTaxa.Open;
+  qSynonyms.Open;
   qChildTaxa.Open;
+  qVernacular.Open;
+  qTaxonCountries.Open;
 end;
 
 procedure TdmTaxa.qTaxaBeforeClose(DataSet: TDataSet);
 begin
+  qTaxonCountries.Close;
+  qVernacular.Close;
   qChildTaxa.Close;
-  qSynonymTaxa.Close;
+  qSynonyms.Close;
 end;
 
 procedure TdmTaxa.qTaxaiucn_statusGetText(Sender: TField; var aText: string; DisplayText: Boolean);

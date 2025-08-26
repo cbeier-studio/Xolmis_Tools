@@ -8,9 +8,9 @@ object dlgAbout: TdlgAbout
   Caption = 'Sobre o Xolmis'
   ClientHeight = 326
   ClientWidth = 310
-  OnShow = FormShow
   PopupMode = pmAuto
   Position = poScreenCenter
+  OnShow = FormShow
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
@@ -58,8 +58,8 @@ object dlgAbout: TdlgAbout
       Caption = 'Copiar'
       Images = iButtons
       ImageIndex = 0
-      OnClick = sbCopyClick
       TabOrder = 1
+      OnClick = sbCopyClick
     end
   end
   object pContent: TPanel
@@ -136,7 +136,7 @@ object dlgAbout: TdlgAbout
       Width = 278
       Align = alTop
       BorderSpacing.Bottom = 8
-      Caption = '© 2023 Christian Beier'
+      Caption = '© 2023-2025 Christian Beier'
       ParentColor = False
     end
     object linkWebsite: TATLabelLink
@@ -248,7 +248,7 @@ object dlgAbout: TdlgAbout
       Top = 41
       Width = 278
       Align = alTop
-      Caption = 'Taxonomies Editor'
+      Caption = 'Taxonomy Editor'
       Font.Color = 13066075
       Font.Height = -32
       Font.Style = [fsBold]

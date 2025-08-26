@@ -14,7 +14,7 @@ type
 
   TdlgSqlFilter = class(TForm)
     iButtons: TImageList;
-    Panel1: TPanel;
+    pToolbar: TPanel;
     pBottom: TPanel;
     sbApply: TBitBtn;
     sbClose: TButton;
@@ -52,8 +52,6 @@ begin
     Add('SELECT z.*,');
     Add('    u.full_name AS parent_taxon_name,');
     Add('    v.full_name AS valid_name,');
-    Add('    ui.full_name AS ioc_parent_taxon_name,');
-    Add('    vi.full_name AS ioc_valid_name,');
     Add('    o.full_name AS order_name,');
     Add('    f.full_name AS family_name,');
     Add('    s.full_name AS subfamily_name,');
@@ -63,8 +61,6 @@ begin
     Add('FROM zoo_taxa AS z');
     Add('LEFT JOIN zoo_taxa AS u ON z.parent_taxon_id = u.taxon_id');
     Add('LEFT JOIN zoo_taxa AS v ON z.valid_id = v.taxon_id');
-    Add('LEFT JOIN zoo_taxa AS ui ON z.ioc_parent_taxon_id = ui.taxon_id');
-    Add('LEFT JOIN zoo_taxa AS vi ON z.ioc_valid_id = vi.taxon_id');
     Add('LEFT JOIN zoo_taxa AS o ON z.order_id = o.taxon_id');
     Add('LEFT JOIN zoo_taxa AS f ON z.family_id = f.taxon_id');
     Add('LEFT JOIN zoo_taxa AS s ON z.subfamily_id = s.taxon_id');
@@ -75,9 +71,6 @@ begin
   end;
 
 end;
-
-initialization
-  {$I udlg_sqlfilter.lrs}
 
 end.
 

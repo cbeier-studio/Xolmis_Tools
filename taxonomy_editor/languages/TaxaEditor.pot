@@ -1,109 +1,16 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
-#: lib_taxa.rsactiverecordduplicated
-#, object-pascal-format
-msgid "A record with the same %s value already exists (%s)."
-msgstr ""
-
-#: lib_taxa.rscaptionfind
-msgid "Find"
-msgstr ""
-
-#: lib_taxa.rsdeleterecordfooter
-msgid "Deleted record stay in recycle bin for the time period defined in Settings before being permanently deleted."
-msgstr ""
-
-#: lib_taxa.rsdeleterecordprompt
-msgid "Do you really want to delete this record?"
-msgstr ""
-
-#: lib_taxa.rsdeleterecordtitle
-msgid "Delete record"
-msgstr ""
-
-#: lib_taxa.rserrorfileisempty
-msgid "Selected file is empty."
-msgstr ""
-
-#: lib_taxa.rserrorfilenotfound
-#, object-pascal-format
-msgid "File %s not found."
-msgstr ""
-
-#: lib_taxa.rserrorrewritinghierarchy
-msgid "An error occurred during hierarchy rewriting. All changes will be reverted back."
-msgstr ""
-
-#: lib_taxa.rserrortablenotfound
-#, object-pascal-format
-msgid "Table %s not found."
-msgstr ""
-
-#: lib_taxa.rsimportcanceledbyuser
-msgid "Import canceled by the user."
-msgstr ""
-
-#: lib_taxa.rsinactiverecordduplicated
-#, object-pascal-format
-msgid "An inactive record with the same %s value already exists (%s)."
-msgstr ""
-
-#: lib_taxa.rsrecnoempty
-msgid "record 0 of 0"
-msgstr ""
-
-#: lib_taxa.rsrecordnumber
-#, object-pascal-format
-msgid "record %d of %d"
-msgstr ""
-
-#: lib_taxa.rsrestorerecordprompt
-msgid "Do you really want to restore this record?"
-msgstr ""
-
-#: lib_taxa.rsrestorerecordtitle
-msgid "Restore record"
-msgstr ""
-
-#: lib_taxa.rssuccessfulimport
-msgid "The selected file was sucessfully imported."
-msgstr ""
-
-#: lib_taxa.rstitlecaution
-msgid "Warning"
-msgstr ""
-
-#: lib_taxa.rstitleconfirmation
-msgid "Confirmation"
-msgstr ""
-
-#: lib_taxa.rstitleerror
-msgid "Error"
-msgstr ""
-
-#: lib_taxa.rstitleimportfile
-msgid "Import file"
-msgstr ""
-
-#: lib_taxa.rstitleinformation
-msgid "Information"
-msgstr ""
-
-#: lib_taxa.rsworkingonit
-msgid "Working on it..."
-msgstr ""
-
 #: tdlgabout.caption
 msgid "Sobre o Xolmis"
 msgstr ""
 
 #: tdlgabout.lblappcopyright.caption
-msgid "© 2023 Christian Beier"
+msgid "© 2023-2025 Christian Beier"
 msgstr ""
 
 #: tdlgabout.lblappname.caption
-msgid "Taxonomies Editor"
+msgid "Taxonomy Editor"
 msgstr ""
 
 #: tdlgabout.lblappname1.caption
@@ -315,6 +222,18 @@ msgctxt "tdlgfind.ulist.columns[0].title.caption"
 msgid "Name"
 msgstr ""
 
+#: tdlgloading.btncancel.caption
+msgid "&Cancel"
+msgstr ""
+
+#: tdlgloading.caption
+msgid "Loading"
+msgstr ""
+
+#: tdlgloading.lblloading.caption
+msgid "Loading..."
+msgstr ""
+
 #: tdlgnewsubspecies.caption
 msgctxt "tdlgnewsubspecies.caption"
 msgid "New subspecies"
@@ -353,6 +272,48 @@ msgctxt "tdlgsqlfilter.sbreset.caption"
 msgid "Reset"
 msgstr ""
 
+#: tedtdatabase.caption
+msgid "Connection settings"
+msgstr ""
+
+#: tedtdatabase.edbfile.buttonhint
+msgid "Select file"
+msgstr ""
+
+#: tedtdatabase.edbpass.buttonhint
+msgid "Show/hide password"
+msgstr ""
+
+#: tedtdatabase.lbldbfile.caption
+msgid "Database file: *"
+msgstr ""
+
+#: tedtdatabase.lbldbpass.caption
+msgid "Password:"
+msgstr ""
+
+#: tedtdatabase.lbldbuser.caption
+msgid "Username:"
+msgstr ""
+
+#: tedtdatabase.lbltitleauthentication.caption
+msgid "Authentication"
+msgstr ""
+
+#: tedtdatabase.opendlg.title
+msgid "Select database file"
+msgstr ""
+
+#: tedtdatabase.sbcancel.caption
+msgctxt "tedtdatabase.sbcancel.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tedtdatabase.sbsave.caption
+msgctxt "tedtdatabase.sbsave.caption"
+msgid "Save"
+msgstr ""
+
 #: tfrmtaxaeditor.actabout.caption
 msgid "About"
 msgstr ""
@@ -368,6 +329,7 @@ msgid "Exit"
 msgstr ""
 
 #: tfrmtaxaeditor.actexport.caption
+msgctxt "tfrmtaxaeditor.actexport.caption"
 msgid "Export"
 msgstr ""
 
@@ -396,23 +358,8 @@ msgstr ""
 msgid "Subspecies' vernacular names"
 msgstr ""
 
-#: tfrmtaxaeditor.btncancelprogress.caption
-msgctxt "tfrmtaxaeditor.btncancelprogress.caption"
-msgid "Cancel"
-msgstr ""
-
 #: tfrmtaxaeditor.caption
-msgid "Xolmis Taxonomies Editor"
-msgstr ""
-
-#: tfrmtaxaeditor.cktcbro.caption
-msgctxt "tfrmtaxaeditor.cktcbro.caption"
-msgid "CBRO"
-msgstr ""
-
-#: tfrmtaxaeditor.cktclements.caption
-msgctxt "tfrmtaxaeditor.cktclements.caption"
-msgid "Clements/eBird"
+msgid "Xolmis Taxonomy Editor"
 msgstr ""
 
 #: tfrmtaxaeditor.cktextinct.caption
@@ -420,23 +367,30 @@ msgctxt "tfrmtaxaeditor.cktextinct.caption"
 msgid "Extinct"
 msgstr ""
 
-#: tfrmtaxaeditor.cktioc.caption
-msgctxt "tfrmtaxaeditor.cktioc.caption"
-msgid "IOC"
+#: tfrmtaxaeditor.dbcheckbox1.caption
+msgctxt "tfrmtaxaeditor.dbcheckbox1.caption"
+msgid "Accepted"
 msgstr ""
 
-#: tfrmtaxaeditor.efindranks.texthint
-msgctxt "tfrmtaxaeditor.efindranks.texthint"
-msgid "Search taxon rank"
+#: tfrmtaxaeditor.dbgcountries.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.dbgcountries.columns[0].title.caption"
+msgid "Country"
 msgstr ""
 
-#: tfrmtaxaeditor.efindtaxa.texthint
-msgctxt "tfrmtaxaeditor.efindtaxa.texthint"
-msgid "Search taxon"
+#: tfrmtaxaeditor.dbgvernacular.columns[0].title.caption
+msgid "Language"
 msgstr ""
 
-#: tfrmtaxaeditor.efindtaxa2.texthint
-msgid "Search taxonomy"
+#: tfrmtaxaeditor.dbgvernacular.columns[1].title.caption
+msgid "Vernacular name"
+msgstr ""
+
+#: tfrmtaxaeditor.dbgvernacular.columns[2].title.caption
+msgid "Preferred"
+msgstr ""
+
+#: tfrmtaxaeditor.efind.texthint
+msgid "Search"
 msgstr ""
 
 #: tfrmtaxaeditor.etextinctionyear.texthint
@@ -447,9 +401,123 @@ msgstr ""
 msgid "AAA AAA"
 msgstr ""
 
+#: tfrmtaxaeditor.gridchanges.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[0].title.caption"
+msgid "Marked"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchanges.columns[1].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[1].title.caption"
+msgid "Action"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchanges.columns[2].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[2].title.caption"
+msgid "Taxon"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchanges.columns[3].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[3].title.caption"
+msgid "New taxon"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchanges.columns[4].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[4].title.caption"
+msgid "Trait"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchanges.columns[5].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[5].title.caption"
+msgid "New value"
+msgstr ""
+
+#: tfrmtaxaeditor.gridchanges.columns[6].title.caption
+msgctxt "tfrmtaxaeditor.gridchanges.columns[6].title.caption"
+msgid "ID"
+msgstr ""
+
 #: tfrmtaxaeditor.gridchildtaxa.columns[0].title.caption
 msgctxt "tfrmtaxaeditor.gridchildtaxa.columns[0].title.caption"
 msgid "Child taxa"
+msgstr ""
+
+#: tfrmtaxaeditor.gridcountries.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.gridcountries.columns[0].title.caption"
+msgid "Marked"
+msgstr ""
+
+#: tfrmtaxaeditor.gridcountries.columns[1].title.caption
+msgctxt "tfrmtaxaeditor.gridcountries.columns[1].title.caption"
+msgid "Code"
+msgstr ""
+
+#: tfrmtaxaeditor.gridcountries.columns[2].title.caption
+msgctxt "tfrmtaxaeditor.gridcountries.columns[2].title.caption"
+msgid "Name"
+msgstr ""
+
+#: tfrmtaxaeditor.gridcountries.columns[3].title.caption
+msgctxt "tfrmtaxaeditor.gridcountries.columns[3].title.caption"
+msgid "ID"
+msgstr ""
+
+#: tfrmtaxaeditor.gridlanguages.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.gridlanguages.columns[0].title.caption"
+msgid "Marked"
+msgstr ""
+
+#: tfrmtaxaeditor.gridlanguages.columns[1].title.caption
+msgctxt "tfrmtaxaeditor.gridlanguages.columns[1].title.caption"
+msgid "Code"
+msgstr ""
+
+#: tfrmtaxaeditor.gridlanguages.columns[2].title.caption
+msgctxt "tfrmtaxaeditor.gridlanguages.columns[2].title.caption"
+msgid "Country"
+msgstr ""
+
+#: tfrmtaxaeditor.gridlanguages.columns[3].title.caption
+msgid "Variation"
+msgstr ""
+
+#: tfrmtaxaeditor.gridlanguages.columns[4].title.caption
+msgctxt "tfrmtaxaeditor.gridlanguages.columns[4].title.caption"
+msgid "Name"
+msgstr ""
+
+#: tfrmtaxaeditor.gridlanguages.columns[5].title.caption
+msgctxt "tfrmtaxaeditor.gridlanguages.columns[5].title.caption"
+msgid "ID"
+msgstr ""
+
+#: tfrmtaxaeditor.gridpacks.columns[0].title.caption
+msgctxt "tfrmtaxaeditor.gridpacks.columns[0].title.caption"
+msgid "Marked"
+msgstr ""
+
+#: tfrmtaxaeditor.gridpacks.columns[1].title.caption
+msgctxt "tfrmtaxaeditor.gridpacks.columns[1].title.caption"
+msgid "Package name"
+msgstr ""
+
+#: tfrmtaxaeditor.gridpacks.columns[2].title.caption
+msgctxt "tfrmtaxaeditor.gridpacks.columns[2].title.caption"
+msgid "Year"
+msgstr ""
+
+#: tfrmtaxaeditor.gridpacks.columns[3].title.caption
+msgctxt "tfrmtaxaeditor.gridpacks.columns[3].title.caption"
+msgid "Month"
+msgstr ""
+
+#: tfrmtaxaeditor.gridpacks.columns[4].title.caption
+msgctxt "tfrmtaxaeditor.gridpacks.columns[4].title.caption"
+msgid "Version"
+msgstr ""
+
+#: tfrmtaxaeditor.gridpacks.columns[5].title.caption
+msgctxt "tfrmtaxaeditor.gridpacks.columns[5].title.caption"
+msgid "ID"
 msgstr ""
 
 #: tfrmtaxaeditor.gridranks.columns[0].title.caption
@@ -469,7 +537,7 @@ msgstr ""
 
 #: tfrmtaxaeditor.gridranks.columns[2].title.caption
 msgctxt "tfrmtaxaeditor.gridranks.columns[2].title.caption"
-msgid "Acronym"
+msgid "Abbreviation"
 msgstr ""
 
 #: tfrmtaxaeditor.gridranks.columns[3].title.caption
@@ -536,69 +604,9 @@ msgctxt "tfrmtaxaeditor.gridtaxa.columns[4].title.caption"
 msgid "rank_id"
 msgstr ""
 
-#: tfrmtaxaeditor.gridtaxa1.columns[0].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa1.columns[0].title.caption"
-msgid "Marked"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa1.columns[1].title.caption
-msgid "Package name"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa1.columns[2].title.caption
-msgid "Taxonomy"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa1.columns[3].title.caption
-msgid "Year"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa1.columns[4].title.caption
-msgid "Month"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa1.columns[5].title.caption
-msgid "Version"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa1.columns[6].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa1.columns[6].title.caption"
-msgid "ID"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[0].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa2.columns[0].title.caption"
-msgid "Marked"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[1].title.caption
-msgid "Action"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[2].title.caption
-msgid "Taxon"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[3].title.caption
-msgid "New taxon"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[4].title.caption
-msgid "Trait"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[5].title.caption
-msgid "New value"
-msgstr ""
-
-#: tfrmtaxaeditor.gridtaxa2.columns[6].title.caption
-msgctxt "tfrmtaxaeditor.gridtaxa2.columns[6].title.caption"
-msgid "ID"
-msgstr ""
-
-#: tfrmtaxaeditor.lblclementsfilter.caption
-msgctxt "tfrmtaxaeditor.lblclementsfilter.caption"
-msgid "Clements/eBird"
+#: tfrmtaxaeditor.lblacceptedfilter.caption
+msgctxt "tfrmtaxaeditor.lblacceptedfilter.caption"
+msgid "Accepted"
 msgstr ""
 
 #: tfrmtaxaeditor.lblcounttaxa.caption
@@ -618,42 +626,21 @@ msgstr ""
 msgid "Have synonyms"
 msgstr ""
 
-#: tfrmtaxaeditor.lblloading.caption
-msgid "Welcome"
-msgstr ""
-
 #: tfrmtaxaeditor.lblmarkedfilter.caption
 msgid "Marked records"
-msgstr ""
-
-#: tfrmtaxaeditor.lblprogress.caption
-msgid "Progress"
-msgstr ""
-
-#: tfrmtaxaeditor.lblsynonymfilter.caption
-msgid "Is a synonym"
 msgstr ""
 
 #: tfrmtaxaeditor.lbltauthorship.caption
 msgid "Authorship"
 msgstr ""
 
-#: tfrmtaxaeditor.lbltaxonomycbrofilter.caption
-msgctxt "tfrmtaxaeditor.lbltaxonomycbrofilter.caption"
-msgid "CBRO"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltaxonomyiocfilter.caption
-msgctxt "tfrmtaxaeditor.lbltaxonomyiocfilter.caption"
-msgid "IOC"
-msgstr ""
-
 #: tfrmtaxaeditor.lbltaxonranksfilter.caption
 msgid "Ranks"
 msgstr ""
 
-#: tfrmtaxaeditor.lbltcbrootherptnames.caption
-msgid "Other portuguese names"
+#: tfrmtaxaeditor.lbltcountries.caption
+msgctxt "tfrmtaxaeditor.lbltcountries.caption"
+msgid "Occurrence in countries"
 msgstr ""
 
 #: tfrmtaxaeditor.lbltdistribution.caption
@@ -665,44 +652,9 @@ msgstr ""
 msgid "eBird code"
 msgstr ""
 
-#: tfrmtaxaeditor.lbltenglishname.caption
-msgctxt "tfrmtaxaeditor.lbltenglishname.caption"
-msgid "English name"
-msgstr ""
-
 #: tfrmtaxaeditor.lbltfullname.caption
 msgctxt "tfrmtaxaeditor.lbltfullname.caption"
 msgid "Scientific name"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltiocdistribution.caption
-msgctxt "tfrmtaxaeditor.lbltiocdistribution.caption"
-msgid "Geographical distribution"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltiocenglishname.caption
-msgctxt "tfrmtaxaeditor.lbltiocenglishname.caption"
-msgid "English name"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltiocparenttaxon.caption
-msgctxt "tfrmtaxaeditor.lbltiocparenttaxon.caption"
-msgid "Parent taxon"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltiocrank.caption
-msgctxt "tfrmtaxaeditor.lbltiocrank.caption"
-msgid "Rank"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltiocsortnr.caption
-msgctxt "tfrmtaxaeditor.lbltiocsortnr.caption"
-msgid "Sorting number"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltiocvalidname.caption
-msgctxt "tfrmtaxaeditor.lbltiocvalidname.caption"
-msgid "Valid name"
 msgstr ""
 
 #: tfrmtaxaeditor.lbltitlechilds.caption
@@ -723,10 +675,6 @@ msgctxt "tfrmtaxaeditor.lbltparenttaxon.caption"
 msgid "Parent taxon"
 msgstr ""
 
-#: tfrmtaxaeditor.lbltportuguesename.caption
-msgid "Portuguese name"
-msgstr ""
-
 #: tfrmtaxaeditor.lbltquickcode.caption
 msgid "Quick code"
 msgstr ""
@@ -741,17 +689,9 @@ msgctxt "tfrmtaxaeditor.lbltsortnr.caption"
 msgid "Sorting number"
 msgstr ""
 
-#: tfrmtaxaeditor.lbltspanishname.caption
-msgid "Spanish name"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltsubspecificgroup.caption
-msgid "Subspecific group"
-msgstr ""
-
-#: tfrmtaxaeditor.lbltvalidname.caption
-msgctxt "tfrmtaxaeditor.lbltvalidname.caption"
-msgid "Valid name"
+#: tfrmtaxaeditor.lbltvernacular.caption
+msgctxt "tfrmtaxaeditor.lbltvernacular.caption"
+msgid "Vernacular names"
 msgstr ""
 
 #: tfrmtaxaeditor.menuitem3.caption
@@ -847,6 +787,21 @@ msgctxt "tfrmtaxaeditor.pmvmovetospecies.caption"
 msgid "To species"
 msgstr ""
 
+#: tfrmtaxaeditor.rbacceptedall.caption
+msgctxt "tfrmtaxaeditor.rbacceptedall.caption"
+msgid "All"
+msgstr ""
+
+#: tfrmtaxaeditor.rbacceptedno.caption
+msgctxt "tfrmtaxaeditor.rbacceptedno.caption"
+msgid "No"
+msgstr ""
+
+#: tfrmtaxaeditor.rbacceptedyes.caption
+msgctxt "tfrmtaxaeditor.rbacceptedyes.caption"
+msgid "Yes"
+msgstr ""
+
 #: tfrmtaxaeditor.rbextinctall.caption
 msgctxt "tfrmtaxaeditor.rbextinctall.caption"
 msgid "All"
@@ -877,21 +832,6 @@ msgctxt "tfrmtaxaeditor.rbhassynonymsyes.caption"
 msgid "Yes"
 msgstr ""
 
-#: tfrmtaxaeditor.rbissynonymall.caption
-msgctxt "tfrmtaxaeditor.rbissynonymall.caption"
-msgid "All"
-msgstr ""
-
-#: tfrmtaxaeditor.rbissynonymno.caption
-msgctxt "tfrmtaxaeditor.rbissynonymno.caption"
-msgid "No"
-msgstr ""
-
-#: tfrmtaxaeditor.rbissynonymyes.caption
-msgctxt "tfrmtaxaeditor.rbissynonymyes.caption"
-msgid "Yes"
-msgstr ""
-
 #: tfrmtaxaeditor.rbmarkedall.caption
 msgctxt "tfrmtaxaeditor.rbmarkedall.caption"
 msgid "All"
@@ -907,13 +847,24 @@ msgctxt "tfrmtaxaeditor.rbmarkedyes.caption"
 msgid "Yes"
 msgstr ""
 
-#: tfrmtaxaeditor.sbadvancedfilters.hint
-msgid "Advanced filters"
+#: tfrmtaxaeditor.sbaddcountry.caption
+msgctxt "tfrmtaxaeditor.sbaddcountry.caption"
+msgid "Add"
 msgstr ""
 
-#: tfrmtaxaeditor.sbcancelrank.caption
-msgctxt "tfrmtaxaeditor.sbcancelrank.caption"
-msgid "Cancel"
+#: tfrmtaxaeditor.sbaddsynonym.caption
+msgctxt "tfrmtaxaeditor.sbaddsynonym.caption"
+msgid "Add"
+msgstr ""
+
+#: tfrmtaxaeditor.sbaddvernacular.caption
+msgctxt "tfrmtaxaeditor.sbaddvernacular.caption"
+msgid "Add"
+msgstr ""
+
+#: tfrmtaxaeditor.sbadvancedfilters.hint
+msgctxt "tfrmtaxaeditor.sbadvancedfilters.hint"
+msgid "Advanced filters"
 msgstr ""
 
 #: tfrmtaxaeditor.sbcancelrecord.caption
@@ -921,32 +872,37 @@ msgctxt "tfrmtaxaeditor.sbcancelrecord.caption"
 msgid "Cancel"
 msgstr ""
 
-#: tfrmtaxaeditor.sbcancelrecord2.caption
-msgctxt "tfrmtaxaeditor.sbcancelrecord2.caption"
-msgid "Cancel"
-msgstr ""
-
 #: tfrmtaxaeditor.sbclearfilters.hint
+msgctxt "tfrmtaxaeditor.sbclearfilters.hint"
 msgid "Clear filters"
 msgstr ""
 
-#: tfrmtaxaeditor.sbclearfindranks.hint
-msgctxt "tfrmtaxaeditor.sbclearfindranks.hint"
+#: tfrmtaxaeditor.sbclearfind.hint
+msgctxt "tfrmtaxaeditor.sbclearfind.hint"
 msgid "Clear search"
 msgstr ""
 
-#: tfrmtaxaeditor.sbclearfindtaxa.hint
-msgctxt "tfrmtaxaeditor.sbclearfindtaxa.hint"
-msgid "Clear search"
+#: tfrmtaxaeditor.sbcountries.hint
+msgid "Countries"
 msgstr ""
 
-#: tfrmtaxaeditor.sbclearfindtaxa2.hint
-msgctxt "tfrmtaxaeditor.sbclearfindtaxa2.hint"
-msgid "Clear search"
+#: tfrmtaxaeditor.sbdelcountry.caption
+msgctxt "tfrmtaxaeditor.sbdelcountry.caption"
+msgid "Delete"
 msgstr ""
 
 #: tfrmtaxaeditor.sbdelrecord.caption
 msgctxt "tfrmtaxaeditor.sbdelrecord.caption"
+msgid "Delete"
+msgstr ""
+
+#: tfrmtaxaeditor.sbdelsynonym.caption
+msgctxt "tfrmtaxaeditor.sbdelsynonym.caption"
+msgid "Delete"
+msgstr ""
+
+#: tfrmtaxaeditor.sbdelvernacular.caption
+msgctxt "tfrmtaxaeditor.sbdelvernacular.caption"
 msgid "Delete"
 msgstr ""
 
@@ -955,17 +911,14 @@ msgctxt "tfrmtaxaeditor.sbeditrecord.caption"
 msgid "Edit"
 msgstr ""
 
-#: tfrmtaxaeditor.sbfilemenu.caption
-msgid "File"
+#: tfrmtaxaeditor.sbexport.caption
+msgctxt "tfrmtaxaeditor.sbexport.caption"
+msgid "Export"
 msgstr ""
 
 #: tfrmtaxaeditor.sbfirstrecord.hint
+msgctxt "tfrmtaxaeditor.sbfirstrecord.hint"
 msgid "First record"
-msgstr ""
-
-#: tfrmtaxaeditor.sbinsertrank.caption
-msgctxt "tfrmtaxaeditor.sbinsertrank.caption"
-msgid "New"
 msgstr ""
 
 #: tfrmtaxaeditor.sbinsertrecord.caption
@@ -973,12 +926,12 @@ msgctxt "tfrmtaxaeditor.sbinsertrecord.caption"
 msgid "New"
 msgstr ""
 
-#: tfrmtaxaeditor.sbinsertrecord2.caption
-msgctxt "tfrmtaxaeditor.sbinsertrecord2.caption"
-msgid "New"
+#: tfrmtaxaeditor.sblanguages.hint
+msgid "Languages"
 msgstr ""
 
 #: tfrmtaxaeditor.sblastrecord.hint
+msgctxt "tfrmtaxaeditor.sblastrecord.hint"
 msgid "Last record"
 msgstr ""
 
@@ -989,6 +942,10 @@ msgstr ""
 
 #: tfrmtaxaeditor.sblumptaxon.hint
 msgid "Lump species into subspecies"
+msgstr ""
+
+#: tfrmtaxaeditor.sbmainmenu.hint
+msgid "Menu"
 msgstr ""
 
 #: tfrmtaxaeditor.sbmoreoptions.hint
@@ -1006,10 +963,16 @@ msgid "Move taxon into other order, family, genus or species"
 msgstr ""
 
 #: tfrmtaxaeditor.sbnextrecord.hint
+msgctxt "tfrmtaxaeditor.sbnextrecord.hint"
 msgid "Next record"
 msgstr ""
 
+#: tfrmtaxaeditor.sbpackages.hint
+msgid "Packages"
+msgstr ""
+
 #: tfrmtaxaeditor.sbpriorrecord.hint
+msgctxt "tfrmtaxaeditor.sbpriorrecord.hint"
 msgid "Previous record"
 msgstr ""
 
@@ -1018,18 +981,8 @@ msgctxt "tfrmtaxaeditor.sbrefreshrecords.hint"
 msgid "Refresh"
 msgstr ""
 
-#: tfrmtaxaeditor.sbsaverank.caption
-msgctxt "tfrmtaxaeditor.sbsaverank.caption"
-msgid "Save"
-msgstr ""
-
 #: tfrmtaxaeditor.sbsaverecord.caption
 msgctxt "tfrmtaxaeditor.sbsaverecord.caption"
-msgid "Save"
-msgstr ""
-
-#: tfrmtaxaeditor.sbsaverecord2.caption
-msgctxt "tfrmtaxaeditor.sbsaverecord2.caption"
 msgid "Save"
 msgstr ""
 
@@ -1046,6 +999,7 @@ msgid "Recycle bin"
 msgstr ""
 
 #: tfrmtaxaeditor.sbsortrecords.hint
+msgctxt "tfrmtaxaeditor.sbsortrecords.hint"
 msgid "Sort records"
 msgstr ""
 
@@ -1056,5 +1010,128 @@ msgstr ""
 
 #: tfrmtaxaeditor.sbsplittaxon.hint
 msgid "Split subspecies into species"
+msgstr ""
+
+#: tfrmtaxaeditor.sbtaxa.hint
+msgid "Taxa"
+msgstr ""
+
+#: tfrmtaxaeditor.sbtaxonranks.hint
+msgid "Taxonomic ranks"
+msgstr ""
+
+#: utils_global.rsactiverecordduplicated
+#, object-pascal-format
+msgctxt "utils_global.rsactiverecordduplicated"
+msgid "A record with the same %s value already exists (%s)."
+msgstr ""
+
+#: utils_global.rscaptionfind
+msgctxt "utils_global.rscaptionfind"
+msgid "Find"
+msgstr ""
+
+#: utils_global.rsdeleterecordfooter
+msgctxt "utils_global.rsdeleterecordfooter"
+msgid "Deleted record stay in recycle bin for the time period defined in Settings before being permanently deleted."
+msgstr ""
+
+#: utils_global.rsdeleterecordprompt
+msgctxt "utils_global.rsdeleterecordprompt"
+msgid "Do you really want to delete this record?"
+msgstr ""
+
+#: utils_global.rsdeleterecordtitle
+msgctxt "utils_global.rsdeleterecordtitle"
+msgid "Delete record"
+msgstr ""
+
+#: utils_global.rserrorfileisempty
+msgctxt "utils_global.rserrorfileisempty"
+msgid "Selected file is empty."
+msgstr ""
+
+#: utils_global.rserrorfilenotfound
+#, object-pascal-format
+msgctxt "utils_global.rserrorfilenotfound"
+msgid "File %s not found."
+msgstr ""
+
+#: utils_global.rserrorrewritinghierarchy
+msgctxt "utils_global.rserrorrewritinghierarchy"
+msgid "An error occurred during hierarchy rewriting. All changes will be reverted back."
+msgstr ""
+
+#: utils_global.rserrortablenotfound
+#, object-pascal-format
+msgctxt "utils_global.rserrortablenotfound"
+msgid "Table %s not found."
+msgstr ""
+
+#: utils_global.rsimportcanceledbyuser
+msgctxt "utils_global.rsimportcanceledbyuser"
+msgid "Import canceled by the user."
+msgstr ""
+
+#: utils_global.rsinactiverecordduplicated
+#, object-pascal-format
+msgctxt "utils_global.rsinactiverecordduplicated"
+msgid "An inactive record with the same %s value already exists (%s)."
+msgstr ""
+
+#: utils_global.rsrecnoempty
+msgctxt "utils_global.rsrecnoempty"
+msgid "record 0 of 0"
+msgstr ""
+
+#: utils_global.rsrecordnumber
+#, object-pascal-format
+msgctxt "utils_global.rsrecordnumber"
+msgid "record %d of %d"
+msgstr ""
+
+#: utils_global.rsrestorerecordprompt
+msgctxt "utils_global.rsrestorerecordprompt"
+msgid "Do you really want to restore this record?"
+msgstr ""
+
+#: utils_global.rsrestorerecordtitle
+msgctxt "utils_global.rsrestorerecordtitle"
+msgid "Restore record"
+msgstr ""
+
+#: utils_global.rssuccessfulimport
+msgctxt "utils_global.rssuccessfulimport"
+msgid "The selected file was sucessfully imported."
+msgstr ""
+
+#: utils_global.rstitlecaution
+msgctxt "utils_global.rstitlecaution"
+msgid "Warning"
+msgstr ""
+
+#: utils_global.rstitleconfirmation
+msgctxt "utils_global.rstitleconfirmation"
+msgid "Confirmation"
+msgstr ""
+
+#: utils_global.rstitleerror
+msgctxt "utils_global.rstitleerror"
+msgid "Error"
+msgstr ""
+
+#: utils_global.rstitleimportfile
+msgctxt "utils_global.rstitleimportfile"
+msgid "Import file"
+msgstr ""
+
+#: utils_global.rstitleinformation
+msgctxt "utils_global.rstitleinformation"
+msgid "Information"
+msgstr ""
+
+#: utils_global.rsworkingonit
+msgctxt "utils_global.rsworkingonit"
+msgid "Working on it..."
 msgstr ""
 
