@@ -197,6 +197,7 @@ object dmTaxa: TdmTaxa
     AfterInsert = qTaxaAfterInsert
     AfterOpen = qTaxaAfterOpen
     BeforeClose = qTaxaBeforeClose
+    BeforePost = qTaxaBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -692,6 +693,7 @@ object dmTaxa: TdmTaxa
         DataType = ftBoolean
         Precision = -1
       end>
+    BeforePost = qRanksBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -913,6 +915,7 @@ object dmTaxa: TdmTaxa
         DataType = ftBoolean
         Precision = -1
       end>
+    BeforePost = qPacksBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -1098,6 +1101,7 @@ object dmTaxa: TdmTaxa
         DataType = ftBoolean
         Precision = -1
       end>
+    BeforePost = qTaxaChangesBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -1319,6 +1323,7 @@ object dmTaxa: TdmTaxa
         DataType = ftBoolean
         Precision = -1
       end>
+    BeforePost = qSynonymsBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -1535,6 +1540,7 @@ object dmTaxa: TdmTaxa
         Precision = -1
         Size = 100
       end>
+    BeforePost = qVernacularBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -1703,6 +1709,7 @@ object dmTaxa: TdmTaxa
         Precision = -1
         Size = 100
       end>
+    BeforePost = qTaxonCountriesBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -1860,6 +1867,7 @@ object dmTaxa: TdmTaxa
         DataType = ftBoolean
         Precision = -1
       end>
+    BeforePost = qCountriesBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (
@@ -1995,6 +2003,7 @@ object dmTaxa: TdmTaxa
         DataType = ftBoolean
         Precision = -1
       end>
+    BeforePost = qLanguagesBeforePost
     Database = sqlCon
     Transaction = sqlTrans
     SQL.Strings = (

@@ -74,6 +74,7 @@ type
     mmSspVernacularNames: TMenuItem;
     mmRewriteHierarchy: TMenuItem;
     pAcceptedFilter: TBCPanel;
+    pChangesToolbar: TPanel;
     pFind: TBCPanel;
     pNavigation: TPanel;
     pgLanguages: TPage;
@@ -202,6 +203,11 @@ type
     sbAddVernacular: TSpeedButton;
     sbDelSynonym: TSpeedButton;
     sbAddSynonym: TSpeedButton;
+    sbInsertChange: TSpeedButton;
+    sbEditChange: TSpeedButton;
+    sbSaveChange: TSpeedButton;
+    sbCancelChange: TSpeedButton;
+    sbDelChange: TSpeedButton;
     splitTaxaLeft: TSplitter;
     splitPacksLeft: TSplitter;
     splitTaxaRight: TSplitter;
@@ -215,6 +221,7 @@ type
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure actRewriteHierarchyExecute(Sender: TObject);
     procedure actSspVernacularNamesExecute(Sender: TObject);
+    procedure cbAuthorshipKeyPress(Sender: TObject; var Key: char);
     procedure cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure clbTaxonRanksFilterClickCheck(Sender: TObject);
     procedure dsTaxaDataChange(Sender: TObject; Field: TField);
@@ -239,12 +246,16 @@ type
     procedure pmvMoveToSpeciesClick(Sender: TObject);
     procedure rbMarkedYesClick(Sender: TObject);
     procedure sbAdvancedFiltersClick(Sender: TObject);
+    procedure sbCancelChangeClick(Sender: TObject);
     procedure sbCancelRecordClick(Sender: TObject);
     procedure sbClearFiltersClick(Sender: TObject);
     procedure sbClearFindClick(Sender: TObject);
+    procedure sbDelChangeClick(Sender: TObject);
     procedure sbDelRecordClick(Sender: TObject);
+    procedure sbEditChangeClick(Sender: TObject);
     procedure sbEditRecordClick(Sender: TObject);
     procedure sbFirstRecordClick(Sender: TObject);
+    procedure sbInsertChangeClick(Sender: TObject);
     procedure sbInsertRecordClick(Sender: TObject);
     procedure sbLastRecordClick(Sender: TObject);
     procedure sbLumpTaxonClick(Sender: TObject);
@@ -253,6 +264,7 @@ type
     procedure sbNextRecordClick(Sender: TObject);
     procedure sbPriorRecordClick(Sender: TObject);
     procedure sbRefreshRecordsClick(Sender: TObject);
+    procedure sbSaveChangeClick(Sender: TObject);
     procedure sbSaveRecordClick(Sender: TObject);
     procedure sbShowQuickFiltersClick(Sender: TObject);
     procedure sbSortRecordsClick(Sender: TObject);
@@ -263,16 +275,20 @@ type
     procedure tsTaxonExtinctOff(Sender: TObject);
     procedure tsTaxonExtinctOn(Sender: TObject);
   private
-    FSearch: TCustomSearch;
+    FSearchTaxa, FSearchPacks, FSearchRanks, FSearchCountries, FSearchLanguages: TCustomSearch;
     FTaxaSearchString, FPackageSearchString,
       FRankSearchString, FCountrySearchString, FLanguageSearchString: String;
-    CanToggle: Boolean;
+    CanToggle, canSearch: Boolean;
     Working: Boolean;
-    procedure AddSortedField(aFieldName: String; aDirection: TSortDirection; aCollation: String = '';
+    procedure AddSortedField(aTable: TTableType; aFieldName: String; aDirection: TSortDirection; aCollation: String = '';
       IsAnAlias: Boolean = False);
     procedure ClearTaxaFilters;
     procedure GetTaxaFilters;
     procedure OpenAsync;
+    function SearchCountries(aValue: String): Boolean;
+    function SearchLanguages(aValue: String): Boolean;
+    function SearchPackages(aValue: String): Boolean;
+    function SearchRanks(aValue: String): Boolean;
     function SearchTaxa(aValue: String): Boolean;
     procedure UpdateButtons;
     function ValidateTaxon: Boolean;
@@ -519,16 +535,70 @@ begin
   end;
 end;
 
-procedure TfrmTaxaEditor.AddSortedField(aFieldName: String; aDirection: TSortDirection; aCollation: String;
-  IsAnAlias: Boolean);
+procedure TfrmTaxaEditor.AddSortedField(aTable: TTableType; aFieldName: String; aDirection: TSortDirection;
+  aCollation: String; IsAnAlias: Boolean);
 var
   p: Integer;
 begin
-  p := FSearch.SortFields.Add(TSortedField.Create);
-  FSearch.SortFields.Items[p].FieldName := aFieldName;
-  FSearch.SortFields.Items[p].Direction := aDirection;
-  FSearch.SortFields.Items[p].Collation := aCollation;
-  FSearch.SortFields.Items[p].Lookup := IsAnAlias;
+  case aTable of
+    tbNone: ;
+    tbTaxonRanks:
+    begin
+      p := FSearchRanks.SortFields.Add(TSortedField.Create);
+      FSearchRanks.SortFields.Items[p].FieldName := aFieldName;
+      FSearchRanks.SortFields.Items[p].Direction := aDirection;
+      FSearchRanks.SortFields.Items[p].Collation := aCollation;
+      FSearchRanks.SortFields.Items[p].Lookup := IsAnAlias;
+    end;
+    tbZooTaxa:
+    begin
+      p := FSearchTaxa.SortFields.Add(TSortedField.Create);
+      FSearchTaxa.SortFields.Items[p].FieldName := aFieldName;
+      FSearchTaxa.SortFields.Items[p].Direction := aDirection;
+      FSearchTaxa.SortFields.Items[p].Collation := aCollation;
+      FSearchTaxa.SortFields.Items[p].Lookup := IsAnAlias;
+    end;
+    tbPackages:
+    begin
+      p := FSearchPacks.SortFields.Add(TSortedField.Create);
+      FSearchPacks.SortFields.Items[p].FieldName := aFieldName;
+      FSearchPacks.SortFields.Items[p].Direction := aDirection;
+      FSearchPacks.SortFields.Items[p].Collation := aCollation;
+      FSearchPacks.SortFields.Items[p].Lookup := IsAnAlias;
+    end;
+    tbTaxonChanges: ;
+    tbCountries:
+    begin
+      p := FSearchCountries.SortFields.Add(TSortedField.Create);
+      FSearchCountries.SortFields.Items[p].FieldName := aFieldName;
+      FSearchCountries.SortFields.Items[p].Direction := aDirection;
+      FSearchCountries.SortFields.Items[p].Collation := aCollation;
+      FSearchCountries.SortFields.Items[p].Lookup := IsAnAlias;
+    end;
+    tbLanguages:
+    begin
+      p := FSearchLanguages.SortFields.Add(TSortedField.Create);
+      FSearchLanguages.SortFields.Items[p].FieldName := aFieldName;
+      FSearchLanguages.SortFields.Items[p].Direction := aDirection;
+      FSearchLanguages.SortFields.Items[p].Collation := aCollation;
+      FSearchLanguages.SortFields.Items[p].Lookup := IsAnAlias;
+    end;
+    tbVernacularNames: ;
+    tbSynonyms: ;
+    tbTaxonCountries: ;
+  end;
+end;
+
+procedure TfrmTaxaEditor.cbAuthorshipKeyPress(Sender: TObject; var Key: char);
+begin
+  FormKeyPress(Sender, Key);
+
+  { <ENTER/RETURN> key }
+  if (Key = #13) then
+  begin
+    SelectNext(Sender as TWinControl, True, True);
+    Key := #0;
+  end;
 end;
 
 procedure TfrmTaxaEditor.cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
@@ -606,7 +676,8 @@ begin
   sbClearFind.Visible := Length(Trim(eFind.Text)) > 0;
 
   TimerFind.Enabled := False;
-  TimerFind.Enabled := True;
+  if canSearch then
+    TimerFind.Enabled := True;
 end;
 
 procedure TfrmTaxaEditor.eFindEnter(Sender: TObject);
@@ -618,8 +689,69 @@ end;
 procedure TfrmTaxaEditor.etFullnameExit(Sender: TObject);
 var
   DS: TDataSet;
-  wc: Integer;
   FSciName: String;
+
+  function GetRankId(const FSciName: String): Integer;
+  var
+    wc: Integer;
+    rankType: TZooRank;
+  begin
+    wc := WordCount(FSciName, [' ']);
+    rankType := trGenus;
+
+    if ExecRegExpr('.+ini$', FSciName) then
+      rankType := trTribe
+    else if ExecRegExpr('.+inae$', FSciName) then
+      rankType := trSubfamily
+    else if ExecRegExpr('.+idae$', FSciName) then
+      rankType := trFamily
+    else if ExecRegExpr('.+formes$', FSciName) then
+      rankType := trOrder
+    else if IsWordPresent('intergrade', FSciName, [' '] + Brackets) then
+      rankType := trIntergrade
+    else if IsWordPresent('hybrid', FSciName, [' '] + Brackets) then
+      rankType := trHybrid
+    else if (Pos(' x ', FSciName) > 0) then
+      rankType := trHybrid
+    else if ((Pos('[', FSciName) > 0) and (wc = 4)) or ((Pos('/', FSciName) > 0) and (wc = 3)) then
+      rankType := trPolitypicGroup
+    else if (Pos('/', FSciName) > 0) then
+      rankType := trSlash
+    else if IsWordPresent('sp.', FSciName, [' ']) then
+      rankType := trSpuh
+    else if (wc = 2) then
+      rankType := trSpecies
+    else if (wc = 3) then
+      rankType := trSubspecies;
+
+    Result := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[rankType]);
+  end;
+
+  procedure GetParentIds(const FSciName: String);
+  var
+    parentFullName: String;
+  begin
+    if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
+    begin
+      case WordCount(FSciName, [' ']) of
+        2: parentFullName := ExtractWord(0, FSciName, [' ']);
+        3, 4:
+          if IsWordPresent('sp.', FSciName, [' ']) then
+            parentFullName := ExtractWord(0, FSciName, [' '])
+          else
+            parentFullName := ExtractWord(0, FSciName, [' ']) + ' ' + ExtractWord(1, FSciName, [' ']);
+        else
+          parentFullName := EmptyStr;
+      end;
+
+      if parentFullName <> EmptyStr then
+      begin
+        DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', parentFullName);
+        DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
+      end;
+    end;
+  end;
+
 begin
   DS := etFullname.DataSource.DataSet;
 
@@ -627,193 +759,12 @@ begin
     Exit;
 
   FSciName := Trim(DS.FieldByName('full_name').AsString);
+
   if not (FSciName = EmptyStr) then
   begin
-    wc := WordCount(FSciName,[' ']);
-    case wc of
-      1:
-      begin
-        if ExecRegExpr('^.+ini$', FSciName) then
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trTribe])
-        else
-        if ExecRegExpr('^.+inae$', FSciName) then
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSubfamily])
-        else
-        if ExecRegExpr('^.+idae$', FSciName) then
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trFamily])
-        else
-        if ExecRegExpr('^.+formes$', FSciName) then
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trOrder])
-        else
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trGenus]);
-        DS.FieldByName('genus_epithet').AsString := FSciName;
-      end;
-      2:
-      begin
-        if (ExtractWord(1, FSciName, [' ']) = 'sp.') then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSpuh]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').Clear;
-        end else
-        if (Pos('/', ExtractWord(1, FSciName, [' '])) > 0) then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSlash]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').Clear;
-        end else
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSpecies]);
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-        end;
-        if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-        begin
-          DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']));
-          DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-        end;
-      end;
-      3:
-      begin
-        if (ExtractWord(1, FSciName, [' ']) = 'sp.') then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSpuh]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').Clear;
-          if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-          begin
-            DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']));
-            DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-          end;
-        end else
-        if (Pos('/', ExtractWord(1, FSciName, [' '])) > 0) then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSlash]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').Clear;
-          DS.FieldByName('species_epithet').Clear;
-        end else
-        if (Pos('/', ExtractWord(2, FSciName, [' '])) > 0) then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trPolitypicGroup]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-          if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-          begin
-            DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']) + ' ' + ExtractWord(1, FSciName, [' ']));
-            DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-          end;
-        end else
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSubspecies]);
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-          DS.FieldByName('subspecies_epithet').AsString := ExtractWord(2, FSciName, [' ']);
-          if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-          begin
-            DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']) + ' ' + ExtractWord(1, FSciName, [' ']));
-            DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-          end;
-        end;
-      end;
-      4:
-      begin
-        if (ExtractWord(1, FSciName, [' ']) = 'sp.') then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trSpuh]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').Clear;
-          if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-          begin
-            DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']));
-            DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-          end;
-        end else
-        if (ExtractWord(2, FSciName, [' ']) = 'x') then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trHybrid]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').Clear;
-          if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-          begin
-            DS.FieldByName('parent_taxon_id').AsInteger := GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']));
-            DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-          end;
-        end else
-        if (Pos('[', ExtractWord(2, FSciName, [' '])) > 0) then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trPolitypicGroup]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-          if DS.FieldByName('parent_taxon_id').AsInteger = 0 then
-          begin
-            DS.FieldByName('parent_taxon_id').AsInteger:=
-              GetKey('zoo_taxa', 'taxon_id', 'full_name', ExtractWord(0, FSciName, [' ']) + ' ' + ExtractWord(1, FSciName, [' ']));
-            DS.FieldByName('parent_taxon_name').AsString := GetName('zoo_taxa', 'full_name', 'taxon_id', DS.FieldByName('parent_taxon_id').AsInteger);
-          end;
-        end else
-        begin
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-          DS.FieldByName('subspecies_epithet').AsString := ExtractWord(2, FSciName, [' ']) + ' ' +
-                                                           ExtractWord(3, FSciName, [' ']);
-        end;
-      end;
-      5:
-      begin
-        if (ExtractWord(2, FSciName, [' ']) = 'x') then
-        begin
-          DS.FieldByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[trHybrid]);
-          DS.FieldByName('clements_taxonomy').AsBoolean := True;
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').Clear;
-        end else
-        begin
-          DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-          DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-          DS.FieldByName('subspecies_epithet').AsString := ExtractWord(2, FSciName, [' ']) + ' ' +
-                                                           ExtractWord(3, FSciName, [' ']) + ' ' +
-                                                           ExtractWord(4, FSciName, [' ']);
-        end;
-      end;
-      6:
-      begin
-        DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-        DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-        DS.FieldByName('subspecies_epithet').AsString := ExtractWord(2, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(3, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(4, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(5, FSciName, [' ']);
-      end;
-      7:
-      begin
-        DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-        DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-        DS.FieldByName('subspecies_epithet').AsString := ExtractWord(2, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(3, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(4, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(5, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(6, FSciName, [' ']);
-      end;
-      8:
-      begin
-        DS.FieldByName('genus_epithet').AsString := ExtractWord(0, FSciName, [' ']);
-        DS.FieldByName('species_epithet').AsString := ExtractWord(1, FSciName, [' ']);
-        DS.FieldByName('subspecies_epithet').AsString := ExtractWord(2, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(3, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(4, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(5, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(6, FSciName, [' ']) + ' ' +
-                                                         ExtractWord(7, FSciName, [' ']);
-      end;
-    end;
+    DS.FieldByName('rank_id').AsInteger := GetRankId(FSciName);
+
+    GetParentIds(FSciName);
   end;
 end;
 
@@ -930,16 +881,39 @@ procedure TfrmTaxaEditor.FormCreate(Sender: TObject);
 begin
   CanToggle := False;
 
-  nbTaxaSide.Visible := False;
-
   dlgLoading := TdlgLoading.Create(nil);
   dlgLoading.Show;
   dlgLoading.UpdateProgress('Starting Xolmis Taxonomy Editor...', -1);
+
+  nbTaxaSide.Visible := False;
+
+  FSearchTaxa := TCustomSearch.Create(tbZooTaxa);
+  FSearchTaxa.DataSet := dmTaxa.qTaxa;
+
+  FSearchPacks := TCustomSearch.Create(tbPackages);
+  FSearchPacks.DataSet := dmTaxa.qPacks;
+  FSearchPacks.TableAlias := EmptyStr;
+
+  FSearchRanks := TCustomSearch.Create(tbTaxonRanks);
+  FSearchRanks.DataSet := dmTaxa.qRanks;
+  FSearchRanks.TableAlias := EmptyStr;
+
+  FSearchCountries := TCustomSearch.Create(tbCountries);
+  FSearchCountries.DataSet := dmTaxa.qCountries;
+  FSearchCountries.TableAlias := EmptyStr;
+
+  FSearchLanguages := TCustomSearch.Create(tbLanguages);
+  FSearchLanguages.DataSet := dmTaxa.qLanguages;
+  FSearchLanguages.TableAlias := EmptyStr;
 end;
 
 procedure TfrmTaxaEditor.FormDestroy(Sender: TObject);
 begin
-  FreeAndNil(FSearch);
+  FreeAndNil(FSearchTaxa);
+  FreeAndNil(FSearchPacks);
+  FreeAndNil(FSearchRanks);
+  FreeAndNil(FSearchCountries);
+  FreeAndNil(FSearchLanguages);
 
   if Assigned(dlgLoading) then
     FreeAndNil(dlgLoading);
@@ -970,7 +944,38 @@ begin
       2:
       begin
         if (dmTaxa.qRanks.State in [dsInsert, dsEdit]) then
+        begin
           dmTaxa.qRanks.Cancel;
+        end
+        else
+        begin
+          eFind.SetFocus;
+          eFind.Clear;
+        end;
+      end;
+      3:
+      begin
+        if (dmTaxa.qCountries.State in [dsInsert, dsEdit]) then
+        begin
+          dmTaxa.qCountries.Cancel;
+        end
+        else
+        begin
+          eFind.SetFocus;
+          eFind.Clear;
+        end;
+      end;
+      4:
+      begin
+        if (dmTaxa.qLanguages.State in [dsInsert, dsEdit]) then
+        begin
+          dmTaxa.qLanguages.Cancel;
+        end
+        else
+        begin
+          eFind.SetFocus;
+          eFind.Clear;
+        end;
       end;
     end;
   end;
@@ -978,9 +983,6 @@ end;
 
 procedure TfrmTaxaEditor.FormShow(Sender: TObject);
 begin
-  FSearch := TCustomSearch.Create(tbZooTaxa);
-  FSearch.DataSet := dmTaxa.qTaxa;
-
   LoadTaxaRanks(dmTaxa.sqlCon, clbTaxonRanksFilter);
   LoadAuthorships(dmTaxa.sqlCon, cbAuthorship.Items);
 
@@ -1040,6 +1042,7 @@ begin
 
   dlgLoading.Hide;
   CanToggle := True;
+  canSearch := True;
 end;
 
 procedure TfrmTaxaEditor.pmgNewSubspeciesClick(Sender: TObject);
@@ -1127,7 +1130,7 @@ end;
 
 procedure TfrmTaxaEditor.pmtSortClick(Sender: TObject);
 begin
-  FSearch.SortFields.Clear;
+  FSearchTaxa.SortFields.Clear;
 
   SearchTaxa(eFind.Text);
 end;
@@ -1268,6 +1271,11 @@ begin
   end;
 end;
 
+procedure TfrmTaxaEditor.sbCancelChangeClick(Sender: TObject);
+begin
+  dmTaxa.qTaxaChanges.Cancel;
+end;
+
 procedure TfrmTaxaEditor.sbCancelRecordClick(Sender: TObject);
 begin
   case nbPages.PageIndex of
@@ -1277,7 +1285,7 @@ begin
     end;
     1:
     begin
-
+      dmTaxa.qPacks.Cancel;
     end;
     2:
     begin
@@ -1301,9 +1309,9 @@ begin
   case nbPages.PageIndex of
     0:
     begin
-      FSearch.QuickFilters.Clear;
+      FSearchTaxa.QuickFilters.Clear;
       ClearTaxaFilters;
-      SearchTaxa(eFind.Text);
+      SearchTaxa(FTaxaSearchString);
 
       UpdateButtons;
     end;
@@ -1331,57 +1339,32 @@ begin
   eFind.Clear;
 end;
 
+procedure TfrmTaxaEditor.sbDelChangeClick(Sender: TObject);
+begin
+  DeleteRecord(tbTaxonChanges, dmTaxa.qTaxaChanges);
+end;
+
 procedure TfrmTaxaEditor.sbDelRecordClick(Sender: TObject);
 begin
   case nbPages.PageIndex of
-    0:
-    begin
-      with dmTaxa.qTaxa do
-      begin
-        Edit;
-        FieldByName('active_status').AsBoolean := False;
-        Post;
-      end;
-    end;
-    1:
-    begin
-
-    end;
-    2:
-    begin
-      with dmTaxa.qRanks do
-      begin
-        Edit;
-        FieldByName('active_status').AsBoolean := False;
-        Post;
-      end;
-    end;
-    3:
-    begin
-      with dmTaxa.qCountries do
-      begin
-        Edit;
-        FieldByName('active_status').AsBoolean := False;
-        Post;
-      end;
-    end;
-    4:
-    begin
-      with dmTaxa.qLanguages do
-      begin
-        Edit;
-        FieldByName('active_status').AsBoolean := False;
-        Post;
-      end;
-    end;
+    0: DeleteRecord(tbZooTaxa, dmTaxa.qTaxa);
+    1: DeleteRecord(tbPackages, dmTaxa.qPacks);
+    2: DeleteRecord(tbTaxonRanks, dmTaxa.qRanks);
+    3: DeleteRecord(tbCountries, dmTaxa.qCountries);
+    4: DeleteRecord(tbLanguages, dmTaxa.qLanguages);
   end;
+end;
+
+procedure TfrmTaxaEditor.sbEditChangeClick(Sender: TObject);
+begin
+  dmTaxa.qTaxaChanges.Edit;
 end;
 
 procedure TfrmTaxaEditor.sbEditRecordClick(Sender: TObject);
 begin
   case nbPages.PageIndex of
     0: dmTaxa.qTaxa.Edit;
-    1: ;
+    1: dmTaxa.qPacks.Edit;
     2: dmTaxa.qRanks.Edit;
     3: dmTaxa.qCountries.Edit;
     4: dmTaxa.qLanguages.Edit;
@@ -1399,11 +1382,16 @@ begin
   end;
 end;
 
+procedure TfrmTaxaEditor.sbInsertChangeClick(Sender: TObject);
+begin
+  dmTaxa.qTaxaChanges.Insert;
+end;
+
 procedure TfrmTaxaEditor.sbInsertRecordClick(Sender: TObject);
 begin
   case nbPages.PageIndex of
     0: dmTaxa.qTaxa.Insert;
-    1: ;
+    1: dmTaxa.qPacks.Insert;
     2: dmTaxa.qRanks.Insert;
     3: dmTaxa.qCountries.Insert;
     4: dmTaxa.qLanguages.Insert;
@@ -1532,6 +1520,11 @@ begin
   end;
 end;
 
+procedure TfrmTaxaEditor.sbSaveChangeClick(Sender: TObject);
+begin
+  dmTaxa.qTaxaChanges.Post;
+end;
+
 procedure TfrmTaxaEditor.sbSaveRecordClick(Sender: TObject);
 begin
   case nbPages.PageIndex of
@@ -1544,7 +1537,7 @@ begin
     end;
     1:
     begin
-
+      dmTaxa.qPacks.Post;
     end;
     2:
     begin
@@ -1643,20 +1636,298 @@ procedure TfrmTaxaEditor.sbTaxaClick(Sender: TObject);
 begin
   if Sender is TSpeedButton then
     nbPages.PageIndex := TSpeedButton(Sender).Tag;
+
+  canSearch := False;
+  case nbPages.PageIndex of
+    0: eFind.Text := FTaxaSearchString;
+    1: eFind.Text := FPackageSearchString;
+    2: eFind.Text := FRankSearchString;
+    3: eFind.Text := FCountrySearchString;
+    4: eFind.Text := FLanguageSearchString;
+  end;
+  canSearch := True;
+end;
+
+function TfrmTaxaEditor.SearchCountries(aValue: String): Boolean;
+var
+  FCriteria: TCriteriaType;
+  aGroup: Integer;
+  dummyInt: Longint;
+begin
+  Result := False;
+
+  if Working then
+    Exit;
+
+  Working := True;
+  FSearchCountries.Fields.Clear;
+  FSearchCountries.QuickFilters.Clear;
+
+  FCriteria := crLike;
+  aValue := Trim(aValue);
+
+  if aValue <> EmptyStr then
+  begin
+    if ExecRegExpr('^=.+$', aValue) then
+    begin
+      FCriteria := crEqual;
+      aValue := StringReplace(aValue, '=', '', [rfReplaceAll]);
+    end
+    else
+    if ExecRegExpr('^:.+$', aValue) then
+    begin
+      FCriteria := crStartLike;
+      aValue := StringReplace(aValue, ':', '', [rfReplaceAll]);
+    end;
+
+    if TryStrToInt(aValue, dummyInt) then
+    begin
+      aGroup := FSearchCountries.Fields.Add(TSearchGroup.Create);
+      FSearchCountries.Fields[aGroup].Fields.Add(TSearchField.Create('country_id', 'Country (ID)', sdtInteger, crEqual,
+        False, aValue));
+    end
+    else
+    begin
+      aGroup := FSearchCountries.Fields.Add(TSearchGroup.Create);
+      FSearchCountries.Fields[aGroup].Fields.Add(TSearchField.Create('country_name', 'Name', sdtText, FCriteria,
+        False, aValue));
+      FSearchCountries.Fields[aGroup].Fields.Add(TSearchField.Create('country_code', 'Code', sdtText, FCriteria,
+        False, aValue));
+    end;
+  end;
+
+  //GetTaxaFilters;
+
+  FSearchCountries.SortFields.Clear;
+  AddSortedField(tbCountries, 'country_name', sdAscending);
+
+  Result := FSearchCountries.RunSearch > 0;
+
+  Working := False;
+
+  UpdateButtons;
+end;
+
+function TfrmTaxaEditor.SearchLanguages(aValue: String): Boolean;
+var
+  FCriteria: TCriteriaType;
+  aGroup: Integer;
+  dummyInt: Longint;
+begin
+  Result := False;
+
+  if Working then
+    Exit;
+
+  Working := True;
+  FSearchLanguages.Fields.Clear;
+  FSearchLanguages.QuickFilters.Clear;
+
+  FCriteria := crLike;
+  aValue := Trim(aValue);
+
+  if aValue <> EmptyStr then
+  begin
+    if ExecRegExpr('^=.+$', aValue) then
+    begin
+      FCriteria := crEqual;
+      aValue := StringReplace(aValue, '=', '', [rfReplaceAll]);
+    end
+    else
+    if ExecRegExpr('^:.+$', aValue) then
+    begin
+      FCriteria := crStartLike;
+      aValue := StringReplace(aValue, ':', '', [rfReplaceAll]);
+    end;
+
+    if TryStrToInt(aValue, dummyInt) then
+    begin
+      aGroup := FSearchLanguages.Fields.Add(TSearchGroup.Create);
+      FSearchLanguages.Fields[aGroup].Fields.Add(TSearchField.Create('language_id', 'Language (ID)', sdtInteger, crEqual,
+        False, aValue));
+    end
+    else
+    begin
+      aGroup := FSearchLanguages.Fields.Add(TSearchGroup.Create);
+      FSearchLanguages.Fields[aGroup].Fields.Add(TSearchField.Create('language_name', 'Name', sdtText, FCriteria,
+        False, aValue));
+      FSearchLanguages.Fields[aGroup].Fields.Add(TSearchField.Create('macrolanguage_code', 'Macrolanguage code', sdtText, FCriteria,
+        False, aValue));
+      FSearchLanguages.Fields[aGroup].Fields.Add(TSearchField.Create('country_code', 'Country code', sdtText, FCriteria,
+        False, aValue));
+      FSearchLanguages.Fields[aGroup].Fields.Add(TSearchField.Create('variation_code', 'Variant code', sdtText, FCriteria,
+        False, aValue));
+    end;
+  end;
+
+  //GetTaxaFilters;
+
+  FSearchLanguages.SortFields.Clear;
+  AddSortedField(tbLanguages, 'language_name', sdAscending);
+
+  Result := FSearchLanguages.RunSearch > 0;
+
+  Working := False;
+
+  UpdateButtons;
+end;
+
+function TfrmTaxaEditor.SearchPackages(aValue: String): Boolean;
+var
+  FCriteria: TCriteriaType;
+  aGroup: Integer;
+  dummyInt: Longint;
+begin
+  Result := False;
+
+  if Working then
+    Exit;
+
+  Working := True;
+  FSearchPacks.Fields.Clear;
+  FSearchPacks.QuickFilters.Clear;
+
+  FCriteria := crLike;
+  aValue := Trim(aValue);
+
+  if aValue <> EmptyStr then
+  begin
+    if ExecRegExpr('^=.+$', aValue) then
+    begin
+      FCriteria := crEqual;
+      aValue := StringReplace(aValue, '=', '', [rfReplaceAll]);
+    end
+    else
+    if ExecRegExpr('^:.+$', aValue) then
+    begin
+      FCriteria := crStartLike;
+      aValue := StringReplace(aValue, ':', '', [rfReplaceAll]);
+    end;
+
+    if TryStrToInt(aValue, dummyInt) then
+    begin
+      aGroup := FSearchPacks.Fields.Add(TSearchGroup.Create);
+      FSearchPacks.Fields[aGroup].Fields.Add(TSearchField.Create('package_id', 'Package (ID)', sdtInteger, crEqual,
+        False, aValue));
+      FSearchPacks.Fields[aGroup].Fields.Add(TSearchField.Create('package_year', 'Year', sdtInteger, crEqual,
+        False, aValue));
+    end
+    else
+    begin
+      aGroup := FSearchPacks.Fields.Add(TSearchGroup.Create);
+      FSearchPacks.Fields[aGroup].Fields.Add(TSearchField.Create('package_name', 'Name', sdtText, FCriteria,
+        False, aValue));
+    end;
+  end;
+
+  //GetTaxaFilters;
+
+  FSearchPacks.SortFields.Clear;
+  AddSortedField(tbPackages, 'package_name', sdAscending);
+
+  Result := FSearchPacks.RunSearch > 0;
+
+  Working := False;
+
+  UpdateButtons;
+end;
+
+function TfrmTaxaEditor.SearchRanks(aValue: String): Boolean;
+var
+  FCriteria: TCriteriaType;
+  aGroup: Integer;
+  dummyInt: Longint;
+begin
+  Result := False;
+
+  if Working then
+    Exit;
+
+  Working := True;
+  FSearchRanks.Fields.Clear;
+  FSearchRanks.QuickFilters.Clear;
+
+  FCriteria := crLike;
+  aValue := Trim(aValue);
+
+  if aValue <> EmptyStr then
+  begin
+    if ExecRegExpr('^=.+$', aValue) then
+    begin
+      FCriteria := crEqual;
+      aValue := StringReplace(aValue, '=', '', [rfReplaceAll]);
+    end
+    else
+    if ExecRegExpr('^:.+$', aValue) then
+    begin
+      FCriteria := crStartLike;
+      aValue := StringReplace(aValue, ':', '', [rfReplaceAll]);
+    end;
+
+    if TryStrToInt(aValue, dummyInt) then
+    begin
+      aGroup := FSearchRanks.Fields.Add(TSearchGroup.Create);
+      FSearchRanks.Fields[aGroup].Fields.Add(TSearchField.Create('rank_id', 'Rank (ID)', sdtInteger, crEqual,
+        False, aValue));
+      FSearchRanks.Fields[aGroup].Fields.Add(TSearchField.Create('rank_seq', 'Sequence', sdtInteger, crEqual,
+        False, aValue));
+    end
+    else
+    begin
+      aGroup := FSearchRanks.Fields.Add(TSearchGroup.Create);
+      FSearchRanks.Fields[aGroup].Fields.Add(TSearchField.Create('rank_name', 'Name', sdtText, FCriteria,
+        False, aValue));
+      FSearchRanks.Fields[aGroup].Fields.Add(TSearchField.Create('rank_acronym', 'Abbreviation', sdtText, FCriteria,
+        False, aValue));
+    end;
+  end;
+
+  //GetTaxaFilters;
+
+  FSearchRanks.SortFields.Clear;
+  AddSortedField(tbTaxonRanks, 'rank_seq', sdAscending);
+
+  Result := FSearchRanks.RunSearch > 0;
+
+  Working := False;
+
+  UpdateButtons;
 end;
 
 procedure TfrmTaxaEditor.TimerFindTimer(Sender: TObject);
 begin
   TimerFind.Enabled := False;
-  if not CanToggle then
+  if not canSearch then
     Exit;
+  //if not CanToggle then
+  //  Exit;
 
   case nbPages.PageIndex of
-    0: SearchTaxa(eFind.Text);
-    1: ;
-    2: ;
-    3: ;
-    4: ;
+    0:
+    begin
+      FTaxaSearchString := eFind.Text;
+      SearchTaxa(FTaxaSearchString);
+    end;
+    1:
+    begin
+      FPackageSearchString := eFind.Text;
+      SearchPackages(FPackageSearchString);
+    end;
+    2:
+    begin
+      FRankSearchString := eFind.Text;
+      SearchRanks(FRankSearchString);
+    end;
+    3:
+    begin
+      FCountrySearchString := eFind.Text;
+      SearchCountries(FCountrySearchString);
+    end;
+    4:
+    begin
+      FLanguageSearchString := eFind.Text;
+      SearchLanguages(FLanguageSearchString);
+    end;
   end;
 end;
 
@@ -1694,15 +1965,15 @@ begin
 
   if (rbMarkedYes.Checked) then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+    FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
       crEqual, False, '1'));
   end
   else
   if (rbMarkedNo.Checked) then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+    FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('marked_status', 'Marked', sdtBoolean,
       crEqual, False, '0'));
   end;
 
@@ -1712,61 +1983,61 @@ begin
       Inc(cc);
   if cc > 0 then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
     for i := 0 to clbTaxonRanksFilter.Count - 1 do
       if clbTaxonRanksFilter.Checked[i] then
-        FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('rank_id', 'Rank', sdtInteger,
+        FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('rank_id', 'Rank', sdtInteger,
           crEqual, False, IntToStr(GetKey('taxon_ranks', 'rank_id', 'rank_name', clbTaxonRanksFilter.Items[i]))));
   end;
 
   //if tsTaxonomyClements.Checked then
   //begin
-  //  sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-  //  FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('clements_taxonomy', 'Clements/eBird', sdtBoolean,
+  //  sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+  //  FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('clements_taxonomy', 'Clements/eBird', sdtBoolean,
   //    crEqual, False, '1'));
   //end;
   //if tsTaxonomyIoc.Checked then
   //begin
-  //  sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-  //  FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('ioc_taxonomy', 'IOC', sdtBoolean,
+  //  sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+  //  FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('ioc_taxonomy', 'IOC', sdtBoolean,
   //    crEqual, False, '1'));
   //end;
   //if tsTaxonomyCbro.Checked then
   //begin
-  //  sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-  //  FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('cbro_taxonomy', 'CBRO', sdtBoolean,
+  //  sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+  //  FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('cbro_taxonomy', 'CBRO', sdtBoolean,
   //    crEqual, False, '1'));
   //end;
 
   if rbExtinctYes.Checked then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('extinct', 'Extinct', sdtBoolean,
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+    FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('extinct', 'Extinct', sdtBoolean,
       crEqual, False, '1'));
   end;
   if rbExtinctNo.Checked then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('extinct', 'Extinct', sdtBoolean,
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+    FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('extinct', 'Extinct', sdtBoolean,
       crEqual, False, '0'));
   end;
 
   if rbAcceptedYes.Checked then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('accepted_status', 'Accepted', sdtBoolean,
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+    FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('accepted_status', 'Accepted', sdtBoolean,
       crEqual, False, '1'));
   end;
   if rbAcceptedNo.Checked then
   begin
-    sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-    FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('accepted_status', 'Accepted', sdtBoolean,
+    sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+    FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('accepted_status', 'Accepted', sdtBoolean,
       crEqual, False, '0'));
   end;
   //if tsHasSynonyms.StateOn = sw_on then
   //begin
-  //  sf := FSearch.QuickFilters.Add(TSearchGroup.Create);
-  //  FSearch.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('valid_id', 'Valid name', sdtInteger,
+  //  sf := FSearchTaxa.QuickFilters.Add(TSearchGroup.Create);
+  //  FSearchTaxa.QuickFilters.Items[sf].Fields.Add(TSearchField.Create('valid_id', 'Valid name', sdtInteger,
   //    crMoreThan, False, '1'));
   //end;
 
@@ -1815,9 +2086,9 @@ end;
 
 function TfrmTaxaEditor.SearchTaxa(aValue: String): Boolean;
 var
-  Crit: TCriteriaType;
-  g: Integer;
-  i: Longint;
+  FCriteria: TCriteriaType;
+  aGroup: Integer;
+  dummyInt: Longint;
 begin
   Result := False;
 
@@ -1825,53 +2096,54 @@ begin
     Exit;
 
   Working := True;
-  FSearch.Fields.Clear;
-  FSearch.QuickFilters.Clear;
+  FSearchTaxa.Fields.Clear;
+  FSearchTaxa.QuickFilters.Clear;
 
-  Crit := crLike;
+  FCriteria := crLike;
   aValue := Trim(aValue);
 
   if aValue <> EmptyStr then
   begin
     if ExecRegExpr('^=.+$', aValue) then
     begin
-      Crit := crEqual;
+      FCriteria := crEqual;
       aValue := StringReplace(aValue, '=', '', [rfReplaceAll]);
     end
     else
     if ExecRegExpr('^:.+$', aValue) then
     begin
-      Crit := crStartLike;
+      FCriteria := crStartLike;
       aValue := StringReplace(aValue, ':', '', [rfReplaceAll]);
     end;
 
-    if TryStrToInt(aValue, i) then
+    if TryStrToInt(aValue, dummyInt) then
     begin
-      g := FSearch.Fields.Add(TSearchGroup.Create);
-      FSearch.Fields[g].Fields.Add(TSearchField.Create('taxon_id', 'Taxon (ID)', sdtInteger, crEqual,
+      aGroup := FSearchTaxa.Fields.Add(TSearchGroup.Create);
+      FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('taxon_id', 'Taxon (ID)', sdtInteger, crEqual,
         False, aValue));
     end
     else
     begin
-      g := FSearch.Fields.Add(TSearchGroup.Create);
-      FSearch.Fields[g].Fields.Add(TSearchField.Create('full_name', 'Scientific name', sdtText, Crit,
+      aGroup := FSearchTaxa.Fields.Add(TSearchGroup.Create);
+      FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('full_name', 'Scientific name', sdtText, FCriteria,
         False, aValue));
-      FSearch.Fields[g].Fields.Add(TSearchField.Create('ebird_code', 'eBird code', sdtText, Crit,
+      FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('ebird_code', 'eBird code', sdtText, FCriteria,
         False, aValue));
-      FSearch.Fields[g].Fields.Add(TSearchField.Create('quick_code', 'Quick code', sdtText, Crit,
+      FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('quick_code', 'Quick code', sdtText, FCriteria,
         False, aValue));
     end;
   end;
 
   GetTaxaFilters;
 
+  FSearchTaxa.SortFields.Clear;
   if pmtSortTaxonomic.Checked then
-    AddSortedField('sort_num', sdAscending)
+    AddSortedField(tbZooTaxa, 'sort_num', sdAscending)
   else
   if pmtSortAlphabetical.Checked then
-    AddSortedField('full_name', sdAscending);
+    AddSortedField(tbZooTaxa, 'full_name', sdAscending);
 
-  Result := FSearch.RunSearch > 0;
+  Result := FSearchTaxa.RunSearch > 0;
 
   Working := False;
 
@@ -1940,7 +2212,7 @@ begin
       sbLastRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo < aDataSet.RecordCount);
 
       sbRefreshRecords.Enabled := True;
-      sbClearFilters.Enabled := FSearch.QuickFilters.Count > 0;
+      sbClearFilters.Enabled := FSearchTaxa.QuickFilters.Count > 0;
       sbMoreOptions.Enabled := True;
 
       if (nbPages.PageIndex = 0) then

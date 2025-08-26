@@ -867,6 +867,10 @@ msgctxt "tfrmtaxaeditor.sbadvancedfilters.hint"
 msgid "Advanced filters"
 msgstr ""
 
+#: tfrmtaxaeditor.sbcancelchange.hint
+msgid "Cancel taxon change"
+msgstr ""
+
 #: tfrmtaxaeditor.sbcancelrecord.caption
 msgctxt "tfrmtaxaeditor.sbcancelrecord.caption"
 msgid "Cancel"
@@ -884,6 +888,10 @@ msgstr ""
 
 #: tfrmtaxaeditor.sbcountries.hint
 msgid "Countries"
+msgstr ""
+
+#: tfrmtaxaeditor.sbdelchange.hint
+msgid "Delete taxon change"
 msgstr ""
 
 #: tfrmtaxaeditor.sbdelcountry.caption
@@ -906,6 +914,10 @@ msgctxt "tfrmtaxaeditor.sbdelvernacular.caption"
 msgid "Delete"
 msgstr ""
 
+#: tfrmtaxaeditor.sbeditchange.hint
+msgid "Edit taxon change"
+msgstr ""
+
 #: tfrmtaxaeditor.sbeditrecord.caption
 msgctxt "tfrmtaxaeditor.sbeditrecord.caption"
 msgid "Edit"
@@ -919,6 +931,10 @@ msgstr ""
 #: tfrmtaxaeditor.sbfirstrecord.hint
 msgctxt "tfrmtaxaeditor.sbfirstrecord.hint"
 msgid "First record"
+msgstr ""
+
+#: tfrmtaxaeditor.sbinsertchange.hint
+msgid "New taxon change"
 msgstr ""
 
 #: tfrmtaxaeditor.sbinsertrecord.caption
@@ -979,6 +995,10 @@ msgstr ""
 #: tfrmtaxaeditor.sbrefreshrecords.hint
 msgctxt "tfrmtaxaeditor.sbrefreshrecords.hint"
 msgid "Refresh"
+msgstr ""
+
+#: tfrmtaxaeditor.sbsavechange.hint
+msgid "Save taxon change"
 msgstr ""
 
 #: tfrmtaxaeditor.sbsaverecord.caption

@@ -8,10 +8,16 @@ uses
   Classes, SysUtils, DB, SQLDB, data_types;
 
   procedure SetSelectSQL(const aSQL: TStrings; aTable: TTableType; var aAlias: String);
+  procedure SetCountriesSQL(const aSQL: TStrings; aFilter: TFilterValue;
+    aSorting: String = ''; aDirection: TSortDirection = sdNone);
+  procedure SetLanguagesSQL(const aSQL: TStrings; aFilter: TFilterValue;
+    aSorting: String = ''; aDirection: TSortDirection = sdNone);
+  procedure SetPackagesSQL(const aSQL: TStrings; aFilter: TFilterValue;
+    aSorting: String = ''; aDirection: TSortDirection = sdNone);
   procedure SetTaxonRanksSQL(const aSQL: TStrings; aFilter: TFilterValue;
-    aSorting: String = ''; aDirection: String = '');
+    aSorting: String = ''; aDirection: TSortDirection = sdNone);
   procedure SetZooTaxaSQL(const aSQL: TStrings; aFilter: TFilterValue;
-    aSorting: String = ''; aDirection: String = '');
+    aSorting: String = ''; aDirection: TSortDirection = sdNone);
 
 implementation
 
@@ -22,50 +28,39 @@ procedure SetSelectSQL(const aSQL: TStrings; aTable: TTableType; var aAlias: Str
 begin
   case aTable of
     tbNone: ;
-    tbTaxonRanks:
-      SetTaxonRanksSQL(aSQL, fvNone);
-    tbZooTaxa:
-      begin
-        SetZooTaxaSQL(aSQL, fvNone);
-        //aAlias := TableAliases[aTable] + '.';
-      end;
+    tbTaxonRanks:       SetTaxonRanksSQL(aSQL, fvNone);
+    tbZooTaxa:          SetZooTaxaSQL(aSQL, fvNone);
+    tbPackages:         SetPackagesSQL(aSQL, fvNone);
+    tbTaxonChanges: ;
+    tbCountries:        SetCountriesSQL(aSQL, fvNone);
+    tbLanguages:        SetLanguagesSQL(aSQL, fvNone);
+    tbVernacularNames: ;
+    tbSynonyms: ;
+    tbTaxonCountries: ;
   end;
 end;
 
-procedure SetTaxonRanksSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String; aDirection: String);
-var
-  AD: String;
+procedure SetTaxonRanksSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String;
+  aDirection: TSortDirection);
 begin
   with aSQL do
   begin
     Clear;
     Add('SELECT * FROM taxon_ranks');
     case aFilter of
-      fvNone:
-        ; // do nothing
-      fvReset:
-        Add('WHERE (active_status = 1)');
-      fvAll:
-        Add('WHERE (active_status = 1)');
-      fvMarked:
-        Add('WHERE (active_status = 1) AND (marked_status = 1)');
-      fvDeleted:
-        Add('WHERE (active_status = 0)');
+      fvNone: ;   // do nothing
+      fvReset:    Add('WHERE (active_status = 1)');
+      fvAll:      Add('WHERE (active_status = 1)');
+      fvMarked:   Add('WHERE (active_status = 1) AND (marked_status = 1)');
+      fvDeleted:  Add('WHERE (active_status = 0)');
     end;
-    if Trim(aSorting) <> '' then
-    begin
-      if aDirection = '' then
-        AD := 'ASC'
-      else
-        AD := aDirection;
-      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} AD);
-    end;
+    if Trim(aSorting) <> EmptyStr then
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} SORT_DIRECTIONS[aDirection]);
   end;
 end;
 
-procedure SetZooTaxaSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String; aDirection: String);
-var
-  AD: String;
+procedure SetZooTaxaSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String;
+  aDirection: TSortDirection);
 begin
   with aSQL do
   begin
@@ -87,25 +82,71 @@ begin
     Add('LEFT JOIN zoo_taxa AS e ON z.species_id = e.taxon_id');
     Add('LEFT JOIN zoo_taxa AS g ON z.subspecies_group_id = g.taxon_id');
     case aFilter of
-      fvNone:
-        ; // do nothing
-      fvReset:
-        Add('WHERE (z.taxon_id = -1) AND (z.active_status = 1)');
-      fvAll:
-        Add('WHERE (z.active_status = 1)');
-      fvMarked:
-        Add('WHERE (z.active_status = 1) AND (z.marked_status = 1)');
-      fvDeleted:
-        Add('WHERE (z.active_status = 0)');
+      fvNone: ;   // do nothing
+      fvReset:    Add('WHERE (z.taxon_id = -1) AND (z.active_status = 1)');
+      fvAll:      Add('WHERE (z.active_status = 1)');
+      fvMarked:   Add('WHERE (z.active_status = 1) AND (z.marked_status = 1)');
+      fvDeleted:  Add('WHERE (z.active_status = 0)');
     end;
-    if Trim(aSorting) <> '' then
-    begin
-      if aDirection = '' then
-        AD := 'ASC'
-      else
-        AD := aDirection;
-      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} AD);
+    if Trim(aSorting) <> EmptyStr then
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} SORT_DIRECTIONS[aDirection]);
+  end;
+end;
+
+procedure SetCountriesSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String;
+  aDirection: TSortDirection);
+begin
+  with aSQL do
+  begin
+    Clear;
+    Add('SELECT * FROM countries');
+    case aFilter of
+      fvNone: ;   // do nothing
+      fvReset:    Add('WHERE (active_status = 1)');
+      fvAll:      Add('WHERE (active_status = 1)');
+      fvMarked:   Add('WHERE (active_status = 1) AND (marked_status = 1)');
+      fvDeleted:  Add('WHERE (active_status = 0)');
     end;
+    if Trim(aSorting) <> EmptyStr then
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} SORT_DIRECTIONS[aDirection]);
+  end;
+end;
+
+procedure SetLanguagesSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String;
+  aDirection: TSortDirection);
+begin
+  with aSQL do
+  begin
+    Clear;
+    Add('SELECT * FROM languages');
+    case aFilter of
+      fvNone: ;   // do nothing
+      fvReset:    Add('WHERE (active_status = 1)');
+      fvAll:      Add('WHERE (active_status = 1)');
+      fvMarked:   Add('WHERE (active_status = 1) AND (marked_status = 1)');
+      fvDeleted:  Add('WHERE (active_status = 0)');
+    end;
+    if Trim(aSorting) <> EmptyStr then
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} SORT_DIRECTIONS[aDirection]);
+  end;
+end;
+
+procedure SetPackagesSQL(const aSQL: TStrings; aFilter: TFilterValue; aSorting: String;
+  aDirection: TSortDirection);
+begin
+  with aSQL do
+  begin
+    Clear;
+    Add('SELECT * FROM packages');
+    case aFilter of
+      fvNone: ;   // do nothing
+      fvReset:    Add('WHERE (active_status = 1)');
+      fvAll:      Add('WHERE (active_status = 1)');
+      fvMarked:   Add('WHERE (active_status = 1) AND (marked_status = 1)');
+      fvDeleted:  Add('WHERE (active_status = 0)');
+    end;
+    if Trim(aSorting) <> EmptyStr then
+      Add('ORDER BY ' + aSorting + {' COLLATE pt_BR ' +} SORT_DIRECTIONS[aDirection]);
   end;
 end;
 

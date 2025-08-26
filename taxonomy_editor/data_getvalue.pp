@@ -111,7 +111,7 @@ begin
     Clear;
     { SQLite }
     Add('SELECT DISTINCT last_insert_rowid() FROM %tabname');
-    MacroByName('TABNAME').Value := TableNames[aTableType];
+    MacroByName('TABNAME').Value := TABLE_NAMES[aTableType];
     Open;
     Result := Fields[0].AsInteger;
     Close;

@@ -31,7 +31,7 @@ begin
     Clear;
     Add('SELECT count(%afield) FROM %tabname WHERE %afield = :keyv');
     MacroByName('AFIELD').Value := aField;
-    MacroByName('TABNAME').Value := TableNames[aTable];
+    MacroByName('TABNAME').Value := TABLE_NAMES[aTable];
     ParamByName('KEYV').AsString := aValue;
     // GravaLogSQL(SQL);
     Open;
@@ -63,7 +63,7 @@ begin
     Add('SELECT %keyf FROM %tabname');
     Add('WHERE (%uniquef = :uniquev) AND (%keyf != :keyv)');
     MacroByName('KEYF').Value := aKeyField;
-    MacroByName('TABNAME').Value := TableNames[aTable];
+    MacroByName('TABNAME').Value := TABLE_NAMES[aTable];
     MacroByName('UNIQUEF').Value := aNameField;
     ParamByName('UNIQUEV').AsString := aNameValue;
     ParamByName('KEYV').AsInteger := aKeyValue;
@@ -104,7 +104,7 @@ begin
     DataBase := dmTaxa.sqlCon;
     Clear;
     Add('SELECT active_status FROM %tabname WHERE (%keyf = :keyv)');
-    MacroByName('TABNAME').Value := TableNames[aTable];
+    MacroByName('TABNAME').Value := TABLE_NAMES[aTable];
     MacroByName('KEYF').Value := aFieldName;
     ParamByName('KEYV').AsInteger := StrToInt(aValue);
     // GravaLogSQL(SQL);

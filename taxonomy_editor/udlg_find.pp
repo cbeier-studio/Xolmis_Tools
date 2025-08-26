@@ -224,7 +224,7 @@ procedure TdlgFind.FindTaxonRanks(aSQL: TStrings; aFilter: TFilterValue; aCriter
 var
   Operador: String;
 begin
-  Operador := CriteriaOperators[aCriteria];
+  Operador := CRITERIA_OPERATORS[aCriteria];
 
   with aSQL do
   begin
@@ -328,7 +328,7 @@ begin
 
   if FTableType = tbNone then
   begin
-    MsgDlg(rsCaptionFind, Format(rsErrorTableNotFound, [TableNames[FTableType]]), mtError);
+    MsgDlg(rsCaptionFind, Format(rsErrorTableNotFound, [TABLE_NAMES[FTableType]]), mtError);
     ModalResult := mrCancel;
   end;
 
@@ -355,7 +355,7 @@ end;
 
 function TdlgFind.GetCriteria(aCriteria: TCriteriaType): String;
 begin
-  Result := CriteriaOperators[aCriteria];
+  Result := CRITERIA_OPERATORS[aCriteria];
 end;
 
 function TdlgFind.HashtagFilter(aValue: String): Boolean;
@@ -532,7 +532,7 @@ end;
 
 procedure TdlgFind.SetupFields(aKeyField, aNameField: String; aFormattedNameField: String);
 begin
-  Caption := Format('%s %s', [Caption, TableNames[FTableType]]);
+  Caption := Format('%s %s', [Caption, TABLE_NAMES[FTableType]]);
   FKeyField := aKeyField;
   FFullNameField := aNameField;
   FFormattedNameField := aFormattedNameField;

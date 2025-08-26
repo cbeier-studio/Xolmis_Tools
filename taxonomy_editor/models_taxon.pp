@@ -315,16 +315,17 @@ end;
 
 function TTaxon.ToString: String;
 begin
-  Result := inherited ToString;
-  //Result := Format('Taxon(Id=%d, Name=%s, Abbreviation=%s, RankIndex=%d, MainRank=%s, Subrank=%s, ' +
-  //  'Infrarank=%s, Infraspecific=%s, ZoologicalCode=%s, BotanicalCode=%s, ' +
-  //  'InsertDate=%s, UpdateDate=%s, Marked=%s, Active=%s)',
-  //  [FId, FName, FAbbreviation, FRankIndex, BoolToStr(FMainRank, 'True', 'False'),
-  //  BoolToStr(FSubrank, 'True', 'False'), BoolToStr(FInfrarank, 'True', 'False'),
-  //  BoolToStr(FInfraspecific, 'True', 'False'), BoolToStr(FZoologicalCode, 'True', 'False'),
-  //  BoolToStr(FBotanicalCode, 'True', 'False'),
-  //  DateTimeToStr(FInsertDate), DateTimeToStr(FUpdateDate), BoolToStr(FMarked, 'True', 'False'),
-  //  BoolToStr(FActive, 'True', 'False')]);
+  Result := Format('Taxon(Id=%d, FullName=%s, FormattedName=%s, Authorship=%s, RankId=%d, ParentTaxonId=%d, ' +
+    'SortNum=%f, QuickCode=%s, IucnStatus=%s, Extinct=%s, ExtinctionYear=%s, Distribution=%s, EbirdCode=%s, ' +
+    'OrderId=%d, FamilyId=%d, SubfamilyId=%d, GenusId=%d, SpeciesId=%d, SubspeciesGroupId=%d, IncertaeSedis=%d, ' +
+    'Accepted=%s, ' +
+    'InsertDate=%s, UpdateDate=%s, Marked=%s, Active=%s)',
+    [FId, FFullName, FFormattedName, FAuthorship, Ord(FRankId), FParentTaxonId, FSortNum, FQuickCode, FIucnStatus,
+    BoolToStr(FExtinct, 'True', 'False'), FExtinctionYear, FDistribution, FEbirdCode, FOrderId, FFamilyId,
+    FSubfamilyId, FGenusId, FSpeciesId, FSubspeciesGroupId, FIncertaeSedis,
+    BoolToStr(FAccepted, 'True', 'False'),
+    DateTimeToStr(FInsertDate), DateTimeToStr(FUpdateDate), BoolToStr(FMarked, 'True', 'False'),
+    BoolToStr(FActive, 'True', 'False')]);
 end;
 
 function TTaxon.Validate(out Msg: string): Boolean;

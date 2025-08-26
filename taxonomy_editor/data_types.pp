@@ -140,7 +140,7 @@ type
   end;
 
 const
-  TableAliases: array[TTableType] of String = ('',
+  TABLE_ALIASES: array[TTableType] of String = ('',
     'tr',
     'z',
     'pk',
@@ -150,7 +150,7 @@ const
     'zv',
     'zs',
     'zc');
-  TableNames: array[TTableType] of String = ('',
+  TABLE_NAMES: array[TTableType] of String = ('',
     'taxon_ranks',
     'zoo_taxa',
     'packages',
@@ -160,14 +160,14 @@ const
     'vernacular_names',
     'zoo_taxa_synonyms',
     'zoo_taxa_countries');
-  CriteriaOperators: array[TCriteriaType] of String = ('',
+  CRITERIA_OPERATORS: array[TCriteriaType] of String = ('',
     'LIKE', 'LIKE', '=', 'DISTINCT',
     'BETWEEN', '>=', '<=',
     'ISNULL', 'NOTNULL');
-  SortDirections: array [TSortDirection] of String = ('', 'ASC', 'DESC');
-  SearchDataTypes: array[TFilterType] of String = ('Text', 'Integer', 'Float', 'Date', 'Time',
+  SORT_DIRECTIONS: array [TSortDirection] of String = ('', 'ASC', 'DESC');
+  SEARCH_DATA_TYPES: array[TFilterType] of String = ('Text', 'Integer', 'Float', 'Date', 'Time',
     'DateTime', 'Boolean', 'List', 'Lookup');
-  SQLAndOrStr: array [TSQLAndOr] of String = ('', 'AND', 'OR');
+  SQL_AND_OR_STR: array [TSQLAndOr] of String = ('', 'AND', 'OR');
 
 var
   databaseConnection: TDBParams;
@@ -413,7 +413,7 @@ end;
 constructor TCustomSearch.Create(aTable: TTableType);
 begin
   FTableType := aTable;
-  FTableAlias := TableAliases[aTable];
+  FTableAlias := TABLE_ALIASES[aTable];
   FFields := TSearchGroups.Create(True);
   FQuickFilters := TSearchGroups.Create(True);
   FSortFields := TSortedFields.Create(True);
@@ -563,24 +563,24 @@ begin
             case Criteria of
               crLike, crStartLike, crEqual, crMoreThan, crLessThan:
               begin
-                if FQuickFilters[i].Fields[f].Lookup then
-                  S := S + Format(Msk, [FieldName, CriteriaOperators[Criteria], Value1])
+                if (FTableAlias = EmptyStr) or (FQuickFilters[i].Fields[f].Lookup) then
+                  S := S + Format(Msk, [FieldName, CRITERIA_OPERATORS[Criteria], Value1])
                 else
-                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CriteriaOperators[Criteria], Value1]);
+                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CRITERIA_OPERATORS[Criteria], Value1]);
               end;
               crBetween:
               begin
-                if FQuickFilters[i].Fields[f].Lookup then
-                  S := S + Format(Msk, [FieldName, CriteriaOperators[Criteria], Value1, Value2])
+                if (FTableAlias = EmptyStr) or (FQuickFilters[i].Fields[f].Lookup) then
+                  S := S + Format(Msk, [FieldName, CRITERIA_OPERATORS[Criteria], Value1, Value2])
                 else
-                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CriteriaOperators[Criteria], Value1, Value2]);
+                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CRITERIA_OPERATORS[Criteria], Value1, Value2]);
               end;
               crNull, crNotNull:
               begin
-                if FQuickFilters[i].Fields[f].Lookup then
-                  S := S + Format(Msk, [FieldName, CriteriaOperators[Criteria]])
+                if (FTableAlias = EmptyStr) or (FQuickFilters[i].Fields[f].Lookup) then
+                  S := S + Format(Msk, [FieldName, CRITERIA_OPERATORS[Criteria]])
                 else
-                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CriteriaOperators[Criteria]]);
+                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CRITERIA_OPERATORS[Criteria]]);
               end;
             end;
 
@@ -623,24 +623,24 @@ begin
             case Criteria of
               crLike, crStartLike, crEqual, crMoreThan, crLessThan:
               begin
-                if FFields[i].Fields[f].Lookup then
-                  S := S + Format(Msk, [FieldName, CriteriaOperators[Criteria], Value1])
+                if (FTableAlias = EmptyStr) or (FFields[i].Fields[f].Lookup) then
+                  S := S + Format(Msk, [FieldName, CRITERIA_OPERATORS[Criteria], Value1])
                 else
-                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CriteriaOperators[Criteria], Value1]);
+                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CRITERIA_OPERATORS[Criteria], Value1]);
               end;
               crBetween:
               begin
-                if FFields[i].Fields[f].Lookup then
-                  S := S + Format(Msk, [FieldName, CriteriaOperators[Criteria], Value1, Value2])
+                if (FTableAlias = EmptyStr) or (FFields[i].Fields[f].Lookup) then
+                  S := S + Format(Msk, [FieldName, CRITERIA_OPERATORS[Criteria], Value1, Value2])
                 else
-                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CriteriaOperators[Criteria], Value1, Value2]);
+                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CRITERIA_OPERATORS[Criteria], Value1, Value2]);
               end;
               crNull, crNotNull:
               begin
-                if FFields[i].Fields[f].Lookup then
-                  S := S + Format(Msk, [FieldName, CriteriaOperators[Criteria]])
+                if (FTableAlias = EmptyStr) or (FFields[i].Fields[f].Lookup) then
+                  S := S + Format(Msk, [FieldName, CRITERIA_OPERATORS[Criteria]])
                 else
-                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CriteriaOperators[Criteria]]);
+                  S := S + Format(Msk, [FTableAlias+'.'+FieldName, CRITERIA_OPERATORS[Criteria]]);
               end;
             end;
 
@@ -693,7 +693,7 @@ begin
         aSort := aSort + ' COLLATE ' + FSortFields.Items[i].Collation;
 
       // Direction
-      aSort := aSort + ' ' + SortDirections[FSortFields.Items[i].Direction];
+      aSort := aSort + ' ' + SORT_DIRECTIONS[FSortFields.Items[i].Direction];
 
       if i < (FSortFields.Count - 1) then
         aSort := aSort + ', ';

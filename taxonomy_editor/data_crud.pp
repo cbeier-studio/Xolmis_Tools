@@ -40,9 +40,9 @@ begin
   aKeyField := GetPrimaryKey(aDataSet);
   aKeyValue := aDataSet.FieldByName(aKeyField).AsInteger;
 
-  {$IFDEF DEBUG}
-  LogDebug(Format('Record %d from %s set inactive', [aKeyValue, TableNames[aTable]]));
-  {$ENDIF}
+  //{$IFDEF DEBUG}
+  //LogDebug(Format('Record %d from %s set inactive', [aKeyValue, TABLE_NAMES[aTable]]));
+  //{$ENDIF}
   try
     dmTaxa.sqlTrans.StartTransaction;
     Qry := TSQLQuery.Create(nil);
@@ -51,23 +51,22 @@ begin
       MacroCheck := True;
       DataBase := dmTaxa.sqlCon;
       Clear;
-      Add('UPDATE %tabname');
+      Add('UPDATE %tablename');
       Add('SET active_status = 0,');
       Add('update_date = datetime(''now'',''localtime'')');
-      //Add('user_updated = :auser');
-      Add('WHERE %keyf = :cod');
-      MacroByName('TABNAME').Value := TableNames[aTable];
-      MacroByName('KEYF').Value := aKeyField;
-      //ParamByName('AUSER').AsInteger := AdminId;
-      ParamByName('COD').AsInteger := aKeyValue;
-      {$IFDEF DEBUG}
-      LogSQL(SQL);
-      {$ENDIF}
+      Add('WHERE %keyfield = :id');
+      MacroByName('tablename').Value := TABLE_NAMES[aTable];
+      MacroByName('keyfield').Value := aKeyField;
+      ParamByName('id').AsInteger := aKeyValue;
+      //{$IFDEF DEBUG}
+      //LogSQL(SQL);
+      //{$ENDIF}
       ExecSQL;
     finally
       FreeAndNil(Qry);
     end;
     dmTaxa.sqlTrans.CommitRetaining;
+    aDataSet.Refresh;
   except
     dmTaxa.sqlTrans.RollbackRetaining;
     raise;
@@ -86,9 +85,9 @@ begin
   aKeyField := GetPrimaryKey(aDataSet);
   aKeyValue := aDataSet.FieldByName(aKeyField).AsInteger;
 
-  {$IFDEF DEBUG}
-  LogDebug(Format('Record %d from %s set active', [aKeyValue, TableNames[aTable]]));
-  {$ENDIF}
+  //{$IFDEF DEBUG}
+  //LogDebug(Format('Record %d from %s set active', [aKeyValue, TABLE_NAMES[aTable]]));
+  //{$ENDIF}
   try
     dmTaxa.sqlTrans.StartTransaction;
     Qry := TSQLQuery.Create(nil);
@@ -97,23 +96,22 @@ begin
       MacroCheck := True;
       DataBase := dmTaxa.sqlCon;
       Clear;
-      Add('UPDATE %tabname');
+      Add('UPDATE %tablename');
       Add('SET active_status = 1,');
       Add('update_date = datetime(''now'',''localtime'')');
-      //Add('user_updated = :auser');
-      Add('WHERE %keyf = :cod');
-      MacroByName('TABNAME').Value := TableNames[aTable];
-      MacroByName('KEYF').Value := aKeyField;
-      //ParamByName('AUSER').AsInteger := AdminId;
-      ParamByName('COD').AsInteger := aKeyValue;
-      {$IFDEF DEBUG}
-      LogSQL(SQL);
-      {$ENDIF}
+      Add('WHERE %keyfield = :id');
+      MacroByName('tablename').Value := TABLE_NAMES[aTable];
+      MacroByName('keyfield').Value := aKeyField;
+      ParamByName('id').AsInteger := aKeyValue;
+      //{$IFDEF DEBUG}
+      //LogSQL(SQL);
+      //{$ENDIF}
       ExecSQL;
     finally
       FreeAndNil(Qry);
     end;
     dmTaxa.sqlTrans.CommitRetaining;
+    aDataSet.Refresh;
   except
     dmTaxa.sqlTrans.RollbackRetaining;
     raise;

@@ -915,6 +915,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 MaxLength = 0
                 TabOrder = 0
                 TextHint = 'AAA AAA'
+                OnKeyPress = cbAuthorshipKeyPress
               end
             end
             object ptExtinct: TBCPanel
@@ -988,6 +989,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 MaxLength = 0
                 TabOrder = 1
                 TextHint = 'Extinction year'
+                OnKeyPress = cbAuthorshipKeyPress
               end
             end
             object ptSortNr: TBCPanel
@@ -1056,6 +1058,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 MaxLength = 0
                 TabOrder = 0
+                OnKeyPress = cbAuthorshipKeyPress
               end
             end
             object ptDistribution: TBCPanel
@@ -1126,6 +1129,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 DataSource = dmTaxa.dsTaxa
                 ScrollBars = ssAutoVertical
                 TabOrder = 0
+                OnKeyPress = FormKeyPress
               end
             end
             object ptEbirdCode: TBCPanel
@@ -1194,6 +1198,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 MaxLength = 0
                 TabOrder = 0
+                OnKeyPress = cbAuthorshipKeyPress
               end
             end
             object ptIucnStatus: TBCPanel
@@ -1277,6 +1282,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Style = csOwnerDrawFixed
                 TabOrder = 0
                 OnDrawItem = cbtIucnStatusDrawItem
+                OnKeyPress = cbAuthorshipKeyPress
               end
             end
             object ptVernacular: TBCPanel
@@ -1713,6 +1719,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             MaxLength = 0
             TabOrder = 0
             OnExit = etFullnameExit
+            OnKeyPress = cbAuthorshipKeyPress
           end
         end
         object ptAuthorship: TBCPanel
@@ -1792,6 +1799,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             ItemHeight = 15
             MaxLength = 0
             TabOrder = 0
+            OnKeyPress = cbAuthorshipKeyPress
           end
         end
         object ptRank: TBCPanel
@@ -1874,6 +1882,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             LookupCache = False
             Style = csDropDownList
             TabOrder = 0
+            OnKeyPress = cbAuthorshipKeyPress
           end
         end
         object ptParentTaxon: TBCPanel
@@ -2017,7 +2026,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideRight.Control = pDetails
           AnchorSideRight.Side = asrBottom
           Left = 8
-          Height = 306
+          Height = 236
           Top = 470
           Width = 346
           AlternateColor = 16448250
@@ -2194,7 +2203,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             end>
           DataSource = dmTaxa.dsPacks
           FixedCols = 0
-          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
+          Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
           ReadOnly = True
           Scrollbars = ssAutoVertical
           TabOrder = 0
@@ -2209,10 +2218,10 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 5
       end
       object gridChanges: TDBGrid
-        Left = 704
+        Left = 756
         Height = 1003
         Top = 0
-        Width = 1164
+        Width = 1112
         Align = alClient
         AlternateColor = 16448250
         AutoFillColumns = True
@@ -2228,27 +2237,27 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Action'
-            Width = 209
+            Width = 199
             FieldName = 'action_type'
           end        
           item
             Title.Caption = 'Taxon'
-            Width = 209
+            Width = 199
             FieldName = 'taxon_name'
           end        
           item
             Title.Caption = 'New taxon'
-            Width = 209
+            Width = 198
             FieldName = 'taxon_new_name'
           end        
           item
             Title.Caption = 'Trait'
-            Width = 209
+            Width = 198
             FieldName = 'trait_name'
           end        
           item
             Title.Caption = 'New value'
-            Width = 208
+            Width = 198
             FieldName = 'new_value'
           end        
           item
@@ -2259,12 +2268,122 @@ object frmTaxaEditor: TfrmTaxaEditor
           end>
         DataSource = dmTaxa.dsTaxaChanges
         FixedCols = 0
-        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
+        Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
         ReadOnly = True
         Scrollbars = ssAutoVertical
         TabOrder = 2
         TitleStyle = tsNative
         OnPrepareCanvas = gridTaxaPrepareCanvas
+      end
+      object pChangesToolbar: TPanel
+        Left = 704
+        Height = 1009
+        Top = 0
+        Width = 52
+        Align = alLeft
+        AutoSize = True
+        ChildSizing.LeftRightSpacing = 8
+        ChildSizing.TopBottomSpacing = 8
+        ChildSizing.VerticalSpacing = 4
+        ClientHeight = 1009
+        ClientWidth = 52
+        TabOrder = 3
+        object sbInsertChange: TSpeedButton
+          AnchorSideLeft.Control = pChangesToolbar
+          AnchorSideTop.Control = pChangesToolbar
+          Left = 9
+          Height = 34
+          Hint = 'New taxon change'
+          Top = 9
+          Width = 34
+          AutoSize = True
+          DisabledImageIndex = 1
+          Flat = True
+          Images = bMenu
+          ImageIndex = 0
+          ImageWidth = 24
+          ShowHint = True
+          ParentShowHint = False
+          OnClick = sbInsertChangeClick
+        end
+        object sbEditChange: TSpeedButton
+          AnchorSideLeft.Control = pChangesToolbar
+          AnchorSideTop.Control = sbInsertChange
+          AnchorSideTop.Side = asrBottom
+          Left = 9
+          Height = 34
+          Hint = 'Edit taxon change'
+          Top = 47
+          Width = 34
+          AutoSize = True
+          DisabledImageIndex = 3
+          Flat = True
+          Images = bMenu
+          ImageIndex = 2
+          ImageWidth = 24
+          ShowHint = True
+          ParentShowHint = False
+          OnClick = sbEditChangeClick
+        end
+        object sbSaveChange: TSpeedButton
+          AnchorSideLeft.Control = pChangesToolbar
+          AnchorSideTop.Control = sbEditChange
+          AnchorSideTop.Side = asrBottom
+          Left = 9
+          Height = 34
+          Hint = 'Save taxon change'
+          Top = 97
+          Width = 34
+          AutoSize = True
+          BorderSpacing.Top = 16
+          DisabledImageIndex = 7
+          Images = bMenu
+          ImageIndex = 6
+          ImageWidth = 24
+          Visible = False
+          ShowHint = True
+          ParentShowHint = False
+          OnClick = sbSaveChangeClick
+        end
+        object sbCancelChange: TSpeedButton
+          AnchorSideLeft.Control = pChangesToolbar
+          AnchorSideTop.Control = sbSaveChange
+          AnchorSideTop.Side = asrBottom
+          Left = 9
+          Height = 34
+          Hint = 'Cancel taxon change'
+          Top = 135
+          Width = 34
+          AutoSize = True
+          DisabledImageIndex = 9
+          Images = bMenu
+          ImageIndex = 8
+          ImageWidth = 24
+          Visible = False
+          ShowHint = True
+          ParentShowHint = False
+          OnClick = sbCancelChangeClick
+        end
+        object sbDelChange: TSpeedButton
+          AnchorSideLeft.Control = pChangesToolbar
+          AnchorSideTop.Control = pChangesToolbar
+          AnchorSideTop.Side = asrCenter
+          Left = 9
+          Height = 34
+          Hint = 'Delete taxon change'
+          Top = 487
+          Width = 34
+          AutoSize = True
+          BorderSpacing.Top = 32
+          DisabledImageIndex = 5
+          Flat = True
+          Images = bMenu
+          ImageIndex = 4
+          ImageWidth = 24
+          ShowHint = True
+          ParentShowHint = False
+          OnClick = sbDelChangeClick
+        end
       end
     end
     object pgRanks: TPage
@@ -2341,6 +2460,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             FieldName = 'infraspecific'
           end        
           item
+            ReadOnly = True
             SizePriority = 0
             Title.Caption = 'ID'
             FieldName = 'rank_id'
@@ -2385,6 +2505,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             FieldName = 'country_name'
           end        
           item
+            ReadOnly = True
             SizePriority = 0
             Title.Caption = 'ID'
             Width = 80
@@ -2442,6 +2563,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             FieldName = 'language_name'
           end        
           item
+            ReadOnly = True
             SizePriority = 0
             Title.Caption = 'ID'
             Width = 80
@@ -2843,6 +2965,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 22
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
       OnClick = sbFirstRecordClick
     end
     object sbPriorRecord: TSpeedButton
@@ -2862,6 +2986,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 24
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
       OnClick = sbPriorRecordClick
     end
     object sbNextRecord: TSpeedButton
@@ -2883,6 +3009,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 26
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
       OnClick = sbNextRecordClick
     end
     object sbLastRecord: TSpeedButton
@@ -2902,6 +3030,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 28
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
     end
     object sbRefreshRecords: TSpeedButton
       AnchorSideTop.Control = pToolbar
@@ -2922,6 +3052,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 20
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
     end
     object sbSortRecords: TSpeedButton
       AnchorSideTop.Control = pToolbar
@@ -2940,6 +3072,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 30
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
     end
     object sbAdvancedFilters: TSpeedButton
       AnchorSideTop.Control = pToolbar
@@ -2959,6 +3093,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 34
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
       OnClick = sbAdvancedFiltersClick
     end
     object sbClearFilters: TSpeedButton
@@ -2978,6 +3114,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 38
       ImageWidth = 24
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
       OnClick = sbClearFiltersClick
     end
     object sbMoreOptions: TSpeedButton
@@ -3000,6 +3138,8 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageWidth = 24
       Visible = False
       ShowCaption = False
+      ShowHint = True
+      ParentShowHint = False
     end
     object sbEditRecord: TSpeedButton
       AnchorSideLeft.Control = sbInsertRecord

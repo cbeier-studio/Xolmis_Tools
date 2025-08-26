@@ -147,11 +147,20 @@ type
     UniqueInstance1: TUniqueInstance;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+    procedure qCountriesBeforePost(DataSet: TDataSet);
+    procedure qLanguagesBeforePost(DataSet: TDataSet);
+    procedure qPacksBeforePost(DataSet: TDataSet);
+    procedure qRanksBeforePost(DataSet: TDataSet);
+    procedure qSynonymsBeforePost(DataSet: TDataSet);
     procedure qTaxaAfterInsert(DataSet: TDataSet);
     procedure qTaxaAfterOpen(DataSet: TDataSet);
     procedure qTaxaBeforeClose(DataSet: TDataSet);
+    procedure qTaxaBeforePost(DataSet: TDataSet);
+    procedure qTaxaChangesBeforePost(DataSet: TDataSet);
     procedure qTaxaiucn_statusGetText(Sender: TField; var aText: string; DisplayText: Boolean);
     procedure qTaxaiucn_statusSetText(Sender: TField; const aText: string);
+    procedure qTaxonCountriesBeforePost(DataSet: TDataSet);
+    procedure qVernacularBeforePost(DataSet: TDataSet);
     procedure UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;
       const Parameters: array of String);
   private
@@ -215,6 +224,41 @@ begin
     sqlCon.Close;
 end;
 
+procedure TdmTaxa.qCountriesBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qLanguagesBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qPacksBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qRanksBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qSynonymsBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
 procedure TdmTaxa.qTaxaAfterInsert(DataSet: TDataSet);
 begin
   DataSet.FieldByName('extinct').AsBoolean:= False;
@@ -234,6 +278,20 @@ begin
   qVernacular.Close;
   qChildTaxa.Close;
   qSynonyms.Close;
+end;
+
+procedure TdmTaxa.qTaxaBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qTaxaChangesBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
 end;
 
 procedure TdmTaxa.qTaxaiucn_statusGetText(Sender: TField; var aText: string; DisplayText: Boolean);
@@ -272,6 +330,20 @@ begin
     'Data Deficient':         Sender.AsString := 'DD';
     'Not Evaluated':          Sender.AsString := 'NE';
   end;
+end;
+
+procedure TdmTaxa.qTaxonCountriesBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qVernacularBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
 end;
 
 procedure TdmTaxa.UniqueInstance1OtherInstance(Sender: TObject; ParamCount: Integer;
