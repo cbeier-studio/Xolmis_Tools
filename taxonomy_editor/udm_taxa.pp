@@ -22,6 +22,7 @@ type
     dsSynonyms: TDataSource;
     dsTaxa: TDataSource;
     dsTaxaChanges: TDataSource;
+    dsSpeciesList: TDataSource;
     dsTaxonCountries: TDataSource;
     dsVernacular: TDataSource;
     lookRanks: TSQLQuery;
@@ -74,6 +75,14 @@ type
     qRankssubrank: TBooleanField;
     qRanksupdate_date: TDateTimeField;
     qRankszoological_code: TBooleanField;
+    qSpeciesListactive_status: TBooleanField;
+    qSpeciesListcountry_id: TLongintField;
+    qSpeciesListinsert_date: TDateTimeField;
+    qSpeciesListmarked_status: TBooleanField;
+    qSpeciesListtaxon_country_id: TLongintField;
+    qSpeciesListtaxon_id: TLongintField;
+    qSpeciesListtaxon_name: TStringField;
+    qSpeciesListupdate_date: TDateTimeField;
     qSynonyms: TSQLQuery;
     qSynonymsactive_status: TBooleanField;
     qSynonymsfull_name: TStringField;
@@ -87,6 +96,7 @@ type
     qTaxaactive_status: TBooleanField;
     qTaxaauthorship: TStringField;
     qTaxaChanges: TSQLQuery;
+    qSpeciesList: TSQLQuery;
     qTaxaChangesaction_type: TStringField;
     qTaxaChangesactive_status: TBooleanField;
     qTaxaChangeschange_id: TLongintField;

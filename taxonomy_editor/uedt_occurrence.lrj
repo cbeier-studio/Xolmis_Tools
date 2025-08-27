@@ -1,0 +1,5 @@
+{"version":1,"strings":[
+{"hash":54133363,"name":"tedtoccurrence.caption","sourcebytes":[69,100,105,116,32,116,97,120,111,110,32,111,99,99,117,114,114,101,110,99,101,32,105,110,32,99,111,117,110,116,114,105,101,115],"value":"Edit taxon occurrence in countries"},
+{"hash":366789,"name":"tedtoccurrence.btnsave.caption","sourcebytes":[83,97,118,101],"value":"Save"},
+{"hash":77089212,"name":"tedtoccurrence.btncancel.caption","sourcebytes":[67,97,110,99,101,108],"value":"Cancel"}
+]}

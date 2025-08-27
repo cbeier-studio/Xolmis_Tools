@@ -19,7 +19,6 @@
     </General>
     <LazDoc Paths=".\docs"/>
     <i18n>
-      <EnableI18N Value="True"/>
       <OutDir Value="languages"/>
     </i18n>
     <VersionInfo>
@@ -298,6 +297,19 @@
       <Unit>
         <Filename Value="data_setparam.pp"/>
         <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uedt_occurrence.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtOccurrence"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uedt_specieslist.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtSpeciesList"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
   </ProjectOptions>

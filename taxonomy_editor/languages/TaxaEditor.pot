@@ -314,6 +314,45 @@ msgctxt "tedtdatabase.sbsave.caption"
 msgid "Save"
 msgstr ""
 
+#: tedtoccurrence.btncancel.caption
+msgctxt "tedtoccurrence.btncancel.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tedtoccurrence.btnsave.caption
+msgctxt "tedtoccurrence.btnsave.caption"
+msgid "Save"
+msgstr ""
+
+#: tedtoccurrence.caption
+msgid "Edit taxon occurrence in countries"
+msgstr ""
+
+#: tedtspecieslist.btnclose.caption
+msgid "Close"
+msgstr ""
+
+#: tedtspecieslist.caption
+msgid "Edit Species List"
+msgstr ""
+
+#: tedtspecieslist.efind.texthint
+msgid "Search and add species"
+msgstr ""
+
+#: tedtspecieslist.gridsp.columns[0].title.caption
+msgid "taxon_name"
+msgstr ""
+
+#: tedtspecieslist.gridsp.columns[1].title.caption
+msgid "Title"
+msgstr ""
+
+#: tedtspecieslist.sbclearfind.hint
+msgctxt "tedtspecieslist.sbclearfind.hint"
+msgid "Clear search"
+msgstr ""
+
 #: tfrmtaxaeditor.actabout.caption
 msgid "About"
 msgstr ""
@@ -847,11 +886,6 @@ msgctxt "tfrmtaxaeditor.rbmarkedyes.caption"
 msgid "Yes"
 msgstr ""
 
-#: tfrmtaxaeditor.sbaddcountry.caption
-msgctxt "tfrmtaxaeditor.sbaddcountry.caption"
-msgid "Add"
-msgstr ""
-
 #: tfrmtaxaeditor.sbaddsynonym.caption
 msgctxt "tfrmtaxaeditor.sbaddsynonym.caption"
 msgid "Add"
@@ -918,9 +952,18 @@ msgstr ""
 msgid "Edit taxon change"
 msgstr ""
 
+#: tfrmtaxaeditor.sbeditcountry.caption
+msgctxt "tfrmtaxaeditor.sbeditcountry.caption"
+msgid "Edit"
+msgstr ""
+
 #: tfrmtaxaeditor.sbeditrecord.caption
 msgctxt "tfrmtaxaeditor.sbeditrecord.caption"
 msgid "Edit"
+msgstr ""
+
+#: tfrmtaxaeditor.sbeditspecieslist.caption
+msgid "Species List"
 msgstr ""
 
 #: tfrmtaxaeditor.sbexport.caption

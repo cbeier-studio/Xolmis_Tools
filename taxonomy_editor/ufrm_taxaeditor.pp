@@ -145,6 +145,7 @@ type
     sbDelRecord: TSpeedButton;
     sbExport: TSpeedButton;
     sbEditRecord: TSpeedButton;
+    sbEditSpeciesList: TSpeedButton;
     sbFirstRecord: TSpeedButton;
     sbInsertRecord: TSpeedButton;
     sbLastRecord: TSpeedButton;
@@ -198,7 +199,7 @@ type
     sbCountries: TSpeedButton;
     sbLanguages: TSpeedButton;
     sbDelCountry: TSpeedButton;
-    sbAddCountry: TSpeedButton;
+    sbEditCountry: TSpeedButton;
     sbDelVernacular: TSpeedButton;
     sbAddVernacular: TSpeedButton;
     sbDelSynonym: TSpeedButton;
@@ -253,7 +254,9 @@ type
     procedure sbDelChangeClick(Sender: TObject);
     procedure sbDelRecordClick(Sender: TObject);
     procedure sbEditChangeClick(Sender: TObject);
+    procedure sbEditCountryClick(Sender: TObject);
     procedure sbEditRecordClick(Sender: TObject);
+    procedure sbEditSpeciesListClick(Sender: TObject);
     procedure sbFirstRecordClick(Sender: TObject);
     procedure sbInsertChangeClick(Sender: TObject);
     procedure sbInsertRecordClick(Sender: TObject);
@@ -306,7 +309,8 @@ uses
   models_rank, models_taxon,
   utils_dialogs, utils_taxonomy,
   io_clements, io_ioc,
-  udm_taxa, udlg_about, udlg_loading, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter;
+  udm_taxa, udlg_about, udlg_loading, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter,
+  uedt_occurrence, uedt_specieslist;
 
 {$R *.lfm}
 
@@ -1360,6 +1364,20 @@ begin
   dmTaxa.qTaxaChanges.Edit;
 end;
 
+procedure TfrmTaxaEditor.sbEditCountryClick(Sender: TObject);
+begin
+  edtOccurrence := TedtOccurrence.Create(nil);
+  with edtOccurrence do
+  try
+    TaxonId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
+    TaxonName := dmTaxa.qTaxa.FieldByName('formatted_name').AsString;
+    if ShowModal = mrOK then
+      dmTaxa.qTaxonCountries.Refresh;
+  finally
+    FreeAndNil(edtOccurrence);
+  end;
+end;
+
 procedure TfrmTaxaEditor.sbEditRecordClick(Sender: TObject);
 begin
   case nbPages.PageIndex of
@@ -1369,6 +1387,18 @@ begin
     3: dmTaxa.qCountries.Edit;
     4: dmTaxa.qLanguages.Edit;
   end;
+end;
+
+procedure TfrmTaxaEditor.sbEditSpeciesListClick(Sender: TObject);
+begin
+  edtSpeciesList := TedtSpeciesList.Create(nil);
+  with edtSpeciesList do
+  try
+    ShowModal;
+  finally
+    FreeAndNil(edtSpeciesList);
+  end;
+  dmTaxa.qTaxonCountries.Refresh;
 end;
 
 procedure TfrmTaxaEditor.sbFirstRecordClick(Sender: TObject);
@@ -1646,6 +1676,8 @@ begin
     4: eFind.Text := FLanguageSearchString;
   end;
   canSearch := True;
+
+  UpdateButtons;
 end;
 
 function TfrmTaxaEditor.SearchCountries(aValue: String): Boolean;
@@ -2274,6 +2306,7 @@ begin
     end;
   end;
 
+  sbEditSpeciesList.Visible := (nbPages.PageIndex = 3);
   sbSortRecords.Visible := (nbPages.PageIndex = 0);
   sbAdvancedFilters.Visible := (nbPages.PageIndex = 0);
 

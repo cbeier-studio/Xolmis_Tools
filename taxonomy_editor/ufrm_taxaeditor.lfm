@@ -27,7 +27,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     Height = 1009
     Top = 52
     Width = 1874
-    PageIndex = 0
+    PageIndex = 3
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 1
     object pgTaxa: TPage
@@ -1515,21 +1515,22 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Images = bMenu
                 ImageIndex = 4
               end
-              object sbAddCountry: TSpeedButton
+              object sbEditCountry: TSpeedButton
                 AnchorSideTop.Control = ptCountries
                 AnchorSideRight.Control = sbDelCountry
-                Left = 546
+                Left = 548
                 Height = 26
                 Top = 12
-                Width = 52
+                Width = 50
                 Anchors = [akTop, akRight]
                 AutoSize = True
                 BorderSpacing.Right = 16
-                Caption = 'Add'
-                DisabledImageIndex = 1
+                Caption = 'Edit'
+                DisabledImageIndex = 3
                 Flat = True
                 Images = bMenu
-                ImageIndex = 0
+                ImageIndex = 2
+                OnClick = sbEditCountryClick
               end
             end
           end
@@ -2178,7 +2179,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             end          
             item
               Title.Caption = 'Package name'
-              Width = 371
+              Width = 367
               FieldName = 'package_name'
             end          
             item
@@ -2218,10 +2219,10 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 5
       end
       object gridChanges: TDBGrid
-        Left = 756
+        Left = 754
         Height = 1003
         Top = 0
-        Width = 1112
+        Width = 1114
         Align = alClient
         AlternateColor = 16448250
         AutoFillColumns = True
@@ -2237,12 +2238,12 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Action'
-            Width = 199
+            Width = 198
             FieldName = 'action_type'
           end        
           item
             Title.Caption = 'Taxon'
-            Width = 199
+            Width = 198
             FieldName = 'taxon_name'
           end        
           item
@@ -2279,22 +2280,23 @@ object frmTaxaEditor: TfrmTaxaEditor
         Left = 704
         Height = 1009
         Top = 0
-        Width = 52
+        Width = 50
         Align = alLeft
         AutoSize = True
+        BevelOuter = bvNone
         ChildSizing.LeftRightSpacing = 8
         ChildSizing.TopBottomSpacing = 8
         ChildSizing.VerticalSpacing = 4
         ClientHeight = 1009
-        ClientWidth = 52
+        ClientWidth = 50
         TabOrder = 3
         object sbInsertChange: TSpeedButton
           AnchorSideLeft.Control = pChangesToolbar
           AnchorSideTop.Control = pChangesToolbar
-          Left = 9
+          Left = 8
           Height = 34
           Hint = 'New taxon change'
-          Top = 9
+          Top = 8
           Width = 34
           AutoSize = True
           DisabledImageIndex = 1
@@ -2310,10 +2312,10 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideLeft.Control = pChangesToolbar
           AnchorSideTop.Control = sbInsertChange
           AnchorSideTop.Side = asrBottom
-          Left = 9
+          Left = 8
           Height = 34
           Hint = 'Edit taxon change'
-          Top = 47
+          Top = 46
           Width = 34
           AutoSize = True
           DisabledImageIndex = 3
@@ -2329,10 +2331,10 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideLeft.Control = pChangesToolbar
           AnchorSideTop.Control = sbEditChange
           AnchorSideTop.Side = asrBottom
-          Left = 9
+          Left = 8
           Height = 34
           Hint = 'Save taxon change'
-          Top = 97
+          Top = 96
           Width = 34
           AutoSize = True
           BorderSpacing.Top = 16
@@ -2349,10 +2351,10 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideLeft.Control = pChangesToolbar
           AnchorSideTop.Control = sbSaveChange
           AnchorSideTop.Side = asrBottom
-          Left = 9
+          Left = 8
           Height = 34
           Hint = 'Cancel taxon change'
-          Top = 135
+          Top = 134
           Width = 34
           AutoSize = True
           DisabledImageIndex = 9
@@ -2368,7 +2370,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideLeft.Control = pChangesToolbar
           AnchorSideTop.Control = pChangesToolbar
           AnchorSideTop.Side = asrCenter
-          Left = 9
+          Left = 8
           Height = 34
           Hint = 'Delete taxon change'
           Top = 487
@@ -2481,7 +2483,6 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 1862
         Align = alClient
         AlternateColor = 16448250
-        AutoFillColumns = True
         BorderSpacing.Left = 6
         BorderSpacing.Right = 6
         BorderSpacing.Bottom = 6
@@ -2501,7 +2502,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Name'
-            Width = 1590
+            Width = 400
             FieldName = 'country_name'
           end        
           item
@@ -2527,7 +2528,6 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 1862
         Align = alClient
         AlternateColor = 16448250
-        AutoFillColumns = True
         BorderSpacing.Left = 6
         BorderSpacing.Right = 6
         BorderSpacing.Bottom = 6
@@ -2559,7 +2559,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Name'
-            Width = 1450
+            Width = 400
             FieldName = 'language_name'
           end        
           item
@@ -3198,6 +3198,26 @@ object frmTaxaEditor: TfrmTaxaEditor
       Images = bMenu
       ImageIndex = 55
       ImageWidth = 24
+    end
+    object sbEditSpeciesList: TSpeedButton
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pToolbar
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = pFind
+      Left = 640
+      Height = 34
+      Top = 9
+      Width = 98
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 24
+      Caption = 'Species List'
+      DisabledImageIndex = 3
+      Flat = True
+      Images = bMenu
+      ImageIndex = 2
+      ImageWidth = 24
+      OnClick = sbEditSpeciesListClick
     end
   end
   object TimerFind: TTimer

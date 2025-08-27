@@ -2120,4 +2120,152 @@ object dmTaxa: TdmTaxa
     Left = 210
     Top = 434
   end
+  object qSpeciesList: TSQLQuery
+    PacketRecords = 200
+    FieldDefs = <    
+      item
+        Name = 'taxon_country_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'taxon_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'country_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'insert_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'update_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'marked_status'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'active_status'
+        DataType = ftBoolean
+        Precision = -1
+      end    
+      item
+        Name = 'taxon_name'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end>
+    BeforePost = qTaxaChangesBeforePost
+    Database = sqlCon
+    Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT zc.*,'
+      '  z.full_name AS taxon_name'
+      'FROM zoo_taxa_countries AS zc'
+      'LEFT JOIN zoo_taxa AS z ON zc.taxon_id = z.taxon_id'
+      'WHERE (zc.country_id = :country_id)'
+      '  AND (zc.active_status = 1)'
+      'ORDER BY taxon_name ASC'
+    )
+    Options = [sqoAutoApplyUpdates]
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'country_id'
+        ParamType = ptInput
+      end>
+    Macros = <>
+    DataSource = dsCountries
+    Left = 296
+    Top = 490
+    object qSpeciesListtaxon_country_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'taxon_country_id'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = False
+      Required = True
+    end
+    object qSpeciesListcountry_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'country_id'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+    end
+    object qSpeciesListtaxon_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'taxon_id'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+    end
+    object qSpeciesListtaxon_name: TStringField
+      FieldKind = fkData
+      FieldName = 'taxon_name'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 100
+    end
+    object qSpeciesListinsert_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'insert_date'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qSpeciesListupdate_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'update_date'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qSpeciesListmarked_status: TBooleanField
+      FieldKind = fkData
+      FieldName = 'marked_status'
+      Index = 6
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+    object qSpeciesListactive_status: TBooleanField
+      FieldKind = fkData
+      FieldName = 'active_status'
+      Index = 7
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      DisplayValues = 'True;False'
+    end
+  end
+  object dsSpeciesList: TDataSource
+    DataSet = qSpeciesList
+    Left = 296
+    Top = 434
+  end
 end

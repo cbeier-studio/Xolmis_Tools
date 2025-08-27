@@ -1,0 +1,100 @@
+object edtOccurrence: TedtOccurrence
+  Left = 361
+  Height = 546
+  Top = 250
+  Width = 659
+  AutoSize = True
+  BorderStyle = bsDialog
+  Caption = 'Edit taxon occurrence in countries'
+  ClientHeight = 546
+  ClientWidth = 659
+  PopupMode = pmAuto
+  Position = poScreenCenter
+  OnShow = FormShow
+  object ckList: TCheckListBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = txtTaxon
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 432
+    Top = 41
+    Width = 659
+    Anchors = [akTop, akLeft, akRight]
+    Columns = 3
+    Constraints.MinHeight = 432
+    Constraints.MinWidth = 658
+    ItemHeight = 0
+    TabOrder = 0
+  end
+  object pBottom: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ckList
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 41
+    Top = 473
+    Width = 659
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 8
+    ChildSizing.HorizontalSpacing = 8
+    ClientHeight = 41
+    ClientWidth = 659
+    TabOrder = 1
+    object btnSave: TBitBtn
+      AnchorSideTop.Control = pBottom
+      AnchorSideRight.Control = btnCancel
+      Left = 395
+      Height = 25
+      Top = 8
+      Width = 120
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Caption = 'Save'
+      Constraints.MinWidth = 120
+      TabOrder = 0
+      OnClick = btnSaveClick
+    end
+    object btnCancel: TBitBtn
+      AnchorSideTop.Control = pBottom
+      AnchorSideRight.Control = pBottom
+      AnchorSideRight.Side = asrBottom
+      Left = 523
+      Height = 25
+      Top = 8
+      Width = 120
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Caption = 'Cancel'
+      Constraints.MinWidth = 120
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object txtTaxon: THtmlViewer
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 41
+    Top = 0
+    Width = 659
+    BorderStyle = htNone
+    HistoryMaxCount = 0
+    NoSelect = False
+    PrintMarginBottom = 2
+    PrintMarginLeft = 2
+    PrintMarginRight = 2
+    PrintMarginTop = 2
+    PrintScale = 1
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 2
+  end
+end

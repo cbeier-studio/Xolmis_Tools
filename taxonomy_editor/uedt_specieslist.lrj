@@ -1,0 +1,8 @@
+{"version":1,"strings":[
+{"hash":163199284,"name":"tedtspecieslist.caption","sourcebytes":[69,100,105,116,32,83,112,101,99,105,101,115,32,76,105,115,116],"value":"Edit Species List"},
+{"hash":76792947,"name":"tedtspecieslist.efind.texthint","sourcebytes":[83,101,97,114,99,104,32,97,110,100,32,97,100,100,32,115,112,101,99,105,101,115],"value":"Search and add species"},
+{"hash":54079704,"name":"tedtspecieslist.sbclearfind.hint","sourcebytes":[67,108,101,97,114,32,115,101,97,114,99,104],"value":"Clear search"},
+{"hash":105115845,"name":"tedtspecieslist.gridsp.columns[0].title.caption","sourcebytes":[116,97,120,111,110,95,110,97,109,101],"value":"taxon_name"},
+{"hash":5966629,"name":"tedtspecieslist.gridsp.columns[1].title.caption","sourcebytes":[84,105,116,108,101],"value":"Title"},
+{"hash":4863637,"name":"tedtspecieslist.btnclose.caption","sourcebytes":[67,108,111,115,101],"value":"Close"}
+]}
