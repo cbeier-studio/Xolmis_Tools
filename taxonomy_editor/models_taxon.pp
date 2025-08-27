@@ -130,6 +130,48 @@ type
     procedure Delete(E: TXolmisRecord); override;
   end;
 
+  { TVernacularName }
+
+  TVernacularName = class(TXolmisRecord)
+  protected
+    FTaxonId: Integer;
+    FLanguageId: Integer;
+    FVernacularName: String;
+    FPreferred: Boolean;
+  public
+    constructor Create(aValue: Integer = 0); reintroduce; virtual;
+    procedure Clear; override;
+    procedure Assign(Source: TPersistent); override;
+    function Clone: TXolmisRecord; reintroduce;
+    function Diff(const aOld: TVernacularName; var Changes: TStrings): Boolean; virtual;
+    function EqualsTo(const Other: TVernacularName): Boolean;
+    procedure FromJSON(const aJSONString: String); virtual;
+    function ToJSON: String;
+    function ToString: String; override;
+    function Validate(out Msg: string): Boolean; virtual;
+  published
+    property TaxonId: Integer read FTaxonId write FTaxonId;
+    property LanguageId: Integer read FLanguageId write FLanguageId;
+    property VernacularName: String read FVernacularName write FVernacularName;
+    property Preferred: Boolean read FPreferred write FPreferred;
+  end;
+
+  { TVernacularRepository }
+
+  TVernacularRepository = class(TXolmisRepository)
+  protected
+    function TableName: string; override;
+  public
+    function Exists(const Id: Integer): Boolean; override;
+    procedure FindBy(const FieldName: String; const Value: Variant; E: TXolmisRecord); override;
+    procedure FindByTaxon(const aTaxonId: Integer; const aVernacularName: String; E: TVernacularName);
+    procedure GetById(const Id: Integer; E: TXolmisRecord); override;
+    procedure Hydrate(aDataSet: TDataSet; E: TXolmisRecord); override;
+    procedure Insert(E: TXolmisRecord); override;
+    procedure Update(E: TXolmisRecord); override;
+    procedure Delete(E: TXolmisRecord); override;
+  end;
+
 implementation
 
 uses
@@ -1109,6 +1151,406 @@ begin
     ParamByName('marked_status').AsBoolean := R.Marked;
     ParamByName('active_status').AsBoolean := R.Active;
     ParamByName('synonym_id').AsInteger := R.Id;
+
+    ExecSQL;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+{ TVernacularName }
+
+constructor TVernacularName.Create(aValue: Integer);
+begin
+  inherited Create;
+  if aValue <> 0 then
+    FId := aValue;
+end;
+
+procedure TVernacularName.Assign(Source: TPersistent);
+begin
+  inherited Assign(Source);
+  if Source is TVernacularName then
+  begin
+    FTaxonId := TVernacularName(Source).TaxonId;
+    FLanguageId := TVernacularName(Source).LanguageId;
+    FVernacularName := TVernacularName(Source).VernacularName;
+    FPreferred := TVernacularName(Source).Preferred;
+  end;
+end;
+
+procedure TVernacularName.Clear;
+begin
+  inherited Clear;
+  FTaxonId := 0;
+  FLanguageId := 0;
+  FVernacularName := EmptyStr;
+  FPreferred := False;
+end;
+
+function TVernacularName.Clone: TXolmisRecord;
+begin
+  Result := TVernacularName(inherited Clone);
+end;
+
+function TVernacularName.Diff(const aOld: TVernacularName; var Changes: TStrings): Boolean;
+var
+  R: String;
+begin
+  Result := False;
+  R := EmptyStr;
+  if Assigned(Changes) then
+    Changes.Clear;
+  if aOld = nil then
+    Exit(False);
+
+  //if FieldValuesDiff(rscName, aOld.Name, FName, R) then
+  //  Changes.Add(R);
+  //if FieldValuesDiff(rscAbbreviation, aOld.Abbreviation, FAbbreviation, R) then
+  //  Changes.Add(R);
+  //if FieldValuesDiff(rscCategory, aOld.Category, FCategory, R) then
+  //  Changes.Add(R);
+  //if FieldValuesDiff(rscEBirdName, aOld.EbirdName, FEbirdName, R) then
+  //  Changes.Add(R);
+
+  Result := Changes.Count > 0;
+end;
+
+function TVernacularName.EqualsTo(const Other: TVernacularName): Boolean;
+begin
+  Result := Assigned(Other) and (FId = Other.Id);
+end;
+
+procedure TVernacularName.FromJSON(const aJSONString: String);
+var
+  Obj: TJSONObject;
+begin
+  Obj := TJSONObject(GetJSON(AJSONString));
+  try
+    FTaxonId        := Obj.Get('taxon_id', 0);
+    FLanguageId     := Obj.Get('language_id', 0);
+    FVernacularName := Obj.Get('vernacular_name', '');
+    FPreferred      := Obj.Get('preferred', False);
+  finally
+    Obj.Free;
+  end;
+end;
+
+function TVernacularName.ToJSON: String;
+var
+  JSONObject: TJSONObject;
+begin
+  JSONObject := TJSONObject.Create;
+  try
+    JSONObject.Add('taxon_id', FTaxonId);
+    JSONObject.Add('language_id', FLanguageId);
+    JSONObject.Add('vernacular_name', FVernacularName);
+    JSONObject.Add('preferred', FPreferred);
+
+    Result := JSONObject.AsJSON;
+  finally
+    JSONObject.Free;
+  end;
+end;
+
+function TVernacularName.ToString: String;
+begin
+  Result := Format('VernacularName(Id=%d, TaxonId=%d, LanguageId=%d, VernacularName=%s, Preferred=%s, ' +
+    'InsertDate=%s, UpdateDate=%s, Marked=%s, Active=%s)',
+    [FId, FTaxonId, FLanguageId, FVernacularName, BoolToStr(FPreferred, 'True', 'False'),
+    DateTimeToStr(FInsertDate), DateTimeToStr(FUpdateDate), BoolToStr(FMarked, 'True', 'False'),
+    BoolToStr(FActive, 'True', 'False')]);
+end;
+
+function TVernacularName.Validate(out Msg: string): Boolean;
+begin
+  if FTaxonId = 0 then
+  begin
+    Msg := 'TaxonId required.';
+    Exit(False);
+  end;
+  if FLanguageId = 0 then
+  begin
+    Msg := 'LanguageId required.';
+    Exit(False);
+  end;
+  if FVernacularName = EmptyStr then
+  begin
+    Msg := 'VernacularName required.';
+    Exit(False);
+  end;
+
+  Msg := '';
+  Result := True;
+end;
+
+{ TVernacularRepository }
+
+procedure TVernacularRepository.Delete(E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+  R: TVernacularName;
+begin
+  if not (E is TVernacularName) then
+    raise Exception.Create('Delete: Expected TVernacularName');
+
+  R := TVernacularName(E);
+  if R.Id = 0 then
+    raise Exception.CreateFmt('TVernacularRepository.Delete: %s.', ['ID is empty']);
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    if not FTrans.Active then
+      FTrans.StartTransaction;
+    try
+      Clear;
+      Add('DELETE FROM %tablename');
+      Add('WHERE (%idname = :aid)');
+
+      MacroByName('tablename').Value := TableName;
+      MacroByName('idname').Value := 'vernacular_id';
+      ParamByName('aid').AsInteger := R.Id;
+
+      ExecSQL;
+
+      FTrans.CommitRetaining;
+    except
+      FTrans.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+function TVernacularRepository.Exists(const Id: Integer): Boolean;
+var
+  Qry: TSQLQuery;
+begin
+  Qry := NewQuery;
+  with Qry do
+  try
+    MacroCheck := True;
+    SQL.Text := 'SELECT 1 AS x FROM %tablename WHERE %idname=:id LIMIT 1';
+    MacroByName('tablename').Value := TableName;
+    MacroByName('idname').Value := 'vernacular_id';
+    ParamByName('id').AsInteger := Id;
+    Open;
+    Result := not EOF;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TVernacularRepository.FindBy(const FieldName: String; const Value: Variant; E: TXolmisRecord);
+const
+  ALLOWED: array[0..1] of string = ('vernacular_id', 'vernacular_name'); // whitelist
+var
+  Qry: TSQLQuery;
+  I: Integer;
+  Ok: Boolean;
+begin
+  if not (E is TVernacularName) then
+    raise Exception.Create('FindBy: Expected TVernacularName');
+
+  // Avoid FieldName injection: check in whitelist
+  Ok := False;
+  for I := Low(ALLOWED) to High(ALLOWED) do
+    if SameText(FieldName, ALLOWED[I]) then
+    begin
+      Ok := True;
+      Break;
+    end;
+  if not Ok then
+    raise Exception.CreateFmt('Field %s not allowed in FindBy', [FieldName]);
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    Add('SELECT * FROM %tablename');
+    Add('WHERE %afield = :avalue');
+    MacroByName('tablename').Value := TableName;
+    MacroByName('afield').Value := FieldName;
+    ParamByName('avalue').Value := Value;
+    Open;
+
+    if not EOF then
+    begin
+      Hydrate(Qry, TVernacularName(E));
+    end;
+
+    Close;
+  finally
+    Qry.Free;
+  end;
+end;
+
+procedure TVernacularRepository.FindByTaxon(const aTaxonId: Integer; const aVernacularName: String;
+  E: TVernacularName);
+var
+  Qry: TSQLQuery;
+begin
+  Qry := NewQuery;
+  with Qry do
+  try
+    MacroCheck := True;
+    SQL.Text := 'SELECT 1 AS x FROM %tablename WHERE (taxon_id=:taxon_id) AND (vernacular_name=:vernacular_name) LIMIT 1';
+    MacroByName('tablename').Value := TableName;
+    ParamByName('taxon_id').AsInteger := aTaxonId;
+    ParamByName('vernacular_name').AsString := aVernacularName;
+    Open;
+
+    if not EOF then
+    begin
+      Hydrate(Qry, E);
+    end;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TVernacularRepository.GetById(const Id: Integer; E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+begin
+  if not (E is TVernacularName) then
+    raise Exception.Create('GetById: Expected TVernacularName');
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    Clear;
+    Add('SELECT * FROM %tablename');
+    Add('WHERE %idname = :id');
+    MacroByName('tablename').Value := TableName;
+    MacroByName('idname').Value := 'vernacular_id';
+    ParamByName('id').AsInteger := Id;
+    Open;
+    if not EOF then
+    begin
+      Hydrate(Qry, TVernacularName(E));
+    end;
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TVernacularRepository.Hydrate(aDataSet: TDataSet; E: TXolmisRecord);
+var
+  R: TVernacularName;
+begin
+  if (aDataSet = nil) or (E = nil) or aDataSet.EOF then
+    Exit;
+  if not (E is TVernacularName) then
+    raise Exception.Create('Hydrate: Expected TVernacularName');
+
+  R := TVernacularName(E);
+  with aDataSet do
+  begin
+    R.Id := FieldByName('vernacular_id').AsInteger;
+    R.TaxonId := FieldByName('taxon_id').AsInteger;
+    R.LanguageId := FieldByName('language_id').AsInteger;
+    R.VernacularName := FieldByName('vernacular_name').AsString;
+    R.Preferred := FieldByName('preferred').AsBoolean;
+    // SQLite may store date and time data as ISO8601 string or Julian date real formats
+    // so it checks in which format it is stored before load the value
+    GetTimeStamp(FieldByName('insert_date'), R.InsertDate);
+    GetTimeStamp(FieldByName('update_date'), R.UpdateDate);
+    R.Marked := FieldByName('marked_status').AsBoolean;
+    R.Active := FieldByName('active_status').AsBoolean;
+  end;
+end;
+
+procedure TVernacularRepository.Insert(E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+  R: TVernacularName;
+begin
+  if not (E is TVernacularName) then
+    raise Exception.Create('Insert: Expected TVernacularName');
+
+  R := TVernacularName(E);
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    Clear;
+    Add('INSERT INTO vernacular_names (' +
+      'taxon_id, ' +
+      'language_id, ' +
+      'vernacular_name, ' +
+      'preferred, ' +
+      'insert_date) ');
+    Add('VALUES (' +
+      ':taxon_id, ' +
+      ':language_id, ' +
+      ':vernacular_name, ' +
+      ':preferred, ' +
+      'datetime(''now'', ''subsec''))');
+
+    ParamByName('taxon_id').AsInteger := R.TaxonId;
+    ParamByName('language_id').AsInteger := R.LanguageId;
+    ParamByName('vernacular_name').AsString := R.VernacularName;
+    ParamByName('preferred').AsBoolean := R.Preferred;
+
+    ExecSQL;
+
+    // Get the record ID
+    Clear;
+    Add('SELECT last_insert_rowid()');
+    Open;
+    R.Id := Fields[0].AsInteger;
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+function TVernacularRepository.TableName: string;
+begin
+  Result := 'vernacular_names';
+end;
+
+procedure TVernacularRepository.Update(E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+  R: TVernacularName;
+begin
+  if not (E is TVernacularName) then
+    raise Exception.Create('Update: Expected TVernacularName');
+
+  R := TVernacularName(E);
+  if R.Id = 0 then
+    raise Exception.CreateFmt('TVernacularRepository.Update: %s.', ['ID is empty']);
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    Clear;
+    Add('UPDATE vernacular_names SET ' +
+      'taxon_id = :taxon_id, ' +
+      'language_id = :language_id, ' +
+      'vernacular_name = :vernacular_name, ' +
+      'preferred = :preferred, ' +
+      'update_date = datetime(''now'', ''subsec''), ' +
+      'marked_status = :marked_status, ' +
+      'active_status = :active_status');
+    Add('WHERE (vernacular_id = :vernacular_id)');
+
+    ParamByName('taxon_id').AsInteger := R.TaxonId;
+    ParamByName('language_id').AsInteger := R.LanguageId;
+    ParamByName('vernacular_name').AsString := R.VernacularName;
+    ParamByName('preferred').AsBoolean := R.Preferred;
+    ParamByName('marked_status').AsBoolean := R.Marked;
+    ParamByName('active_status').AsBoolean := R.Active;
+    ParamByName('vernacular_id').AsInteger := R.Id;
 
     ExecSQL;
   finally

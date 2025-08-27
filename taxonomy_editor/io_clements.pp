@@ -12,14 +12,16 @@ uses
 implementation
 
 uses
-  utils_global, utils_dialogs, utils_taxonomy, data_getvalue, udm_taxa, udlg_loading;
+  utils_global, utils_dialogs, utils_taxonomy, data_getvalue, models_taxon, udm_taxa, udlg_loading;
 
 procedure ImportClementsData(aFilename: String);
 var
   CSV: TSdfDataSet;
-  Qry: TSQLQuery;
-  Range: TStrings;
-  nRank: Integer;
+  nRank: TZooRank;
+  Repo: TTaxonRepository;
+  FTaxon: TTaxon;
+  VernRepo: TVernacularRepository;
+  FVernacular: TVernacularName;
 begin
   if not FileExists(aFilename) then
   begin
@@ -31,9 +33,11 @@ begin
   dlgLoading.Show;
   dlgLoading.UpdateProgress('Importing Clements/eBird checklist...', 0);
 
+  Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
+  VernRepo := TVernacularRepository.Create(dmTaxa.sqlCon);
+  FTaxon := TTaxon.Create();
+  FVernacular := TVernacularName.Create();
   CSV := TSdfDataSet.Create(nil);
-  Qry := TSQLQuery.Create(nil);
-  Range := TStringList.Create;
   try
     { Define CSV format settings }
     with CSV do
@@ -52,110 +56,95 @@ begin
 
     if CSV.RecordCount > 0 then
     begin
-      Qry.SQLConnection := dmTaxa.sqlCon;
-      Qry.SQL.Add('SELECT * FROM zoo_taxa WHERE full_name = :aname');
       if not dmTaxa.sqlTrans.Active then
         dmTaxa.sqlTrans.StartTransaction;
       try
         CSV.First;
         repeat
-          Range.Clear;
-          Qry.Close;
-          Qry.ParamByName('ANAME').AsString := CSV.FieldByName('scientific name').AsString;
-          Qry.Open;
+          FTaxon.Clear;
+          FVernacular.Clear;
+          Repo.FindBy('full_name', CSV.FieldByName('scientific name').AsString, FTaxon);
 
-          if Qry.RecordCount > 0 then
+          if not FTaxon.IsNew then
           begin
-            Qry.Edit;
-
+            FTaxon.Authorship := CSV.FieldByName('authority').AsString;
             if CSV.Fields[0].AsString <> EmptyStr then
-              Qry.FieldByName('sort_num').AsFloat := CSV.Fields[0].AsFloat;
+              FTaxon.SortNum := CSV.Fields[0].AsFloat;
             if CSV.FindField('species_code') <> nil then
-              Qry.FieldByName('ebird_code').AsString := CSV.FieldByName('species_code').AsString;
-
-            Qry.FieldByName('english_name').AsString := CSV.FieldByName('English name').AsString;
-            Qry.FieldByName('authorship').AsString := CSV.FieldByName('authority').AsString;
+              FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
 
             if CSV.FieldByName('range').AsString <> EmptyStr then
-              Qry.FieldByName('distribution').AsString := CSV.FieldByName('range').AsString;
-            Qry.FieldByName('extinct').AsBoolean := CSV.FieldByName('extinct').AsString = '1';
+              FTaxon.Distribution := CSV.FieldByName('range').AsString;
+            FTaxon.Extinct := CSV.FieldByName('extinct').AsString = '1';
             if CSV.FieldByName('extinct year').AsString <> EmptyStr then
-              Qry.FieldByName('extinction_year').AsString := CSV.FieldByName('extinct year').AsString;
+              FTaxon.ExtinctionYear := CSV.FieldByName('extinct year').AsString;
 
-            Qry.Post;
+            Repo.Update(FTaxon);
+
+            VernRepo.FindByTaxon(FTaxon.Id, CSV.FieldByName('English name').AsString, FVernacular);
+            if not FVernacular.IsNew then
+            begin
+              FVernacular.Active := True;
+              VernRepo.Update(FVernacular);
+            end
+            else
+            begin
+              FVernacular.TaxonId := FTaxon.Id;
+              FVernacular.LanguageId := GetKey('languages', 'language_id', 'macrolanguage_code', 'en');
+              FVernacular.VernacularName := CSV.FieldByName('English name').AsString;
+              VernRepo.Insert(FVernacular);
+            end;
           end
           else
           begin
-            Qry.Append;
+            case CSV.FieldByName('category').AsString of
+              'species':            FTaxon.RankId := trSpecies;
+              'subspecies':         FTaxon.RankId := trSubspecies;
+              'group (monotypic)':  FTaxon.RankId := trMonotypicGroup;
+              'group (polytypic)':  FTaxon.RankId := trPolitypicGroup;
+              'domestic':           FTaxon.RankId := trDomestic;
+              'form':               FTaxon.RankId := trForm;
+              'spuh':               FTaxon.RankId := trSpuh;
+              'slash':              FTaxon.RankId := trSlash;
+              'hybrid':             FTaxon.RankId := trHybrid;
+              'intergrade':         FTaxon.RankId := trIntergrade;
+            end;
 
-            if CSV.FieldByName('category').AsString = 'species' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'sp.')
-            else
-            if CSV.FieldByName('category').AsString = 'subspecies' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ssp.')
-            else
-            if CSV.FieldByName('category').AsString = 'group (monotypic)' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'grp. (mono)')
-            else
-            if CSV.FieldByName('category').AsString = 'group (polytypic)' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'grp. (poli)')
-            else
-            if CSV.FieldByName('category').AsString = 'domestic' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'domest.')
-            else
-            if CSV.FieldByName('category').AsString = 'form' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'form')
-            else
-            if CSV.FieldByName('category').AsString = 'spuh' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'spuh')
-            else
-            if CSV.FieldByName('category').AsString = 'slash' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'slash')
-            else
-            if CSV.FieldByName('category').AsString = 'hybrid' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'hybrid')
-            else
-            if CSV.FieldByName('category').AsString = 'intergrade' then
-              nRank := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'intergrade');
+            FTaxon.FullName := CSV.FieldByName('scientific name').AsString;
+            FTaxon.FormattedName := FormattedBirdName(CSV.FieldByName('scientific name').AsString, GetRankKey(FTaxon.RankId));
 
-            Qry.FieldByName('full_name').AsString := CSV.FieldByName('scientific name').AsString;
-            Qry.FieldByName('formatted_name').AsString := FormattedBirdName(CSV.FieldByName('scientific name').AsString, nRank);
-            Qry.FieldByName('rank_id').AsInteger := nRank;
-
-            if (CSV.FieldByName('category').AsString = 'species') or
-              (CSV.FieldByName('category').AsString = 'spuh') then
-              Qry.FieldByName('parent_taxon_id').AsInteger :=
-                GetKey('zoo_taxa', 'taxon_id', 'full_name',
+            if (FTaxon.RankId = trSpecies) or (FTaxon.RankId = trSpuh) then
+              FTaxon.ParentTaxonId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
                   ExtractWord(0, CSV.FieldByName('scientific name').AsString, [' ']))
             else
-            if (CSV.FieldByName('category').AsString = 'subspecies') or
-              (CSV.FieldByName('category').AsString = 'group (monotypic)') or
-              (CSV.FieldByName('category').AsString = 'group (polytypic)') then
-              Qry.FieldByName('parent_taxon_id').AsInteger :=
-                GetKey('zoo_taxa', 'taxon_id', 'full_name',
+            if (FTaxon.RankId = trSubspecies) or (FTaxon.RankId = trMonotypicGroup) or
+              (FTaxon.RankId = trPolitypicGroup) then
+              FTaxon.ParentTaxonId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
                   ExtractWord(0, CSV.FieldByName('scientific name').AsString, [' ']) + ' ' +
                   ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' ']));
 
-            Qry.FieldByName('clements_taxonomy').AsBoolean := True;
-            Qry.FieldByName('extinct').AsBoolean := CSV.FieldByName('extinct').AsString = '1';
+            FTaxon.Extinct := CSV.FieldByName('extinct').AsString = '1';
             if CSV.FieldByName('extinct year').AsString <> EmptyStr then
-              Qry.FieldByName('extinction_year').AsString := CSV.FieldByName('extinct year').AsString;
+              FTaxon.ExtinctionYear := CSV.FieldByName('extinct year').AsString;
 
             if CSV.Fields[0].AsString <> EmptyStr then
-              Qry.FieldByName('sort_num').AsFloat := CSV.Fields[0].AsFloat;
+              FTaxon.SortNum := CSV.Fields[0].AsFloat;
             if CSV.FindField('species_code') <> nil then
-              Qry.FieldByName('ebird_code').AsString := CSV.FieldByName('species_code').AsString;
+              FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
 
-            Qry.FieldByName('english_name').AsString := CSV.FieldByName('English name').AsString;
-            Qry.FieldByName('authorship').AsString := CSV.FieldByName('authority').AsString;
+            FTaxon.Authorship := CSV.FieldByName('authority').AsString;
 
             if CSV.FieldByName('range').AsString <> EmptyStr then
-              Qry.FieldByName('distribution').AsString := CSV.FieldByName('range').AsString;
+              FTaxon.Distribution := CSV.FieldByName('range').AsString;
 
-            Qry.Post;
+            Repo.Insert(FTaxon);
+
+            FVernacular.TaxonId := FTaxon.Id;
+            FVernacular.LanguageId := GetKey('languages', 'language_id', 'macrolanguage_code', 'en');
+            FVernacular.VernacularName := CSV.FieldByName('English name').AsString;
+            VernRepo.Insert(FVernacular);
           end;
 
-          Qry.ApplyUpdates;
           dlgLoading.Progress := CSV.RecNo;
           Application.ProcessMessages;
           CSV.Next;
@@ -184,8 +173,10 @@ begin
     dlgLoading.Max := 100;
     CSV.Close;
     FreeAndNil(CSV);
-    FreeAndNil(Qry);
-    FreeAndNil(Range);
+    FreeAndNil(FVernacular);
+    FreeAndNil(FTaxon);
+    VernRepo.Free;
+    Repo.Free;
   end;
 end;
 
