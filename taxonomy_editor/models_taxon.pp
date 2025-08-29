@@ -609,18 +609,18 @@ begin
       'datetime(''now'', ''subsec''))');
 
     ParamByName('full_name').AsString := R.FullName;
-    ParamByName('authorship').AsString := R.Authorship;
+    SetStrParam(ParamByName('authorship'), R.Authorship);
     ParamByName('formatted_name').AsString := R.FormattedName;
-    ParamByName('quick_code').AsString := R.QuickCode;
+    SetStrParam(ParamByName('quick_code'), R.QuickCode);
     ParamByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[R.RankId]);
     SetForeignParam(ParamByName('parent_taxon_id'), R.ParentTaxonId);
-    ParamByName('iucn_status').AsString := R.IucnStatus;
+    SetStrParam(ParamByName('iucn_status'), R.IucnStatus);
     ParamByName('extinct').AsBoolean := R.Extinct;
-    ParamByName('extinction_year').AsString := R.ExtinctionYear;
-    ParamByName('sort_num').AsFloat := R.SortNum;
-    ParamByName('incertae_sedis').AsInteger := R.IncertaeSedis;
-    ParamByName('ebird_code').AsString := R.EbirdCode;
-    ParamByName('distribution').AsString := R.Distribution;
+    SetStrParam(ParamByName('extinction_year'), R.ExtinctionYear);
+    SetFloatParam(ParamByName('sort_num'), R.SortNum);
+    SetForeignParam(ParamByName('incertae_sedis'), R.IncertaeSedis);
+    SetStrParam(ParamByName('ebird_code'), R.EbirdCode);
+    SetStrParam(ParamByName('distribution'), R.Distribution);
 
     ExecSQL;
 
@@ -721,22 +721,22 @@ begin
     Add('WHERE (taxon_id = :taxon_id)');
 
     ParamByName('full_name').AsString := R.FullName;
-    ParamByName('authorship').AsString := R.Authorship;
+    SetStrParam(ParamByName('authorship'), R.Authorship);
     ParamByName('formatted_name').AsString := R.FormattedName;
-    ParamByName('quick_code').AsString := R.QuickCode;
+    SetStrParam(ParamByName('quick_code'), R.QuickCode);
     ParamByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[R.RankId]);
     SetForeignParam(ParamByName('parent_taxon_id'), R.ParentTaxonId);
-    ParamByName('iucn_status').AsString := R.IucnStatus;
+    SetStrParam(ParamByName('iucn_status'), R.IucnStatus);
     ParamByName('extinct').AsBoolean := R.Extinct;
-    ParamByName('extinction_year').AsString := R.ExtinctionYear;
-    ParamByName('sort_num').AsFloat := R.SortNum;
-    ParamByName('incertae_sedis').AsInteger := R.IncertaeSedis;
-    ParamByName('ebird_code').AsString := R.EbirdCode;
-    ParamByName('distribution').AsString := R.Distribution;
+    SetStrParam(ParamByName('extinction_year'), R.ExtinctionYear);
+    SetFloatParam(ParamByName('sort_num'), R.SortNum);
+    SetForeignParam(ParamByName('incertae_sedis'), R.IncertaeSedis);
+    SetStrParam(ParamByName('ebird_code'), R.EbirdCode);
+    SetStrParam(ParamByName('distribution'), R.Distribution);
     ParamByName('accepted_status').AsBoolean := R.Accepted;
     ParamByName('marked_status').AsBoolean := R.Marked;
     ParamByName('active_status').AsBoolean := R.Active;
-    ParamByName('rank_id').AsInteger := R.Id;
+    ParamByName('taxon_id').AsInteger := R.Id;
 
     ExecSQL;
 

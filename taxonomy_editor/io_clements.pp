@@ -22,6 +22,7 @@ var
   FTaxon: TTaxon;
   VernRepo: TVernacularRepository;
   FVernacular: TVernacularName;
+  Qry: TSQLQuery;
 begin
   if not FileExists(aFilename) then
   begin
@@ -59,6 +60,16 @@ begin
       if not dmTaxa.sqlTrans.Active then
         dmTaxa.sqlTrans.StartTransaction;
       try
+        Qry := TSQLQuery.Create(nil);
+        with Qry, SQL do
+        try
+          DataBase := dmTaxa.sqlCon;
+          Add('UPDATE zoo_taxa SET accepted_status = 0');
+          ExecSQL;
+        finally
+          FreeAndNil(Qry);
+        end;
+
         CSV.First;
         repeat
           FTaxon.Clear;
@@ -67,17 +78,29 @@ begin
 
           if not FTaxon.IsNew then
           begin
+            case CSV.FieldByName('category').AsString of
+              'species':            FTaxon.RankId := trSpecies;
+              'subspecies':         FTaxon.RankId := trSubspecies;
+              'group (monotypic)':  FTaxon.RankId := trMonotypicGroup;
+              'group (polytypic)':  FTaxon.RankId := trPolitypicGroup;
+              'domestic':           FTaxon.RankId := trDomestic;
+              'form':               FTaxon.RankId := trForm;
+              'spuh':               FTaxon.RankId := trSpuh;
+              'slash':              FTaxon.RankId := trSlash;
+              'hybrid':             FTaxon.RankId := trHybrid;
+              'intergrade':         FTaxon.RankId := trIntergrade;
+            end;
             FTaxon.Authorship := CSV.FieldByName('authority').AsString;
             if CSV.Fields[0].AsString <> EmptyStr then
               FTaxon.SortNum := CSV.Fields[0].AsFloat;
             if CSV.FindField('species_code') <> nil then
               FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
-
             if CSV.FieldByName('range').AsString <> EmptyStr then
               FTaxon.Distribution := CSV.FieldByName('range').AsString;
             FTaxon.Extinct := CSV.FieldByName('extinct').AsString = '1';
             if CSV.FieldByName('extinct year').AsString <> EmptyStr then
               FTaxon.ExtinctionYear := CSV.FieldByName('extinct year').AsString;
+            FTaxon.Accepted := True;
 
             Repo.Update(FTaxon);
 
@@ -136,6 +159,7 @@ begin
 
             if CSV.FieldByName('range').AsString <> EmptyStr then
               FTaxon.Distribution := CSV.FieldByName('range').AsString;
+            FTaxon.Accepted := True;
 
             Repo.Insert(FTaxon);
 

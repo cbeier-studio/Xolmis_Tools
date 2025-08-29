@@ -230,12 +230,10 @@ object dmTaxa: TdmTaxa
       '    quick_code,'
       '    rank_id,'
       '    parent_taxon_id,'
-      '    valid_id,'
       '    iucn_status,'
       '    extinct,'
       '    extinction_year,'
       '    sort_num,'
-      '    group_name,'
       '    order_id,'
       '    family_id,'
       '    subfamily_id,'
@@ -256,12 +254,10 @@ object dmTaxa: TdmTaxa
       '    :quick_code,'
       '    :rank_id,'
       '    :parent_taxon_id,'
-      '    :valid_id,'
       '    :iucn_status,'
       '    :extinct,'
       '    :extinction_year,'
       '    :sort_num,'
-      '    :group_name,'
       '    :order_id,'
       '    :family_id,'
       '    :subfamily_id,'
@@ -284,12 +280,10 @@ object dmTaxa: TdmTaxa
       '    quick_code = :quick_code,'
       '    rank_id = :rank_id,'
       '    parent_taxon_id = :parent_taxon_id,'
-      '    valid_id = :valid_id,'
       '    iucn_status = :iucn_status,'
       '    extinct = :extinct,'
       '    extinction_year = :extinction_year,'
       '    sort_num = :sort_num,'
-      '    group_name = :group_name,'
       '    order_id = :order_id,'
       '    family_id = :family_id,'
       '    subfamily_id = :subfamily_id,'
@@ -298,6 +292,7 @@ object dmTaxa: TdmTaxa
       '    subspecies_group_id = :subspecies_group_id,'
       '    incertae_sedis = :incertae_sedis,'
       '    ebird_code = :ebird_code,'
+      '    accepted_status = :accepted_status,'
       '    insert_date = :insert_date,'
       '    update_date = :update_date,'
       '    marked_status = :marked_status,'
@@ -1350,7 +1345,7 @@ object dmTaxa: TdmTaxa
       LookupCache = False
       ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = False
-      Required = True
+      Required = False
     end
     object qSynonymstaxon_id: TLongintField
       FieldKind = fkData
@@ -1431,7 +1426,7 @@ object dmTaxa: TdmTaxa
     SQL.Strings = (
       'SELECT full_name, formatted_name'
       'FROM zoo_taxa'
-      'WHERE (parent_taxon_id = :taxon_id) AND (active_status = 1)'
+      'WHERE (parent_taxon_id = :taxon_id) AND (accepted_status = 1) AND (active_status = 1)'
       'ORDER BY full_name ASC'
       ''
     )

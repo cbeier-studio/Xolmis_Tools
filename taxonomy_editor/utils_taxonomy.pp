@@ -5,7 +5,7 @@ unit utils_taxonomy;
 interface
 
 uses
-  Classes, SysUtils, Forms, DB, SQLDB, StrUtils, RegExpr, CheckLst;
+  Classes, SysUtils, Forms, Dialogs, DB, SQLDB, StrUtils, RegExpr, CheckLst;
 
 type
   TZooRank = (trNone, {Domain} trDomain, trSubDomain,
@@ -53,6 +53,22 @@ type
   TChangeSuffix   = (csKeep, csA, csUs, csUm, csI);
 
   TBrackets = (brParenthesis, brSquare, brCurly);
+
+  THierarchyLevel = record
+    Id: Integer;
+    Clear: Boolean;
+  end;
+
+  TTaxonHierarchy = record
+    TaxonId: Integer;
+    ParentTaxon: THierarchyLevel;
+    Order: THierarchyLevel;
+    Family: THierarchyLevel;
+    Subfamily: THierarchyLevel;
+    Genus: THierarchyLevel;
+    Species: THierarchyLevel;
+    SubspeciesGroup: THierarchyLevel;
+  end;
 
 const
   ZOOLOGICAL_RANKS: array [TZooRank] of String = ('', 'D.', 'SD.', 'HK.', 'SK.', 'K.', 'sk.', 'ik.', 'pk.', 'SPh.', 'ph.',
@@ -772,12 +788,14 @@ end;
 
 procedure SplitTaxon(aSubspeciesId: Integer);
 var
-  OldName, NewName: String;
+  OldName, NewName, NewEpithet: String;
   ParentGenusId: Integer;
   Repo: TTaxonRepository;
   Ssp, toSp: TTaxon;
   SynRepo: TSynonymRepository;
   Synonym: TSynonym;
+  Qry: TSQLQuery;
+  SameSp: Boolean;
 begin
   Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
   Ssp := TTaxon.Create();
@@ -788,8 +806,20 @@ begin
   Synonym := TSynonym.Create();
 
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSubspeciesId);
-  NewName := ExtractWord(1, OldName, [' ']) + ' ' + ExtractWord(3, OldName, [' ']);
+  if Ssp.RankId = trPolitypicGroup then
+  begin
+    if Pos('/', OldName) > 0 then
+    begin
+      NewEpithet := InputBox('Split politypic group', 'New species epithet for ' + OldName, '');
+      NewName := ExtractWord(1, OldName, [' ']) + ' ' + NewEpithet;
+    end
+    else
+      NewName := ExtractWord(1, OldName, [' ']) + ' ' + Trim(ExtractWord(3, OldName, [' '] + Brackets))
+  end
+  else
+    NewName := ExtractWord(1, OldName, [' ']) + ' ' + ExtractWord(3, OldName, [' ']);
   Repo.FindBy('full_name', NewName, toSp);
+  SameSp := NewName = GetName('zoo_taxa', 'full_name', 'taxon_id', Ssp.ParentTaxonId);
 
   ParentGenusId := 0;
 
@@ -822,8 +852,21 @@ begin
     end;
 
     // Update subspecies
-    Ssp.Accepted := False;
-    Repo.Update(Ssp);
+    if (not SameSp) then
+    begin
+      Ssp.Accepted := False;
+      Repo.Update(Ssp);
+    end;
+    //Qry := TSQLQuery.Create(nil);
+    //with Qry, SQL do
+    //try
+    //  DataBase := dmTaxa.sqlCon;
+    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
+    //  ParamByName('taxon_id').AsInteger := Ssp.Id;
+    //  ExecSQL;
+    //finally
+    //  FreeAndNil(Qry);
+    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSp.Id, OldName, Synonym);
@@ -835,6 +878,30 @@ begin
       SynRepo.Insert(Synonym);
     end;
 
+    // Move subspecies when it is a politypic subspecies group
+    if Ssp.RankId = trPolitypicGroup then
+    begin
+      Qry := TSQLQuery.Create(nil);
+      with Qry, SQL do
+      try
+        DataBase := dmTaxa.sqlCon;
+        Add('SELECT taxon_id FROM zoo_taxa');
+        Add('WHERE (parent_taxon_id = :parent_taxon_id)');
+        ParamByName('parent_taxon_id').AsInteger := aSubspeciesId;
+        Open;
+        if not EOF then
+        begin
+          First;
+          repeat
+            MoveToSpecies(FieldByName('taxon_id').AsInteger, toSp.Id);
+            Next;
+          until EOF;
+        end;
+        Close;
+      finally
+        FreeAndNil(Qry);
+      end;
+    end;
   finally
     FreeAndNil(Synonym);
     SynRepo.Free;
@@ -851,6 +918,7 @@ var
   Species, toSsp: TTaxon;
   SynRepo: TSynonymRepository;
   Synonym: TSynonym;
+  Qry: TSQLQuery;
 begin
   Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
   Species := TTaxon.Create();
@@ -894,6 +962,16 @@ begin
     // Update subspecies
     Species.Accepted := False;
     Repo.Update(Species);
+    //Qry := TSQLQuery.Create(nil);
+    //with Qry, SQL do
+    //try
+    //  DataBase := dmTaxa.sqlCon;
+    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
+    //  ParamByName('taxon_id').AsInteger := Species.Id;
+    //  ExecSQL;
+    //finally
+    //  FreeAndNil(Qry);
+    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSsp.Id, OldName, Synonym);
@@ -903,6 +981,28 @@ begin
       Synonym.FullName := OldName;
 
       SynRepo.Insert(Synonym);
+    end;
+
+    // Move subspecies groups and subspecies
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      DataBase := dmTaxa.sqlCon;
+      Add('SELECT taxon_id FROM zoo_taxa');
+      Add('WHERE (parent_taxon_id = :parent_taxon_id)');
+      ParamByName('parent_taxon_id').AsInteger := aSpeciesId;
+      Open;
+      if not EOF then
+      begin
+        First;
+        repeat
+          MoveToSpecies(FieldByName('taxon_id').AsInteger, ToSpeciesId);
+          Next;
+        until EOF;
+      end;
+      Close;
+    finally
+      FreeAndNil(Qry);
     end;
   finally
     FreeAndNil(Synonym);
@@ -920,6 +1020,7 @@ var
   Ssp, toSsp: TTaxon;
   SynRepo: TSynonymRepository;
   Synonym: TSynonym;
+  Qry: TSQLQuery;
 begin
   Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
   Ssp := TTaxon.Create();
@@ -932,7 +1033,9 @@ begin
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSubspecies);
   MoveToName := GetName('zoo_taxa', 'full_name', 'taxon_id', ToSpecies);
   if Ssp.RankId = trPolitypicGroup then
+  begin
     NewName := MoveToName + ' ' + Trim(ExtractWord(2, OldName, Brackets))
+  end
   else
     NewName := MoveToName + ' ' + ExtractWord(3, OldName, [' ']);
   // Suffix
@@ -971,6 +1074,16 @@ begin
     // Update subspecies
     Ssp.Accepted := False;
     Repo.Update(Ssp);
+    //Qry := TSQLQuery.Create(nil);
+    //with Qry, SQL do
+    //try
+    //  DataBase := dmTaxa.sqlCon;
+    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
+    //  ParamByName('taxon_id').AsInteger := Ssp.Id;
+    //  ExecSQL;
+    //finally
+    //  FreeAndNil(Qry);
+    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSsp.Id, OldName, Synonym);
@@ -980,6 +1093,31 @@ begin
       Synonym.FullName := OldName;
 
       SynRepo.Insert(Synonym);
+    end;
+
+    // Move subspecies from subspecies group
+    if Ssp.RankId = trPolitypicGroup then
+    begin
+      Qry := TSQLQuery.Create(nil);
+      with Qry, SQL do
+      try
+        DataBase := dmTaxa.sqlCon;
+        Add('SELECT taxon_id FROM zoo_taxa');
+        Add('WHERE (parent_taxon_id = :parent_taxon_id)');
+        ParamByName('parent_taxon_id').AsInteger := aSubspecies;
+        Open;
+        if not EOF then
+        begin
+          First;
+          repeat
+            MoveToSpecies(FieldByName('taxon_id').AsInteger, toSsp.Id);
+            Next;
+          until EOF;
+        end;
+        Close;
+      finally
+        FreeAndNil(Qry);
+      end;
     end;
   finally
     FreeAndNil(Synonym);
@@ -997,6 +1135,7 @@ var
   Species, toSp: TTaxon;
   SynRepo: TSynonymRepository;
   Synonym: TSynonym;
+  Qry: TSQLQuery;
 begin
   Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
   Species := TTaxon.Create();
@@ -1043,6 +1182,16 @@ begin
     // Update subspecies
     Species.Accepted := False;
     Repo.Update(Species);
+    //Qry := TSQLQuery.Create(nil);
+    //with Qry, SQL do
+    //try
+    //  DataBase := dmTaxa.sqlCon;
+    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
+    //  ParamByName('taxon_id').AsInteger := Species.Id;
+    //  ExecSQL;
+    //finally
+    //  FreeAndNil(Qry);
+    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSp.Id, OldName, Synonym);
@@ -1052,6 +1201,28 @@ begin
       Synonym.FullName := OldName;
 
       SynRepo.Insert(Synonym);
+    end;
+
+    // Move subspecies groups and subspecies
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      DataBase := dmTaxa.sqlCon;
+      Add('SELECT taxon_id FROM zoo_taxa');
+      Add('WHERE (parent_taxon_id = :parent_taxon_id)');
+      ParamByName('parent_taxon_id').AsInteger := aSpecies;
+      Open;
+      if not EOF then
+      begin
+        First;
+        repeat
+          MoveToSpecies(FieldByName('taxon_id').AsInteger, toSp.Id);
+          Next;
+        until EOF;
+      end;
+      Close;
+    finally
+      FreeAndNil(Qry);
     end;
   finally
     FreeAndNil(Synonym);

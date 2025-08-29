@@ -311,6 +311,12 @@
         <ComponentName Value="edtSpeciesList"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="uedt_vernacular.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtVernacular"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

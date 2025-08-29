@@ -1,12 +1,11 @@
 object frmTaxaEditor: TfrmTaxaEditor
-  Left = -8
+  Left = 0
   Height = 1100
-  Top = -8
+  Top = 0
   Width = 1940
   Caption = 'Xolmis Taxonomy Editor'
   ClientHeight = 1061
   ClientWidth = 1924
-  Position = poDefault
   SnapOptions.SnapToMonitor = True
   WindowState = wsMaximized
   OnClose = FormClose
@@ -17,7 +16,6 @@ object frmTaxaEditor: TfrmTaxaEditor
   object nbPages: TNotebook
     AnchorSideLeft.Control = pNavigation
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = pToolbar
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
@@ -27,224 +25,10 @@ object frmTaxaEditor: TfrmTaxaEditor
     Height = 1009
     Top = 52
     Width = 1874
-    PageIndex = 3
+    PageIndex = 0
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 1
     object pgTaxa: TPage
-      object pTaxaList: TBCPanel
-        Left = 0
-        Height = 1009
-        Top = 0
-        Width = 411
-        Align = alLeft
-        Background.Color = clBtnFace
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clBlack
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        BevelInner = bvNone
-        BevelOuter = bvRaised
-        BevelWidth = 1
-        Border.Style = bboNone
-        BorderBCStyle = bpsBorder
-        FontEx.Color = clDefault
-        FontEx.FontQuality = fqSystemClearType
-        FontEx.Shadow = False
-        FontEx.ShadowRadius = 5
-        FontEx.ShadowOffsetX = 5
-        FontEx.ShadowOffsetY = 5
-        FontEx.Style = []
-        ParentBackground = False
-        Rounding.RoundX = 1
-        Rounding.RoundY = 1
-        TabOrder = 0
-        object HtmlView: THtmlViewer
-          Left = 38
-          Top = 340
-          BorderStyle = htNone
-          DefBackground = clWindow
-          DefFontName = 'Default'
-          DefFontSize = 9
-          HistoryMaxCount = 0
-          MarginHeight = 2
-          MarginWidth = 2
-          NoSelect = False
-          PrintMarginBottom = 2
-          PrintMarginLeft = 2
-          PrintMarginRight = 2
-          PrintMarginTop = 2
-          PrintScale = 1
-          TabOrder = 1
-        end
-        object gridTaxa: TDBGrid
-          Left = 7
-          Height = 1001
-          Top = 1
-          Width = 403
-          Align = alClient
-          AlternateColor = 16448250
-          AutoEdit = False
-          AutoFillColumns = True
-          BorderSpacing.Left = 6
-          BorderSpacing.Bottom = 6
-          Color = clWindow
-          Columns = <          
-            item
-              Alignment = taCenter
-              SizePriority = 0
-              Title.Caption = 'marked_status'
-              Width = 30
-              FieldName = 'marked_status'
-            end          
-            item
-              ReadOnly = True
-              Title.Caption = 'Scientific name'
-              Width = 352
-              FieldName = 'full_name'
-            end          
-            item
-              Title.Caption = 'formatted_name'
-              Width = 0
-              Visible = False
-              FieldName = 'formatted_name'
-            end          
-            item
-              ReadOnly = True
-              Title.Caption = 'valid_id'
-              Width = 0
-              Visible = False
-              FieldName = 'accepted_status'
-            end          
-            item
-              ReadOnly = True
-              Title.Caption = 'rank_id'
-              Width = 0
-              Visible = False
-              FieldName = 'rank_id'
-            end>
-          DataSource = dmTaxa.dsTaxa
-          FixedCols = 0
-          Options = [dgEditing, dgColumnResize, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAnyButtonCanSelect, dgDisableDelete, dgDisableInsert, dgCellHints, dgCellEllipsis, dgRowHighlight, dgThumbTracking]
-          PopupMenu = pmGridTaxa
-          Scrollbars = ssVertical
-          TabOrder = 0
-          TitleStyle = tsNative
-          OnDrawColumnCell = gridTaxaDrawColumnCell
-          OnKeyPress = FormKeyPress
-          OnMouseWheel = gridTaxaMouseWheel
-          OnPrepareCanvas = gridTaxaPrepareCanvas
-        end
-      end
-      object pTaxaRightBar: TBCPanel
-        Left = 1822
-        Height = 1009
-        Top = 0
-        Width = 52
-        Align = alRight
-        AutoSize = True
-        ChildSizing.LeftRightSpacing = 8
-        ChildSizing.TopBottomSpacing = 16
-        ChildSizing.VerticalSpacing = 8
-        Background.Color = 15987699
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clBlack
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        BevelInner = bvNone
-        BevelOuter = bvRaised
-        BevelWidth = 1
-        Border.Style = bboNone
-        BorderBCStyle = bpsBorder
-        FontEx.Color = clDefault
-        FontEx.FontQuality = fqSystemClearType
-        FontEx.Shadow = False
-        FontEx.ShadowRadius = 5
-        FontEx.ShadowOffsetX = 5
-        FontEx.ShadowOffsetY = 5
-        FontEx.Style = []
-        ParentBackground = False
-        Rounding.RoundX = 1
-        Rounding.RoundY = 1
-        TabOrder = 5
-        object sbShowQuickFilters: TSpeedButton
-          Tag = 1
-          Left = 9
-          Height = 34
-          Hint = 'Quick filters'
-          Top = 17
-          Width = 34
-          Align = alTop
-          AllowAllUp = True
-          AutoSize = True
-          DisabledImageIndex = 37
-          Flat = True
-          GroupIndex = 10
-          Images = bMenu
-          ImageIndex = 36
-          ImageWidth = 24
-          OnClick = sbShowQuickFiltersClick
-        end
-        object sbShowImages: TSpeedButton
-          Tag = 2
-          Left = 9
-          Height = 34
-          Hint = 'Images'
-          Top = 59
-          Width = 34
-          Align = alTop
-          AllowAllUp = True
-          AutoSize = True
-          DisabledImageIndex = 41
-          Flat = True
-          GroupIndex = 10
-          Images = bMenu
-          ImageIndex = 40
-          ImageWidth = 24
-          Visible = False
-        end
-        object sbShowRecycle: TSpeedButton
-          Tag = 7
-          Left = 9
-          Height = 34
-          Hint = 'Recycle bin'
-          Top = 112
-          Width = 34
-          Align = alTop
-          AllowAllUp = True
-          AutoSize = True
-          BorderSpacing.Top = 19
-          DisabledImageIndex = 43
-          Flat = True
-          GroupIndex = 10
-          Images = bMenu
-          ImageIndex = 42
-          ImageWidth = 24
-        end
-      end
       object splitTaxaLeft: TSplitter
         Left = 411
         Height = 1009
@@ -252,7 +36,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Width = 5
       end
       object splitTaxaRight: TSplitter
-        Left = 1505
+        Left = 1507
         Height = 1009
         Top = 0
         Width = 5
@@ -260,13 +44,13 @@ object frmTaxaEditor: TfrmTaxaEditor
         ResizeAnchor = akRight
       end
       object nbTaxaSide: TNotebook
-        Left = 1510
+        Left = 1512
         Height = 1009
         Top = 0
         Width = 312
         PageIndex = 0
         Align = alRight
-        TabOrder = 2
+        TabOrder = 0
         object pgTaxaFilters: TPage
           object sboxTaxaFilters: TScrollBox
             Left = 0
@@ -286,11 +70,16 @@ object frmTaxaEditor: TfrmTaxaEditor
             ParentColor = False
             TabOrder = 0
             object pTaxonRanksFilters: TBCPanel
+              AnchorSideLeft.Control = sboxTaxaFilters
+              AnchorSideTop.Control = pAcceptedFilter
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = sboxTaxaFilters
+              AnchorSideRight.Side = asrBottom
               Left = 8
               Height = 224
               Top = 106
               Width = 296
-              Align = alTop
+              Anchors = [akTop, akLeft, akRight]
               BorderSpacing.Bottom = 6
               ChildSizing.LeftRightSpacing = 16
               Background.Color = clWhite
@@ -391,11 +180,16 @@ object frmTaxaEditor: TfrmTaxaEditor
               end
             end
             object pExtinctFilter: TBCPanel
+              AnchorSideLeft.Control = sboxTaxaFilters
+              AnchorSideTop.Control = pTaxonRanksFilters
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = sboxTaxaFilters
+              AnchorSideRight.Side = asrBottom
               Left = 8
               Height = 43
               Top = 336
               Width = 296
-              Align = alTop
+              Anchors = [akTop, akLeft, akRight]
               AutoSize = True
               BorderSpacing.Bottom = 6
               ChildSizing.LeftRightSpacing = 16
@@ -488,11 +282,16 @@ object frmTaxaEditor: TfrmTaxaEditor
               end
             end
             object pHasSynonymsFilter: TBCPanel
+              AnchorSideLeft.Control = sboxTaxaFilters
+              AnchorSideTop.Control = pExtinctFilter
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = sboxTaxaFilters
+              AnchorSideRight.Side = asrBottom
               Left = 8
               Height = 43
               Top = 385
               Width = 296
-              Align = alTop
+              Anchors = [akTop, akLeft, akRight]
               BorderSpacing.Bottom = 6
               ChildSizing.LeftRightSpacing = 16
               ChildSizing.TopBottomSpacing = 12
@@ -584,11 +383,15 @@ object frmTaxaEditor: TfrmTaxaEditor
               end
             end
             object pMarkedFilter: TBCPanel
+              AnchorSideLeft.Control = sboxTaxaFilters
+              AnchorSideTop.Control = sboxTaxaFilters
+              AnchorSideRight.Control = sboxTaxaFilters
+              AnchorSideRight.Side = asrBottom
               Left = 8
               Height = 43
               Top = 8
               Width = 296
-              Align = alTop
+              Anchors = [akTop, akLeft, akRight]
               AutoSize = True
               BorderSpacing.Bottom = 6
               ChildSizing.LeftRightSpacing = 16
@@ -681,11 +484,16 @@ object frmTaxaEditor: TfrmTaxaEditor
               end
             end
             object pAcceptedFilter: TBCPanel
+              AnchorSideLeft.Control = sboxTaxaFilters
+              AnchorSideTop.Control = pMarkedFilter
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = sboxTaxaFilters
+              AnchorSideRight.Side = asrBottom
               Left = 8
               Height = 43
               Top = 57
               Width = 296
-              Align = alTop
+              Anchors = [akTop, akLeft, akRight]
               AutoSize = True
               BorderSpacing.Bottom = 6
               ChildSizing.LeftRightSpacing = 16
@@ -780,687 +588,385 @@ object frmTaxaEditor: TfrmTaxaEditor
           end
         end
       end
-      object ptContent: TBCPanel
+      object pDetails: TPanel
+        Left = 1145
+        Height = 1009
+        Top = 0
+        Width = 362
+        Align = alRight
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 8
+        ChildSizing.TopBottomSpacing = 16
+        ChildSizing.VerticalSpacing = 8
+        ClientHeight = 1009
+        ClientWidth = 362
+        Color = 15066599
+        ParentBackground = False
+        ParentColor = False
+        TabOrder = 3
+        object gridSynonyms: TDBGrid
+          AnchorSideLeft.Control = pDetails
+          AnchorSideTop.Control = lblTitleSynonyms
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = pDetails
+          AnchorSideRight.Side = asrBottom
+          Left = 8
+          Height = 236
+          Top = 226
+          Width = 346
+          AlternateColor = 16448250
+          Anchors = [akTop, akLeft, akRight]
+          AutoFillColumns = True
+          Color = clWindow
+          Columns = <          
+            item
+              Title.Caption = 'Synonym'
+              Width = 325
+              FieldName = 'full_name'
+            end>
+          DataSource = dmTaxa.dsSynonyms
+          FixedCols = 0
+          Options = [dgEditing, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgRowHighlight, dgThumbTracking]
+          Scrollbars = ssVertical
+          TabOrder = 0
+          TitleStyle = tsNative
+        end
+        object gridChildTaxa: TDBGrid
+          AnchorSideLeft.Control = pDetails
+          AnchorSideTop.Control = lblTitleChilds
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = pDetails
+          AnchorSideRight.Side = asrBottom
+          Left = 8
+          Height = 236
+          Top = 499
+          Width = 346
+          AlternateColor = 16448250
+          Anchors = [akTop, akLeft, akRight]
+          AutoFillColumns = True
+          Color = clWindow
+          Columns = <          
+            item
+              Title.Caption = 'Child taxa'
+              Width = 325
+              FieldName = 'full_name'
+            end>
+          DataSource = dmTaxa.dsChildTaxa
+          FixedCols = 0
+          Options = [dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgDisableInsert]
+          Scrollbars = ssVertical
+          TabOrder = 1
+          TitleStyle = tsNative
+        end
+        object tvHierarchy: TTreeView
+          AnchorSideLeft.Control = pDetails
+          AnchorSideTop.Control = lblTitleHierarchy
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = pDetails
+          AnchorSideRight.Side = asrBottom
+          Left = 8
+          Height = 144
+          Top = 45
+          Width = 346
+          Anchors = [akTop, akLeft, akRight]
+          ScrollBars = ssAutoVertical
+          TabOrder = 2
+        end
+        object lblTitleSynonyms: TLabel
+          AnchorSideLeft.Control = pDetails
+          AnchorSideTop.Control = tvHierarchy
+          AnchorSideTop.Side = asrBottom
+          Left = 8
+          Height = 21
+          Top = 197
+          Width = 73
+          Caption = 'Synonyms'
+          Font.Height = -16
+          ParentFont = False
+        end
+        object lblTitleChilds: TLabel
+          AnchorSideLeft.Control = pDetails
+          AnchorSideTop.Control = gridSynonyms
+          AnchorSideTop.Side = asrBottom
+          Left = 8
+          Height = 21
+          Top = 470
+          Width = 68
+          Caption = 'Child taxa'
+          Font.Height = -16
+          ParentFont = False
+        end
+        object sbDelSynonym: TSpeedButton
+          AnchorSideTop.Control = tvHierarchy
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = pDetails
+          AnchorSideRight.Side = asrBottom
+          Left = 291
+          Height = 26
+          Top = 197
+          Width = 63
+          Anchors = [akTop, akRight]
+          AutoSize = True
+          Caption = 'Delete'
+          DisabledImageIndex = 5
+          Flat = True
+          Images = bMenu
+          ImageIndex = 4
+          OnClick = sbDelSynonymClick
+        end
+        object sbAddSynonym: TSpeedButton
+          AnchorSideTop.Control = tvHierarchy
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = sbDelSynonym
+          Left = 223
+          Height = 26
+          Top = 197
+          Width = 52
+          Anchors = [akTop, akRight]
+          AutoSize = True
+          BorderSpacing.Right = 16
+          Caption = 'Add'
+          DisabledImageIndex = 1
+          Flat = True
+          Images = bMenu
+          ImageIndex = 0
+          OnClick = sbAddSynonymClick
+        end
+        object sbEditHierarchy: TSpeedButton
+          AnchorSideTop.Control = pDetails
+          AnchorSideRight.Control = pDetails
+          AnchorSideRight.Side = asrBottom
+          Left = 304
+          Height = 26
+          Top = 16
+          Width = 50
+          Anchors = [akTop, akRight]
+          AutoSize = True
+          Caption = 'Edit'
+          DisabledImageIndex = 3
+          Flat = True
+          Images = bMenu
+          ImageIndex = 2
+          OnClick = sbEditHierarchyClick
+        end
+        object lblTitleHierarchy: TLabel
+          AnchorSideLeft.Control = pDetails
+          AnchorSideTop.Control = pDetails
+          Left = 8
+          Height = 21
+          Top = 16
+          Width = 67
+          Caption = 'Hierarchy'
+          Font.Height = -16
+          ParentFont = False
+        end
+      end
+      object pTaxaList: TPanel
+        Left = 0
+        Height = 1009
+        Top = 0
+        Width = 411
+        Align = alLeft
+        BevelOuter = bvNone
+        ClientHeight = 1009
+        ClientWidth = 411
+        ParentBackground = False
+        TabOrder = 4
+        object HtmlView: THtmlViewer
+          Left = 38
+          Top = 340
+          BorderStyle = htNone
+          DefBackground = clWindow
+          DefFontName = 'Default'
+          DefFontSize = 9
+          HistoryMaxCount = 0
+          MarginHeight = 2
+          MarginWidth = 2
+          NoSelect = False
+          PrintMarginBottom = 2
+          PrintMarginLeft = 2
+          PrintMarginRight = 2
+          PrintMarginTop = 2
+          PrintScale = 1
+          TabOrder = 1
+        end
+        object gridTaxa: TDBGrid
+          Left = 0
+          Height = 1009
+          Top = 0
+          Width = 411
+          Align = alClient
+          AlternateColor = 16448250
+          AutoEdit = False
+          AutoFillColumns = True
+          Color = clWindow
+          Columns = <          
+            item
+              Alignment = taCenter
+              SizePriority = 0
+              Title.Caption = 'marked_status'
+              Width = 30
+              FieldName = 'marked_status'
+            end          
+            item
+              ReadOnly = True
+              Title.Caption = 'Scientific name'
+              Width = 360
+              FieldName = 'full_name'
+            end          
+            item
+              Title.Caption = 'formatted_name'
+              Width = 0
+              Visible = False
+              FieldName = 'formatted_name'
+            end          
+            item
+              ReadOnly = True
+              Title.Caption = 'valid_id'
+              Width = 0
+              Visible = False
+              FieldName = 'accepted_status'
+            end          
+            item
+              ReadOnly = True
+              Title.Caption = 'rank_id'
+              Width = 0
+              Visible = False
+              FieldName = 'rank_id'
+            end          
+            item
+              Title.Caption = 'extinct'
+              Width = 0
+              Visible = False
+              FieldName = 'extinct'
+            end>
+          DataSource = dmTaxa.dsTaxa
+          FixedCols = 0
+          Options = [dgEditing, dgColumnResize, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAnyButtonCanSelect, dgDisableDelete, dgDisableInsert, dgCellHints, dgCellEllipsis, dgRowHighlight, dgThumbTracking]
+          PopupMenu = pmGridTaxa
+          Scrollbars = ssVertical
+          TabOrder = 0
+          TitleStyle = tsNative
+          OnCellClick = gridTaxaCellClick
+          OnDrawColumnCell = gridTaxaDrawColumnCell
+          OnKeyPress = FormKeyPress
+          OnMouseWheel = gridTaxaMouseWheel
+          OnPrepareCanvas = gridTaxaPrepareCanvas
+        end
+      end
+      object ptContent: TPanel
         Left = 416
         Height = 1009
         Top = 0
-        Width = 727
+        Width = 729
         Align = alClient
-        Background.Color = 15066599
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clBlack
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        BevelInner = bvNone
-        BevelOuter = bvRaised
-        BevelWidth = 1
-        Border.Style = bboNone
-        BorderBCStyle = bpsBorder
-        FontEx.Color = clDefault
-        FontEx.FontQuality = fqSystemClearType
-        FontEx.Shadow = False
-        FontEx.ShadowRadius = 5
-        FontEx.ShadowOffsetX = 5
-        FontEx.ShadowOffsetY = 5
-        FontEx.Style = []
+        BevelOuter = bvNone
+        ClientHeight = 1009
+        ClientWidth = 729
         ParentBackground = False
-        Rounding.RoundX = 1
-        Rounding.RoundY = 1
-        TabOrder = 1
+        TabOrder = 5
         object sboxTaxa: TScrollBox
-          Left = 1
-          Height = 742
-          Top = 266
-          Width = 725
-          HorzScrollBar.Page = 228
+          AnchorSideLeft.Control = ptContent
+          AnchorSideTop.Control = ptSliverFullname
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = ptContent
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = ptContent
+          AnchorSideBottom.Side = asrBottom
+          Left = 0
+          Height = 906
+          Top = 103
+          Width = 729
+          HorzScrollBar.Page = 264
           VertScrollBar.Increment = 86
-          VertScrollBar.Page = 713
-          Align = alClient
+          VertScrollBar.Page = 856
+          Anchors = [akTop, akLeft, akRight, akBottom]
           BorderStyle = bsNone
-          ClientHeight = 742
-          ClientWidth = 725
-          TabOrder = 5
+          ClientHeight = 906
+          ClientWidth = 729
+          TabOrder = 1
           object peTaxa: TPanel
             Left = 0
-            Height = 713
+            Height = 856
             Top = 0
-            Width = 725
+            Width = 729
             Align = alTop
             AutoSize = True
             BevelOuter = bvNone
             ChildSizing.LeftRightSpacing = 16
             ChildSizing.TopBottomSpacing = 8
-            ClientHeight = 713
-            ClientWidth = 725
-            Color = 14408667
+            ClientHeight = 856
+            ClientWidth = 729
             ParentBackground = False
             ParentColor = False
             TabOrder = 0
-            object ptQuickCode: TBCPanel
+            object ptFullName: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Control = peTaxa
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
               Left = 16
-              Height = 47
+              Height = 58
               Top = 8
-              Width = 693
-              Align = alTop
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
               AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
               BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 58
+              ClientWidth = 697
               TabOrder = 0
-              object lbltQuickCode: TLabel
+              object lbltFullname: TLabel
                 Left = 16
-                Height = 23
-                Top = 12
-                Width = 60
-                Align = alLeft
-                Caption = 'Quick code'
+                Height = 15
+                Top = 8
+                Width = 665
+                Caption = 'Scientific name'
                 Layout = tlCenter
                 ParentColor = False
               end
-              object etQuickcode: TDBEdit
-                Left = 400
+              object etFullname: TDBEdit
+                AnchorSideRight.Side = asrBottom
+                Left = 16
                 Height = 23
-                Top = 12
-                Width = 277
-                DataField = 'quick_code'
+                Top = 27
+                Width = 665
+                DataField = 'full_name'
                 DataSource = dmTaxa.dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
                 MaxLength = 0
                 TabOrder = 0
-                TextHint = 'AAA AAA'
+                OnExit = etFullnameExit
                 OnKeyPress = cbAuthorshipKeyPress
               end
             end
-            object ptExtinct: TBCPanel
+            object ptCountries: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
               Left = 16
-              Height = 47
-              Top = 112
-              Width = 693
-              Align = alTop
+              Height = 178
+              Top = 670
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
               AutoSize = True
               BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
               ChildSizing.LeftRightSpacing = 16
               ChildSizing.TopBottomSpacing = 12
               ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
+              ChildSizing.VerticalSpacing = 4
+              ClientHeight = 178
+              ClientWidth = 697
               ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
               TabOrder = 1
-              object cktExtinct: TDBCheckBox
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 53
-                Align = alLeft
-                AutoSize = True
-                Caption = 'Extinct'
-                DataField = 'extinct'
-                TabOrder = 0
-                ValueChecked = 'True'
-                ValueUnchecked = 'False'
-              end
-              object etExtinctionYear: TDBEdit
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 277
-                DataField = 'extinction_year'
-                DataSource = dmTaxa.dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                MaxLength = 0
-                TabOrder = 1
-                TextHint = 'Extinction year'
-                OnKeyPress = cbAuthorshipKeyPress
-              end
-            end
-            object ptSortNr: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 165
-              Width = 693
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 2
-              object lbltSortNr: TLabel
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 83
-                Align = alLeft
-                Caption = 'Sorting number'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etSortNr: TDBEdit
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 277
-                DataField = 'sort_num'
-                DataSource = dmTaxa.dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                MaxLength = 0
-                TabOrder = 0
-                OnKeyPress = cbAuthorshipKeyPress
-              end
-            end
-            object ptDistribution: TBCPanel
-              Left = 16
-              Height = 78
-              Top = 259
-              Width = 693
-              Align = alTop
-              AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-              TabOrder = 4
-              object lbltDistribution: TLabel
-                Left = 16
-                Height = 54
-                Top = 12
-                Width = 134
-                Align = alLeft
-                Caption = 'Geographical distribution'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object mtDistribution: TDBMemo
-                Left = 211
-                Height = 54
-                Top = 12
-                Width = 466
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                Constraints.MinHeight = 54
-                DataField = 'distribution'
-                DataSource = dmTaxa.dsTaxa
-                ScrollBars = ssAutoVertical
-                TabOrder = 0
-                OnKeyPress = FormKeyPress
-              end
-            end
-            object ptEbirdCode: TBCPanel
-              Left = 16
-              Height = 47
-              Top = 212
-              Width = 693
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 3
-              object lbltEbirdCode: TLabel
-                Left = 16
-                Height = 23
-                Top = 12
-                Width = 56
-                Align = alLeft
-                Caption = 'eBird code'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object etEbirdCode: TDBEdit
-                Left = 400
-                Height = 23
-                Top = 12
-                Width = 277
-                DataField = 'ebird_code'
-                DataSource = dmTaxa.dsTaxa
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                MaxLength = 0
-                TabOrder = 0
-                OnKeyPress = cbAuthorshipKeyPress
-              end
-            end
-            object ptIucnStatus: TBCPanel
-              Left = 16
-              Height = 51
-              Top = 61
-              Width = 693
-              Align = alTop
-              AutoSize = True
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-              TabOrder = 5
-              object lbltIucnStatus: TLabel
-                Left = 16
-                Height = 27
-                Top = 12
-                Width = 104
-                Align = alLeft
-                Caption = 'Conservation status'
-                Layout = tlCenter
-                ParentColor = False
-              end
-              object cbtIucnStatus: TDBComboBox
-                Left = 400
-                Height = 27
-                Top = 12
-                Width = 277
-                Align = alRight
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                DataField = 'iucn_status'
-                DataSource = dmTaxa.dsTaxa
-                DropDownCount = 10
-                ItemHeight = 21
-                Items.Strings = (
-                  'Least Concern'
-                  'Near Threatened'
-                  'Vulnerable'
-                  'Endangered'
-                  'Critically Endangered'
-                  'Extinct in the Wild'
-                  'Extinct'
-                  'Data Deficient'
-                  'Not Evaluated'
-                )
-                MaxLength = 0
-                Style = csOwnerDrawFixed
-                TabOrder = 0
-                OnDrawItem = cbtIucnStatusDrawItem
-                OnKeyPress = cbAuthorshipKeyPress
-              end
-            end
-            object ptVernacular: TBCPanel
-              Left = 16
-              Height = 178
-              Top = 343
-              Width = 693
-              Align = alTop
-              AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              ChildSizing.VerticalSpacing = 4
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              TabOrder = 6
-              object lbltVernacular: TLabel
-                AnchorSideLeft.Control = ptVernacular
-                AnchorSideTop.Control = ptVernacular
-                Left = 16
-                Height = 21
-                Top = 12
-                Width = 124
-                Caption = 'Vernacular names'
-                Font.Height = -16
-                Layout = tlCenter
-                ParentColor = False
-                ParentFont = False
-              end
-              object dbgVernacular: TDBGrid
-                AnchorSideLeft.Control = ptVernacular
-                AnchorSideTop.Control = sbDelVernacular
-                AnchorSideTop.Side = asrBottom
-                AnchorSideRight.Control = ptVernacular
-                AnchorSideRight.Side = asrBottom
-                Left = 16
-                Height = 124
-                Top = 42
-                Width = 661
-                Anchors = [akTop, akLeft, akRight]
-                AutoFillColumns = True
-                Color = clWindow
-                Columns = <                
-                  item
-                    SizePriority = 0
-                    Title.Caption = 'Language'
-                    Width = 160
-                    FieldName = 'language_name'
-                  end                
-                  item
-                    Title.Caption = 'Vernacular name'
-                    Width = 400
-                    FieldName = 'vernacular_name'
-                  end                
-                  item
-                    ButtonStyle = cbsCheckboxColumn
-                    SizePriority = 0
-                    Title.Caption = 'Preferred'
-                    Width = 80
-                    FieldName = 'preferred'
-                  end>
-                DataSource = dmTaxa.dsVernacular
-                FixedCols = 0
-                Options = [dgTitles, dgColumnResize, dgColumnMove, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgRowHighlight, dgThumbTracking, dgDisplayMemoText]
-                TabOrder = 0
-                TitleStyle = tsNative
-              end
-              object sbDelVernacular: TSpeedButton
-                AnchorSideTop.Control = ptVernacular
-                AnchorSideRight.Control = ptVernacular
-                AnchorSideRight.Side = asrBottom
-                Left = 614
-                Height = 26
-                Top = 12
-                Width = 63
-                Anchors = [akTop, akRight]
-                AutoSize = True
-                Caption = 'Delete'
-                DisabledImageIndex = 5
-                Flat = True
-                Images = bMenu
-                ImageIndex = 4
-              end
-              object sbAddVernacular: TSpeedButton
-                AnchorSideTop.Control = ptVernacular
-                AnchorSideRight.Control = sbDelVernacular
-                Left = 546
-                Height = 26
-                Top = 12
-                Width = 52
-                Anchors = [akTop, akRight]
-                AutoSize = True
-                BorderSpacing.Right = 16
-                Caption = 'Add'
-                DisabledImageIndex = 1
-                Flat = True
-                Images = bMenu
-                ImageIndex = 0
-              end
-            end
-            object ptCountries: TBCPanel
-              Left = 16
-              Height = 178
-              Top = 527
-              Width = 693
-              Align = alTop
-              AutoSize = True
-              BorderSpacing.Bottom = 6
-              ChildSizing.LeftRightSpacing = 16
-              ChildSizing.TopBottomSpacing = 12
-              ChildSizing.HorizontalSpacing = 8
-              ChildSizing.VerticalSpacing = 4
-              Background.Color = 16448250
-              Background.Gradient1.StartColor = clWhite
-              Background.Gradient1.EndColor = clBlack
-              Background.Gradient1.GradientType = gtLinear
-              Background.Gradient1.Point1XPercent = 0
-              Background.Gradient1.Point1YPercent = 0
-              Background.Gradient1.Point2XPercent = 0
-              Background.Gradient1.Point2YPercent = 100
-              Background.Gradient2.StartColor = clWhite
-              Background.Gradient2.EndColor = clBlack
-              Background.Gradient2.GradientType = gtLinear
-              Background.Gradient2.Point1XPercent = 0
-              Background.Gradient2.Point1YPercent = 0
-              Background.Gradient2.Point2XPercent = 0
-              Background.Gradient2.Point2YPercent = 100
-              Background.Gradient1EndPercent = 35
-              Background.Style = bbsColor
-              BevelInner = bvNone
-              BevelOuter = bvNone
-              BevelWidth = 1
-              Border.Color = 13750737
-              Border.Style = bboSolid
-              BorderBCStyle = bpsBorder
-              FontEx.Color = clDefault
-              FontEx.FontQuality = fqSystemClearType
-              FontEx.Shadow = False
-              FontEx.ShadowRadius = 5
-              FontEx.ShadowOffsetX = 5
-              FontEx.ShadowOffsetY = 5
-              FontEx.Style = []
-              ParentBackground = False
-              Rounding.RoundX = 8
-              Rounding.RoundY = 8
-              TabOrder = 7
               object lbltCountries: TLabel
                 AnchorSideLeft.Control = ptCountries
                 AnchorSideTop.Control = ptCountries
@@ -1483,19 +989,20 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 16
                 Height = 124
                 Top = 42
-                Width = 661
+                Width = 665
                 Anchors = [akTop, akLeft, akRight]
                 AutoFillColumns = True
                 Color = clWindow
                 Columns = <                
                   item
                     Title.Caption = 'Country'
-                    Width = 640
+                    Width = 644
                     FieldName = 'country_name'
                   end>
                 DataSource = dmTaxa.dsTaxonCountries
                 FixedCols = 0
                 Options = [dgColumnResize, dgColumnMove, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgRowHighlight, dgThumbTracking, dgDisplayMemoText]
+                Scrollbars = ssVertical
                 TabOrder = 0
                 TitleStyle = tsNative
               end
@@ -1503,7 +1010,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 AnchorSideTop.Control = ptCountries
                 AnchorSideRight.Control = ptCountries
                 AnchorSideRight.Side = asrBottom
-                Left = 614
+                Left = 618
                 Height = 26
                 Top = 12
                 Width = 63
@@ -1514,11 +1021,12 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Flat = True
                 Images = bMenu
                 ImageIndex = 4
+                OnClick = sbDelCountryClick
               end
               object sbEditCountry: TSpeedButton
                 AnchorSideTop.Control = ptCountries
                 AnchorSideRight.Control = sbDelCountry
-                Left = 548
+                Left = 552
                 Height = 26
                 Top = 12
                 Width = 50
@@ -1533,14 +1041,512 @@ object frmTaxaEditor: TfrmTaxaEditor
                 OnClick = sbEditCountryClick
               end
             end
+            object ptVernacular: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 178
+              Top = 486
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 12
+              ChildSizing.HorizontalSpacing = 8
+              ChildSizing.VerticalSpacing = 4
+              ClientHeight = 178
+              ClientWidth = 697
+              ParentBackground = False
+              TabOrder = 2
+              object lbltVernacular: TLabel
+                AnchorSideLeft.Control = ptVernacular
+                AnchorSideTop.Control = ptVernacular
+                Left = 16
+                Height = 21
+                Top = 12
+                Width = 124
+                Caption = 'Vernacular names'
+                Font.Height = -16
+                Layout = tlCenter
+                ParentColor = False
+                ParentFont = False
+              end
+              object dbgVernacular: TDBGrid
+                AnchorSideLeft.Control = ptVernacular
+                AnchorSideTop.Control = sbDelVernacular
+                AnchorSideTop.Side = asrBottom
+                AnchorSideRight.Control = ptVernacular
+                AnchorSideRight.Side = asrBottom
+                Left = 16
+                Height = 124
+                Top = 42
+                Width = 665
+                Anchors = [akTop, akLeft, akRight]
+                AutoFillColumns = True
+                Color = clWindow
+                Columns = <                
+                  item
+                    SizePriority = 0
+                    Title.Caption = 'Language'
+                    Width = 160
+                    FieldName = 'language_name'
+                  end                
+                  item
+                    Title.Caption = 'Vernacular name'
+                    Width = 404
+                    FieldName = 'vernacular_name'
+                  end                
+                  item
+                    ButtonStyle = cbsCheckboxColumn
+                    SizePriority = 0
+                    Title.Caption = 'Preferred'
+                    Width = 80
+                    FieldName = 'preferred'
+                  end>
+                DataSource = dmTaxa.dsVernacular
+                FixedCols = 0
+                Options = [dgTitles, dgColumnResize, dgColumnMove, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgRowHighlight, dgThumbTracking, dgDisplayMemoText]
+                Scrollbars = ssVertical
+                TabOrder = 0
+                TitleStyle = tsNative
+                OnDblClick = dbgVernacularDblClick
+              end
+              object sbDelVernacular: TSpeedButton
+                AnchorSideTop.Control = ptVernacular
+                AnchorSideRight.Control = ptVernacular
+                AnchorSideRight.Side = asrBottom
+                Left = 618
+                Height = 26
+                Top = 12
+                Width = 63
+                Anchors = [akTop, akRight]
+                AutoSize = True
+                Caption = 'Delete'
+                DisabledImageIndex = 5
+                Flat = True
+                Images = bMenu
+                ImageIndex = 4
+                OnClick = sbDelVernacularClick
+              end
+              object sbAddVernacular: TSpeedButton
+                AnchorSideTop.Control = ptVernacular
+                AnchorSideRight.Control = sbDelVernacular
+                Left = 550
+                Height = 26
+                Top = 12
+                Width = 52
+                Anchors = [akTop, akRight]
+                AutoSize = True
+                BorderSpacing.Right = 16
+                Caption = 'Add'
+                DisabledImageIndex = 1
+                Flat = True
+                Images = bMenu
+                ImageIndex = 0
+                OnClick = sbAddVernacularClick
+              end
+            end
+            object ptDistribution: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 89
+              Top = 391
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 89
+              ClientWidth = 697
+              ParentBackground = False
+              TabOrder = 3
+              object lbltDistribution: TLabel
+                Left = 16
+                Height = 15
+                Top = 8
+                Width = 665
+                Caption = 'Geographical distribution'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object mtDistribution: TDBMemo
+                Left = 16
+                Height = 54
+                Top = 27
+                Width = 665
+                Constraints.MinHeight = 54
+                DataField = 'distribution'
+                DataSource = dmTaxa.dsTaxa
+                ScrollBars = ssAutoVertical
+                TabOrder = 0
+                OnKeyPress = FormKeyPress
+              end
+            end
+            object ptIucnStatus: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 66
+              Top = 319
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 2
+              ClientHeight = 66
+              ClientWidth = 697
+              ParentBackground = False
+              TabOrder = 4
+              object lbltIucnStatus: TLabel
+                Left = 16
+                Height = 19
+                Top = 8
+                Width = 324
+                Caption = 'Conservation status'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object cktExtinct: TDBCheckBox
+                Left = 356
+                Height = 19
+                Top = 8
+                Width = 325
+                AutoSize = True
+                Caption = 'Extinct'
+                DataField = 'extinct'
+                DataSource = dmTaxa.dsTaxa
+                TabOrder = 0
+                ValueChecked = 'True'
+                ValueUnchecked = 'False'
+              end
+              object cbtIucnStatus: TDBComboBox
+                Left = 16
+                Height = 27
+                Top = 31
+                Width = 324
+                DataField = 'iucn_status'
+                DataSource = dmTaxa.dsTaxa
+                DropDownCount = 10
+                ItemHeight = 21
+                Items.Strings = (
+                  'Least Concern'
+                  'Near Threatened'
+                  'Vulnerable'
+                  'Endangered'
+                  'Critically Endangered'
+                  'Extinct in the Wild'
+                  'Extinct'
+                  'Data Deficient'
+                  'Not Evaluated'
+                )
+                MaxLength = 0
+                Style = csOwnerDrawFixed
+                TabOrder = 1
+                OnDrawItem = cbtIucnStatusDrawItem
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+              object etExtinctionYear: TDBEdit
+                Left = 356
+                Height = 27
+                Top = 31
+                Width = 325
+                DataField = 'extinction_year'
+                DataSource = dmTaxa.dsTaxa
+                MaxLength = 0
+                TabOrder = 2
+                TextHint = 'Extinction year'
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+            end
+            object ptQuickCode: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 58
+              Top = 255
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 2
+              ClientHeight = 58
+              ClientWidth = 697
+              ParentBackground = False
+              TabOrder = 5
+              object lbltQuickCode: TLabel
+                Left = 16
+                Height = 15
+                Top = 8
+                Width = 324
+                Caption = 'Quick code'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object lbltEbirdCode: TLabel
+                Left = 356
+                Height = 15
+                Top = 8
+                Width = 325
+                Caption = 'eBird code'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object etQuickcode: TDBEdit
+                Left = 16
+                Height = 23
+                Top = 27
+                Width = 324
+                DataField = 'quick_code'
+                DataSource = dmTaxa.dsTaxa
+                MaxLength = 0
+                TabOrder = 0
+                TextHint = 'AAA AAA'
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+              object etEbirdCode: TDBEdit
+                Left = 356
+                Height = 23
+                Top = 27
+                Width = 325
+                DataField = 'ebird_code'
+                DataSource = dmTaxa.dsTaxa
+                MaxLength = 0
+                TabOrder = 1
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+            end
+            object ptParentTaxon: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 61
+              Top = 188
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 61
+              ClientWidth = 697
+              TabOrder = 6
+              object lbltParentTaxon: TLabel
+                Left = 16
+                Height = 15
+                Top = 8
+                Width = 665
+                Caption = 'Parent taxon'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object etParentTaxon: TDBEditButton
+                Cursor = crDefault
+                Left = 16
+                Height = 26
+                Top = 27
+                Width = 665
+                ButtonCursor = crDefault
+                ButtonWidth = 24
+                CharCase = ecNormal
+                Color = clDefault
+                Constraints.MaxHeight = 28
+                CustomEditMask = False
+                DataField = 'parent_taxon_name'
+                DataSource = dmTaxa.dsTaxa
+                DirectInput = False
+                DisabledImageIndex = 12
+                ImageIndex = 11
+                Images = bMenu
+                MaxLength = 0
+                ParentColor = False
+                ShowHint = False
+                Spacing = 0
+                TabOrder = 0
+                OnButtonClick = etParentTaxonButtonClick
+                OnKeyPress = etParentTaxonKeyPress
+              end
+            end
+            object ptRank: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 58
+              Top = 130
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 2
+              ClientHeight = 58
+              ClientWidth = 697
+              TabOrder = 7
+              object lbltRank: TLabel
+                Left = 16
+                Height = 15
+                Top = 8
+                Width = 324
+                Caption = 'Rank'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object lbltSortNr: TLabel
+                Left = 356
+                Height = 15
+                Top = 8
+                Width = 325
+                Caption = 'Sorting number'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object cbtRank: TDBLookupComboBox
+                AnchorSideTop.Side = asrCenter
+                AnchorSideRight.Side = asrBottom
+                Left = 16
+                Height = 23
+                Top = 27
+                Width = 324
+                AutoComplete = True
+                BorderSpacing.Bottom = 6
+                DataField = 'rank_id'
+                DataSource = dmTaxa.dsTaxa
+                DropDownRows = 12
+                KeyField = 'rank_id'
+                ListField = 'rank_name'
+                ListFieldIndex = 0
+                ListSource = dmTaxa.dslookRanks
+                LookupCache = False
+                Style = csDropDownList
+                TabOrder = 0
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+              object etSortNr: TDBEdit
+                Left = 356
+                Height = 23
+                Top = 27
+                Width = 325
+                DataField = 'sort_num'
+                DataSource = dmTaxa.dsTaxa
+                MaxLength = 0
+                TabOrder = 1
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+            end
+            object ptAuthorship: TPanel
+              AnchorSideLeft.Control = peTaxa
+              AnchorSideTop.Control = ptFullName
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = peTaxa
+              AnchorSideRight.Side = asrBottom
+              Left = 16
+              Height = 58
+              Top = 66
+              Width = 697
+              Anchors = [akTop, akLeft, akRight]
+              AutoSize = True
+              BorderSpacing.Bottom = 6
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 16
+              ChildSizing.TopBottomSpacing = 8
+              ChildSizing.HorizontalSpacing = 16
+              ChildSizing.VerticalSpacing = 4
+              ChildSizing.EnlargeHorizontal = crsSameSize
+              ChildSizing.ShrinkHorizontal = crsSameSize
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 58
+              ClientWidth = 697
+              TabOrder = 8
+              object lbltAuthorship: TLabel
+                Left = 16
+                Height = 15
+                Top = 8
+                Width = 665
+                Caption = 'Authorship'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object cbAuthorship: TDBComboBox
+                AnchorSideRight.Side = asrBottom
+                Left = 16
+                Height = 23
+                Top = 27
+                Width = 665
+                AutoComplete = True
+                AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+                AutoDropDown = True
+                DataField = 'authorship'
+                DataSource = dmTaxa.dsTaxa
+                ItemHeight = 15
+                MaxLength = 0
+                TabOrder = 0
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+            end
           end
         end
         object ptToolbar: TPanel
-          Left = 9
+          AnchorSideLeft.Control = ptContent
+          AnchorSideTop.Control = ptContent
+          AnchorSideRight.Control = ptContent
+          AnchorSideRight.Side = asrBottom
+          Left = 8
           Height = 42
-          Top = 9
-          Width = 709
-          Align = alTop
+          Top = 8
+          Width = 713
+          Anchors = [akTop, akLeft, akRight]
           AutoSize = True
           BorderSpacing.Left = 8
           BorderSpacing.Top = 8
@@ -1551,7 +1557,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           ChildSizing.TopBottomSpacing = 4
           ChildSizing.HorizontalSpacing = 4
           ClientHeight = 42
-          ClientWidth = 709
+          ClientWidth = 713
           Constraints.MinWidth = 500
           TabOrder = 0
           object sbSplitTaxon: TSpeedButton
@@ -1621,7 +1627,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = ptToolbar
             AnchorSideRight.Side = asrBottom
-            Left = 627
+            Left = 631
             Height = 15
             Top = 14
             Width = 66
@@ -1629,7 +1635,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Caption = '0 of 0 record'
             Layout = tlCenter
           end
-          object DBCheckBox1: TDBCheckBox
+          object ckAccepted: TDBCheckBox
             AnchorSideLeft.Control = sbMoveTaxon
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = ptToolbar
@@ -1647,18 +1653,28 @@ object frmTaxaEditor: TfrmTaxaEditor
             ValueUnchecked = '0'
           end
         end
-        object ptFullName: TBCPanel
-          Left = 17
-          Height = 47
-          Top = 59
-          Width = 677
-          Align = alTop
+        object ptSliverFullname: TBCPanel
+          AnchorSideLeft.Control = ptContent
+          AnchorSideTop.Control = ptToolbar
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = ptContent
+          AnchorSideRight.Side = asrBottom
+          Left = 8
+          Height = 37
+          Top = 58
+          Width = 713
+          Anchors = [akTop, akLeft, akRight]
           AutoSize = True
-          BorderSpacing.Left = 16
-          BorderSpacing.Right = 32
+          BorderSpacing.Left = 8
+          BorderSpacing.Right = 8
+          BorderSpacing.Bottom = 8
           ChildSizing.LeftRightSpacing = 16
-          ChildSizing.TopBottomSpacing = 12
-          ChildSizing.HorizontalSpacing = 8
+          ChildSizing.TopBottomSpacing = 8
+          ChildSizing.HorizontalSpacing = 16
+          ChildSizing.VerticalSpacing = 4
+          ChildSizing.EnlargeHorizontal = crsSameSize
+          ChildSizing.ShrinkHorizontal = crsSameSize
+          ChildSizing.ControlsPerLine = 2
           Background.Color = 16448250
           Background.Gradient1.StartColor = clWhite
           Background.Gradient1.EndColor = clBlack
@@ -1682,7 +1698,6 @@ object frmTaxaEditor: TfrmTaxaEditor
           Border.Color = 13750737
           Border.Style = bboSolid
           BorderBCStyle = bpsBorder
-          Color = 15066599
           FontEx.Color = clDefault
           FontEx.FontQuality = fqSystemClearType
           FontEx.Shadow = False
@@ -1690,528 +1705,97 @@ object frmTaxaEditor: TfrmTaxaEditor
           FontEx.ShadowOffsetX = 5
           FontEx.ShadowOffsetY = 5
           FontEx.Style = []
-          ParentBackground = False
+          ParentBackground = True
           Rounding.RoundX = 8
           Rounding.RoundY = 8
-          Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-          TabOrder = 1
-          object lbltFullname: TLabel
+          TabOrder = 2
+          Visible = False
+          object txtTaxaFullName: TDBText
+            AnchorSideLeft.Control = ptSliverFullname
+            AnchorSideTop.Control = ptSliverFullname
             Left = 16
-            Height = 23
-            Top = 12
-            Width = 81
-            Align = alLeft
-            Caption = 'Scientific name'
-            Layout = tlCenter
-            ParentColor = False
-          end
-          object etFullname: TDBEdit
-            AnchorSideTop.Control = ptFullName
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = ptFullName
-            AnchorSideRight.Side = asrBottom
-            Left = 211
-            Height = 23
-            Top = 12
-            Width = 450
+            Height = 21
+            Top = 8
+            Width = 113
             DataField = 'full_name'
             DataSource = dmTaxa.dsTaxa
-            Anchors = [akTop, akLeft, akRight]
-            MaxLength = 0
-            TabOrder = 0
-            OnExit = etFullnameExit
-            OnKeyPress = cbAuthorshipKeyPress
-          end
-        end
-        object ptAuthorship: TBCPanel
-          Left = 17
-          Height = 47
-          Top = 106
-          Width = 677
-          Align = alTop
-          AutoSize = True
-          BorderSpacing.Left = 16
-          BorderSpacing.Right = 32
-          BorderSpacing.Bottom = 8
-          ChildSizing.LeftRightSpacing = 16
-          ChildSizing.TopBottomSpacing = 12
-          ChildSizing.HorizontalSpacing = 8
-          Background.Color = 16448250
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clBlack
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          BevelInner = bvNone
-          BevelOuter = bvNone
-          BevelWidth = 1
-          Border.Color = 13750737
-          Border.Style = bboSolid
-          BorderBCStyle = bpsBorder
-          Color = 15066599
-          FontEx.Color = clDefault
-          FontEx.FontQuality = fqSystemClearType
-          FontEx.Shadow = False
-          FontEx.ShadowRadius = 5
-          FontEx.ShadowOffsetX = 5
-          FontEx.ShadowOffsetY = 5
-          FontEx.Style = []
-          ParentBackground = False
-          Rounding.RoundX = 8
-          Rounding.RoundY = 8
-          Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-          TabOrder = 2
-          object lbltAuthorship: TLabel
-            Left = 16
-            Height = 23
-            Top = 12
-            Width = 59
-            Align = alLeft
-            Caption = 'Authorship'
-            Layout = tlCenter
-            ParentColor = False
-          end
-          object cbAuthorship: TDBComboBox
-            AnchorSideTop.Control = ptAuthorship
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = ptAuthorship
-            AnchorSideRight.Side = asrBottom
-            Left = 211
-            Height = 23
-            Top = 12
-            Width = 450
-            Anchors = [akTop, akLeft, akRight]
-            AutoComplete = True
-            AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-            AutoDropDown = True
-            DataField = 'authorship'
-            DataSource = dmTaxa.dsTaxa
-            ItemHeight = 15
-            MaxLength = 0
-            TabOrder = 0
-            OnKeyPress = cbAuthorshipKeyPress
-          end
-        end
-        object ptRank: TBCPanel
-          Left = 17
-          Height = 47
-          Top = 161
-          Width = 677
-          Align = alTop
-          AutoSize = True
-          BorderSpacing.Left = 16
-          BorderSpacing.Right = 32
-          ChildSizing.LeftRightSpacing = 16
-          ChildSizing.TopBottomSpacing = 12
-          ChildSizing.HorizontalSpacing = 8
-          Background.Color = 16448250
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clBlack
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          BevelInner = bvNone
-          BevelOuter = bvNone
-          BevelWidth = 1
-          Border.Color = 13750737
-          Border.Style = bboSolid
-          BorderBCStyle = bpsBorder
-          Color = 15066599
-          FontEx.Color = clDefault
-          FontEx.FontQuality = fqSystemClearType
-          FontEx.Shadow = False
-          FontEx.ShadowRadius = 5
-          FontEx.ShadowOffsetX = 5
-          FontEx.ShadowOffsetY = 5
-          FontEx.Style = []
-          ParentBackground = False
-          Rounding.RoundX = 8
-          Rounding.RoundY = 8
-          Rounding.RoundOptions = [rrBottomRightSquare, rrBottomLeftSquare]
-          TabOrder = 3
-          object lbltRank: TLabel
-            Left = 16
-            Height = 23
-            Top = 12
-            Width = 26
-            Align = alLeft
-            Caption = 'Rank'
-            Layout = tlCenter
-            ParentColor = False
-          end
-          object cbtRank: TDBLookupComboBox
-            AnchorSideTop.Control = ptRank
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = ptRank
-            AnchorSideRight.Side = asrBottom
-            Left = 400
-            Height = 23
-            Top = 12
-            Width = 261
-            Anchors = [akTop, akLeft, akRight]
-            AutoComplete = True
-            BorderSpacing.Bottom = 6
-            DataField = 'rank_id'
-            DataSource = dmTaxa.dsTaxa
-            DropDownRows = 12
-            KeyField = 'rank_id'
-            ListField = 'rank_name'
-            ListFieldIndex = 0
-            ListSource = dmTaxa.dslookRanks
-            LookupCache = False
-            Style = csDropDownList
-            TabOrder = 0
-            OnKeyPress = cbAuthorshipKeyPress
-          end
-        end
-        object ptParentTaxon: TBCPanel
-          AnchorSideTop.Control = ptRank
-          AnchorSideTop.Side = asrBottom
-          Left = 17
-          Height = 50
-          Top = 208
-          Width = 677
-          Align = alTop
-          AutoSize = True
-          BorderSpacing.Left = 16
-          BorderSpacing.Right = 32
-          BorderSpacing.Bottom = 8
-          ChildSizing.LeftRightSpacing = 16
-          ChildSizing.TopBottomSpacing = 12
-          ChildSizing.HorizontalSpacing = 8
-          Background.Color = 16448250
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clBlack
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          BevelInner = bvNone
-          BevelOuter = bvNone
-          BevelWidth = 1
-          Border.Color = 13750737
-          Border.Style = bboSolid
-          BorderBCStyle = bpsBorder
-          Color = 15066599
-          FontEx.Color = clDefault
-          FontEx.FontQuality = fqSystemClearType
-          FontEx.Shadow = False
-          FontEx.ShadowRadius = 5
-          FontEx.ShadowOffsetX = 5
-          FontEx.ShadowOffsetY = 5
-          FontEx.Style = []
-          ParentBackground = False
-          Rounding.RoundX = 8
-          Rounding.RoundY = 8
-          Rounding.RoundOptions = [rrTopLeftSquare, rrTopRightSquare]
-          TabOrder = 4
-          object lbltParentTaxon: TLabel
-            Left = 16
-            Height = 26
-            Top = 12
-            Width = 66
-            Align = alLeft
-            Caption = 'Parent taxon'
-            Layout = tlCenter
-            ParentColor = False
-          end
-          object etParentTaxon: TDBEditButton
-            Cursor = crDefault
-            Left = 211
-            Height = 26
-            Top = 12
-            Width = 450
-            Align = alRight
-            Anchors = [akTop, akLeft, akRight, akBottom]
-            ButtonCursor = crDefault
-            ButtonWidth = 24
-            CharCase = ecNormal
-            Color = clDefault
-            Constraints.MaxHeight = 28
-            CustomEditMask = False
-            DataField = 'parent_taxon_name'
-            DataSource = dmTaxa.dsTaxa
-            DirectInput = False
-            DisabledImageIndex = 12
-            ImageIndex = 11
-            Images = bMenu
-            MaxLength = 0
-            ParentColor = False
-            ShowHint = False
-            Spacing = 0
-            TabOrder = 0
-            OnButtonClick = etParentTaxonButtonClick
-            OnKeyPress = etParentTaxonKeyPress
+            Font.Height = -16
+            ParentFont = False
           end
         end
       end
-      object pDetails: TPanel
-        Left = 1143
+      object pTaxaRightBar: TPanel
+        Left = 1824
         Height = 1009
         Top = 0
-        Width = 362
+        Width = 50
         Align = alRight
+        AutoSize = True
         BevelOuter = bvNone
         ChildSizing.LeftRightSpacing = 8
         ChildSizing.TopBottomSpacing = 16
         ChildSizing.VerticalSpacing = 8
         ClientHeight = 1009
-        ClientWidth = 362
-        Color = 15066599
+        ClientWidth = 50
         ParentBackground = False
-        ParentColor = False
         TabOrder = 6
-        object gridSynonyms: TDBGrid
-          AnchorSideLeft.Control = pDetails
-          AnchorSideTop.Control = lblTitleSynonyms
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = pDetails
-          AnchorSideRight.Side = asrBottom
+        object sbShowQuickFilters: TSpeedButton
+          Tag = 1
           Left = 8
-          Height = 236
-          Top = 197
-          Width = 346
-          AlternateColor = 16448250
-          Anchors = [akTop, akLeft, akRight]
-          AutoFillColumns = True
-          Color = clWindow
-          Columns = <          
-            item
-              Title.Caption = 'Synonym'
-              Width = 325
-              FieldName = 'full_name'
-            end>
-          DataSource = dmTaxa.dsSynonyms
-          FixedCols = 0
-          Options = [dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgDisableInsert, dgRowHighlight]
-          Scrollbars = ssVertical
-          TabOrder = 0
-          TitleStyle = tsNative
-        end
-        object gridChildTaxa: TDBGrid
-          AnchorSideLeft.Control = pDetails
-          AnchorSideTop.Control = lblTitleChilds
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = pDetails
-          AnchorSideRight.Side = asrBottom
-          Left = 8
-          Height = 236
-          Top = 470
-          Width = 346
-          AlternateColor = 16448250
-          Anchors = [akTop, akLeft, akRight]
-          AutoFillColumns = True
-          Color = clWindow
-          Columns = <          
-            item
-              Title.Caption = 'Child taxa'
-              Width = 325
-              FieldName = 'full_name'
-            end>
-          DataSource = dmTaxa.dsChildTaxa
-          FixedCols = 0
-          Options = [dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgDisableInsert]
-          Scrollbars = ssVertical
-          TabOrder = 1
-          TitleStyle = tsNative
-        end
-        object tvHierarchy: TTreeView
-          AnchorSideLeft.Control = pDetails
-          AnchorSideTop.Control = pDetails
-          AnchorSideRight.Control = pDetails
-          AnchorSideRight.Side = asrBottom
-          Left = 8
-          Height = 144
+          Height = 34
+          Hint = 'Quick filters'
           Top = 16
-          Width = 346
-          Anchors = [akTop, akLeft, akRight]
-          ScrollBars = ssAutoVertical
-          TabOrder = 2
-        end
-        object lblTitleSynonyms: TLabel
-          AnchorSideLeft.Control = pDetails
-          AnchorSideTop.Control = tvHierarchy
-          AnchorSideTop.Side = asrBottom
-          Left = 8
-          Height = 21
-          Top = 168
-          Width = 73
-          Caption = 'Synonyms'
-          Font.Height = -16
-          ParentFont = False
-        end
-        object lblTitleChilds: TLabel
-          AnchorSideLeft.Control = pDetails
-          AnchorSideTop.Control = gridSynonyms
-          AnchorSideTop.Side = asrBottom
-          Left = 8
-          Height = 21
-          Top = 441
-          Width = 68
-          Caption = 'Child taxa'
-          Font.Height = -16
-          ParentFont = False
-        end
-        object sbDelSynonym: TSpeedButton
-          AnchorSideTop.Control = tvHierarchy
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = pDetails
-          AnchorSideRight.Side = asrBottom
-          Left = 291
-          Height = 26
-          Top = 168
-          Width = 63
-          Anchors = [akTop, akRight]
+          Width = 34
+          Align = alTop
+          AllowAllUp = True
           AutoSize = True
-          Caption = 'Delete'
-          DisabledImageIndex = 5
+          DisabledImageIndex = 37
           Flat = True
+          GroupIndex = 10
           Images = bMenu
-          ImageIndex = 4
+          ImageIndex = 36
+          ImageWidth = 24
+          OnClick = sbShowQuickFiltersClick
         end
-        object sbAddSynonym: TSpeedButton
-          AnchorSideTop.Control = tvHierarchy
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = sbDelSynonym
-          Left = 223
-          Height = 26
-          Top = 168
-          Width = 52
-          Anchors = [akTop, akRight]
+        object sbShowImages: TSpeedButton
+          Tag = 2
+          Left = 8
+          Height = 34
+          Hint = 'Images'
+          Top = 58
+          Width = 34
+          Align = alTop
+          AllowAllUp = True
           AutoSize = True
-          BorderSpacing.Right = 16
-          Caption = 'Add'
-          DisabledImageIndex = 1
+          DisabledImageIndex = 41
           Flat = True
+          GroupIndex = 10
           Images = bMenu
-          ImageIndex = 0
+          ImageIndex = 40
+          ImageWidth = 24
+          Visible = False
+        end
+        object sbShowRecycle: TSpeedButton
+          Tag = 7
+          Left = 8
+          Height = 34
+          Hint = 'Recycle bin'
+          Top = 111
+          Width = 34
+          Align = alTop
+          AllowAllUp = True
+          AutoSize = True
+          BorderSpacing.Top = 19
+          DisabledImageIndex = 43
+          Flat = True
+          GroupIndex = 10
+          Images = bMenu
+          ImageIndex = 42
+          ImageWidth = 24
         end
       end
     end
     object pgPackages: TPage
-      object pPacksList: TBCPanel
-        Left = 0
-        Height = 1009
-        Top = 0
-        Width = 699
-        Align = alLeft
-        Background.Color = clBtnFace
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clBlack
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        BevelInner = bvNone
-        BevelOuter = bvRaised
-        BevelWidth = 1
-        Border.Style = bboNone
-        BorderBCStyle = bpsBorder
-        FontEx.Color = clDefault
-        FontEx.FontQuality = fqSystemClearType
-        FontEx.Shadow = False
-        FontEx.ShadowRadius = 5
-        FontEx.ShadowOffsetX = 5
-        FontEx.ShadowOffsetY = 5
-        FontEx.Style = []
-        ParentBackground = False
-        Rounding.RoundX = 1
-        Rounding.RoundY = 1
-        TabOrder = 0
-        object gridPacks: TDBGrid
-          Left = 7
-          Height = 1001
-          Top = 1
-          Width = 691
-          Align = alClient
-          AlternateColor = 16448250
-          AutoFillColumns = True
-          BorderSpacing.Left = 6
-          BorderSpacing.Bottom = 6
-          Color = clWindow
-          Columns = <          
-            item
-              SizePriority = 0
-              Title.Caption = 'Marked'
-              FieldName = 'marked_status'
-            end          
-            item
-              Title.Caption = 'Package name'
-              Width = 367
-              FieldName = 'package_name'
-            end          
-            item
-              SizePriority = 0
-              Title.Caption = 'Year'
-              FieldName = 'package_year'
-            end          
-            item
-              SizePriority = 0
-              Title.Caption = 'Month'
-              FieldName = 'package_month'
-            end          
-            item
-              SizePriority = 0
-              Title.Caption = 'Version'
-              FieldName = 'version'
-            end          
-            item
-              SizePriority = 0
-              Title.Caption = 'ID'
-              FieldName = 'package_id'
-            end>
-          DataSource = dmTaxa.dsPacks
-          FixedCols = 0
-          Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
-          ReadOnly = True
-          Scrollbars = ssAutoVertical
-          TabOrder = 0
-          TitleStyle = tsNative
-          OnPrepareCanvas = gridTaxaPrepareCanvas
-        end
-      end
       object splitPacksLeft: TSplitter
         Left = 699
         Height = 1009
@@ -2238,22 +1822,22 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Action'
-            Width = 198
+            Width = 199
             FieldName = 'action_type'
           end        
           item
             Title.Caption = 'Taxon'
-            Width = 198
+            Width = 199
             FieldName = 'taxon_name'
           end        
           item
             Title.Caption = 'New taxon'
-            Width = 198
+            Width = 199
             FieldName = 'taxon_new_name'
           end        
           item
             Title.Caption = 'Trait'
-            Width = 198
+            Width = 199
             FieldName = 'trait_name'
           end        
           item
@@ -2272,7 +1856,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
         ReadOnly = True
         Scrollbars = ssAutoVertical
-        TabOrder = 2
+        TabOrder = 1
         TitleStyle = tsNative
         OnPrepareCanvas = gridTaxaPrepareCanvas
       end
@@ -2289,7 +1873,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ChildSizing.VerticalSpacing = 4
         ClientHeight = 1009
         ClientWidth = 50
-        TabOrder = 3
+        TabOrder = 2
         object sbInsertChange: TSpeedButton
           AnchorSideLeft.Control = pChangesToolbar
           AnchorSideTop.Control = pChangesToolbar
@@ -2385,6 +1969,68 @@ object frmTaxaEditor: TfrmTaxaEditor
           ShowHint = True
           ParentShowHint = False
           OnClick = sbDelChangeClick
+        end
+      end
+      object pPacksList: TPanel
+        Left = 0
+        Height = 1009
+        Top = 0
+        Width = 699
+        Align = alLeft
+        ClientHeight = 1009
+        ClientWidth = 699
+        ParentBackground = False
+        TabOrder = 3
+        object gridPacks: TDBGrid
+          Left = 7
+          Height = 1001
+          Top = 1
+          Width = 691
+          Align = alClient
+          AlternateColor = 16448250
+          AutoFillColumns = True
+          BorderSpacing.Left = 6
+          BorderSpacing.Bottom = 6
+          Color = clWindow
+          Columns = <          
+            item
+              SizePriority = 0
+              Title.Caption = 'Marked'
+              FieldName = 'marked_status'
+            end          
+            item
+              Title.Caption = 'Package name'
+              Width = 371
+              FieldName = 'package_name'
+            end          
+            item
+              SizePriority = 0
+              Title.Caption = 'Year'
+              FieldName = 'package_year'
+            end          
+            item
+              SizePriority = 0
+              Title.Caption = 'Month'
+              FieldName = 'package_month'
+            end          
+            item
+              SizePriority = 0
+              Title.Caption = 'Version'
+              FieldName = 'version'
+            end          
+            item
+              SizePriority = 0
+              Title.Caption = 'ID'
+              FieldName = 'package_id'
+            end>
+          DataSource = dmTaxa.dsPacks
+          FixedCols = 0
+          Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight]
+          ReadOnly = True
+          Scrollbars = ssAutoVertical
+          TabOrder = 0
+          TitleStyle = tsNative
+          OnPrepareCanvas = gridTaxaPrepareCanvas
         end
       end
     end
@@ -2712,52 +2358,24 @@ object frmTaxaEditor: TfrmTaxaEditor
       OnClick = sbTaxaClick
     end
   end
-  object pToolbar: TBCPanel
+  object pToolbar: TPanel
     AnchorSideLeft.Control = pNavigation
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 50
-    Height = 52
+    Height = 50
     Top = 0
     Width = 1874
     Anchors = [akTop, akLeft, akRight]
     AutoSize = True
+    BevelOuter = bvNone
     ChildSizing.LeftRightSpacing = 16
     ChildSizing.TopBottomSpacing = 8
-    Background.Color = 15987699
-    Background.Gradient1.StartColor = clWhite
-    Background.Gradient1.EndColor = clBlack
-    Background.Gradient1.GradientType = gtLinear
-    Background.Gradient1.Point1XPercent = 0
-    Background.Gradient1.Point1YPercent = 0
-    Background.Gradient1.Point2XPercent = 0
-    Background.Gradient1.Point2YPercent = 100
-    Background.Gradient2.StartColor = clWhite
-    Background.Gradient2.EndColor = clBlack
-    Background.Gradient2.GradientType = gtLinear
-    Background.Gradient2.Point1XPercent = 0
-    Background.Gradient2.Point1YPercent = 0
-    Background.Gradient2.Point2XPercent = 0
-    Background.Gradient2.Point2YPercent = 100
-    Background.Gradient1EndPercent = 35
-    Background.Style = bbsColor
-    BevelInner = bvNone
-    BevelOuter = bvRaised
-    BevelWidth = 1
-    Border.Style = bboNone
-    BorderBCStyle = bpsBorder
-    FontEx.Color = clDefault
-    FontEx.FontQuality = fqSystemClearType
-    FontEx.Shadow = False
-    FontEx.ShadowRadius = 5
-    FontEx.ShadowOffsetX = 5
-    FontEx.ShadowOffsetY = 5
-    FontEx.Style = []
+    ClientHeight = 50
+    ClientWidth = 1874
     ParentBackground = False
-    Rounding.RoundX = 1
-    Rounding.RoundY = 1
     TabOrder = 2
     object pFind: TBCPanel
       AnchorSideLeft.Control = pToolbar
@@ -2766,7 +2384,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Side = asrCenter
       Left = 762
       Height = 32
-      Top = 10
+      Top = 9
       Width = 350
       AutoSize = True
       BorderSpacing.Right = 30
@@ -2894,9 +2512,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideLeft.Control = pToolbar
       AnchorSideTop.Control = pFind
       AnchorSideTop.Side = asrCenter
-      Left = 17
+      Left = 16
       Height = 34
-      Top = 9
+      Top = 8
       Width = 62
       AutoSize = True
       BorderSpacing.Right = 24
@@ -2913,9 +2531,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = sbInsertRecord
       AnchorSideTop.Side = asrCenter
-      Left = 280
+      Left = 279
       Height = 34
-      Top = 9
+      Top = 8
       Width = 82
       AutoSize = True
       BorderSpacing.Right = 8
@@ -2933,9 +2551,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = sbSaveRecord
       AnchorSideTop.Side = asrCenter
-      Left = 370
+      Left = 369
       Height = 34
-      Top = 9
+      Top = 8
       Width = 82
       AutoSize = True
       Constraints.MinWidth = 82
@@ -2951,10 +2569,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbPriorRecord
-      Left = 1410
+      Left = 1411
       Height = 34
       Hint = 'First record'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -2973,10 +2591,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbNextRecord
-      Left = 1444
+      Left = 1445
       Height = 34
       Hint = 'Previous record'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -2994,10 +2612,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbLastRecord
-      Left = 1481
+      Left = 1482
       Height = 34
       Hint = 'Next record'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3017,10 +2635,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbRefreshRecords
-      Left = 1518
+      Left = 1519
       Height = 34
       Hint = 'Last record'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3037,10 +2655,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbDelRecord
-      Left = 1568
+      Left = 1569
       Height = 34
       Hint = 'Refresh'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3059,10 +2677,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbClearFilters
-      Left = 1739
+      Left = 1740
       Height = 34
       Hint = 'Sort records'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3079,10 +2697,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbSortRecords
-      Left = 1705
+      Left = 1706
       Height = 34
       Hint = 'Advanced filters'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3101,10 +2719,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbMoreOptions
-      Left = 1773
+      Left = 1774
       Height = 34
       Hint = 'Clear filters'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3123,10 +2741,10 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = pToolbar
       AnchorSideRight.Side = asrBottom
-      Left = 1823
+      Left = 1824
       Height = 34
       Hint = 'More options'
-      Top = 9
+      Top = 8
       Width = 34
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3146,9 +2764,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
-      Left = 103
+      Left = 102
       Height = 34
-      Top = 9
+      Top = 8
       Width = 58
       AutoSize = True
       BorderSpacing.Right = 24
@@ -3165,9 +2783,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = sbAdvancedFilters
-      Left = 1618
+      Left = 1619
       Height = 34
-      Top = 9
+      Top = 8
       Width = 71
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3186,9 +2804,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pToolbar
       AnchorSideTop.Side = asrCenter
-      Left = 185
+      Left = 184
       Height = 34
-      Top = 9
+      Top = 8
       Width = 71
       AutoSize = True
       BorderSpacing.Right = 24
@@ -3206,7 +2824,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       AnchorSideRight.Control = pFind
       Left = 640
       Height = 34
-      Top = 9
+      Top = 8
       Width = 98
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -3391,6 +3009,11 @@ object frmTaxaEditor: TfrmTaxaEditor
       ImageIndex = 0
       ShortCut = 49230
       OnClick = pmgNewSubspeciesClick
+    end
+    object pmgNewPolitypicGroup: TMenuItem
+      Caption = 'New politypic group'
+      ImageIndex = 0
+      OnClick = pmgNewPolitypicGroupClick
     end
     object pmgSplit: TMenuItem
       Caption = 'Split'
@@ -5986,9 +5609,16 @@ object frmTaxaEditor: TfrmTaxaEditor
   end
   object TimerOpen: TTimer
     Enabled = False
-    Interval = 250
+    Interval = 350
     OnTimer = TimerOpenTimer
     Left = 267
     Top = 120
+  end
+  object dsTaxa: TDataSource
+    DataSet = dmTaxa.qTaxa
+    OnStateChange = dsTaxaStateChange
+    OnDataChange = dsTaxaDataChange
+    Left = 296
+    Top = 208
   end
 end

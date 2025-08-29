@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, CheckLst, Buttons,
-  atshapelinebgra, BCPanel, utils_taxonomy;
+  DBCtrls, atshapelinebgra, BCPanel, utils_taxonomy;
 
 type
 
@@ -15,10 +15,17 @@ type
   TdlgNewSubspecies = class(TForm)
     eEpythet: TEdit;
     lblApplyTo: TLabel;
+    lblRange: TLabel;
     lineBottom: TShapeLineBGRA;
+    mRange: TMemo;
     pApplyTo: TBCPanel;
+    pRange: TBCPanel;
     pBottom: TPanel;
+    pChangeSuffix: TBCPanel;
     pContent: TPanel;
+    rbMonotypic: TRadioButton;
+    rbSubspecies: TRadioButton;
+    rbPolitypic: TRadioButton;
     sbApply: TBitBtn;
     sbClose: TButton;
     procedure eEpythetKeyPress(Sender: TObject; var Key: char);
@@ -27,11 +34,14 @@ type
     procedure sbApplyClick(Sender: TObject);
   private
     FTaxonomies: TBirdTaxonomies;
-    FEpythet: String;
+    FEpythet, FRange: String;
+    FRank: TZooRank;
     function ValidateFields: Boolean;
   public
     property Taxonomies: TBirdTaxonomies read FTaxonomies write FTaxonomies;
     property Epythet: String read FEpythet write FEpythet;
+    property Rank: TZooRank read FRank write FRank;
+    property GeographicalRange: String read FRange write FRange;
   end;
 
 var
@@ -86,6 +96,15 @@ begin
   //  FTaxonomies := FTaxonomies + [btCbro];
 
   FEpythet := eEpythet.Text;
+  if rbSubspecies.Checked then
+    FRank := trSubspecies
+  else
+  if rbMonotypic.Checked then
+    FRank := trMonotypicGroup
+  else
+  if rbPolitypic.Checked then
+    FRank := trPolitypicGroup;
+  FRange := mRange.Lines.Text;
 
   ModalResult:= mrOK;
 end;

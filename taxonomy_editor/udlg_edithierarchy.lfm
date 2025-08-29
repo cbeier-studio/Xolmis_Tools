@@ -1,16 +1,16 @@
 object dlgEditHierarchy: TdlgEditHierarchy
   Left = 373
-  Height = 413
+  Height = 428
   Top = 34
   Width = 577
   AutoSize = True
   BorderStyle = bsDialog
   Caption = 'Editing selected/marked taxon hierarchy'
-  ClientHeight = 413
+  ClientHeight = 428
   ClientWidth = 577
   PopupMode = pmAuto
   Position = poScreenCenter
-  LCLVersion = '4.2.0.0'
+  OnShow = FormShow
   object lineBottom: TShapeLineBGRA
     Left = 0
     Height = 2
@@ -57,6 +57,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Apply'
       ImageWidth = 24
       TabOrder = 0
+      OnClick = sbApplyClick
     end
   end
   object pParentTaxon: TBCPanel
@@ -133,6 +134,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eParentTaxonButtonClick
+      OnKeyPress = eParentTaxonKeyPress
     end
     object cbClearParentTaxon: TCheckBox
       Left = 489
@@ -143,6 +146,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearParentTaxonChange
     end
   end
   object pOrder: TBCPanel
@@ -220,6 +224,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eOrderButtonClick
+      OnKeyPress = eOrderKeyPress
     end
     object cbClearOrder: TCheckBox
       Left = 489
@@ -230,6 +236,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearOrderChange
     end
   end
   object pFamily: TBCPanel
@@ -306,6 +313,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eFamilyButtonClick
+      OnKeyPress = eFamilyKeyPress
     end
     object cbClearFamily: TCheckBox
       Left = 489
@@ -316,6 +325,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearFamilyChange
     end
   end
   object pSubfamily: TBCPanel
@@ -392,6 +402,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eSubfamilyButtonClick
+      OnKeyPress = eSubfamilyKeyPress
     end
     object cbClearSubfamily: TCheckBox
       Left = 489
@@ -402,6 +414,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearSubfamilyChange
     end
   end
   object pGenus: TBCPanel
@@ -478,6 +491,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eGenusButtonClick
+      OnKeyPress = eGenusKeyPress
     end
     object cbClearGenus: TCheckBox
       Left = 489
@@ -488,6 +503,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearGenusChange
     end
   end
   object pSpecies: TBCPanel
@@ -564,6 +580,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eSpeciesButtonClick
+      OnKeyPress = eSpeciesKeyPress
     end
     object cbClearSpecies: TCheckBox
       Left = 489
@@ -574,6 +592,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearSpeciesChange
     end
   end
   object pSubspeciesGroup: TBCPanel
@@ -651,6 +670,8 @@ object dlgEditHierarchy: TdlgEditHierarchy
       PasswordChar = #0
       Spacing = 0
       TabOrder = 0
+      OnButtonClick = eSubspeciesGroupButtonClick
+      OnKeyPress = eSubspeciesGroupKeyPress
     end
     object cbClearSubspeciesGroup: TCheckBox
       Left = 489
@@ -661,6 +682,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       Caption = 'Clear'
       Constraints.MinWidth = 44
       TabOrder = 1
+      OnChange = cbClearSubspeciesGroupChange
     end
   end
   object pApplyTo: TBCPanel
@@ -731,6 +753,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       GroupIndex = 1
       Images = iButtons
       ImageIndex = 2
+      OnClick = sbApplyToSelectedClick
     end
     object sbApplyToSelected: TSpeedButton
       Left = 326
@@ -743,6 +766,7 @@ object dlgEditHierarchy: TdlgEditHierarchy
       GroupIndex = 1
       Images = iButtons
       ImageIndex = 1
+      OnClick = sbApplyToSelectedClick
     end
   end
   object iButtons: TImageList
