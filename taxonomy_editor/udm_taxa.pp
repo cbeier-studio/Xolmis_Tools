@@ -277,7 +277,7 @@ end;
 procedure TdmTaxa.qTaxaAfterOpen(DataSet: TDataSet);
 begin
   qSynonyms.Open;
-  qChildTaxa.Open;
+  //qChildTaxa.Open;
   qVernacular.Open;
   qTaxonCountries.Open;
 end;
@@ -286,7 +286,7 @@ procedure TdmTaxa.qTaxaBeforeClose(DataSet: TDataSet);
 begin
   qTaxonCountries.Close;
   qVernacular.Close;
-  qChildTaxa.Close;
+  //qChildTaxa.Close;
   qSynonyms.Close;
 end;
 

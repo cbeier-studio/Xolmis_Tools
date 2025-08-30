@@ -214,6 +214,7 @@ type
     splitTaxaLeft: TSplitter;
     splitPacksLeft: TSplitter;
     splitTaxaRight: TSplitter;
+    TimerUpdate: TTimer;
     TimerOpen: TTimer;
     TimerFind: TTimer;
     tvHierarchy: TTreeView;
@@ -288,6 +289,7 @@ type
     procedure sbTaxaClick(Sender: TObject);
     procedure TimerFindTimer(Sender: TObject);
     procedure TimerOpenTimer(Sender: TObject);
+    procedure TimerUpdateTimer(Sender: TObject);
     procedure tsTaxonExtinctOff(Sender: TObject);
     procedure tsTaxonExtinctOn(Sender: TObject);
   private
@@ -307,6 +309,7 @@ type
     function SearchRanks(aValue: String): Boolean;
     function SearchTaxa(aValue: String): Boolean;
     procedure UpdateButtons;
+    procedure UpdateTree;
     function ValidateTaxon: Boolean;
   public
 
@@ -683,36 +686,11 @@ begin
 end;
 
 procedure TfrmTaxaEditor.dsTaxaDataChange(Sender: TObject; Field: TField);
-var
-  nOrder, nFamily, nGenus, nSpecies, nGroup: TTreeNode;
 begin
   UpdateButtons;
 
-  if not (dsTaxa.State in [dsInsert, dsEdit]) then
-  begin
-    tvHierarchy.Items.Clear;
-    if dmTaxa.qTaxa.FieldByName('order_id').AsInteger > 0 then
-    begin
-      nOrder := tvHierarchy.Items.Add(nil, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('order_id').AsInteger));
-      if dmTaxa.qTaxa.FieldByName('family_id').AsInteger > 0 then
-      begin
-        nFamily := tvHierarchy.Items.AddChild(nOrder, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('family_id').AsInteger));
-        if dmTaxa.qTaxa.FieldByName('genus_id').AsInteger > 0 then
-        begin
-          nGenus := tvHierarchy.Items.AddChild(nFamily, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('genus_id').AsInteger));
-          if dmTaxa.qTaxa.FieldByName('species_id').AsInteger > 0 then
-          begin
-            nSpecies := tvHierarchy.Items.AddChild(nGenus, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('species_id').AsInteger));
-            if dmTaxa.qTaxa.FieldByName('subspecies_group_id').AsInteger > 0 then
-            begin
-              nGroup := tvHierarchy.Items.AddChild(nSpecies, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('subspecies_group_id').AsInteger));
-            end;
-          end;
-        end;
-      end;
-      tvHierarchy.FullExpand;
-    end;
-  end;
+  TimerUpdate.Enabled := False;
+  TimerUpdate.Enabled := True;
 end;
 
 procedure TfrmTaxaEditor.dsTaxaStateChange(Sender: TObject);
@@ -2323,6 +2301,13 @@ begin
   OpenAsync;
 end;
 
+procedure TfrmTaxaEditor.TimerUpdateTimer(Sender: TObject);
+begin
+  TimerUpdate.Enabled := False;
+
+  UpdateTree;
+end;
+
 procedure TfrmTaxaEditor.tsTaxonExtinctOff(Sender: TObject);
 begin
   if not CanToggle then
@@ -2687,7 +2672,70 @@ begin
     else
       lblCountTaxa.Caption := rsRecNoEmpty;
     lblTitleSynonyms.Caption := Format('Synonyms (%d)', [dmTaxa.qSynonyms.RecordCount]);
-    lblTitleChilds.Caption := Format('ChildTaxa (%d)', [dmTaxa.qChildTaxa.RecordCount]);
+    //lblTitleChilds.Caption := Format('ChildTaxa (%d)', [dmTaxa.qChildTaxa.RecordCount]);
+  end;
+end;
+
+procedure TfrmTaxaEditor.UpdateTree;
+var
+  node, parentNode: TTreeNode;
+  Qry: TSQLQuery;
+begin
+  tvHierarchy.Items.Clear;
+
+  if not (dsTaxa.DataSet.Active) or (dmTaxa.qTaxa.RecordCount = 0) then
+    Exit;
+
+  if not (dsTaxa.State in [dsInsert, dsEdit]) then
+  begin
+    if dmTaxa.qTaxa.FieldByName('order_id').AsInteger > 0 then
+    begin
+      node := tvHierarchy.Items.Add(nil, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('order_id').AsInteger));
+      if dmTaxa.qTaxa.FieldByName('family_id').AsInteger > 0 then
+      begin
+        parentNode := node;
+        node := tvHierarchy.Items.AddChild(parentNode, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('family_id').AsInteger));
+        if dmTaxa.qTaxa.FieldByName('genus_id').AsInteger > 0 then
+        begin
+          parentNode := node;
+          node := tvHierarchy.Items.AddChild(parentNode, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('genus_id').AsInteger));
+          if dmTaxa.qTaxa.FieldByName('species_id').AsInteger > 0 then
+          begin
+            parentNode := node;
+            node := tvHierarchy.Items.AddChild(parentNode, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('species_id').AsInteger));
+            if dmTaxa.qTaxa.FieldByName('subspecies_group_id').AsInteger > 0 then
+            begin
+              parentNode := node;
+              node := tvHierarchy.Items.AddChild(parentNode, GetName('zoo_taxa', 'full_name', 'taxon_id', dmTaxa.qTaxa.FieldByName('subspecies_group_id').AsInteger));
+            end;
+          end;
+        end;
+      end;
+    end;
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      DataBase := dmTaxa.sqlCon;
+      Add('SELECT full_name FROM zoo_taxa');
+      Add('WHERE (parent_taxon_id = :taxon_id) AND (accepted_status = 1) AND (active_status = 1)');
+      Add('ORDER BY full_name ASC');
+      ParamByName('taxon_id').AsInteger := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
+      Open;
+      if (RecordCount > 0) then
+      begin
+        parentNode := node;
+        First;
+        while not EOF do
+        begin
+          tvHierarchy.Items.AddChild(parentNode, FieldByName('full_name').AsString);
+          Next;
+        end;
+      end;
+      Close;
+    finally
+      FreeAndNil(Qry);
+    end;
+    tvHierarchy.FullExpand;
   end;
 end;
 

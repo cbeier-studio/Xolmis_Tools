@@ -852,21 +852,11 @@ begin
     end;
 
     // Update subspecies
-    if (not SameSp) then
+    //if not (Ssp.RankId = trPolitypicGroup) and (not SameSp) then
     begin
       Ssp.Accepted := False;
       Repo.Update(Ssp);
     end;
-    //Qry := TSQLQuery.Create(nil);
-    //with Qry, SQL do
-    //try
-    //  DataBase := dmTaxa.sqlCon;
-    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
-    //  ParamByName('taxon_id').AsInteger := Ssp.Id;
-    //  ExecSQL;
-    //finally
-    //  FreeAndNil(Qry);
-    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSp.Id, OldName, Synonym);
@@ -962,16 +952,6 @@ begin
     // Update subspecies
     Species.Accepted := False;
     Repo.Update(Species);
-    //Qry := TSQLQuery.Create(nil);
-    //with Qry, SQL do
-    //try
-    //  DataBase := dmTaxa.sqlCon;
-    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
-    //  ParamByName('taxon_id').AsInteger := Species.Id;
-    //  ExecSQL;
-    //finally
-    //  FreeAndNil(Qry);
-    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSsp.Id, OldName, Synonym);
@@ -1032,9 +1012,22 @@ begin
 
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSubspecies);
   MoveToName := GetName('zoo_taxa', 'full_name', 'taxon_id', ToSpecies);
+  if (WordCount(MoveToName, [' ']) > 2) then
+    MoveToName := ExtractWord(1, MoveToName, [' ']) + ' ' + ExtractWord(2, MoveToName, [' ']);
   if Ssp.RankId = trPolitypicGroup then
   begin
-    NewName := MoveToName + ' ' + Trim(ExtractWord(2, OldName, Brackets))
+    if Pos('/', OldName) > 0 then
+      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, [' ']))
+    else
+      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, [' '] + Brackets));
+  end
+  else
+  if Ssp.RankId = trForm then
+  begin
+    if (Pos('[', OldName) > 0) or (Pos('(', OldName) > 0) then
+      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, Brackets))
+    else
+      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, [' ']));
   end
   else
     NewName := MoveToName + ' ' + ExtractWord(3, OldName, [' ']);
@@ -1074,16 +1067,6 @@ begin
     // Update subspecies
     Ssp.Accepted := False;
     Repo.Update(Ssp);
-    //Qry := TSQLQuery.Create(nil);
-    //with Qry, SQL do
-    //try
-    //  DataBase := dmTaxa.sqlCon;
-    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
-    //  ParamByName('taxon_id').AsInteger := Ssp.Id;
-    //  ExecSQL;
-    //finally
-    //  FreeAndNil(Qry);
-    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSsp.Id, OldName, Synonym);
@@ -1182,16 +1165,6 @@ begin
     // Update subspecies
     Species.Accepted := False;
     Repo.Update(Species);
-    //Qry := TSQLQuery.Create(nil);
-    //with Qry, SQL do
-    //try
-    //  DataBase := dmTaxa.sqlCon;
-    //  Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (taxon_id = :taxon_id)');
-    //  ParamByName('taxon_id').AsInteger := Species.Id;
-    //  ExecSQL;
-    //finally
-    //  FreeAndNil(Qry);
-    //end;
 
     // Update synonyms
     SynRepo.FindByTaxon(toSp.Id, OldName, Synonym);
