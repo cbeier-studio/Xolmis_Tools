@@ -1011,7 +1011,7 @@ begin
   with Qry do
   try
     MacroCheck := True;
-    SQL.Text := 'SELECT 1 AS x FROM %tablename WHERE (taxon_id=:taxon_id) AND (full_name=:full_name) LIMIT 1';
+    SQL.Text := 'SELECT * FROM %tablename WHERE (taxon_id=:taxon_id) AND (full_name=:full_name)';
     MacroByName('tablename').Value := TableName;
     ParamByName('taxon_id').AsInteger := aTaxonId;
     ParamByName('full_name').AsString := aSynonym;
@@ -1399,7 +1399,7 @@ begin
   with Qry do
   try
     MacroCheck := True;
-    SQL.Text := 'SELECT 1 AS x FROM %tablename WHERE (taxon_id=:taxon_id) AND (vernacular_name=:vernacular_name) LIMIT 1';
+    SQL.Text := 'SELECT * FROM %tablename WHERE (taxon_id=:taxon_id) AND (vernacular_name=:vernacular_name)';
     MacroByName('tablename').Value := TableName;
     ParamByName('taxon_id').AsInteger := aTaxonId;
     ParamByName('vernacular_name').AsString := aVernacularName;

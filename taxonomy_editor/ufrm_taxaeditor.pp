@@ -60,6 +60,9 @@ type
     lbltRank: TLabel;
     lbltSortNr: TLabel;
     lbltVernacular: TLabel;
+    pmgUnmarkAll: TMenuItem;
+    pmgMarkAll: TMenuItem;
+    pmgRemovePolitypicGroup: TMenuItem;
     pmgNewPolitypicGroup: TMenuItem;
     mtDistribution: TDBMemo;
     peTaxa: TPanel;
@@ -211,6 +214,7 @@ type
     sbSaveChange: TSpeedButton;
     sbCancelChange: TSpeedButton;
     sbDelChange: TSpeedButton;
+    Separator6: TMenuItem;
     splitTaxaLeft: TSplitter;
     splitPacksLeft: TSplitter;
     splitTaxaRight: TSplitter;
@@ -229,6 +233,7 @@ type
     procedure cbAuthorshipKeyPress(Sender: TObject; var Key: char);
     procedure cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure clbTaxonRanksFilterClickCheck(Sender: TObject);
+    procedure dbgVernacularCellClick(Column: TColumn);
     procedure dbgVernacularDblClick(Sender: TObject);
     procedure dsTaxaDataChange(Sender: TObject; Field: TField);
     procedure dsTaxaStateChange(Sender: TObject);
@@ -248,8 +253,11 @@ type
     procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
       var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
+    procedure pmgMarkAllClick(Sender: TObject);
     procedure pmgNewPolitypicGroupClick(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
+    procedure pmgRemovePolitypicGroupClick(Sender: TObject);
+    procedure pmgUnmarkAllClick(Sender: TObject);
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
@@ -325,8 +333,8 @@ uses
   models_rank, models_taxon,
   utils_dialogs, utils_taxonomy,
   io_clements, io_ioc,
-  udm_taxa, udlg_about, udlg_loading, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter,
-  uedt_occurrence, uedt_specieslist, uedt_vernacular;
+  udm_taxa, udlg_about, udlg_loading, udlg_find, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter,
+  uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit;
 
 {$R *.lfm}
 
@@ -661,6 +669,14 @@ begin
   CanToggle := True;
 end;
 
+procedure TfrmTaxaEditor.dbgVernacularCellClick(Column: TColumn);
+begin
+  // if clicked on a checkbox column, save immediatelly
+  if (Column.Index = 2) then
+    if (dmTaxa.qVernacular.State = dsEdit) then
+      dmTaxa.qVernacular.Post;
+end;
+
 procedure TfrmTaxaEditor.dbgVernacularDblClick(Sender: TObject);
 var
   Repo: TVernacularRepository;
@@ -670,10 +686,11 @@ begin
   with edtVernacular do
   try
     IsNew := False;
+    Repo.GetById(dmTaxa.qVernacular.FieldByName('vernacular_id').AsInteger, Vernacular);
     TaxonId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
-    Vernacular.LanguageId := dmTaxa.qVernacular.FieldByName('language_id').AsInteger;
-    Vernacular.VernacularName := dmTaxa.qVernacular.FieldByName('vernacular_name').AsString;
-    Vernacular.Preferred := dmTaxa.qVernacular.FieldByName('preferred').AsBoolean;
+    //Vernacular.LanguageId := dmTaxa.qVernacular.FieldByName('language_id').AsInteger;
+    //Vernacular.VernacularName := dmTaxa.qVernacular.FieldByName('vernacular_name').AsString;
+    //Vernacular.Preferred := dmTaxa.qVernacular.FieldByName('preferred').AsBoolean;
     if ShowModal = mrOK then
     begin
       Repo.Update(Vernacular);
@@ -1052,16 +1069,16 @@ begin
         trSlash:          TDBGrid(Sender).Canvas.Brush.Color := $009597E7;
       end;
 
-      // Taxon not accepted
-      if (TDBGrid(Sender).Columns[3].Field.AsBoolean = False) then
-        TDBGrid(Sender).Canvas.Font.Color := $00646464;
-
       // Extinct
       if (TDBGrid(Sender).Columns[5].Field.AsBoolean = True) then
       begin
         TDBGrid(Sender).Canvas.Brush.Color := clBlack;
         TDBGrid(Sender).Canvas.Font.Color := clWhite;
       end;
+
+      // Taxon not accepted
+      if (TDBGrid(Sender).Columns[3].Field.AsBoolean = False) then
+        TDBGrid(Sender).Canvas.Font.Color := $00646464;
     end;
   end;
 end;
@@ -1083,6 +1100,34 @@ begin
   canSearch := True;
 end;
 
+procedure TfrmTaxaEditor.pmgMarkAllClick(Sender: TObject);
+var
+  BM: TBookMark;
+begin
+  with dmTaxa.qTaxa do
+  begin
+    BM := GetBookmark;
+    DisableControls;
+    try
+      First;
+      while not EOF do
+      begin
+        if FieldByName('active_status').AsBoolean = True then
+        begin
+          Edit;
+          FieldByName('marked_status').AsBoolean := True;
+          Post;
+        end;
+        Next;
+      end;
+    finally
+      EnableControls;
+      if BookmarkValid(BM) then
+        GotoBookmark(BM);
+    end;
+  end;
+end;
+
 procedure TfrmTaxaEditor.pmgNewPolitypicGroupClick(Sender: TObject);
 var
   GroupStr, SpName, NewName: String;
@@ -1090,7 +1135,7 @@ var
   Group: TTaxon;
   Qry: TSQLQuery;
 begin
-  GroupStr := InputBox('New politypic group', 'Polytpic group epithet:', '');
+  GroupStr := InputBox('New politypic group', 'Politypic group epithet:', '');
 
   if GroupStr <> EmptyStr then
   begin
@@ -1100,13 +1145,17 @@ begin
     Group := TTaxon.Create();
     try
       try
-        Group.FullName := NewName;
-        Group.FormattedName := FormattedBirdName(NewName, GetRankKey(trPolitypicGroup));
-        Group.RankId := trPolitypicGroup;
-        Group.ParentTaxonId := dmTaxa.qTaxa.FieldByName('species_id').AsInteger;
-        Group.Accepted := True;
+        Repo.FindBy('full_name', NewName, Group);
+        if Group.IsNew then
+        begin
+          Group.FullName := NewName;
+          Group.FormattedName := FormattedBirdName(NewName, GetRankKey(trPolitypicGroup));
+          Group.RankId := trPolitypicGroup;
+          Group.ParentTaxonId := dmTaxa.qTaxa.FieldByName('species_id').AsInteger;
+          Group.Accepted := True;
 
-        Repo.Insert(Group);
+          Repo.Insert(Group);
+        end;
 
         // Move subspecies to the new group
         Qry := TSQLQuery.Create(nil);
@@ -1173,6 +1222,66 @@ begin
     dmTaxa.qTaxa.Refresh;
     if dmTaxa.qTaxa.BookmarkValid(BM) then
       dmTaxa.qTaxa.Bookmark := BM;
+  end;
+end;
+
+procedure TfrmTaxaEditor.pmgRemovePolitypicGroupClick(Sender: TObject);
+var
+  GroupName, toSpName: String;
+  GroupId, toSpId: Integer;
+  Qry: TSQLQuery;
+begin
+  GroupId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
+  GroupName := dmTaxa.qTaxa.FieldByName('full_name').AsString;
+  toSpName := ExtractWord(1, GroupName, [' ']) + ' ' + ExtractWord(2, GroupName, [' ']);
+  toSpId := GetKey('zoo_taxa', 'taxon_id', 'full_name', toSpName);
+
+  Qry := TSQLQuery.Create(nil);
+  with Qry, SQL do
+  try
+    DataBase := dmTaxa.sqlCon;
+    try
+      Add('UPDATE zoo_taxa SET');
+      Add('  parent_taxon_id = :parent_taxon_id,');
+      Add('  update_date = datetime(''now'',''subsec'')');
+      Add('WHERE (parent_taxon_id = :group_id)');
+      ParamByName('parent_taxon_id').AsInteger := toSpId;
+      ParamByName('group_id').AsInteger := GroupId;
+      ExecSQL;
+
+      Clear;
+      Add('UPDATE zoo_taxa SET');
+      Add('  accepted_status = 0,');
+      Add('  update_date = datetime(''now'',''subsec'')');
+      Add('WHERE (taxon_id = :group_id)');
+      ParamByName('group_id').AsInteger := GroupId;
+      ExecSQL;
+
+      dmTaxa.sqlTrans.CommitRetaining;
+    except
+      dmTaxa.sqlTrans.RollbackRetaining;
+      raise;
+    end;
+
+    dmTaxa.qTaxa.Refresh;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TfrmTaxaEditor.pmgUnmarkAllClick(Sender: TObject);
+var
+  Qry: TSQLQuery;
+begin
+  Qry := TSQLQuery.Create(nil);
+  with Qry, SQL do
+  try
+    DataBase := dmTaxa.sqlCon;
+    Add('UPDATE zoo_taxa SET marked_status = 0 WHERE (marked_status = 1)');
+    ExecSQL;
+    Refresh;
+  finally
+    FreeAndNil(Qry);
   end;
 end;
 
@@ -1930,63 +2039,99 @@ procedure TfrmTaxaEditor.sbSplitTaxonClick(Sender: TObject);
 var
   needRefresh: Boolean;
   Qry: TSQLQuery;
+  aTaxonKey: Integer;
+  aTaxonName: String;
   //BM: TBookmark;
 begin
   needRefresh := False;
-  dlgDestTaxon := TdlgDestTaxon.Create(nil);
-  with dlgDestTaxon do
-  try
-    //BM := dmTaxa.qTaxa.Bookmark;
-    dmTaxa.qTaxa.DisableControls;
-    TaxonomyAction:= taSplit;
-    if ShowModal = mrOK then
-    begin
-      needRefresh := True;
-      try
-        case ApplyTo of
-          acSelected:
-          begin
-            SplitTaxon(dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger);
-          end;
-          acMarked:
-          begin
-            dlgLoading.Show;
-            dlgLoading.UpdateProgress('Splitting marked taxa...', 0);
-            Qry := TSQLQuery.Create(dmTaxa.sqlCon);
-            Qry.SQLConnection := dmTaxa.sqlCon;
-            with Qry, SQL do
-            try
-              Add('SELECT taxon_id FROM zoo_taxa WHERE (marked_status = 1) AND (active_status = 1)');
-              Open;
-              dlgLoading.Max := RecordCount;
-              First;
-              repeat
-                SplitTaxon(Qry.FieldByName('taxon_id').AsInteger);
-                dlgLoading.Progress := RecNo;
-                Next;
-              until Eof;
-              Close;
-              Clear;
-              Add('UPDATE zoo_taxa SET marked_status = 0 WHERE marked_status = 1');
-              ExecSQL;
-            finally
-              FreeAndNil(Qry);
-              dlgLoading.Hide;
-              dlgLoading.Max := 100;
+
+  if GetRankType(dmTaxa.qTaxa.FieldByName('rank_id').AsInteger) = trFamily then
+  begin
+    dlgFind := TdlgFind.Create(nil);
+    with dlgFind do
+    try
+      TextHint := 'Select the destination family';
+      TableType := tbZooTaxa;
+      TaxonFilter := [tfFamilies];
+      Position := poScreenCenter;
+      if ShowModal = mrOK then
+      begin
+        aTaxonKey := dlgFind.KeySelected;
+        aTaxonName := dlgFind.NameSelected;
+
+        edtFamilySplit := TedtFamilySplit.Create(nil);
+        with edtFamilySplit do
+        try
+          FromTaxonId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
+          ToTaxonId := aTaxonKey;
+          ToTaxonName := aTaxonName;
+          if ShowModal = mrOK then
+            needRefresh := True;
+        finally
+          FreeAndNil(edtFamilySplit);
+        end;
+      end;
+    finally
+      FreeAndNil(dlgFind);
+    end;
+  end
+  else
+  begin
+    dlgDestTaxon := TdlgDestTaxon.Create(nil);
+    with dlgDestTaxon do
+    try
+      //BM := dmTaxa.qTaxa.Bookmark;
+      dmTaxa.qTaxa.DisableControls;
+      TaxonomyAction:= taSplit;
+      if ShowModal = mrOK then
+      begin
+        needRefresh := True;
+        try
+          case ApplyTo of
+            acSelected:
+            begin
+              SplitTaxon(dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger);
+            end;
+            acMarked:
+            begin
+              dlgLoading.Show;
+              dlgLoading.UpdateProgress('Splitting marked taxa...', 0);
+              Qry := TSQLQuery.Create(dmTaxa.sqlCon);
+              Qry.SQLConnection := dmTaxa.sqlCon;
+              with Qry, SQL do
+              try
+                Add('SELECT taxon_id FROM zoo_taxa WHERE (marked_status = 1) AND (active_status = 1)');
+                Open;
+                dlgLoading.Max := RecordCount;
+                First;
+                repeat
+                  SplitTaxon(Qry.FieldByName('taxon_id').AsInteger);
+                  dlgLoading.Progress := RecNo;
+                  Next;
+                until Eof;
+                Close;
+                Clear;
+                Add('UPDATE zoo_taxa SET marked_status = 0 WHERE marked_status = 1');
+                ExecSQL;
+              finally
+                FreeAndNil(Qry);
+                dlgLoading.Hide;
+                dlgLoading.Max := 100;
+              end;
             end;
           end;
+          dmTaxa.sqlTrans.CommitRetaining;
+        except
+          dmTaxa.sqlTrans.RollbackRetaining;
+          raise;
         end;
-        dmTaxa.sqlTrans.CommitRetaining;
-      except
-        dmTaxa.sqlTrans.RollbackRetaining;
-        raise;
       end;
+    finally
+      FreeAndNil(dlgDestTaxon);
+      dmTaxa.qTaxa.EnableControls;
+      //if dmTaxa.qTaxa.BookmarkValid(BM) then
+      //  dmTaxa.qTaxa.Bookmark := BM;
     end;
-  finally
-    FreeAndNil(dlgDestTaxon);
-    dmTaxa.qTaxa.EnableControls;
-    //if dmTaxa.qTaxa.BookmarkValid(BM) then
-    //  dmTaxa.qTaxa.Bookmark := BM;
   end;
 
   if needRefresh then

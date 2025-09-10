@@ -126,8 +126,8 @@ const
 
   procedure MoveToSpecies(aSubspecies, ToSpecies: Integer; Suffix: TChangeSuffix = csKeep);
   procedure MoveToGenus(aSpecies, ToGenus: Integer; Suffix: TChangeSuffix = csKeep);
-  procedure MoveToFamily(aFamily: Integer);
-  procedure MoveToOrder(aOrder: Integer);
+  procedure MoveToFamily(aTaxonId, toFamilyId: Integer);
+  procedure MoveToOrder(aTaxonId, toOrderId: Integer);
 
   procedure UpdateScientificName(aTaxon: Integer; aNewName: String; aDataset: TSQLQuery;
     ExecNow: Boolean = True);
@@ -188,9 +188,9 @@ function ChangeSuffix(const Suffix: TChangeSuffix; AText: String): String;
 begin
   case Suffix of
     csKeep: Result := AText;
-    csA:  Result := ReplaceRegExpr('(us|um|i)\b', AText, 'a');
-    csUs: Result := ReplaceRegExpr('(a|um|i)\b', AText, 'us');
-    csUm: Result := ReplaceRegExpr('(a|us|i)\b', AText, 'um');
+    csA:  Result := ReplaceRegExpr('(us|um)\b', AText, 'a');
+    csUs: Result := ReplaceRegExpr('(a|um)\b', AText, 'us');
+    csUm: Result := ReplaceRegExpr('(a|us)\b', AText, 'um');
     csI:  Result := ReplaceRegExpr('(a|us|um)\b', AText, 'i');
   else
     Result := AText;
@@ -810,7 +810,7 @@ begin
   begin
     if Pos('/', OldName) > 0 then
     begin
-      NewEpithet := InputBox('Split politypic group', 'New species epithet for ' + OldName, '');
+      NewEpithet := InputBox('Split politypic group', 'New species epithet for ' + OldName, ExtractWord(3, OldName, [' ','/']));
       NewName := ExtractWord(1, OldName, [' ']) + ' ' + NewEpithet;
     end
     else
@@ -1017,22 +1017,22 @@ begin
   if Ssp.RankId = trPolitypicGroup then
   begin
     if Pos('/', OldName) > 0 then
-      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, [' ']))
+      NewName := MoveToName + ' ' + ChangeSuffix(Suffix, Trim(ExtractWord(3, OldName, [' '])))
     else
-      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, [' '] + Brackets));
+      NewName := MoveToName + ' ' + ChangeSuffix(Suffix, Trim(ExtractWord(3, OldName, [' '] + Brackets)));
   end
   else
   if Ssp.RankId = trForm then
   begin
     if (Pos('[', OldName) > 0) or (Pos('(', OldName) > 0) then
-      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, Brackets))
+      NewName := MoveToName + ' ' + ChangeSuffix(Suffix, Trim(ExtractWord(3, OldName, Brackets)))
     else
-      NewName := MoveToName + ' ' + Trim(ExtractWord(3, OldName, [' ']));
+      NewName := MoveToName + ' ' + ChangeSuffix(Suffix, Trim(ExtractWord(3, OldName, [' '])));
   end
   else
-    NewName := MoveToName + ' ' + ExtractWord(3, OldName, [' ']);
+    NewName := MoveToName + ' ' + ChangeSuffix(Suffix, ExtractWord(3, OldName, [' ']));
   // Suffix
-  NewName := ChangeSuffix(Suffix, NewName);
+  //NewName := ChangeSuffix(Suffix, NewName);
 
   Repo.FindBy('full_name', NewName, toSsp);
 
@@ -1093,7 +1093,7 @@ begin
         begin
           First;
           repeat
-            MoveToSpecies(FieldByName('taxon_id').AsInteger, toSsp.Id);
+            MoveToSpecies(FieldByName('taxon_id').AsInteger, toSsp.Id, Suffix);
             Next;
           until EOF;
         end;
@@ -1130,9 +1130,9 @@ begin
 
   OldName := GetName('zoo_taxa', 'full_name', 'taxon_id', aSpecies);
   MoveToName := GetName('zoo_taxa', 'full_name', 'taxon_id', ToGenus);
-  NewName := MoveToName + ' ' + ExtractWord(2, OldName, [' ']);
+  NewName := MoveToName + ' ' + ChangeSuffix(Suffix, ExtractWord(2, OldName, [' ']));
   // Suffix
-  NewName := ChangeSuffix(Suffix, NewName);
+  //NewName := ChangeSuffix(Suffix, NewName);
 
   Repo.FindBy('full_name', NewName, toSp);
 
@@ -1189,7 +1189,7 @@ begin
       begin
         First;
         repeat
-          MoveToSpecies(FieldByName('taxon_id').AsInteger, toSp.Id);
+          MoveToSpecies(FieldByName('taxon_id').AsInteger, toSp.Id, Suffix);
           Next;
         until EOF;
       end;
@@ -1206,14 +1206,50 @@ begin
   end;
 end;
 
-procedure MoveToFamily(aFamily: Integer);
+procedure MoveToFamily(aTaxonId, toFamilyId: Integer);
+var
+  Repo: TTaxonRepository;
+  Taxon: TTaxon;
 begin
-  { #todo : Move taxon to family }
+  Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
+  Taxon := TTaxon.Create();
+  try
+    Repo.GetById(aTaxonId, Taxon);
+    if not Taxon.IsNew then
+    begin
+      if Taxon.RankId = trGenus then
+        Taxon.ParentTaxonId := toFamilyId;
+      Taxon.FamilyId := toFamilyId;
+
+      Repo.Update(Taxon);
+    end;
+  finally
+    FreeAndNil(Taxon);
+    Repo.Free;
+  end;
 end;
 
-procedure MoveToOrder(aOrder: Integer);
+procedure MoveToOrder(aTaxonId, toOrderId: Integer);
+var
+  Repo: TTaxonRepository;
+  Taxon: TTaxon;
 begin
-  { #todo : Move taxon to order }
+  Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
+  Taxon := TTaxon.Create();
+  try
+    Repo.GetById(aTaxonId, Taxon);
+    if not Taxon.IsNew then
+    begin
+      if Taxon.RankId = trFamily then
+        Taxon.ParentTaxonId := toOrderId;
+      Taxon.OrderId := toOrderId;
+
+      Repo.Update(Taxon);
+    end;
+  finally
+    FreeAndNil(Taxon);
+    Repo.Free;
+  end;
 end;
 
 procedure UpdateScientificName(aTaxon: Integer; aNewName: String; aDataset: TSQLQuery; ExecNow: Boolean);

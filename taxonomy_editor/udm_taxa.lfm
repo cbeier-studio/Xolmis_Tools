@@ -242,11 +242,9 @@ object dmTaxa: TdmTaxa
       '    subspecies_group_id,'
       '    incertae_sedis,'
       '    ebird_code,'
+      '    distribution,'
       '    insert_date,'
-      '    update_date,'
-      '    marked_status,'
-      '    active_status,'
-      '    distribution)'
+      '    update_date)'
       'VALUES ('
       '    :full_name,'
       '    :authorship,'
@@ -266,11 +264,9 @@ object dmTaxa: TdmTaxa
       '    :subspecies_group_id,'
       '    :incertae_sedis,'
       '    :ebird_code,'
-      '    :insert_date,'
-      '    :update_date,'
-      '    :marked_status,'
-      '    :active_status,'
-      '    :distribution)'
+      '    :distribution,'
+      '    datetime(''now'',''subsec''),'
+      '    datetime(''now'',''subsec''))'
     )
     UpdateSQL.Strings = (
       'UPDATE zoo_taxa SET'
@@ -293,11 +289,10 @@ object dmTaxa: TdmTaxa
       '    incertae_sedis = :incertae_sedis,'
       '    ebird_code = :ebird_code,'
       '    accepted_status = :accepted_status,'
-      '    insert_date = :insert_date,'
-      '    update_date = :update_date,'
+      '    distribution = :distribution,'
+      '    update_date = datetime(''now'',''subsec''),'
       '    marked_status = :marked_status,'
-      '    active_status = :active_status,'
-      '    distribution = :distribution'
+      '    active_status = :active_status'
       'WHERE (taxon_id = :taxon_id)'
       ''
     )
@@ -1547,6 +1542,36 @@ object dmTaxa: TdmTaxa
       'ORDER BY zv.vernacular_name ASC'
       ''
     )
+    InsertSQL.Strings = (
+      'INSERT INTO vernacular_names ('
+      '    taxon_id,'
+      '    language_id,'
+      '    vernacular_name,'
+      '    preferred,'
+      '    insert_date,'
+      '    update_date)'
+      'VALUES ('
+      '    :taxon_id,'
+      '    :language_id,'
+      '    :vernacular_name,'
+      '    :preferred,'
+      '    datetime(''now'',''subsec''),'
+      '    datetime(''now'',''subsec''))'
+      ''
+    )
+    UpdateSQL.Strings = (
+      'UPDATE vernacular_names SET'
+      '    taxon_id = :taxon_id,'
+      '    language_id = :language_id,'
+      '    vernacular_name = :vernacular_name,'
+      '    preferred = :preferred,'
+      '    update_date = datetime(''now'',''subsec''),'
+      '    marked_status = :marked_status,'
+      '    active_status = :active_status'
+      'WHERE (vernacular_id = :vernacular_id)'
+      ''
+    )
+    Options = [sqoAutoApplyUpdates]
     Params = <    
       item
         DataType = ftUnknown

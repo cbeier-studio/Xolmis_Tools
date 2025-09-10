@@ -139,10 +139,12 @@ begin
     DataBase := dmTaxa.sqlCon;
     Add('SELECT vernacular_id FROM vernacular_names');
     Add('WHERE (language_id = :language_id) AND (vernacular_name = :vernacular_name)');
+    Add('  AND (vernacular_id != :id)');
     ParamByName('language_id').AsInteger := GetKey('languages', 'language_id', 'language_name', cbLanguage.Text);
     ParamByName('vernacular_name').AsString := eVernacular.Text;
+    ParamByName('id').AsInteger := FVernacular.Id;
     Open;
-    if not EOF then
+    if RecordCount > 0 then
     begin
       MsgDlg(rsTitleInformation, 'Vernacular name already exists.', mtInformation);
       Exit(False);

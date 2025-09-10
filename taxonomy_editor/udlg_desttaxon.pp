@@ -126,6 +126,14 @@ end;
 
 procedure TdlgDestTaxon.FormShow(Sender: TObject);
 begin
+  case FTaxonomyAction of
+    taNew: ;
+    taSplit: Caption := 'Split taxon';
+    taLump: Caption := 'Lump taxon';
+    taMove: Caption := 'Move taxon';
+    taUpdate: ;
+  end;
+
   eDestinationTaxon.Enabled := FTaxonomyAction <> taSplit;
   lblDestinationTaxon.Enabled := eDestinationTaxon.Enabled;
 end;

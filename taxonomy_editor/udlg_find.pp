@@ -41,6 +41,7 @@ type
     FTaxonFilter: TTaxonFilters;
     FSortField, FSortDirection: String;
     FKeyField, FFullNameField, FFormattedNameField: String;
+    FTextHint: String;
     function Search(aValue: String): Boolean;
     function HashtagFilter(aValue: String): Boolean;
     procedure SetSelect(const aSQL: TStrings; aFilter: TFilterValue; aCriteria: TCriteriaType);
@@ -59,6 +60,7 @@ type
     property InitialValue: String read FInitial write FInitial;
     property Filter: String read FFilter write FFilter;
     property TaxonFilter: TTaxonFilters read FTaxonFilter write FTaxonFilter;
+    property TextHint: String read FTextHint write FTextHint;
   end;
 
 var
@@ -325,6 +327,9 @@ begin
   {$IFDEF MSWINDOWS}
   SetRoundedCorners(Self.Handle, rcSmall);
   {$ENDIF}
+
+  if FTextHint <> EmptyStr then
+    EP.TextHint := FTextHint;
 
   if FTableType = tbNone then
   begin

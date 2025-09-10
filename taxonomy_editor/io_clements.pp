@@ -19,10 +19,13 @@ var
   CSV: TSdfDataSet;
   nRank: TZooRank;
   Repo: TTaxonRepository;
-  FTaxon: TTaxon;
+  FTaxon, FGenus: TTaxon;
   VernRepo: TVernacularRepository;
   FVernacular: TVernacularName;
   Qry: TSQLQuery;
+  FGenusId: Integer;
+  EnglishFS: TFormatSettings;
+  dummyFloat: Double;
 begin
   if not FileExists(aFilename) then
   begin
@@ -34,6 +37,7 @@ begin
   dlgLoading.Show;
   dlgLoading.UpdateProgress('Importing Clements/eBird checklist...', 0);
 
+  GetLocaleFormatSettings(1033, EnglishFS);
   Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
   VernRepo := TVernacularRepository.Create(dmTaxa.sqlCon);
   FTaxon := TTaxon.Create();
@@ -64,7 +68,8 @@ begin
         with Qry, SQL do
         try
           DataBase := dmTaxa.sqlCon;
-          Add('UPDATE zoo_taxa SET accepted_status = 0');
+          Add('UPDATE zoo_taxa SET accepted_status = 0 WHERE (rank_id > :rank_id)');
+          ParamByName('rank_id').AsInteger := GetRankKey(trSuperspecies);
           ExecSQL;
         finally
           FreeAndNil(Qry);
@@ -78,7 +83,10 @@ begin
 
           if not FTaxon.IsNew then
           begin
+            // If taxon exists, update it
             case CSV.FieldByName('category').AsString of
+              'order':              FTaxon.RankId := trOrder;
+              'family':             FTaxon.RankId := trFamily;
               'species':            FTaxon.RankId := trSpecies;
               'subspecies':         FTaxon.RankId := trSubspecies;
               'group (monotypic)':  FTaxon.RankId := trMonotypicGroup;
@@ -90,9 +98,15 @@ begin
               'hybrid':             FTaxon.RankId := trHybrid;
               'intergrade':         FTaxon.RankId := trIntergrade;
             end;
-            FTaxon.Authorship := CSV.FieldByName('authority').AsString;
+            if CSV.FindField('authority') <> nil then
+              FTaxon.Authorship := CSV.FieldByName('authority').AsString;
             if CSV.Fields[0].AsString <> EmptyStr then
-              FTaxon.SortNum := CSV.Fields[0].AsFloat;
+            begin
+              if TryStrToFloat(CSV.Fields[0].AsString, dummyFloat) then
+                FTaxon.SortNum := dummyFloat
+              else
+                FTaxon.SortNum := StrToFloat(CSV.Fields[0].AsString, EnglishFS);
+            end;
             if CSV.FindField('species_code') <> nil then
               FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
             if CSV.FieldByName('range').AsString <> EmptyStr then
@@ -120,7 +134,10 @@ begin
           end
           else
           begin
+            // If taxon does not exist, insert it
             case CSV.FieldByName('category').AsString of
+              'order':              FTaxon.RankId := trOrder;
+              'family':             FTaxon.RankId := trFamily;
               'species':            FTaxon.RankId := trSpecies;
               'subspecies':         FTaxon.RankId := trSubspecies;
               'group (monotypic)':  FTaxon.RankId := trMonotypicGroup;
@@ -136,26 +153,62 @@ begin
             FTaxon.FullName := CSV.FieldByName('scientific name').AsString;
             FTaxon.FormattedName := FormattedBirdName(CSV.FieldByName('scientific name').AsString, GetRankKey(FTaxon.RankId));
 
+            if (FTaxon.RankId = trFamily) then
+            begin
+              FTaxon.ParentTaxonId := GetKey('zoo_taxa', 'taxon_id', 'full_name', CSV.FieldByName('order').AsString);
+            end
+            else
             if (FTaxon.RankId = trSpecies) or (FTaxon.RankId = trSpuh) then
-              FTaxon.ParentTaxonId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
-                  ExtractWord(0, CSV.FieldByName('scientific name').AsString, [' ']))
+            begin
+              if not (Repo.Exists(GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                  ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' '])))) then
+              begin
+                FGenus := TTaxon.Create();
+                try
+                  FGenus.FullName := ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' ']);
+                  FGenus.RankId := trGenus;
+                  FGenus.FormattedName := FormattedBirdName(FGenus.FullName, GetRankKey(FGenus.RankId));
+                  FGenus.ParentTaxonId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                    ExtractWord(1, CSV.FieldByName('family').AsString, [' ']));
+                  FGenus.Extinct := False;
+                  FGenus.Accepted := True;
+
+                  Repo.Insert(FGenus);
+
+                  FGenusId := FGenus.Id;
+                finally
+                  FreeAndNil(FGenus);
+                end;
+              end
+              else
+                FGenusId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                  ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' ']));
+
+              FTaxon.ParentTaxonId := FGenusId;
+            end
             else
             if (FTaxon.RankId = trSubspecies) or (FTaxon.RankId = trMonotypicGroup) or
               (FTaxon.RankId = trPolitypicGroup) then
               FTaxon.ParentTaxonId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
-                  ExtractWord(0, CSV.FieldByName('scientific name').AsString, [' ']) + ' ' +
-                  ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' ']));
+                  ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' ']) + ' ' +
+                  ExtractWord(2, CSV.FieldByName('scientific name').AsString, [' ']));
 
             FTaxon.Extinct := CSV.FieldByName('extinct').AsString = '1';
             if CSV.FieldByName('extinct year').AsString <> EmptyStr then
               FTaxon.ExtinctionYear := CSV.FieldByName('extinct year').AsString;
 
             if CSV.Fields[0].AsString <> EmptyStr then
-              FTaxon.SortNum := CSV.Fields[0].AsFloat;
+            begin
+              if TryStrToFloat(CSV.Fields[0].AsString, dummyFloat) then
+                FTaxon.SortNum := dummyFloat
+              else
+                FTaxon.SortNum := StrToFloat(CSV.Fields[0].AsString, EnglishFS);
+            end;
             if CSV.FindField('species_code') <> nil then
               FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
 
-            FTaxon.Authorship := CSV.FieldByName('authority').AsString;
+            if CSV.FindField('authority') <> nil then
+              FTaxon.Authorship := CSV.FieldByName('authority').AsString;
 
             if CSV.FieldByName('range').AsString <> EmptyStr then
               FTaxon.Distribution := CSV.FieldByName('range').AsString;
