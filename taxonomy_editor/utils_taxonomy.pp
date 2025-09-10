@@ -50,7 +50,7 @@ type
 
   TTaxonomyAction = (taNew, taSplit, taLump, taMove, taUpdate);
   TApplyChangesTo = (acSelected, acMarked);
-  TChangeSuffix   = (csKeep, csA, csUs, csUm, csI);
+  TChangeSuffix   = (csKeep, csA, csUs, csUm, csI, csE);
 
   TBrackets = (brParenthesis, brSquare, brCurly);
 
@@ -80,7 +80,7 @@ const
     'fam.', 'subfam.', 'infrafam.', 'supertr.', 'tr.', 'subtr.', 'infratr.', 'superg.', 'g.',
     'subg.', 'supersp.', 'sp.', 'ssp.', 'grp. (mono)', 'grp. (poli)', 'f.', 'spuh', 'hybrid',
     'intergrade', 'domest.', 'slash');
-  Suffixes: array [TChangeSuffix] of String = ('', 'a', 'us', 'um', 'i');
+  Suffixes: array [TChangeSuffix] of String = ('', 'a', 'us', 'um', 'i', 'e');
 
 const
   colorGroup: String      = 'green';
@@ -101,6 +101,8 @@ const
   function Enclosed(const AText: String; ABracket: TBrackets): String; inline;
   procedure ExtractParents(const AText: String; out Parent1, Parent2: String);
   function ChangeSuffix(const Suffix: TChangeSuffix; AText: String): String;
+
+  function HaveMarkedTaxa: Boolean;
 
   function GetRankType(aRankKey: Integer): TZooRank;
   function GetRankFromTaxon(aTaxonKey: Integer): Integer;
@@ -190,8 +192,9 @@ begin
     csKeep: Result := AText;
     csA:  Result := ReplaceRegExpr('(us|um)\b', AText, 'a');
     csUs: Result := ReplaceRegExpr('(a|um)\b', AText, 'us');
-    csUm: Result := ReplaceRegExpr('(a|us)\b', AText, 'um');
+    csUm: Result := ReplaceRegExpr('(a|e|us)\b', AText, 'um');
     csI:  Result := ReplaceRegExpr('(a|us|um)\b', AText, 'i');
+    csE:  Result := ReplaceRegExpr('(us|um)\b', AText, 'e');
   else
     Result := AText;
   end;
@@ -1333,6 +1336,26 @@ begin
 
     if ExecNow then
       ExecSQL;
+  end;
+end;
+
+function HaveMarkedTaxa: Boolean;
+var
+  Qry: TSQLQuery;
+begin
+  Result := False;
+
+  Qry := TSQLQuery.Create(nil);
+  with Qry, SQL do
+  try
+    DataBase := dmTaxa.sqlCon;
+    Add('SELECT COUNT(*) AS marked_count FROM zoo_taxa');
+    Add('WHERE (active_status = 1) AND (marked_status = 1)');
+    Open;
+    Result := FieldByName('marked_count').AsInteger > 0;
+    Close;
+  finally
+    FreeAndNil(Qry);
   end;
 end;
 

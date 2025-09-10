@@ -350,6 +350,9 @@ end;
 
 procedure TdlgEditHierarchy.FormShow(Sender: TObject);
 begin
+  if HaveMarkedTaxa then
+    sbApplyToMarked.Down := True;
+
   GetValues;
 end;
 

@@ -1304,7 +1304,7 @@ begin
   try
     //BM := dsTaxa.DataSet.Bookmark;
     dmTaxa.qTaxa.DisableControls;
-    TaxonomyAction:= taLump;
+    TaxonomyAction:= taMove;
     if ShowModal = mrOK then
     begin
       needRefresh := True;
@@ -1371,7 +1371,7 @@ begin
   try
     //BM := dsTaxa.DataSet.Bookmark;
     dmTaxa.qTaxa.DisableControls;
-    TaxonomyAction:= taLump;
+    TaxonomyAction:= taMove;
     if ShowModal = mrOK then
     begin
       needRefresh := True;
@@ -2045,6 +2045,40 @@ var
 begin
   needRefresh := False;
 
+  // Split order
+  if GetRankType(dmTaxa.qTaxa.FieldByName('rank_id').AsInteger) = trOrder then
+  begin
+    dlgFind := TdlgFind.Create(nil);
+    with dlgFind do
+    try
+      TextHint := 'Select the destination order';
+      TableType := tbZooTaxa;
+      TaxonFilter := [tfOrders];
+      Position := poScreenCenter;
+      if ShowModal = mrOK then
+      begin
+        aTaxonKey := dlgFind.KeySelected;
+        aTaxonName := dlgFind.NameSelected;
+
+        edtFamilySplit := TedtFamilySplit.Create(nil);
+        with edtFamilySplit do
+        try
+          RankType := trOrder;
+          FromTaxonId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
+          ToTaxonId := aTaxonKey;
+          ToTaxonName := aTaxonName;
+          if ShowModal = mrOK then
+            needRefresh := True;
+        finally
+          FreeAndNil(edtFamilySplit);
+        end;
+      end;
+    finally
+      FreeAndNil(dlgFind);
+    end;
+  end
+  else
+  // Split family
   if GetRankType(dmTaxa.qTaxa.FieldByName('rank_id').AsInteger) = trFamily then
   begin
     dlgFind := TdlgFind.Create(nil);
@@ -2062,6 +2096,7 @@ begin
         edtFamilySplit := TedtFamilySplit.Create(nil);
         with edtFamilySplit do
         try
+          RankType := trFamily;
           FromTaxonId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
           ToTaxonId := aTaxonKey;
           ToTaxonName := aTaxonName;
@@ -2076,6 +2111,7 @@ begin
     end;
   end
   else
+  // Split species
   begin
     dlgDestTaxon := TdlgDestTaxon.Create(nil);
     with dlgDestTaxon do

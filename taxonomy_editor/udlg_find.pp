@@ -101,7 +101,7 @@ begin
 
   with aSQL do
   begin
-    Add('SELECT taxon_id, full_name, formatted_name, valid_id FROM zoo_taxa ');
+    Add('SELECT taxon_id, full_name, formatted_name FROM zoo_taxa ');
     case aFilter of
       fvNone:
         ; // do nothing

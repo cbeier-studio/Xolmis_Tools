@@ -25,7 +25,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="97"/>
+      <BuildNr Value="98"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Christian Beier Studio" LegalCopyright="© Christian Beier 2023-2025" ProductName="Xolmis Taxonomy Editor" ProductVersion="0.2"/>
     </VersionInfo>

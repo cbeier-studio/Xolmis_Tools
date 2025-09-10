@@ -24,6 +24,7 @@ type
     pContent: TPanel;
     pApplyTo: TBCPanel;
     pBottom: TPanel;
+    rbSuffixE: TRadioButton;
     rbSuffixKeep: TRadioButton;
     rbSuffixA: TRadioButton;
     rbSuffixUs: TRadioButton;
@@ -134,8 +135,11 @@ begin
     taUpdate: ;
   end;
 
-  eDestinationTaxon.Enabled := FTaxonomyAction <> taSplit;
-  lblDestinationTaxon.Enabled := eDestinationTaxon.Enabled;
+  pDestinationTaxon.Visible := FTaxonomyAction <> taSplit;
+  //lblDestinationTaxon.Enabled := eDestinationTaxon.Enabled;
+
+  if HaveMarkedTaxa then
+    sbApplyToMarked.Down := True;
 end;
 
 procedure TdlgDestTaxon.rbSuffixKeepClick(Sender: TObject);
@@ -153,7 +157,10 @@ begin
     FChangeSuffix := csUm
   else
   if rbSuffixI.Checked then
-    FChangeSuffix := csI;
+    FChangeSuffix := csI
+  else
+  if rbSuffixE.Checked then
+    FChangeSuffix := csE;
 end;
 
 procedure TdlgDestTaxon.eDestinationTaxonButtonClick(Sender: TObject);
