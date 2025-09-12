@@ -10,7 +10,6 @@ object dlgEditHierarchy: TdlgEditHierarchy
   ClientWidth = 577
   PopupMode = pmAuto
   Position = poScreenCenter
-  LCLVersion = '4.2.0.0'
   OnShow = FormShow
   object lineBottom: TShapeLineBGRA
     Left = 0

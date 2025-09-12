@@ -95,6 +95,12 @@ end;
 
 procedure TdlgDestTaxon.sbApplyClick(Sender: TObject);
 begin
+  if sbApplyToSelected.Down then
+    FApplyTo := acSelected
+  else
+  if sbApplyToMarked.Down then
+    FApplyTo := acMarked;
+
   if not ValidateFields then
     Exit;
 

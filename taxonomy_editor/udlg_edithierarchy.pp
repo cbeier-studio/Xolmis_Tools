@@ -411,6 +411,12 @@ end;
 
 procedure TdlgEditHierarchy.sbApplyClick(Sender: TObject);
 begin
+  if sbApplyToSelected.Down then
+    FApplyTo := acSelected
+  else
+  if sbApplyToMarked.Down then
+    FApplyTo := acMarked;
+
   if not ValidateFields then
   begin
     MsgDlg(rsTitleInformation, 'At least one field must be filled to proceed.', mtInformation);
