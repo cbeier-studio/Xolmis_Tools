@@ -124,6 +124,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="atflatcontrols_package"/>
+      </Item>
+      <Item>
         <PackageName Value="FrameViewer09"/>
       </Item>
       <Item>
@@ -149,9 +152,6 @@
       </Item>
       <Item>
         <PackageName Value="bgracontrols"/>
-      </Item>
-      <Item>
-        <PackageName Value="atflatcontrols_package"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>
@@ -309,6 +309,7 @@
         <Filename Value="uedt_specieslist.pp"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="edtSpeciesList"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>

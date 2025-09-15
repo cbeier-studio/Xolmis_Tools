@@ -16,6 +16,7 @@ type
     btnClose: TBitBtn;
     gridSp: TDBGrid;
     lblSpeciesCount: TLabel;
+    TimerMsg: TTimer;
     txtCountry: TDBText;
     iButtons: TImageList;
     eFind: TEdit;
@@ -30,6 +31,7 @@ type
     procedure gridSpDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
     procedure gridSpEditButtonClick(Sender: TObject);
+    procedure TimerMsgTimer(Sender: TObject);
   private
     procedure UpdateSpeciesCount;
   public
@@ -61,7 +63,7 @@ begin
     begin
       Qry := TSQLQuery.Create(dmTaxa.sqlCon);
       with Qry, SQL do
-      begin
+      try
         DataBase := dmTaxa.sqlCon;
 
         Clear;
@@ -81,6 +83,7 @@ begin
           ParamByName('taxon_id').AsInteger := aTaxonId;
           ParamByName('country_id').AsInteger := dmTaxa.qSpeciesList.FieldByName('country_id').AsInteger;
           ExecSQL;
+          lblSpeciesCount.Caption := 'Species is on the list already!';
         end
         else
         begin
@@ -91,14 +94,19 @@ begin
           ParamByName('country_id').AsInteger := dmTaxa.qCountries.FieldByName('country_id').AsInteger;
           ExecSQL;
         end;
+      finally
+        FreeAndNil(Qry);
       end;
       dmTaxa.qSpeciesList.Refresh;
+      if recExists then
+        TimerMsg.Enabled := True
+      else
+        UpdateSpeciesCount;
     end;
     Key := #0;
   end;
 
   eFind.Clear;
-  UpdateSpeciesCount;
 end;
 
 procedure TedtSpeciesList.FormCreate(Sender: TObject);
@@ -136,6 +144,9 @@ procedure TedtSpeciesList.gridSpEditButtonClick(Sender: TObject);
 var
   Qry: TSQLQuery;
 begin
+  if dmTaxa.qSpeciesList.RecordCount = 0 then
+    Exit;
+
   Qry := TSQLQuery.Create(dmTaxa.sqlCon);
   with Qry, SQL do
   begin
@@ -149,6 +160,13 @@ begin
     ExecSQL;
   end;
   dmTaxa.qSpeciesList.Refresh;
+  UpdateSpeciesCount;
+end;
+
+procedure TedtSpeciesList.TimerMsgTimer(Sender: TObject);
+begin
+  TimerMsg.Enabled := False;
+
   UpdateSpeciesCount;
 end;
 

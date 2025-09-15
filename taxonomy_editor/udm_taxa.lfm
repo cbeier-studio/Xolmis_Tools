@@ -2141,7 +2141,7 @@ object dmTaxa: TdmTaxa
     Top = 434
   end
   object qSpeciesList: TSQLQuery
-    PacketRecords = 200
+    PacketRecords = 2000
     FieldDefs = <    
       item
         Name = 'taxon_country_id'

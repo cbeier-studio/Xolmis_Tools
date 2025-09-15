@@ -322,4 +322,11 @@ object edtSpeciesList: TedtSpeciesList
       E6CF23F4CD0C32BE5F36033751DF7253B8966BD1FA0B3BC39BED
     }
   end
+  object TimerMsg: TTimer
+    Enabled = False
+    Interval = 2000
+    OnTimer = TimerMsgTimer
+    Left = 184
+    Top = 195
+  end
 end
