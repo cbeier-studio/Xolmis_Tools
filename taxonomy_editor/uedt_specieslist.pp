@@ -59,7 +59,7 @@ begin
   { Alphabetic search in numeric field }
   if (IsLetter(Key) or IsNumber(Key) or IsPunctuation(Key) or IsSeparator(Key) or IsSymbol(Key)) then
   begin
-    if FindTaxonDlg([tfSpecies], eFind, True, aTaxonId, Key) then
+    if FindTaxonDlg([tfSpecies, tfSpuhs, tfSlashes, tfDomestics, tfSubspeciesGroups], eFind, True, aTaxonId, Key) then
     begin
       Qry := TSQLQuery.Create(dmTaxa.sqlCon);
       with Qry, SQL do

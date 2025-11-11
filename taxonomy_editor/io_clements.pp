@@ -20,12 +20,15 @@ var
   nRank: TZooRank;
   Repo: TTaxonRepository;
   FTaxon, FGenus: TTaxon;
+  SynRepo: TSynonymRepository;
+  FSynonym: TSynonym;
   VernRepo: TVernacularRepository;
   FVernacular: TVernacularName;
   Qry: TSQLQuery;
   FGenusId: Integer;
   EnglishFS: TFormatSettings;
   dummyFloat: Double;
+  FChecklistVersion: String;
 begin
   if not FileExists(aFilename) then
   begin
@@ -39,8 +42,10 @@ begin
 
   GetLocaleFormatSettings(1033, EnglishFS);
   Repo := TTaxonRepository.Create(dmTaxa.sqlCon);
+  SynRepo := TSynonymRepository.Create(dmTaxa.sqlCon);
   VernRepo := TVernacularRepository.Create(dmTaxa.sqlCon);
   FTaxon := TTaxon.Create();
+  FSynonym := TSynonym.Create();
   FVernacular := TVernacularName.Create();
   CSV := TSdfDataSet.Create(nil);
   try
@@ -78,6 +83,7 @@ begin
         CSV.First;
         repeat
           FTaxon.Clear;
+          FSynonym.Clear;
           FVernacular.Clear;
           Repo.FindBy('full_name', CSV.FieldByName('scientific name').AsString, FTaxon);
 
@@ -100,6 +106,7 @@ begin
             end;
             if CSV.FindField('authority') <> nil then
               FTaxon.Authorship := CSV.FieldByName('authority').AsString;
+            // sort v0000
             if CSV.Fields[0].AsString <> EmptyStr then
             begin
               if TryStrToFloat(CSV.Fields[0].AsString, dummyFloat) then
@@ -109,6 +116,8 @@ begin
             end;
             if CSV.FindField('species_code') <> nil then
               FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
+            if CSV.FindField('taxon concept ID') <> nil then
+              FTaxon.ConceptId := CSV.FieldByName('taxon concept ID').AsString;
             if CSV.FieldByName('range').AsString <> EmptyStr then
               FTaxon.Distribution := CSV.FieldByName('range').AsString;
             FTaxon.Extinct := CSV.FieldByName('extinct').AsString = '1';
@@ -117,6 +126,20 @@ begin
             FTaxon.Accepted := True;
 
             Repo.Update(FTaxon);
+
+            SynRepo.FindByTaxon(FTaxon.Id, FTaxon.FullName, FSynonym);
+            if not FSynonym.IsNew then
+            begin
+              FSynonym.Valid := True;
+              SynRepo.Update(FSynonym);
+            end
+            else
+            begin
+              FSynonym.FullName := FTaxon.FullName;
+              FSynonym.TaxonId := FTaxon.Id;
+              FSynonym.Valid := True;
+              SynRepo.Insert(FSynonym);
+            end;
 
             VernRepo.FindByTaxon(FTaxon.Id, CSV.FieldByName('English name').AsString, FVernacular);
             if not FVernacular.IsNew then
@@ -160,6 +183,12 @@ begin
             else
             if (FTaxon.RankId = trSpecies) or (FTaxon.RankId = trSpuh) then
             begin
+              if (Pos('/', CSV.FieldByName('scientific name').AsString) > 0) then
+              begin
+                FGenusId := GetKey('zoo_taxa', 'taxon_id', 'full_name',
+                    ExtractWord(1, CSV.FieldByName('family').AsString, [' ']));
+              end
+              else
               if not (Repo.Exists(GetKey('zoo_taxa', 'taxon_id', 'full_name',
                   ExtractWord(1, CSV.FieldByName('scientific name').AsString, [' '])))) then
               begin
@@ -196,7 +225,7 @@ begin
             FTaxon.Extinct := CSV.FieldByName('extinct').AsString = '1';
             if CSV.FieldByName('extinct year').AsString <> EmptyStr then
               FTaxon.ExtinctionYear := CSV.FieldByName('extinct year').AsString;
-
+            // sort v0000
             if CSV.Fields[0].AsString <> EmptyStr then
             begin
               if TryStrToFloat(CSV.Fields[0].AsString, dummyFloat) then
@@ -206,6 +235,8 @@ begin
             end;
             if CSV.FindField('species_code') <> nil then
               FTaxon.EbirdCode := CSV.FieldByName('species_code').AsString;
+            if CSV.FindField('taxon concept ID') <> nil then
+              FTaxon.ConceptId := CSV.FieldByName('taxon concept ID').AsString;
 
             if CSV.FindField('authority') <> nil then
               FTaxon.Authorship := CSV.FieldByName('authority').AsString;
@@ -215,6 +246,11 @@ begin
             FTaxon.Accepted := True;
 
             Repo.Insert(FTaxon);
+
+            FSynonym.FullName := FTaxon.FullName;
+            FSynonym.TaxonId := FTaxon.Id;
+            FSynonym.Valid := True;
+            SynRepo.Insert(FSynonym);
 
             FVernacular.TaxonId := FTaxon.Id;
             FVernacular.LanguageId := GetKey('languages', 'language_id', 'macrolanguage_code', 'en');
@@ -227,6 +263,7 @@ begin
           CSV.Next;
         until CSV.Eof or Parar;
 
+        dlgLoading.Hide;
         if Parar then
         begin
           dmTaxa.sqlTrans.RollbackRetaining;
@@ -246,11 +283,13 @@ begin
     else
       MsgDlg(rsTitleImportFile, rsErrorFileIsEmpty, mtError);
   finally
-    dlgLoading.Hide;
+    if dlgLoading.Visible then
+      dlgLoading.Hide;
     dlgLoading.Max := 100;
     CSV.Close;
     FreeAndNil(CSV);
     FreeAndNil(FVernacular);
+    FreeAndNil(FSynonym);
     FreeAndNil(FTaxon);
     VernRepo.Free;
     Repo.Free;

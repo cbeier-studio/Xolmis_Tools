@@ -15,6 +15,7 @@ type
     protected
       FFullName: String;
       FFormattedName: String;
+      FConceptId: String;
       FAuthorship: String;
       FRankId: TZooRank;
       FParentTaxonId: Integer;
@@ -28,6 +29,7 @@ type
     published
       property FullName: String read FFullName write FFullName;
       property FormattedName: String read FFormattedName write FFormattedName;
+      property ConceptId: String read FConceptId write FConceptId;
       property Authorship: String read FAuthorship write FAuthorship;
       property RankId: TZooRank read FRankId write FRankId;
       property ParentTaxonId: Integer read FParentTaxonId write FParentTaxonId;
@@ -98,6 +100,7 @@ type
   protected
     FTaxonId: Integer;
     FFullName: String;
+    FValid: Boolean;
   public
     constructor Create(aValue: Integer = 0); reintroduce; virtual;
     procedure Clear; override;
@@ -112,6 +115,7 @@ type
   published
     property TaxonId: Integer read FTaxonId write FTaxonId;
     property FullName: String read FFullName write FFullName;
+    property Valid: Boolean read FValid write FValid;
   end;
 
   { TSynonymRepository }
@@ -186,6 +190,7 @@ begin
   begin
     FFullName := TCustomTaxon(Source).FullName;
     FFormattedName := TCustomTaxon(Source).FormattedName;
+    FConceptId := TCustomTaxon(Source).ConceptId;
     FAuthorship := TCustomTaxon(Source).Authorship;
     FRankId := TCustomTaxon(Source).RankId;
     FParentTaxonId := TCustomTaxon(Source).ParentTaxonId;
@@ -201,6 +206,7 @@ begin
   inherited Clear;
   FFullName := EmptyStr;
   FFormattedName := EmptyStr;
+  FConceptId := EmptyStr;
   FAuthorship := EmptyStr;
   FRankId := trNone;
   FParentTaxonId := 0;
@@ -299,6 +305,7 @@ begin
   try
     FFullName           := Obj.Get('full_name', '');
     FFormattedName      := Obj.Get('formatted_name', '');
+    FConceptId          := Obj.Get('concept_id', '');
     FAuthorship         := Obj.Get('authorship', '');
     FRankId             := TZooRank(Obj.Get('rank_id', 0));
     FParentTaxonId      := Obj.Get('parent_taxon_id', 0);
@@ -330,6 +337,7 @@ begin
   try
     JSONObject.Add('full_name', FFullName);
     JSONObject.Add('formatted_name', FFormattedName);
+    JSONObject.Add('concept_id', FConceptId);
     JSONObject.Add('authorship', FAuthorship);
     JSONObject.Add('rank_id', Ord(FRankId));
     JSONObject.Add('parent_taxon_id', FParentTaxonId);
@@ -357,12 +365,12 @@ end;
 
 function TTaxon.ToString: String;
 begin
-  Result := Format('Taxon(Id=%d, FullName=%s, FormattedName=%s, Authorship=%s, RankId=%d, ParentTaxonId=%d, ' +
+  Result := Format('Taxon(Id=%d, FullName=%s, FormattedName=%s, ConceptId=%s, Authorship=%s, RankId=%d, ParentTaxonId=%d, ' +
     'SortNum=%f, QuickCode=%s, IucnStatus=%s, Extinct=%s, ExtinctionYear=%s, Distribution=%s, EbirdCode=%s, ' +
     'OrderId=%d, FamilyId=%d, SubfamilyId=%d, GenusId=%d, SpeciesId=%d, SubspeciesGroupId=%d, IncertaeSedis=%d, ' +
     'Accepted=%s, ' +
     'InsertDate=%s, UpdateDate=%s, Marked=%s, Active=%s)',
-    [FId, FFullName, FFormattedName, FAuthorship, Ord(FRankId), FParentTaxonId, FSortNum, FQuickCode, FIucnStatus,
+    [FId, FFullName, FFormattedName, FConceptId, FAuthorship, Ord(FRankId), FParentTaxonId, FSortNum, FQuickCode, FIucnStatus,
     BoolToStr(FExtinct, 'True', 'False'), FExtinctionYear, FDistribution, FEbirdCode, FOrderId, FFamilyId,
     FSubfamilyId, FGenusId, FSpeciesId, FSubspeciesGroupId, FIncertaeSedis,
     BoolToStr(FAccepted, 'True', 'False'),
@@ -537,6 +545,7 @@ begin
     R.Id := FieldByName('taxon_id').AsInteger;
     R.FullName := FieldByName('full_name').AsString;
     R.FormattedName := FieldByName('formatted_name').AsString;
+    R.ConceptId := FieldByName('taxon_concept_id').AsString;
     R.ParentTaxonId := FieldByName('parent_taxon_id').AsInteger;
     R.RankId := GetRankType(FieldByName('rank_id').AsInteger);
     R.Authorship := FieldByName('authorship').AsString;
@@ -581,6 +590,7 @@ begin
       'full_name, ' +
       'authorship, ' +
       'formatted_name, ' +
+      'taxon_concept_id, ' +
       'quick_code, ' +
       'rank_id, ' +
       'parent_taxon_id, ' +
@@ -596,6 +606,7 @@ begin
       ':full_name, ' +
       ':authorship, ' +
       ':formatted_name, ' +
+      ':taxon_concept_id, ' +
       ':quick_code, ' +
       ':rank_id, ' +
       ':parent_taxon_id, ' +
@@ -611,6 +622,7 @@ begin
     ParamByName('full_name').AsString := R.FullName;
     SetStrParam(ParamByName('authorship'), R.Authorship);
     ParamByName('formatted_name').AsString := R.FormattedName;
+    SetStrParam(ParamByName('taxon_concept_id'), R.ConceptId);
     SetStrParam(ParamByName('quick_code'), R.QuickCode);
     ParamByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[R.RankId]);
     SetForeignParam(ParamByName('parent_taxon_id'), R.ParentTaxonId);
@@ -704,6 +716,7 @@ begin
       'full_name = :full_name, ' +
       'authorship = :authorship, ' +
       'formatted_name = :formatted_name, ' +
+      'taxon_concept_id = :taxon_concept_id, ' +
       'quick_code = :quick_code, ' +
       'rank_id = :rank_id, ' +
       'parent_taxon_id = :parent_taxon_id, ' +
@@ -723,6 +736,7 @@ begin
     ParamByName('full_name').AsString := R.FullName;
     SetStrParam(ParamByName('authorship'), R.Authorship);
     ParamByName('formatted_name').AsString := R.FormattedName;
+    SetStrParam(ParamByName('taxon_concept_id'), R.ConceptId);
     SetStrParam(ParamByName('quick_code'), R.QuickCode);
     ParamByName('rank_id').AsInteger := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', ZOOLOGICAL_RANKS[R.RankId]);
     SetForeignParam(ParamByName('parent_taxon_id'), R.ParentTaxonId);
@@ -804,6 +818,7 @@ begin
   begin
     FTaxonId := TSynonym(Source).TaxonId;
     FFullName := TSynonym(Source).FullName;
+    FValid := TSynonym(Source).Valid;
   end;
 end;
 
@@ -812,6 +827,7 @@ begin
   inherited Clear;
   FTaxonId := 0;
   FFullName := EmptyStr;
+  FValid := False;
 end;
 
 function TSynonym.Clone: TXolmisRecord;
@@ -851,6 +867,7 @@ begin
   try
     FTaxonId  := Obj.Get('taxon_id', 0);
     FFullName := Obj.Get('full_name', '');
+    FValid := Obj.Get('valid', False);
   finally
     Obj.Free;
   end;
@@ -864,6 +881,7 @@ begin
   try
     JSONObject.Add('taxon_id', FTaxonId);
     JSONObject.Add('full_name', FFullName);
+    JSONObject.Add('valid', FValid);
 
     Result := JSONObject.AsJSON;
   finally
@@ -873,9 +891,9 @@ end;
 
 function TSynonym.ToString: String;
 begin
-  Result := Format('Synonym(Id=%d, TaxonId=%d, FullName=%s, ' +
+  Result := Format('Synonym(Id=%d, TaxonId=%d, FullName=%s, Valid=%s, ' +
     'InsertDate=%s, UpdateDate=%s, Marked=%s, Active=%s)',
-    [FId, FTaxonId, FFullName,
+    [FId, FTaxonId, FFullName, BoolToStr(FValid, 'True', 'False'),
     DateTimeToStr(FInsertDate), DateTimeToStr(FUpdateDate), BoolToStr(FMarked, 'True', 'False'),
     BoolToStr(FActive, 'True', 'False')]);
 end;
@@ -1070,6 +1088,7 @@ begin
     R.Id := FieldByName('synonym_id').AsInteger;
     R.TaxonId := FieldByName('taxon_id').AsInteger;
     R.FullName := FieldByName('full_name').AsString;
+    R.Valid := FieldByName('valid_status').AsBoolean;
     // SQLite may store date and time data as ISO8601 string or Julian date real formats
     // so it checks in which format it is stored before load the value
     GetTimeStamp(FieldByName('insert_date'), R.InsertDate);
@@ -1095,14 +1114,17 @@ begin
     Add('INSERT INTO zoo_taxa_synonyms (' +
       'taxon_id, ' +
       'full_name, ' +
+      'valid_status, ' +
       'insert_date) ');
     Add('VALUES (' +
       ':taxon_id, ' +
       ':full_name, ' +
+      ':valid_status, ' +
       'datetime(''now'', ''subsec''))');
 
     ParamByName('taxon_id').AsInteger := R.TaxonId;
     ParamByName('full_name').AsString := R.FullName;
+    ParamByName('valid_status').AsBoolean := R.Valid;
 
     ExecSQL;
 
@@ -1141,6 +1163,7 @@ begin
     Add('UPDATE zoo_taxa_synonyms SET ' +
       'taxon_id = :taxon_id, ' +
       'full_name = :full_name, ' +
+      'valid_status = :valid_status, ' +
       'update_date = datetime(''now'', ''subsec''), ' +
       'marked_status = :marked_status, ' +
       'active_status = :active_status');
@@ -1148,6 +1171,7 @@ begin
 
     ParamByName('taxon_id').AsInteger := R.TaxonId;
     ParamByName('full_name').AsString := R.FullName;
+    ParamByName('valid_status').AsBoolean := R.Valid;
     ParamByName('marked_status').AsBoolean := R.Marked;
     ParamByName('active_status').AsBoolean := R.Active;
     ParamByName('synonym_id').AsInteger := R.Id;

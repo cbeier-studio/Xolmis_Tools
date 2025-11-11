@@ -85,12 +85,15 @@ type
     qSpeciesListupdate_date: TDateTimeField;
     qSynonyms: TSQLQuery;
     qSynonymsactive_status: TBooleanField;
+    qSynonymsauthorship: TStringField;
+    qSynonymsformatted_name: TStringField;
     qSynonymsfull_name: TStringField;
     qSynonymsinsert_date: TDateTimeField;
     qSynonymsmarked_status: TBooleanField;
     qSynonymssynonym_id: TLongintField;
     qSynonymstaxon_id: TLongintField;
     qSynonymsupdate_date: TDateTimeField;
+    qSynonymsvalid_status: TBooleanField;
     qTaxa: TSQLQuery;
     qTaxaaccepted_status: TBooleanField;
     qTaxaactive_status: TBooleanField;
@@ -129,7 +132,9 @@ type
     qTaxaspecies_id: TLongintField;
     qTaxasubfamily_id: TLongintField;
     qTaxasubspecies_group_id: TLongintField;
+    qTaxataxon_concept_id: TStringField;
     qTaxataxon_id: TLongintField;
+    qTaxataxon_name: TStringField;
     qTaxaupdate_date: TDateTimeField;
     qTaxonCountries: TSQLQuery;
     qTaxonCountriesactive_status: TBooleanField;

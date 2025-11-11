@@ -35,6 +35,8 @@ var
 
 implementation
 
+{$R *.lfm}
+
 { TdlgSqlFilter }
 
 procedure TdlgSqlFilter.sbApplyClick(Sender: TObject);

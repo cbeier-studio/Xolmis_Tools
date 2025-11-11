@@ -12,6 +12,7 @@ object edtSpeciesList: TedtSpeciesList
   Constraints.MinWidth = 436
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow

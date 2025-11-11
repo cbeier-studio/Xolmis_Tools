@@ -23,6 +23,7 @@ type
     actAbout: TAction;
     actImportIOCNames: TAction;
     actImportClements: TAction;
+    actNormalizeSynonyms: TAction;
     actSspVernacularNames: TAction;
     actRewriteHierarchy: TAction;
     actList: TActionList;
@@ -38,6 +39,7 @@ type
     dsTaxa: TDataSource;
     eFind: TEdit;
     etEbirdCode: TDBEdit;
+    etConceptId: TDBEdit;
     etExtinctionYear: TDBEdit;
     etFullname: TDBEdit;
     etParentTaxon: TDBEditButton;
@@ -52,6 +54,7 @@ type
     lbltCountries: TLabel;
     lbltDistribution: TLabel;
     lbltEbirdCode: TLabel;
+    lbltConceptId: TLabel;
     lbltFullname: TLabel;
     lblTitleHierarchy: TLabel;
     lbltIucnStatus: TLabel;
@@ -60,6 +63,8 @@ type
     lbltRank: TLabel;
     lbltSortNr: TLabel;
     lbltVernacular: TLabel;
+    pmgnSetCurrentName: TMenuItem;
+    mmNormalizeSynonyms: TMenuItem;
     pmgUnmarkAll: TMenuItem;
     pmgMarkAll: TMenuItem;
     pmgRemovePolitypicGroup: TMenuItem;
@@ -67,6 +72,7 @@ type
     mtDistribution: TDBMemo;
     peTaxa: TPanel;
     pFind: TBCPanel;
+    pmGridNames: TPopupMenu;
     pPacksList: TPanel;
     ptAuthorship: TPanel;
     pTaxaList: TPanel;
@@ -228,6 +234,7 @@ type
     procedure actFormatSciNamesExecute(Sender: TObject);
     procedure actImportClementsExecute(Sender: TObject);
     procedure actImportIOCNamesExecute(Sender: TObject);
+    procedure actNormalizeSynonymsExecute(Sender: TObject);
     procedure actRewriteHierarchyExecute(Sender: TObject);
     procedure actSspVernacularNamesExecute(Sender: TObject);
     procedure cbAuthorshipKeyPress(Sender: TObject; var Key: char);
@@ -247,6 +254,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
+    procedure gridSynonymsPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn;
+      AState: TGridDrawState);
     procedure gridTaxaCellClick(Column: TColumn);
     procedure gridTaxaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
@@ -256,6 +265,7 @@ type
     procedure pmgMarkAllClick(Sender: TObject);
     procedure pmgNewPolitypicGroupClick(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
+    procedure pmgnSetCurrentNameClick(Sender: TObject);
     procedure pmgRemovePolitypicGroupClick(Sender: TObject);
     procedure pmgUnmarkAllClick(Sender: TObject);
     procedure pmtSortClick(Sender: TObject);
@@ -395,6 +405,20 @@ begin
     ImportIocData(OpenDlg.FileName);
 
   dmTaxa.qTaxa.Refresh;
+end;
+
+procedure TfrmTaxaEditor.actNormalizeSynonymsExecute(Sender: TObject);
+begin
+  if not dmTaxa.sqlTrans.Active then
+    dmTaxa.sqlTrans.StartTransaction;
+  try
+    NormalizeSynonyms;
+    dmTaxa.sqlTrans.CommitRetaining;
+  except
+    dlgLoading.Hide;
+    dmTaxa.sqlTrans.RollbackRetaining;
+    raise;
+  end;
 end;
 
 procedure TfrmTaxaEditor.actRewriteHierarchyExecute(Sender: TObject);
@@ -1040,14 +1064,20 @@ begin
   //  navTabs.OptScalePercents := (Self.PixelsPerInch * 100) div 96;
   //end;
 
+  if dmTaxa.sqlCon.Connected then
+    UpgradeDatabaseSchema;
+
   TimerOpen.Enabled := True;
 end;
 
 procedure TfrmTaxaEditor.gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn;
   AState: TGridDrawState);
 begin
-  if (Column.FieldName = 'full_name') then
+  if (Column.FieldName = 'taxon_name') then
   begin
+    if TDBGrid(Sender).Columns[4].Field.IsNull then
+      Exit;
+
     // Italics
     if GetRankType(TDBGrid(Sender).Columns[4].Field.AsInteger) >= trSuperGenus then
       TDBGrid(Sender).Canvas.Font.Style := [fsItalic]
@@ -1222,6 +1252,42 @@ begin
     dmTaxa.qTaxa.Refresh;
     if dmTaxa.qTaxa.BookmarkValid(BM) then
       dmTaxa.qTaxa.Bookmark := BM;
+  end;
+end;
+
+procedure TfrmTaxaEditor.pmgnSetCurrentNameClick(Sender: TObject);
+var
+  Qry: TSQLQuery;
+begin
+  Qry := TSQLQuery.Create(nil);
+  with Qry, SQL do
+  try
+    DataBase := dmTaxa.sqlCon;
+    try
+      Add('UPDATE zoo_taxa_synonyms SET');
+      Add('  valid_status = 0');
+      //Add('  update_date = datetime(''now'',''subsec'')');
+      Add('WHERE (taxon_id = :taxon_id)');
+      ParamByName('taxon_id').AsInteger := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
+      ExecSQL;
+
+      Clear;
+      Add('UPDATE zoo_taxa_synonyms SET');
+      Add('  valid_status = 1,');
+      Add('  update_date = datetime(''now'',''subsec'')');
+      Add('WHERE (synonym_id = :synonym_id)');
+      ParamByName('synonym_id').AsInteger := dmTaxa.qSynonyms.FieldByName('synonym_id').AsInteger;
+      ExecSQL;
+
+      dmTaxa.sqlTrans.CommitRetaining;
+    except
+      dmTaxa.sqlTrans.RollbackRetaining;
+      raise;
+    end;
+
+    dmTaxa.qSynonyms.Refresh;
+  finally
+    FreeAndNil(Qry);
   end;
 end;
 
@@ -1449,6 +1515,10 @@ begin
     try
       Synonym.TaxonId := dmTaxa.qTaxa.FieldByName('taxon_id').AsInteger;
       Synonym.FullName := SynonymStr;
+      if dmTaxa.qSynonyms.RecordCount = 0 then
+        Synonym.Valid := True
+      else
+        Synonym.Valid := False;
 
       Repo.Insert(Synonym);
 
@@ -2595,6 +2665,14 @@ begin
   CanToggle := True;
 end;
 
+procedure TfrmTaxaEditor.gridSynonymsPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn;
+  AState: TGridDrawState);
+begin
+  // Valid name
+  if (TDBGrid(Sender).Columns[1].Field.AsBoolean = True) then
+    TDBGrid(Sender).Canvas.Font.Style := [fsBold];
+end;
+
 procedure TfrmTaxaEditor.gridTaxaCellClick(Column: TColumn);
 begin
   // if clicked on a checkbox column, save immediatelly
@@ -2684,8 +2762,8 @@ begin
     else
     begin
       aGroup := FSearchTaxa.Fields.Add(TSearchGroup.Create);
-      FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('full_name', 'Scientific name', sdtText, FCriteria,
-        False, aValue));
+      FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('taxon_name', 'Scientific name', sdtText, FCriteria,
+        True, aValue));
       FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('ebird_code', 'eBird code', sdtText, FCriteria,
         False, aValue));
       FSearchTaxa.Fields[aGroup].Fields.Add(TSearchField.Create('quick_code', 'Quick code', sdtText, FCriteria,
@@ -2700,7 +2778,7 @@ begin
     AddSortedField(tbZooTaxa, 'sort_num', sdAscending)
   else
   if pmtSortAlphabetical.Checked then
-    AddSortedField(tbZooTaxa, 'full_name', sdAscending);
+    AddSortedField(tbZooTaxa, 'taxon_name', sdAscending, '', True);
 
   Result := FSearchTaxa.RunSearch > 0;
 

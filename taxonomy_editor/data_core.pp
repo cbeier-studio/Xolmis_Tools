@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Dialogs, DB, SQLDB;
 
 const
-  SCHEMA_VERSION: Integer = 1;
+  SCHEMA_VERSION: Integer = 2;
 
   function CreateTaxonomyDatabase(aFilename: String): Boolean;
   function UpgradeDatabaseSchema: Boolean;
@@ -234,7 +234,7 @@ var
 begin
   Result := False;
 
-  OldVersion := StrToIntDef(ReadDatabaseMetadata(dmTaxa.sqlCon, 'version'), SCHEMA_VERSION);
+  OldVersion := StrToIntDef(ReadDatabaseMetadata(dmTaxa.sqlCon, 'version'), 1);
 
   if OldVersion = SCHEMA_VERSION then
     Exit;
@@ -249,13 +249,18 @@ begin
     dmTaxa.sqlTrans.StartTransaction;
 
   try
+    if not dlgLoading.Visible then
+      dlgLoading.Show;
     try
-      //if OldVersion < 2 then
-      //begin
-      //  LogDebug(Format('Upgrading database to version %d', [OldVersion]));
-      //
-      //  Result := True;
-      //end;
+      if OldVersion < 2 then
+      begin
+        //LogDebug('Upgrading database to version 2');
+        dlgLoading.UpdateProgress('Upgrading database schema to v2...', -1);
+
+        dmTaxa.sqlCon.ExecuteDirect('ALTER TABLE zoo_taxa ADD COLUMN taxon_concept_id VARCHAR (30)');
+
+        Result := True;
+      end;
 
       //if OldVersion < 3 then
       //begin
@@ -423,6 +428,7 @@ begin
     'full_name              VARCHAR (100) NOT NULL UNIQUE,' +
     'authorship             VARCHAR (150),' +
     'formatted_name         VARCHAR (250),' +
+    'taxon_concept_id       VARCHAR (30),' +
     'quick_code             VARCHAR (10),' +
     'rank_id                INTEGER       NOT NULL REFERENCES taxon_ranks (rank_id) ON UPDATE CASCADE,' +
     'parent_taxon_id        INTEGER,' +

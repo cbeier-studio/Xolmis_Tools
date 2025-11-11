@@ -9,7 +9,6 @@ object dlgSqlFilter: TdlgSqlFilter
   ClientWidth = 750
   PopupMode = pmAuto
   Position = poScreenCenter
-  LCLVersion = '4.2.0.0'
   object pBottom: TPanel
     Left = 0
     Height = 41
@@ -64,7 +63,7 @@ object dlgSqlFilter: TdlgSqlFilter
     TabOrder = 1
     Gutter.Color = clWhite
     Gutter.RightOffset = 16
-    Gutter.Width = 69
+    Gutter.Width = 59
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>

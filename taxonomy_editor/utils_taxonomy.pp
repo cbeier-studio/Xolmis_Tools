@@ -108,6 +108,8 @@ const
   function GetRankFromTaxon(aTaxonKey: Integer): Integer;
   function GetRankKey(aRank: TZooRank): Integer;
 
+  function ResolveValidID(TaxonID: Integer): Integer;
+
   function FormatDomestic(const aName: String): String;
   function FormatForm(const aName: String): String;
   function FormatHybrid(const aName: String): String;
@@ -139,6 +141,8 @@ const
   procedure UpdateDistribution(aTaxon: Integer; aDist: String; aDataset: TSQLQuery; ExecNow: Boolean = True);
   procedure UpdateExtinction(aTaxon: Integer; IsExtinct: Boolean; aYear: String; aDataset: TSQLQuery;
     ExecNow: Boolean = True);
+
+  procedure NormalizeSynonyms;
 
 implementation
 
@@ -1356,6 +1360,88 @@ begin
     Close;
   finally
     FreeAndNil(Qry);
+  end;
+end;
+
+function ResolveValidID(TaxonID: Integer): Integer;
+var
+  Q: TSQLQuery;
+  CurrentID, NextID: Integer;
+  IterCount: Integer;
+begin
+  CurrentID := TaxonID;
+  IterCount := 0;
+
+  Q := TSQLQuery.Create(nil);
+  try
+    Q.DataBase := dmTaxa.sqlCon;
+    while True do
+    begin
+      Inc(IterCount);
+      if IterCount > 50 then
+        raise Exception.CreateFmt('Loop detectado ao resolver valid_id para taxon %d', [TaxonID]);
+
+      Q.Close;
+      Q.SQL.Text := 'SELECT valid_id FROM zoo_taxa WHERE taxon_id = :id';
+      Q.ParamByName('id').AsInteger := CurrentID;
+      Q.Open;
+
+      if Q.FieldByName('valid_id').IsNull or (Q.FieldByName('valid_id').AsInteger = 0) then
+        Exit(CurrentID)
+      else
+      begin
+        NextID := Q.FieldByName('valid_id').AsInteger;
+        if NextID = CurrentID then
+          Exit(CurrentID); // proteção contra auto‑referência
+        CurrentID := NextID;
+      end;
+    end;
+  finally
+    Q.Free;
+  end;
+end;
+
+procedure NormalizeSynonyms;
+var
+  Q: TSQLQuery;
+  U: TSQLQuery;
+  SynonymID, OriginalTaxonID, FinalTaxonID, PercentDone: Integer;
+begin
+  Q := TSQLQuery.Create(nil);
+  U := TSQLQuery.Create(nil);
+  try
+    Q.DataBase := dmTaxa.sqlCon;
+    U.DataBase := dmTaxa.sqlCon;
+    dlgLoading.Max := 100;
+    dlgLoading.Show;
+    dlgLoading.UpdateProgress('Normalizing synonyms...', -1);
+    Q.SQL.Text := 'SELECT synonym_id, taxon_id FROM zoo_taxa_synonyms';
+    Q.Open;
+    Q.First;
+    PercentDone := 0;
+    while not Q.EOF do
+    begin
+      SynonymID := Q.FieldByName('synonym_id').AsInteger;
+      OriginalTaxonID := Q.FieldByName('taxon_id').AsInteger;
+      FinalTaxonID := ResolveValidID(OriginalTaxonID);
+
+      if FinalTaxonID <> OriginalTaxonID then
+      begin
+        U.Close;
+        U.SQL.Text := 'UPDATE zoo_taxa_synonyms SET taxon_id = :new_id WHERE synonym_id = :sid';
+        U.ParamByName('new_id').AsInteger := FinalTaxonID;
+        U.ParamByName('sid').AsInteger := SynonymID;
+        U.ExecSQL;
+      end;
+
+      PercentDone := Round((Q.RecNo * 100) / Q.RecordCount);
+      dlgLoading.UpdateProgress(Format('Normalizing synonyms (%d%%)', [PercentDone]), PercentDone);
+      Q.Next;
+    end;
+  finally
+    dlgLoading.Hide;
+    Q.Free;
+    U.Free;
   end;
 end;
 

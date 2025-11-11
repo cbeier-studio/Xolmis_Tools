@@ -7,6 +7,7 @@ object frmTaxaEditor: TfrmTaxaEditor
   ClientHeight = 1061
   ClientWidth = 1924
   SnapOptions.SnapToMonitor = True
+  LCLVersion = '4.4.0.0'
   WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate
@@ -623,13 +624,21 @@ object frmTaxaEditor: TfrmTaxaEditor
               Title.Caption = 'Synonym'
               Width = 325
               FieldName = 'full_name'
+            end          
+            item
+              Title.Caption = 'valid_status'
+              Width = 0
+              Visible = False
+              FieldName = 'valid_status'
             end>
           DataSource = dmTaxa.dsSynonyms
           FixedCols = 0
           Options = [dgEditing, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgRowHighlight, dgThumbTracking]
+          PopupMenu = pmGridNames
           Scrollbars = ssVertical
           TabOrder = 0
           TitleStyle = tsNative
+          OnPrepareCanvas = gridSynonymsPrepareCanvas
         end
         object gridChildTaxa: TDBGrid
           AnchorSideLeft.Control = pDetails
@@ -814,7 +823,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               ReadOnly = True
               Title.Caption = 'Scientific name'
               Width = 360
-              FieldName = 'full_name'
+              FieldName = 'taxon_name'
             end          
             item
               Title.Caption = 'formatted_name'
@@ -879,7 +888,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           Height = 906
           Top = 103
           Width = 729
-          HorzScrollBar.Page = 264
+          HorzScrollBar.Page = 347
           VertScrollBar.Increment = 86
           VertScrollBar.Page = 740
           Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1308,7 +1317,7 @@ object frmTaxaEditor: TfrmTaxaEditor
               ChildSizing.EnlargeHorizontal = crsSameSize
               ChildSizing.ShrinkHorizontal = crsSameSize
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
-              ChildSizing.ControlsPerLine = 2
+              ChildSizing.ControlsPerLine = 3
               ClientHeight = 42
               ClientWidth = 697
               ParentBackground = False
@@ -1317,17 +1326,26 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 16
                 Height = 15
                 Top = 0
-                Width = 324
+                Width = 211
                 Caption = 'Quick code'
                 Layout = tlCenter
                 ParentColor = False
               end
               object lbltEbirdCode: TLabel
-                Left = 356
+                Left = 243
                 Height = 15
                 Top = 0
-                Width = 325
+                Width = 211
                 Caption = 'eBird code'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object lbltConceptId: TLabel
+                Left = 470
+                Height = 15
+                Top = 0
+                Width = 211
+                Caption = 'Taxon concept ID'
                 Layout = tlCenter
                 ParentColor = False
               end
@@ -1335,7 +1353,7 @@ object frmTaxaEditor: TfrmTaxaEditor
                 Left = 16
                 Height = 23
                 Top = 19
-                Width = 324
+                Width = 211
                 DataField = 'quick_code'
                 DataSource = dmTaxa.dsTaxa
                 MaxLength = 0
@@ -1344,14 +1362,25 @@ object frmTaxaEditor: TfrmTaxaEditor
                 OnKeyPress = cbAuthorshipKeyPress
               end
               object etEbirdCode: TDBEdit
-                Left = 356
+                Left = 243
                 Height = 23
                 Top = 19
-                Width = 325
+                Width = 211
                 DataField = 'ebird_code'
                 DataSource = dmTaxa.dsTaxa
                 MaxLength = 0
                 TabOrder = 1
+                OnKeyPress = cbAuthorshipKeyPress
+              end
+              object etConceptId: TDBEdit
+                Left = 470
+                Height = 23
+                Top = 19
+                Width = 211
+                DataField = 'taxon_concept_id'
+                DataSource = dmTaxa.dsTaxa
+                MaxLength = 0
+                TabOrder = 2
                 OnKeyPress = cbAuthorshipKeyPress
               end
             end
@@ -1720,7 +1749,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             Height = 21
             Top = 8
             Width = 113
-            DataField = 'full_name'
+            DataField = 'taxon_name'
             DataSource = dmTaxa.dsTaxa
             Font.Height = -16
             ParentFont = False
@@ -1861,7 +1890,6 @@ object frmTaxaEditor: TfrmTaxaEditor
         Scrollbars = ssAutoVertical
         TabOrder = 1
         TitleStyle = tsNative
-        OnPrepareCanvas = gridTaxaPrepareCanvas
       end
       object pChangesToolbar: TPanel
         Left = 704
@@ -2033,7 +2061,6 @@ object frmTaxaEditor: TfrmTaxaEditor
           Scrollbars = ssAutoVertical
           TabOrder = 0
           TitleStyle = tsNative
-          OnPrepareCanvas = gridTaxaPrepareCanvas
         end
       end
     end
@@ -2121,7 +2148,6 @@ object frmTaxaEditor: TfrmTaxaEditor
         Scrollbars = ssAutoVertical
         TabOrder = 0
         TitleStyle = tsNative
-        OnPrepareCanvas = gridTaxaPrepareCanvas
       end
     end
     object pgCountries: TPage
@@ -2166,7 +2192,6 @@ object frmTaxaEditor: TfrmTaxaEditor
         Scrollbars = ssAutoVertical
         TabOrder = 0
         TitleStyle = tsNative
-        OnPrepareCanvas = gridTaxaPrepareCanvas
       end
     end
     object pgLanguages: TPage
@@ -2223,7 +2248,6 @@ object frmTaxaEditor: TfrmTaxaEditor
         Scrollbars = ssAutoVertical
         TabOrder = 0
         TitleStyle = tsNative
-        OnPrepareCanvas = gridTaxaPrepareCanvas
       end
     end
   end
@@ -2675,6 +2699,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       ShowCaption = False
       ShowHint = True
       ParentShowHint = False
+      OnClick = sbRefreshRecordsClick
     end
     object sbSortRecords: TSpeedButton
       AnchorSideTop.Control = pToolbar
@@ -2904,6 +2929,11 @@ object frmTaxaEditor: TfrmTaxaEditor
       Caption = 'Rewrite taxa hierarchy'
       OnExecute = actRewriteHierarchyExecute
     end
+    object actNormalizeSynonyms: TAction
+      Category = 'Batch'
+      Caption = 'Normalize synonyms'
+      OnExecute = actNormalizeSynonymsExecute
+    end
   end
   object pmMain: TPopupMenu
     Images = bMenu
@@ -2933,6 +2963,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object mmRewriteHierarchy: TMenuItem
         Action = actRewriteHierarchy
+      end
+      object mmNormalizeSynonyms: TMenuItem
+        Action = actNormalizeSynonyms
       end
     end
     object Separator1: TMenuItem
@@ -3077,6 +3110,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       Caption = 'Refresh'
       ImageIndex = 20
       ShortCut = 116
+      OnClick = sbRefreshRecordsClick
     end
     object Separator3: TMenuItem
       Caption = '-'
@@ -5782,5 +5816,13 @@ object frmTaxaEditor: TfrmTaxaEditor
     OnTimer = TimerUpdateTimer
     Left = 335
     Top = 121
+  end
+  object pmGridNames: TPopupMenu
+    Left = 200
+    Top = 448
+    object pmgnSetCurrentName: TMenuItem
+      Caption = 'Set as current name'
+      OnClick = pmgnSetCurrentNameClick
+    end
   end
 end
