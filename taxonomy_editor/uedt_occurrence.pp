@@ -110,10 +110,10 @@ begin
   dlgLoading.Show;
   dlgLoading.UpdateProgress('Saving occurrence for taxon...', -1);
 
-  qryEdit := TSQLQuery.Create(dmTaxa.sqlCon);
+  qryEdit := TSQLQuery.Create(nil);
   qryEdit.DataBase := dmTaxa.sqlCon;
 
-  Qry := TSQLQuery.Create(dmTaxa.sqlCon);
+  Qry := TSQLQuery.Create(nil);
   with Qry, SQL do
   try
     DataBase := dmTaxa.sqlCon;
@@ -128,9 +128,9 @@ begin
       Open;
       if ckList.Checked[i] then
       begin
-        if RecordCount > 0 then
+        if not IsEmpty then
         begin
-          qryEdit.Clear;
+          qryEdit.SQL.Clear;
           qryEdit.SQL.Add('UPDATE zoo_taxa_countries SET active_status = 1');
           qryEdit.SQL.Add('WHERE (taxon_id = :taxon_id) AND (country_id = :country_id)');
           qryEdit.ParamByName('taxon_id').AsInteger := FTaxonId;
@@ -139,7 +139,7 @@ begin
         end
         else
         begin
-          qryEdit.Clear;
+          qryEdit.SQL.Clear;
           qryEdit.SQL.Add('INSERT INTO zoo_taxa_countries (taxon_id, country_id, insert_date, update_date) ');
           qryEdit.SQL.Add('VALUES (:taxon_id, :country_id, datetime(''now'', ''subsec''), datetime(''now'', ''subsec''))');
           qryEdit.ParamByName('taxon_id').AsInteger := FTaxonId;
@@ -149,10 +149,11 @@ begin
       end
       else
       begin
-        if RecordCount > 0 then
+        if not IsEmpty then
         begin
-          qryEdit.Clear;
+          qryEdit.SQL.Clear;
           qryEdit.SQL.Add('UPDATE zoo_taxa_countries SET active_status = 0');
+          //qryEdit.SQL.Add('DELETE FROM zoo_taxa_countries');
           qryEdit.SQL.Add('WHERE (taxon_id = :taxon_id) AND (country_id = :country_id)');
           qryEdit.ParamByName('taxon_id').AsInteger := FTaxonId;
           qryEdit.ParamByName('country_id').AsInteger := GetKey('countries', 'country_id', 'country_name', ckList.Items[i]);

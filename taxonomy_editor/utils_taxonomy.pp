@@ -141,7 +141,9 @@ const
   procedure UpdateDistribution(aTaxon: Integer; aDist: String; aDataset: TSQLQuery; ExecNow: Boolean = True);
   procedure UpdateExtinction(aTaxon: Integer; IsExtinct: Boolean; aYear: String; aDataset: TSQLQuery;
     ExecNow: Boolean = True);
+  procedure UpdateCountryOccurrence(FromTaxonId, ToTaxonId: Integer);
 
+  procedure CopySynonyms(FromTaxonId, ToTaxonId: Integer);
   procedure NormalizeSynonyms;
 
 implementation
@@ -856,6 +858,12 @@ begin
       toSp.Accepted := True;
 
       Repo.Insert(toSp);
+
+      Synonym.TaxonId := toSp.Id;
+      Synonym.FullName := NewName;
+      Synonym.Valid := True;
+
+      SynRepo.Insert(Synonym);
     end;
 
     // Update subspecies
@@ -866,6 +874,7 @@ begin
     end;
 
     // Update synonyms
+    Synonym.Clear;
     SynRepo.FindByTaxon(toSp.Id, OldName, Synonym);
     if Synonym.IsNew then
     begin
@@ -954,6 +963,12 @@ begin
       toSsp.Accepted := True;
 
       Repo.Insert(toSsp);
+
+      Synonym.TaxonId := toSsp.Id;
+      Synonym.FullName := NewName;
+      Synonym.Valid := True;
+
+      SynRepo.Insert(Synonym);
     end;
 
     // Update subspecies
@@ -961,6 +976,7 @@ begin
     Repo.Update(Species);
 
     // Update synonyms
+    Synonym.Clear;
     SynRepo.FindByTaxon(toSsp.Id, OldName, Synonym);
     if Synonym.IsNew then
     begin
@@ -1069,6 +1085,12 @@ begin
       toSsp.Accepted := True;
 
       Repo.Insert(toSsp);
+
+      Synonym.TaxonId := toSsp.Id;
+      Synonym.FullName := NewName;
+      Synonym.Valid := True;
+
+      SynRepo.Insert(Synonym);
     end;
 
     // Update subspecies
@@ -1076,6 +1098,7 @@ begin
     Repo.Update(Ssp);
 
     // Update synonyms
+    Synonym.Clear;
     SynRepo.FindByTaxon(toSsp.Id, OldName, Synonym);
     if Synonym.IsNew then
     begin
@@ -1084,6 +1107,10 @@ begin
 
       SynRepo.Insert(Synonym);
     end;
+    CopySynonyms(Ssp.Id, toSsp.Id);
+
+    // Update country lists
+    UpdateCountryOccurrence(Ssp.Id, toSsp.Id);
 
     // Move subspecies from subspecies group
     if Ssp.RankId = trPolitypicGroup then
@@ -1167,6 +1194,12 @@ begin
       toSp.Accepted := True;
 
       Repo.Insert(toSp);
+
+      Synonym.TaxonId := toSp.Id;
+      Synonym.FullName := NewName;
+      Synonym.Valid := True;
+
+      SynRepo.Insert(Synonym);
     end;
 
     // Update subspecies
@@ -1174,6 +1207,7 @@ begin
     Repo.Update(Species);
 
     // Update synonyms
+    Synonym.Clear;
     SynRepo.FindByTaxon(toSp.Id, OldName, Synonym);
     if Synonym.IsNew then
     begin
@@ -1182,6 +1216,10 @@ begin
 
       SynRepo.Insert(Synonym);
     end;
+    CopySynonyms(Species.Id, toSp.Id);
+
+    // Update country lists
+    UpdateCountryOccurrence(Species.Id, toSp.Id);
 
     // Move subspecies groups and subspecies
     Qry := TSQLQuery.Create(nil);
@@ -1392,7 +1430,7 @@ begin
       begin
         NextID := Q.FieldByName('valid_id').AsInteger;
         if NextID = CurrentID then
-          Exit(CurrentID); // proteção contra auto‑referência
+          Exit(CurrentID); // proteção contra autorreferência
         CurrentID := NextID;
       end;
     end;
@@ -1442,6 +1480,78 @@ begin
     dlgLoading.Hide;
     Q.Free;
     U.Free;
+  end;
+end;
+
+procedure UpdateCountryOccurrence(FromTaxonId, ToTaxonId: Integer);
+var
+  Q: TSQLQuery;
+begin
+  Q := TSQLQuery.Create(nil);
+  with Q, SQL do
+  try
+    DataBase := dmTaxa.sqlCon;
+
+    Clear;
+    Add('UPDATE zoo_taxa_countries SET taxon_id = :new_taxon_id');
+    Add('WHERE (taxon_id = :old_taxon_id);');
+    ParamByName('new_taxon_id').AsInteger := ToTaxonId;
+    ParamByName('old_taxon_id').AsInteger := FromTaxonId;
+
+    ExecSQL;
+
+  finally
+    FreeAndNil(Q);
+  end;
+end;
+
+procedure CopySynonyms(FromTaxonId, ToTaxonId: Integer);
+var
+  Q: TSQLQuery;
+  SynonymID, PercentDone: Integer;
+  SynonymName: String;
+  Synonym: TSynonym;
+  SynRepo: TSynonymRepository;
+begin
+  Q := TSQLQuery.Create(nil);
+  SynRepo := TSynonymRepository.Create(dmTaxa.sqlCon);
+  Synonym := TSynonym.Create();
+  try
+    Q.DataBase := dmTaxa.sqlCon;
+    dlgLoading.Max := 100;
+    dlgLoading.Show;
+    dlgLoading.UpdateProgress('Copying synonyms...', -1);
+    Q.SQL.Add('SELECT synonym_id, full_name FROM zoo_taxa_synonyms');
+    Q.SQL.ADD('WHERE (taxon_id = :old_taxon_id)');
+    Q.ParamByName('old_taxon_id').AsInteger := FromTaxonId;
+    Q.Open;
+    Q.First;
+    PercentDone := 0;
+    while not Q.EOF do
+    begin
+      Synonym.Clear;
+      SynonymID := Q.FieldByName('synonym_id').AsInteger;
+      SynonymName := Q.FieldByName('full_name').AsString;
+      //FinalTaxonID := ResolveValidID(OriginalTaxonID);
+
+      SynRepo.FindByTaxon(ToTaxonId, SynonymName, Synonym);
+      if Synonym.IsNew then
+      begin
+        Synonym.TaxonId := ToTaxonId;
+        Synonym.Valid := False;
+
+        SynRepo.Insert(Synonym);
+      end;
+
+      PercentDone := Round((Q.RecNo * 100) / Q.RecordCount);
+      dlgLoading.UpdateProgress(Format('Copying synonyms (%d%%)', [PercentDone]), PercentDone);
+      Q.Next;
+    end;
+  finally
+    dlgLoading.Hide;
+    SynRepo.Free;
+    Synonym.Free;
+    Q.Free;
   end;
 end;
 

@@ -10,6 +10,7 @@ object edtOccurrence: TedtOccurrence
   ClientWidth = 659
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '4.4.0.0'
   OnShow = FormShow
   object ckList: TCheckListBox
     AnchorSideLeft.Control = Owner

@@ -1,0 +1,189 @@
+object dlgExportSpeciesList: TdlgExportSpeciesList
+  Left = 370
+  Height = 267
+  Top = 250
+  Width = 386
+  BorderStyle = bsDialog
+  Caption = 'Export Xolmis Mobile species list'
+  ClientHeight = 267
+  ClientWidth = 386
+  Constraints.MinWidth = 386
+  PopupMode = pmAuto
+  Position = poScreenCenter
+  LCLVersion = '4.4.0.0'
+  object txtCountry: TDBText
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 157
+    Height = 21
+    Top = 8
+    Width = 73
+    BorderSpacing.Around = 8
+    DataField = 'country_name'
+    DataSource = dmTaxa.dsCountries
+    Font.Height = -16
+    ParentFont = False
+  end
+  object pBottom: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = pSynonyms
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 41
+    Top = 125
+    Width = 386
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 8
+    ChildSizing.HorizontalSpacing = 8
+    ClientHeight = 41
+    ClientWidth = 386
+    Color = 15987699
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 0
+    object sbClose: TButton
+      Left = 266
+      Height = 25
+      Top = 8
+      Width = 104
+      Align = alRight
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object sbOK: TBitBtn
+      Left = 154
+      Height = 25
+      Top = 8
+      Width = 104
+      Align = alRight
+      Caption = 'Export'
+      ImageWidth = 24
+      TabOrder = 0
+      OnClick = sbOKClick
+    end
+  end
+  object pSciName: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = txtCountry
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 28
+    Top = 37
+    Width = 386
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 4
+    ClientHeight = 28
+    ClientWidth = 386
+    TabOrder = 1
+    object ckScientificName: TCheckBox
+      AnchorSideLeft.Control = pSciName
+      AnchorSideTop.Control = pSciName
+      AnchorSideTop.Side = asrCenter
+      Left = 16
+      Height = 19
+      Top = 5
+      Width = 99
+      Caption = 'Scientific name'
+      Checked = True
+      State = cbChecked
+      TabOrder = 0
+    end
+  end
+  object pVernacularName: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = pSciName
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 32
+    Top = 65
+    Width = 386
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 4
+    ChildSizing.HorizontalSpacing = 8
+    ClientHeight = 32
+    ClientWidth = 386
+    TabOrder = 2
+    object ckVernacularName: TCheckBox
+      AnchorSideLeft.Control = pVernacularName
+      AnchorSideTop.Control = pVernacularName
+      AnchorSideTop.Side = asrCenter
+      Left = 16
+      Height = 19
+      Top = 7
+      Width = 107
+      Caption = 'Vernacular name'
+      TabOrder = 0
+    end
+    object cbVernacularLanguage: TComboBox
+      AnchorSideLeft.Control = ckVernacularName
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pVernacularName
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = pVernacularName
+      AnchorSideRight.Side = asrBottom
+      Left = 131
+      Height = 23
+      Top = 5
+      Width = 239
+      Anchors = [akTop, akLeft, akRight]
+      ItemHeight = 15
+      Style = csDropDownList
+      TabOrder = 1
+    end
+  end
+  object pSynonyms: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = pVernacularName
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 28
+    Top = 97
+    Width = 386
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BevelOuter = bvNone
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 4
+    ClientHeight = 28
+    ClientWidth = 386
+    TabOrder = 3
+    object ckSynonyms: TCheckBox
+      AnchorSideLeft.Control = pSynonyms
+      AnchorSideTop.Control = pSynonyms
+      AnchorSideTop.Side = asrCenter
+      Left = 16
+      Height = 19
+      Top = 5
+      Width = 73
+      Caption = 'Synonyms'
+      Enabled = False
+      TabOrder = 0
+    end
+  end
+  object SaveDlg: TSaveDialog
+    DefaultExt = '.json'
+    Filter = 'JSON files|*.json'
+    Options = [ofOverwritePrompt, ofEnableSizing]
+    Left = 310
+    Top = 18
+  end
+end

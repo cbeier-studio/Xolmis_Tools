@@ -2844,6 +2844,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       Images = bMenu
       ImageIndex = 55
       ImageWidth = 24
+      OnClick = sbExportClick
     end
     object sbEditSpeciesList: TSpeedButton
       AnchorSideLeft.Side = asrBottom
@@ -5823,6 +5824,36 @@ object frmTaxaEditor: TfrmTaxaEditor
     object pmgnSetCurrentName: TMenuItem
       Caption = 'Set as current name'
       OnClick = pmgnSetCurrentNameClick
+    end
+  end
+  object pmExport: TPopupMenu
+    OnPopup = pmExportPopup
+    Left = 296
+    Top = 390
+    object pmxMobileSpeciesList: TMenuItem
+      Caption = 'Xolmis Mobile species list'
+      Visible = False
+      OnClick = pmxMobileSpeciesListClick
+    end
+    object pmxDesktopCompleteTaxonomy: TMenuItem
+      Caption = 'Xolmis Desktop complete taxonomy'
+      Visible = False
+    end
+    object pmxDesktopTaxonomyUpdate: TMenuItem
+      Caption = 'Xolmis Desktop taxonomy update'
+      Visible = False
+    end
+    object pmxCountriesList: TMenuItem
+      Caption = 'Countries list'
+      Visible = False
+    end
+    object pmxLanguagesList: TMenuItem
+      Caption = 'Languages list'
+      Visible = False
+    end
+    object pmxRanksList: TMenuItem
+      Caption = 'Taxon ranks list'
+      Visible = False
     end
   end
 end

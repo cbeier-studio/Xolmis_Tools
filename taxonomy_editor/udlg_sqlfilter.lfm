@@ -9,6 +9,7 @@ object dlgSqlFilter: TdlgSqlFilter
   ClientWidth = 750
   PopupMode = pmAuto
   Position = poScreenCenter
+  LCLVersion = '4.4.0.0'
   object pBottom: TPanel
     Left = 0
     Height = 41
@@ -494,6 +495,7 @@ object dlgSqlFilter: TdlgSqlFilter
     MouseSelActions = <>
     Lines.Strings = (
       'SELECT z.*,'
+      '    z2.full_name AS taxon_name,'
       '    u.full_name AS parent_taxon_name,'
       '    v.full_name AS valid_name,'
       '    o.full_name AS order_name,'
@@ -503,6 +505,7 @@ object dlgSqlFilter: TdlgSqlFilter
       '    e.full_name AS species_name,'
       '    g.full_name AS subspecies_group_name'
       'FROM zoo_taxa AS z'
+      'LEFT JOIN zoo_taxa_synonyms AS z2 ON z.taxon_id = z2.taxon_id AND z2.valid_status = 1'
       'LEFT JOIN zoo_taxa AS u ON z.parent_taxon_id = u.taxon_id'
       'LEFT JOIN zoo_taxa AS v ON z.valid_id = v.taxon_id'
       'LEFT JOIN zoo_taxa AS o ON z.order_id = o.taxon_id'
@@ -511,6 +514,7 @@ object dlgSqlFilter: TdlgSqlFilter
       'LEFT JOIN zoo_taxa AS n ON z.genus_id = n.taxon_id'
       'LEFT JOIN zoo_taxa AS e ON z.species_id = e.taxon_id'
       'LEFT JOIN zoo_taxa AS g ON z.subspecies_group_id = g.taxon_id'
+      ''
     )
     Options = [eoAutoIndent, eoBracketHighlight, eoEnhanceHomeKey, eoGroupUndo, eoShowScrollHint, eoTabsToSpaces, eoTrimTrailingSpaces, eoDoubleClickSelectsLine]
     Options2 = [eoEnhanceEndKey, eoFoldedCopyPaste, eoOverwriteBlock, eoAcceptDragDropEditing]
@@ -542,6 +546,8 @@ object dlgSqlFilter: TdlgSqlFilter
         MouseActions = <>
         MaxExtraMarksColums = 0
         Options = [sgmoDeDuplicateMarksOnOverflow]
+        MarkupInfo.Background = clBtnFace
+        MarkupInfo.Foreground = clNone
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
         Width = 17
@@ -559,6 +565,9 @@ object dlgSqlFilter: TdlgSqlFilter
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
+        MarkupInfo.Background = clNone
+        MarkupInfo.Foreground = clGreen
+        MarkupInfo.FrameColor = 59900
       end
       object SynGutterSeparator1: TSynGutterSeparator
         Width = 2

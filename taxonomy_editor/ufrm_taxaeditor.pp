@@ -63,6 +63,12 @@ type
     lbltRank: TLabel;
     lbltSortNr: TLabel;
     lbltVernacular: TLabel;
+    pmxLanguagesList: TMenuItem;
+    pmxRanksList: TMenuItem;
+    pmxMobileSpeciesList: TMenuItem;
+    pmxDesktopCompleteTaxonomy: TMenuItem;
+    pmxDesktopTaxonomyUpdate: TMenuItem;
+    pmxCountriesList: TMenuItem;
     pmgnSetCurrentName: TMenuItem;
     mmNormalizeSynonyms: TMenuItem;
     pmgUnmarkAll: TMenuItem;
@@ -73,6 +79,7 @@ type
     peTaxa: TPanel;
     pFind: TBCPanel;
     pmGridNames: TPopupMenu;
+    pmExport: TPopupMenu;
     pPacksList: TPanel;
     ptAuthorship: TPanel;
     pTaxaList: TPanel;
@@ -262,6 +269,7 @@ type
     procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
       var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
+    procedure pmExportPopup(Sender: TObject);
     procedure pmgMarkAllClick(Sender: TObject);
     procedure pmgNewPolitypicGroupClick(Sender: TObject);
     procedure pmgNewSubspeciesClick(Sender: TObject);
@@ -271,6 +279,7 @@ type
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
+    procedure pmxMobileSpeciesListClick(Sender: TObject);
     procedure rbMarkedYesClick(Sender: TObject);
     procedure sbAddSynonymClick(Sender: TObject);
     procedure sbAddVernacularClick(Sender: TObject);
@@ -289,6 +298,7 @@ type
     procedure sbEditHierarchyClick(Sender: TObject);
     procedure sbEditRecordClick(Sender: TObject);
     procedure sbEditSpeciesListClick(Sender: TObject);
+    procedure sbExportClick(Sender: TObject);
     procedure sbFirstRecordClick(Sender: TObject);
     procedure sbInsertChangeClick(Sender: TObject);
     procedure sbInsertRecordClick(Sender: TObject);
@@ -344,7 +354,7 @@ uses
   utils_dialogs, utils_taxonomy,
   io_clements, io_ioc,
   udm_taxa, udlg_about, udlg_loading, udlg_find, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter,
-  uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit;
+  uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit, udlg_export_species_list;
 
 {$R *.lfm}
 
@@ -1130,6 +1140,41 @@ begin
   canSearch := True;
 end;
 
+procedure TfrmTaxaEditor.pmExportPopup(Sender: TObject);
+begin
+  pmxDesktopCompleteTaxonomy.Visible := False;
+  pmxDesktopTaxonomyUpdate.Visible := False;
+  pmxRanksList.Visible := False;
+  pmxMobileSpeciesList.Visible := False;
+  pmxCountriesList.Visible := False;
+  pmxLanguagesList.Visible := False;
+
+  case nbPages.PageIndex of
+    0:
+    begin
+      pmxDesktopCompleteTaxonomy.Visible := True;
+    end;
+    1:
+    begin
+      pmxDesktopCompleteTaxonomy.Visible := True;
+      pmxDesktopTaxonomyUpdate.Visible := True;
+    end;
+    2:
+    begin
+      pmxRanksList.Visible := True;
+    end;
+    3:
+    begin
+      pmxMobileSpeciesList.Visible := True;
+      pmxCountriesList.Visible := True;
+    end;
+    4:
+    begin
+      pmxLanguagesList.Visible := True;
+    end;
+  end;
+end;
+
 procedure TfrmTaxaEditor.pmgMarkAllClick(Sender: TObject);
 var
   BM: TBookMark;
@@ -1490,6 +1535,17 @@ begin
 
   if needRefresh then
     dmTaxa.qTaxa.Refresh;
+end;
+
+procedure TfrmTaxaEditor.pmxMobileSpeciesListClick(Sender: TObject);
+begin
+  dlgExportSpeciesList := TdlgExportSpeciesList.Create(nil);
+  with dlgExportSpeciesList do
+  try
+    ShowModal;
+  finally
+    FreeAndNil(dlgExportSpeciesList);
+  end;
 end;
 
 procedure TfrmTaxaEditor.rbMarkedYesClick(Sender: TObject);
@@ -1887,6 +1943,12 @@ begin
     FreeAndNil(edtSpeciesList);
   end;
   dmTaxa.qTaxonCountries.Refresh;
+end;
+
+procedure TfrmTaxaEditor.sbExportClick(Sender: TObject);
+begin
+  with sbExport.ClientToScreen(point(0, sbExport.Height + 1)) do
+    pmExport.Popup(X, Y);
 end;
 
 procedure TfrmTaxaEditor.sbFirstRecordClick(Sender: TObject);

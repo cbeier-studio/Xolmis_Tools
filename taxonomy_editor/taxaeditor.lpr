@@ -23,7 +23,8 @@ uses
   io_clements, io_ioc,
   // Forms
   ufrm_TaxaEditor, udlg_desttaxon, udlg_edithierarchy, udlg_sqlfilter,
-  udlg_newsubspecies, udm_taxa, uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit;
+  udlg_newsubspecies, udm_taxa, uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit, 
+udlg_export_species_list, io_json;
 
 {$R *.res}
 

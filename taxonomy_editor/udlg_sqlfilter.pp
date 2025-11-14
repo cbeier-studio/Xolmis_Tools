@@ -52,6 +52,7 @@ begin
   begin
     Clear;
     Add('SELECT z.*,');
+    Add('    z2.full_name AS taxon_name,');
     Add('    u.full_name AS parent_taxon_name,');
     Add('    v.full_name AS valid_name,');
     Add('    o.full_name AS order_name,');
@@ -61,6 +62,7 @@ begin
     Add('    e.full_name AS species_name,');
     Add('    g.full_name AS subspecies_group_name');
     Add('FROM zoo_taxa AS z');
+    Add('LEFT JOIN zoo_taxa_synonyms AS z2 ON z.taxon_id = z2.taxon_id AND z2.valid_status = 1');
     Add('LEFT JOIN zoo_taxa AS u ON z.parent_taxon_id = u.taxon_id');
     Add('LEFT JOIN zoo_taxa AS v ON z.valid_id = v.taxon_id');
     Add('LEFT JOIN zoo_taxa AS o ON z.order_id = o.taxon_id');
