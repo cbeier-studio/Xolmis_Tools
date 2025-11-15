@@ -71,13 +71,16 @@ end;
 procedure TdlgExportSpeciesList.sbOKClick(Sender: TObject);
 var
   FLanguageId, FCountryId: Integer;
+  FCountryCode: String;
 begin
   if not ValidateFields then
     Exit;
 
   FCountryId := dmTaxa.qCountries.FieldByName('country_id').AsInteger;
+  FCountryCode := GetName('countries', 'country_code', 'country_id', FCountryId);
   FLanguageId := GetKey('languages', 'language_id', 'language_name', cbVernacularLanguage.Text);
 
+  SaveDlg.FileName := Format('species_data_%s.json', [FCountryCode]);
   if SaveDlg.Execute then
     ExportSpeciesList(SaveDlg.FileName, FCountryId, FLanguageId, ckVernacularName.Checked);
 

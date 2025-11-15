@@ -50,9 +50,9 @@ begin
     begin
       jObj := TJSONObject.Create;
       try
-        jObj.Add('scientific name', FieldByName('taxon_name').AsString);
+        jObj.Add('scientificName', FieldByName('taxon_name').AsString);
         if VernacularNames then
-          jObj.Add('vernacular name', FieldByName('vernacular_name').AsString);
+          jObj.Add('vernacularName', FieldByName('vernacular_name').AsString);
 
         jArr.Add(jObj);
 
