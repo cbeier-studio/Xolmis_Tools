@@ -325,6 +325,7 @@ type
     FTaxaSearchString, FPackageSearchString,
       FRankSearchString, FCountrySearchString, FLanguageSearchString: String;
     CanToggle, canSearch: Boolean;
+    isFiltered: Boolean;
     Working: Boolean;
     procedure AddSortedField(aTable: TTableType; aFieldName: String; aDirection: TSortDirection; aCollation: String = '';
       IsAnAlias: Boolean = False);
@@ -1612,8 +1613,11 @@ begin
   dlgSqlFilter := TdlgSqlFilter.Create(nil);
   with dlgSqlFilter do
   try
+    if isFiltered then
+      FilterText := dmTaxa.qTaxa.SQL.Text;
     if ShowModal = mrOk then
     begin
+      isFiltered := True;
       dmTaxa.qTaxa.Close;
       TSQLQuery(dmTaxa.qTaxa).SQL.Text := FilterText;
       dmTaxa.qTaxa.Open;
@@ -1661,6 +1665,7 @@ begin
   case nbPages.PageIndex of
     0:
     begin
+      isFiltered := False;
       FSearchTaxa.QuickFilters.Clear;
       ClearTaxaFilters;
       SearchTaxa(FTaxaSearchString);
@@ -2911,7 +2916,7 @@ begin
       sbLastRecord.Enabled := (aDataSet.RecordCount > 1) and (aDataSet.RecNo < aDataSet.RecordCount);
 
       sbRefreshRecords.Enabled := True;
-      sbClearFilters.Enabled := FSearchTaxa.QuickFilters.Count > 0;
+      sbClearFilters.Enabled := (FSearchTaxa.QuickFilters.Count > 0) or (isFiltered);
       sbMoreOptions.Enabled := True;
 
       if (nbPages.PageIndex = 0) then

@@ -22,6 +22,7 @@ type
     sbReset: TSpeedButton;
     SynCompletion: TSynCompletion;
     SynSQLSyn: TSynSQLSyn;
+    procedure FormShow(Sender: TObject);
     procedure sbApplyClick(Sender: TObject);
     procedure sbResetClick(Sender: TObject);
   private
@@ -38,6 +39,12 @@ implementation
 {$R *.lfm}
 
 { TdlgSqlFilter }
+
+procedure TdlgSqlFilter.FormShow(Sender: TObject);
+begin
+  if FFilterText <> EmptyStr then
+    seScript.Lines.Text := FFilterText;
+end;
 
 procedure TdlgSqlFilter.sbApplyClick(Sender: TObject);
 begin

@@ -36,7 +36,7 @@ type
     eGenus: TEditButton;
     eSpecies: TEditButton;
     eSubspeciesGroup: TEditButton;
-    lblDestinationTaxon: TLabel;
+    lblParentTaxon: TLabel;
     lblDestinationTaxon1: TLabel;
     lblDestinationTaxon2: TLabel;
     lblDestinationTaxon3: TLabel;
@@ -50,6 +50,7 @@ type
     sbApply: TBitBtn;
     sbApplyToSelected: TSpeedButton;
     sbApplyToMarked: TSpeedButton;
+    sbAutoFill: TSpeedButton;
     procedure cbClearFamilyChange(Sender: TObject);
     procedure cbClearGenusChange(Sender: TObject);
     procedure cbClearOrderChange(Sender: TObject);
@@ -74,6 +75,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure sbApplyClick(Sender: TObject);
     procedure sbApplyToSelectedClick(Sender: TObject);
+    procedure sbAutoFillClick(Sender: TObject);
   private
     FApplyTo: TApplyChangesTo;
     FCurrent, FParent: Integer;
@@ -433,6 +435,36 @@ begin
   else
   if sbApplyToMarked.Down then
     FApplyTo := acMarked;
+end;
+
+procedure TdlgEditHierarchy.sbAutoFillClick(Sender: TObject);
+var
+  FHierarchy: TTaxonHierarchy;
+begin
+  if FParent = 0 then
+    Exit;
+
+  FHierarchy := GetTaxonHierarchy(FParent);
+
+  FOrder := FHierarchy.Order.Id;
+  FFamily := FHierarchy.Family.Id;
+  FSubfamily := FHierarchy.Subfamily.Id;
+  FGenus := FHierarchy.Genus.Id;
+  FSpecies := FHierarchy.Species.Id;
+  FSubspeciesGroup := FHierarchy.SubspeciesGroup.Id;
+
+  if FOrder > 0 then
+    eOrder.Text := GetName('zoo_taxa', 'full_name', 'taxon_id', FOrder);
+  if FFamily > 0 then
+    eFamily.Text := GetName('zoo_taxa', 'full_name', 'taxon_id', FFamily);
+  if FSubfamily > 0 then
+    eSubfamily.Text := GetName('zoo_taxa', 'full_name', 'taxon_id', FSubfamily);
+  if FGenus > 0 then
+    eGenus.Text := GetName('zoo_taxa', 'full_name', 'taxon_id', FGenus);
+  if FSpecies > 0 then
+    eSpecies.Text := GetName('zoo_taxa', 'full_name', 'taxon_id', FSpecies);
+  if FSubspeciesGroup > 0 then
+    eSubspeciesGroup.Text := GetName('zoo_taxa', 'full_name', 'taxon_id', FSubspeciesGroup);
 end;
 
 function TdlgEditHierarchy.ValidateFields: Boolean;

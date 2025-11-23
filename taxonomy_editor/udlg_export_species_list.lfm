@@ -3,6 +3,7 @@ object dlgExportSpeciesList: TdlgExportSpeciesList
   Height = 267
   Top = 250
   Width = 386
+  AutoSize = True
   BorderStyle = bsDialog
   Caption = 'Export Xolmis Mobile species list'
   ClientHeight = 267

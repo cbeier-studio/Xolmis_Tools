@@ -10,6 +10,7 @@ object dlgSqlFilter: TdlgSqlFilter
   PopupMode = pmAuto
   Position = poScreenCenter
   LCLVersion = '4.4.0.0'
+  OnShow = FormShow
   object pBottom: TPanel
     Left = 0
     Height = 41
@@ -620,14 +621,11 @@ object dlgSqlFilter: TdlgSqlFilter
       'taxon_id'
       'parent_taxon_id'
       'valid_id'
-      'ioc_parent_taxon_id'
-      'ioc_valid_id'
-      'cbro_parent_taxon_id'
-      'cbro_valid_id'
       'order_id'
       'family_id'
       'genus_id'
       'species_id'
+      'subspecies_group_id'
     )
     Position = 0
     LinesInWindow = 6
@@ -659,12 +657,15 @@ object dlgSqlFilter: TdlgSqlFilter
       'taxon_changes'
       'packages'
       'z'
-      'ep'
-      'ev'
-      'ip'
-      'iv'
-      'cp'
-      'cv'
+      'z2'
+      'u'
+      'v'
+      'o'
+      'f'
+      's'
+      'n'
+      'e'
+      'g'
     )
     SQLDialect = sqlSQLite
     Left = 418

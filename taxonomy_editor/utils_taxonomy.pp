@@ -107,6 +107,7 @@ const
   function GetRankType(aRankKey: Integer): TZooRank;
   function GetRankFromTaxon(aTaxonKey: Integer): Integer;
   function GetRankKey(aRank: TZooRank): Integer;
+  function GetTaxonHierarchy(aTaxonId: Integer): TTaxonHierarchy;
 
   function ResolveValidID(TaxonID: Integer): Integer;
 
@@ -1552,6 +1553,37 @@ begin
     SynRepo.Free;
     Synonym.Free;
     Q.Free;
+  end;
+end;
+
+function GetTaxonHierarchy(aTaxonId: Integer): TTaxonHierarchy;
+var
+  Q: TSQLQuery;
+begin
+  Q := TSQLQuery.Create(nil);
+  with Q, SQL do
+  try
+    DataBase := dmTaxa.sqlCon;
+
+    Add('SELECT parent_taxon_id, order_id, family_id, subfamily_id, genus_id, species_id, subspecies_group_id');
+    Add('FROM zoo_taxa');
+    Add('WHERE (taxon_id = :taxon_id)');
+    ParamByName('taxon_id').AsInteger := aTaxonId;
+    Open;
+    if not IsEmpty then
+    begin
+      Result.TaxonId := aTaxonId;
+      Result.ParentTaxon.Id := FieldByName('parent_taxon_id').AsInteger;
+      Result.Order.Id := FieldByName('order_id').AsInteger;
+      Result.Family.Id := FieldByName('family_id').AsInteger;
+      Result.Subfamily.Id := FieldByName('subfamily_id').AsInteger;
+      Result.Genus.Id := FieldByName('genus_id').AsInteger;
+      Result.Species.Id := FieldByName('species_id').AsInteger;
+      Result.SubspeciesGroup.Id := FieldByName('subspecies_group_id').AsInteger;
+    end;
+    Close;
+  finally
+    FreeAndNil(Q);
   end;
 end;
 
