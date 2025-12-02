@@ -175,8 +175,5 @@ begin
   lblSpeciesCount.Caption := Format('%d species', [dmTaxa.qSpeciesList.RecordCount]);
 end;
 
-initialization
-  {$I uedt_specieslist.lrs}
-
 end.
 

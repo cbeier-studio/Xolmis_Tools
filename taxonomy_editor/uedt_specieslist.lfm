@@ -166,7 +166,7 @@ object edtSpeciesList: TedtSpeciesList
       item
         ReadOnly = True
         Title.Caption = 'taxon_name'
-        Width = 352
+        Width = 373
         FieldName = 'taxon_name'
       end    
       item
@@ -174,7 +174,6 @@ object edtSpeciesList: TedtSpeciesList
         SizePriority = 0
         Title.Caption = 'Title'
       end>
-    DataSource = dmTaxa.dsSpeciesList
     FixedCols = 0
     Options = [dgEditing, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgRowHighlight, dgThumbTracking]
     TabOrder = 1
@@ -237,7 +236,6 @@ object edtSpeciesList: TedtSpeciesList
     Width = 73
     BorderSpacing.Around = 8
     DataField = 'country_name'
-    DataSource = dmTaxa.dsCountries
     Font.Height = -16
     ParentFont = False
   end

@@ -325,8 +325,5 @@ begin
   end;
 end;
 
-initialization
-  {$I uedt_familysplit.lrs}
-
 end.
 

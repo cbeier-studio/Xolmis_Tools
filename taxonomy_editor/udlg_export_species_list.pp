@@ -105,8 +105,5 @@ begin
   end;
 end;
 
-initialization
-  {$I udlg_export_species_list.lrs}
-
 end.
 

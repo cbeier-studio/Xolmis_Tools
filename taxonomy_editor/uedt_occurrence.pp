@@ -169,8 +169,5 @@ begin
   end;
 end;
 
-initialization
-  {$I uedt_occurrence.lrs}
-
 end.
 

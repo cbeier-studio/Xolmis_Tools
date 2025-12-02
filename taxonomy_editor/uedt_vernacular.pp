@@ -154,8 +154,5 @@ begin
   end;
 end;
 
-initialization
-  {$I uedt_vernacular.lrs}
-
 end.
 

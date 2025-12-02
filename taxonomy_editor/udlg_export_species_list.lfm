@@ -22,7 +22,6 @@ object dlgExportSpeciesList: TdlgExportSpeciesList
     Width = 73
     BorderSpacing.Around = 8
     DataField = 'country_name'
-    DataSource = dmTaxa.dsCountries
     Font.Height = -16
     ParentFont = False
   end
