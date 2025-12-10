@@ -20,7 +20,6 @@ type
     pDataGenerator: TBCPanel;
     pDataMigration: TBCPanel;
     pDataSchemaViewer: TBCPanel;
-    pSQLQuery: TBCPanel;
     btnOpenCodeGenerator: TButton;
     btnOpenLogViewer: TButton;
     btnOpenUsageDataViewer: TButton;
@@ -28,7 +27,6 @@ type
     btnOpenDataGenerator: TButton;
     btnOpenDataMigration: TButton;
     btnOpenSchemaViewer: TButton;
-    btnOpenSQLQuery: TButton;
     iIcons: TImageList;
     icoCodeGenerator: TImage;
     icoLogViewer: TImage;
@@ -37,15 +35,12 @@ type
     icoDataGenerator: TImage;
     icoDataMigration: TImage;
     icoDataSchemaViewer: TImage;
-    icoSQLQuery: TImage;
     titleCodeGenerator: TLabel;
     lblDataGenerator: TLabel;
     titleDataMigration: TLabel;
     lblDataMigration: TLabel;
     titleDataSchemaViewer: TLabel;
     lblDataSchemaViewer: TLabel;
-    titleSQLQuery: TLabel;
-    lblSQLQuery: TLabel;
     lblCodeGenerator: TLabel;
     titleLogViewer: TLabel;
     lblLogViewer: TLabel;

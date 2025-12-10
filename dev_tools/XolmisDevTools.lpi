@@ -17,7 +17,6 @@
     </General>
     <LazDoc Paths="docs"/>
     <i18n>
-      <EnableI18N Value="True"/>
       <OutDir Value="locale"/>
     </i18n>
     <VersionInfo>
@@ -37,6 +36,18 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="LazControls"/>
+      </Item>
+      <Item>
+        <PackageName Value="LazControlDsgn"/>
+      </Item>
+      <Item>
+        <PackageName Value="SDFLaz"/>
+      </Item>
+      <Item>
+        <PackageName Value="SQLDBLaz"/>
+      </Item>
       <Item>
         <PackageName Value="laz.virtualtreeview_package"/>
       </Item>
@@ -90,6 +101,20 @@
         <Filename Value="frm_logviewer.pp"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmLogViewer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="udlg_loading.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgLoading"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="udlg_progress.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgProgress"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>

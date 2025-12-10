@@ -6,7 +6,7 @@ interface
 
 uses
   Buttons, Classes, ComCtrls, ExtCtrls, laz.VirtualTrees, SynEdit, DateUtils, fgl, RegExpr,
-  SynHighlighterSQL, SysUtils, Forms, Controls, Graphics, Dialogs, dev_types;
+  SynHighlighterSQL, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, EditBtn, dev_types;
 
 type
 
@@ -16,18 +16,26 @@ type
     btnOpen: TBitBtn;
     btnSave: TBitBtn;
     btnClose: TBitBtn;
+    eSearch: TEditButton;
     iButtons: TImageList;
     hlSQLSyn: TSynSQLSyn;
     OpenDlg: TOpenDialog;
     splitLogMessage: TSplitter;
+    togError: TToggleBox;
+    togInfo: TToggleBox;
+    togWarning: TToggleBox;
+    togDebug: TToggleBox;
     vstLog: TLazVirtualStringTree;
     pTop: TPanel;
     SBar: TStatusBar;
     synMessage: TSynEdit;
     procedure btnCloseClick(Sender: TObject);
     procedure btnOpenClick(Sender: TObject);
+    procedure eSearchButtonClick(Sender: TObject);
+    procedure eSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure togErrorChange(Sender: TObject);
     procedure vstLogBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure vstLogFocusChanged
@@ -41,6 +49,8 @@ type
       var InitialStates: TVirtualNodeInitStates);
   private
     LogEntries: array of TLogEntry;
+    SearchText: String;
+    procedure ApplyFilters;
     procedure LoadLogFile(const aFileName: String);
   public
 
@@ -55,6 +65,47 @@ implementation
 
 { TfrmLogViewer }
 
+procedure TfrmLogViewer.ApplyFilters;
+var
+  Node: PVirtualNode;
+  Data: PLogEntry;
+  MatchesType, MatchesText: Boolean;
+begin
+  vstLog.BeginUpdate;
+  try
+    Node := vstLog.GetFirst;
+    while Assigned(Node) do
+    begin
+      Data := vstLog.GetNodeData(Node);
+      if Assigned(Data) then
+      begin
+        // Verifica se o tipo da mensagem deve ser exibido
+        MatchesType :=
+          ((Data^.LogLevel = 'Error')   and togError.Checked) or
+          ((Data^.LogLevel = 'Info')    and togInfo.Checked) or
+          ((Data^.LogLevel = 'Warning') and togWarning.Checked) or
+          ((Data^.LogLevel = 'Debug')   and togDebug.Checked);
+
+        // Filtro por texto
+        if SearchText <> '' then
+          MatchesText := (Pos(LowerCase(SearchText), LowerCase(Data^.Message)) > 0) or
+            (Pos(LowerCase(SearchText), LowerCase(Data^.Details)) > 0)
+        else
+          MatchesText := True;
+
+        // Se não passar nos filtros, marca como oculto
+        if MatchesType and MatchesText then
+          vstLog.IsVisible[Node] := True
+        else
+          vstLog.IsVisible[Node] := False;
+      end;
+      Node := vstLog.GetNext(Node);
+    end;
+  finally
+    vstLog.EndUpdate;
+  end;
+end;
+
 procedure TfrmLogViewer.btnCloseClick(Sender: TObject);
 begin
   Close;
@@ -64,6 +115,17 @@ procedure TfrmLogViewer.btnOpenClick(Sender: TObject);
 begin
   if OpenDlg.Execute then
     LoadLogFile(OpenDlg.FileName);
+end;
+
+procedure TfrmLogViewer.eSearchButtonClick(Sender: TObject);
+begin
+  eSearch.Clear;
+end;
+
+procedure TfrmLogViewer.eSearchChange(Sender: TObject);
+begin
+  SearchText := Trim(eSearch.Text);
+  ApplyFilters;
 end;
 
 procedure TfrmLogViewer.FormCreate(Sender: TObject);
@@ -91,6 +153,11 @@ var
 begin
   if not FileExists(aFileName) then
     Exit;
+
+  togError.Checked := True;
+  togInfo.Checked := True;
+  togWarning.Checked := True;
+  togDebug.Checked := True;
 
   SetLength(LogEntries, 0);
 
@@ -123,7 +190,11 @@ begin
           Entry.LogDate := ISO8601ToDate(Copy(Regex.Match[1], 1, 19));
           Entry.LogLevel := Regex.Match[2];
           Entry.Message := Regex.Match[3];
-          Entry.Details := Regex.Match[4]; // pode estar vazio
+          //Entry.Details := Regex.Match[4]; // pode estar vazio
+          if Regex.MatchLen[4] > 0 then
+            DetailBuffer.Add(Trim(Regex.Match[4]))
+          else
+            DetailBuffer.Clear;
           LogEntries[High(LogEntries)] := Entry;
           Node := vstLog.AddChild(nil, Entry);
         end
@@ -144,10 +215,17 @@ begin
       Regex.Free;
       DetailBuffer.Free;
     end;
+
+    SBar.Panels[0].Text := aFileName;
   finally
     Lines.Free;
   end;
 
+end;
+
+procedure TfrmLogViewer.togErrorChange(Sender: TObject);
+begin
+  ApplyFilters;
 end;
 
 procedure TfrmLogViewer.vstLogBeforeCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas;
