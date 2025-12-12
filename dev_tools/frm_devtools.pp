@@ -50,6 +50,7 @@ type
     lblSettingsEditor: TLabel;
     titleDataGenerator: TLabel;
     procedure btnOpenCodeGeneratorClick(Sender: TObject);
+    procedure btnOpenDataMigrationClick(Sender: TObject);
     procedure btnOpenLogViewerClick(Sender: TObject);
     procedure btnOpenSettingsEditorClick(Sender: TObject);
   private
@@ -64,7 +65,7 @@ var
 implementation
 
 uses
-  frm_classgenerator, frm_logviewer, frm_settingseditor;
+  frm_classgenerator, frm_logviewer, frm_settingseditor, frm_docsgenerator;
 
 {$R *.lfm}
 
@@ -78,6 +79,17 @@ begin
     ShowModal;
   finally
     FreeAndNil(frmClassGenerator);
+  end;
+end;
+
+procedure TfrmDevTools.btnOpenDataMigrationClick(Sender: TObject);
+begin
+  frmDocsGenerator := TfrmDocsGenerator.Create(nil);
+  with frmDocsGenerator do
+  try
+    ShowModal;
+  finally
+    FreeAndNil(frmDocsGenerator);
   end;
 end;
 

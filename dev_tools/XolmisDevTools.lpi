@@ -118,6 +118,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="frm_docsgenerator.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmDocsGenerator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -659,8 +659,8 @@ object frmDevTools: TfrmDevTools
       Anchors = [akTop, akRight]
       AutoSize = True
       Caption = 'Open'
-      Enabled = False
       TabOrder = 0
+      OnClick = btnOpenDataMigrationClick
     end
   end
   object pDataSchemaViewer: TBCPanel
