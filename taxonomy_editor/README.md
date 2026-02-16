@@ -11,4 +11,4 @@ Editor of taxonomy data for [Xolmis Desktop](https://github.com/cbeier-studio/Xo
 - [x] Batch actions for format scientific names, apply subspecies vernacular names, and rewrite the hierarchy.
 - [x] Manage country checklists.
 - [ ] Generate taxonomic updates for Xolmis Desktop.
-- [ ] Generate country checklists for Xolmis Mobile.
+- [x] Generate country checklists for Xolmis Mobile.
