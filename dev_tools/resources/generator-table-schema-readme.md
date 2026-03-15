@@ -201,83 +201,94 @@ Each column has the following structure:
 
 ### Date Functions
 
-| Function | Description |
-| --- | --- |
-| `add_days_random` | Adds a random number of days to a base date. |
-| `add_years_random` | Adds a random number of years to a base date. |
-| `inherit_or_random_date` | Inherits a date from another field or generates a random one if missing. |
-| `extract_day` | Extracts the day component from a date. |
-| `extract_month` | Extracts the month component from a date. |
-| `extract_year` | Extracts the year component from a date. |
-| `days_after` | Generates a date a certain number of days after another date. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `add_days_random` | Adds a random number of days to a base date. | `field`, `min`, `max`, `nullableProbability` |
+| `add_years_random` | Adds a random number of years to a base date. | `min`, `max`, `nullableProbability` |
+| `inherit_or_random_date` | Inherits a date from another field or generates a random one if missing. | `parentField`, `parentSource`, `dateField` |
+| `extract_day` | Extracts the day component from a date. | `field` |
+| `extract_month` | Extracts the month component from a date. | `field` |
+| `extract_year` | Extracts the year component from a date. | `field` |
+| `days_after` | Generates a date a certain number of days after another date. | `min`, `max`, `nullableProbability` |
 
 ### Time Functions
 
-| Function | Description |
-| --- | --- |
-| `random_time` | Generates a random time of day. |
-| `random_time_after` | Generates a random time after a reference time. |
-| `random_time_optional` | Same as `random_time`, but may return null based on probability. |
-| `random_time_after_optional` | Same as `random_time_after`, but may return null. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `random_time` | Generates a random time of day. | |
+| `random_time_after` | Generates a random time after a reference time. | `field`, `min`, `max` |
+| `random_time_optional` | Same as `random_time`, but may return null based on probability. | |
+| `random_time_after_optional` | Same as `random_time_after`, but may return null. | `field`, `min`, `max` |
 
 ### Number Functions
 
-| Function | Description |
-| --- | --- |
-| `random_int` | Generates a random integer. |
-| `random_int_range` | Generates a random integer within a specified range. |
-| `random_float` | Generates a random floating‑point number. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `random_int` | Generates a random integer. | `min`, `max` |
+| `random_int_range` | Generates a random integer within a specified range. | `min`, `max` |
+| `random_float` | Generates a random floating‑point number. | `min`, `max`, `decimals` |
 
 ### Coordinate Functions
 
-| Function | Description |
-| --- | --- |
-| `random_latitude` | Generates a random latitude value. |
-| `random_longitude` | Generates a random longitude value. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `random_latitude` | Generates a random latitude value. | |
+| `random_longitude` | Generates a random longitude value. | |
 
 ### Text Functions
 
-| Function | Description |
-| --- | --- |
-| `concat` | Concatenates multiple fields or values. |
-| `initials` | Extracts initials from a name. |
-| `lorem_text` | Generates placeholder text (multiple sentences). |
-| `lorem_sentence` | Generates a single placeholder sentence. |
-| `email_from_name` | Creates an email address based on a name. |
-| `random_color` | Generates a random color in hex or RGB format. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `concat` | Concatenates multiple fields or values. | `fields`, `delimiter`, `skipNulls`, `prefix`, `suffix` |
+| `initials` | Extracts initials from a name. | `fields`, `textcase` |
+| `citation` | Generates a name citation. | `fields` |
+| `lorem_text` | Generates placeholder text (multiple sentences). | `min`, `max` |
+| `lorem_sentence` | Generates a single placeholder sentence. | |
+| `email_from_name` | Creates an email address based on a name. | `fields` |
+| `fake_url` | Generates an URL based on a name. | `fields` |
+| `random_color` | Generates a random color in hex or RGB format. | `colorFormat` |
+| `tally_values` | Generates a random integer or X for presence. | |
 
 ### Hierarchy Functions
 
-| Function | Description |
-| --- | --- |
-| `inherit_hierarchy` | Inherits hierarchical attributes from a parent record. |
-| `hierarchical_name` | Builds a name based on hierarchical structure. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `inherit_hierarchy` | Inherits hierarchical attributes from a parent record. | `level`, `rankField`, `parentField` |
+| `hierarchical_name` | Builds a name based on hierarchical structure. | `rankField`, `parentField` |
 
 ### Taxonomy Functions
 
-| Function | Description |
-| --- | --- |
-| `inherit_taxonomy` | Inherits taxonomic information from a parent or source. |
-| `assign_valid_taxon` | Assigns a valid taxon based on rules or hierarchy. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `inherit_taxonomy` | Inherits taxonomic information from a parent or source. | `level`, `rankField`, `parentField` |
+| `assign_valid_taxon` | Assigns a valid taxon based on rules or hierarchy. | |
+| `format_botanical_name` | Format a botanical scientific name using HTML tags. | `fields` |
+| `format_zoological_name` | Format a zoological scientific name using HTML tags. | `fields` |
 
 ### Sequence Functions
 
-| Function | Description |
-| --- | --- |
-| `sequence_within_group` | Generates sequential numbers grouped by a field. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `sequence_within_group` | Generates sequential numbers grouped by a field. | `min`, `max`, `groupField` |
 
 ### Polymorphic Functions
 
-| Function | Description |
-| --- | --- |
-| `random_record_id` | Selects a random record ID from a referenced table. |
-| `inherit_or_source` | Inherits a value or retrieves it from a source table. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `random_record_id` | Selects a random record ID from a referenced table. | `tableField` |
+| `inherit_or_source` | Inherits a value or retrieves it from a source table. | `parentField`, `parentSource`, `sourceField` |
 
 ### Conversion Functions
 
-| Function | Description |
-| --- | --- |
-| `convert_beaufort_to_kmh` | Converts Beaufort scale values to km/h. |
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `convert_beaufort_to_kmh` | Converts Beaufort scale values to km/h. | `field` |
+
+### Formula Functions
+
+| Function | Description | Arguments |
+| --- | --- | --- |
+| `egg_volume_formula` | Calculate egg volume. | `lengthField`, `widthField` |
 
 ## 8. Function Arguments (`args`)
 
@@ -289,6 +300,7 @@ All arguments allowed by the schema:
 | `field` | string |
 | `parentField` | string |
 | `parentSource` | string |
+| `sourceField` | string |
 | `dateField` | string |
 | `delimiter` | string |
 | `min` | number |
