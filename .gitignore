@@ -37,5 +37,7 @@ sqlite3.dll
 data/
 *.json
 *.ini
-
 *.sqlite3
+GPATH
+GRTAGS
+GTAGS
