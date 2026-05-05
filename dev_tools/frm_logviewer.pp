@@ -19,6 +19,7 @@ type
     eSearch: TEditButton;
     iButtons: TImageList;
     hlSQLSyn: TSynSQLSyn;
+    mMessage: TMemo;
     OpenDlg: TOpenDialog;
     splitLogMessage: TSplitter;
     togError: TToggleBox;
@@ -260,7 +261,10 @@ var
 begin
   Data := Sender.GetNodeData(Node);
   if Assigned(Data) then
+  begin
+    mMessage.Lines.Text := Data^.Message;
     synMessage.Lines.Text := Data^.Details;
+  end;
 end;
 
 procedure TfrmLogViewer.vstLogFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);

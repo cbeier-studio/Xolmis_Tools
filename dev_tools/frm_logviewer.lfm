@@ -8,7 +8,7 @@ object frmLogViewer: TfrmLogViewer
   ClientWidth = 1009
   PopupMode = pmAuto
   Position = poDefaultPosOnly
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.6.0.0'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   object pTop: TPanel
@@ -151,9 +151,9 @@ object frmLogViewer: TfrmLogViewer
     AnchorSideTop.Control = eSearch
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = splitLogMessage
-    AnchorSideBottom.Control = SBar
+    AnchorSideBottom.Control = mMessage
     Left = 0
-    Height = 448
+    Height = 358
     Top = 73
     Width = 536
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -177,6 +177,8 @@ object frmLogViewer: TfrmLogViewer
         Width = 302
       end>
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
     TreeOptions.MiscOptions = [toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
     TreeOptions.SelectionOptions = [toFullRowSelect]
@@ -735,6 +737,19 @@ object frmLogViewer: TfrmLogViewer
     TextHint = 'Filter'
     OnButtonClick = eSearchButtonClick
     OnChange = eSearchChange
+  end
+  object mMessage: TMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = vstLog
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = SBar
+    Left = 0
+    Height = 90
+    Top = 431
+    Width = 536
+    Anchors = [akLeft, akRight, akBottom]
+    ScrollBars = ssBoth
+    TabOrder = 6
   end
   object iButtons: TImageList
     Scaled = True
