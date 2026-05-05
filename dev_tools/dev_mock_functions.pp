@@ -5,7 +5,7 @@ unit dev_mock_functions;
 interface
 
 uses
-  Classes, SysUtils, DateUtils, Math, fgl, dev_mock_types;
+  Classes, SysUtils, DateUtils, Math, fgl, fpjson, jsonparser, dev_mock_types;
 
 type
   TStringIntMap = specialize TFPGMap<string, Integer>;
@@ -58,6 +58,153 @@ type
 
 implementation
 
+function Abbreviate(const FullName: string): string;
+var
+  Parts: TStringList;
+  i: Integer;
+  Token: string;
+begin
+  Result := '';
+  Parts := TStringList.Create;
+  try
+    ExtractStrings([' ', #9, '-', '_'], [], PChar(Trim(FullName)), Parts);
+    for i := 0 to Parts.Count - 1 do
+    begin
+      Token := Trim(Parts[i]);
+      if Token <> '' then
+        Result := Result + UpCase(Token[1]);
+    end;
+  finally
+    Parts.Free;
+  end;
+end;
+
+function LoremSentence: string;
+const
+  Words: array[0..18] of string = (
+    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
+    'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
+    'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua'
+  );
+var
+  i, WordCount: Integer;
+  W: string;
+begin
+  WordCount := 6 + Random(9); // 6..14 words
+  Result := '';
+
+  for i := 1 to WordCount do
+  begin
+    W := Words[Random(Length(Words))];
+    if i = 1 then
+      W[1] := UpCase(W[1]);
+
+    if Result = '' then
+      Result := W
+    else
+      Result := Result + ' ' + W;
+  end;
+
+  Result := Result + '.';
+end;
+
+function LoremTextRange(MinParagraphs, MaxParagraphs: Integer): string;
+const
+  Paragraphs: array[0..5] of string = (
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    'Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
+    'Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Curabitur blandit tempus porttitor. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna vel scelerisque nisl consectetur.',
+    'Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam volutpat, sem at feugiat posuere, odio lorem interdum neque, non posuere arcu odio a nibh.',
+    'Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi nam eget dui etiam rhoncus.'
+  );
+var
+  i: Integer;
+  ParagraphCount: Integer;
+  Tmp: Integer;
+begin
+  if MinParagraphs > MaxParagraphs then
+  begin
+    Tmp := MinParagraphs;
+    MinParagraphs := MaxParagraphs;
+    MaxParagraphs := Tmp;
+  end;
+
+  if MaxParagraphs < 1 then
+    Exit('');
+
+  if MinParagraphs < 1 then
+    MinParagraphs := 1;
+
+  ParagraphCount := MinParagraphs + Random(MaxParagraphs - MinParagraphs + 1);
+  Result := '';
+
+  for i := 1 to ParagraphCount do
+  begin
+    if Result = '' then
+      Result := Paragraphs[Random(Length(Paragraphs))]
+    else
+      Result := Result + LineEnding + LineEnding + Paragraphs[Random(Length(Paragraphs))];
+  end;
+end;
+
+function EmailFromName(const FullName: string): string;
+var
+  Parts: TStringList;
+  i: Integer;
+  Token: string;
+
+  function NormalizeEmailPart(const S: string): string;
+  var
+    j: Integer;
+    C: Char;
+  begin
+    Result := '';
+    for j := 1 to Length(LowerCase(S)) do
+    begin
+      C := LowerCase(S)[j];
+      if ((C >= 'a') and (C <= 'z')) or ((C >= '0') and (C <= '9')) then
+        Result := Result + C;
+    end;
+  end;
+
+begin
+  Parts := TStringList.Create;
+  try
+    ExtractStrings([' ', #9, '-', '_'], [], PChar(Trim(FullName)), Parts);
+
+    for i := Parts.Count - 1 downto 0 do
+    begin
+      Token := NormalizeEmailPart(Parts[i]);
+      if Token = '' then
+        Parts.Delete(i)
+      else
+        Parts[i] := Token;
+    end;
+
+    if Parts.Count = 0 then
+      Result := 'user' + IntToStr(1000 + Random(9000))
+    else if Parts.Count = 1 then
+      Result := Parts[0]
+    else
+      Result := Parts[0] + '.' + Parts[Parts.Count - 1];
+
+    Result := Result + '@fakemail.com';
+  finally
+    Parts.Free;
+  end;
+end;
+
+function FindExternalSourceByName(Sources: TExternalSourceList; const AName: string): TExternalSource;
+var
+  i: Integer;
+begin
+  Result := nil;
+  for i := 0 to Sources.Count - 1 do
+    if SameText(Sources[i].Name, AName) then
+      Exit(Sources[i]);
+end;
+
 { TValueGenerator }
 
 constructor TValueGenerator.Create(AConfig: TGeneratorConfig);
@@ -100,25 +247,63 @@ end;
 
 function TValueGenerator.ApplyFunction(Col: TColumn; Row: TStringList; Schema: TTableSchema): string;
 var
-  A, B: Integer;
+  A, B, D: Integer;
   BaseDate: TDateTime;
   S: string;
 begin
   case Col.Func of
 
+    // Number functions
     'random_int':
       begin
-        A := StrToInt(Col.Args.Raw.Values['min']);
-        B := StrToInt(Col.Args.Raw.Values['max']);
+        A := StrToIntDef(Col.Args.Raw.Values['min'], 0);
+        B := StrToIntDef(Col.Args.Raw.Values['max'], 0);
         Exit(IntToStr(A + Random(B - A + 1)));
       end;
 
+    'random_int_range': ;
+
     'random_float':
       begin
+        A := StrToIntDef(Col.Args.Raw.Values['min'], 0);
+        B := StrToIntDef(Col.Args.Raw.Values['max'], 0);
+        D := StrToInt(Col.Args.Raw.Values['decimals']);
+        Exit(FormatFloat(',0.' + StringOfChar('0', D), A + Random * (B - A)));
+      end;
+
+    // Date functions
+    'days_after':
+      begin
+        S := Row.Values[Col.Args.Raw.Values['field']];
+        BaseDate := ISO8601ToDate(S, False);
         A := StrToInt(Col.Args.Raw.Values['min']);
         B := StrToInt(Col.Args.Raw.Values['max']);
-        Exit(FloatToStr(A + Random * (B - A)));
+        Exit(FormatDateTime('yyyy-mm-dd', BaseDate + Random(B - A + 1)));
       end;
+
+    'add_days_random': ;
+    'add_years_random': ;
+    'inherit_or_random_date': ;
+    'extract_day': ;
+    'extract_month': ;
+    'extract_year': ;
+
+    // Time functions
+    'random_time': ;
+    'random_time_after': ;
+
+    // Text functions
+    'concat':
+      begin
+        Result := '';
+        for S in Col.Args.Raw.Values['fields'].Split(',') do
+          Result += Row.Values[S];
+      end;
+
+    'initials':
+      Exit(Abbreviate(Row.Values[Col.Args.Raw.Values['field']]));
+
+    'citation': ;
 
     'lorem_sentence':
       Exit(LoremSentence);
@@ -130,34 +315,42 @@ begin
         Exit(LoremTextRange(A, B));
       end;
 
-    'days_after':
-      begin
-        S := Row.Values[Col.Args.Raw.Values['field']];
-        BaseDate := ISO8601ToDate(S, False);
-        A := StrToInt(Col.Args.Raw.Values['min']);
-        B := StrToInt(Col.Args.Raw.Values['max']);
-        Exit(FormatDateTime('yyyy-mm-dd', BaseDate + Random(B - A + 1)));
-      end;
-
-    'concat':
-      begin
-        Result := '';
-        for S in Col.Args.Raw.Values['fields'].Split(',') do
-          Result += Row.Values[S];
-      end;
-
-    'initials':
-      Exit(Abbreviate(Row.Values[Col.Args.Raw.Values['field']]));
-
     'email_from_name':
       Exit(EmailFromName(Row.Values[Col.Args.Raw.Values['field']]));
 
+    'fake_url': ;
+    'random_color': ;
+    'tally_values': ;
+
+    // Coordinate functions
     'random_latitude':
       Exit(FloatToStr(-90 + Random * 180));
 
     'random_longitude':
       Exit(FloatToStr(-180 + Random * 360));
 
+    // Hierarchy functions
+    'inherit_hierarchy': ;
+    'hierarchical_name': ;
+
+    // Taxonomy functions
+    'inherit_taxonomy': ;
+    'assign_valid_taxon': ;
+    'format_botanical_name': ;
+    'format_zoological_name': ;
+
+    // Sequence functions
+    'sequence_within_group': ;
+
+    // Polymorphic functions
+    'random_record_id': ;
+    'inherit_or_source': ;
+
+    // Conversion functions
+    'convert_beaufort_to_kmh': ;
+
+    // Formula functions
+    'egg_volume_formula': ;
   end;
 end;
 
@@ -276,12 +469,18 @@ function TValueGenerator.GetFromExternalSource(Col: TColumn; Schema: TTableSchem
 var
   Ext: TExternalSource;
   Repo: TExternalRepo;
-  i: Integer;
+  i, RepoIndex: Integer;
 begin
-  if not Schema.ExternalSources.TryGetData(Col.Source, Ext) then
+  Ext := FindExternalSourceByName(Schema.ExternalSources, Col.Source);
+  if Ext = nil then
     Exit('');
 
-  if not FRepos.TryGetData(Ext.Name, Repo) then
+  RepoIndex := FRepos.IndexOf(Ext.Name);
+  if RepoIndex = -1 then
+    Exit('');
+
+  Repo := FRepos.Data[RepoIndex];
+  if (Repo = nil) or (Repo.Data = nil) or (Repo.Data.Count = 0) then
     Exit('');
 
   i := Random(Repo.Data.Count);
@@ -292,9 +491,14 @@ function TValueGenerator.GetFromSourceTable(Col: TColumn): string;
 var
   Cache: TTableDataCache;
   Row: TStringList;
-  i: Integer;
+  i, CacheIndex: Integer;
 begin
-  if not FTableCache.TryGetData(Col.SourceTable, Cache) then
+  CacheIndex := FTableCache.IndexOf(Col.SourceTable);
+  if CacheIndex = -1 then
+    Exit('');
+
+  Cache := FTableCache.Data[CacheIndex];
+  if (Cache = nil) or (Length(Cache.Rows) = 0) then
     Exit('');
 
   i := Random(Length(Cache.Rows));
@@ -304,26 +508,32 @@ begin
 end;
 
 function TValueGenerator.NextAutoInc(const ColName: string; StartAt, IncBy: Integer): Integer;
+var
+  Idx: Integer;
 begin
-  if not FAutoInc.TryGetData(ColName, Result) then
+  Idx := FAutoInc.IndexOf(ColName);
+  if Idx = -1 then
   begin
     Result := StartAt;
     FAutoInc.Add(ColName, Result);
   end
   else
   begin
+    Result := FAutoInc.Data[Idx];
     Result := Result + IncBy;
-    FAutoInc[ColName] := Result;
+    FAutoInc.Data[Idx] := Result;
   end;
 end;
 
 procedure TValueGenerator.RegisterTableData(const TableName: string; const Rows: array of TStringList);
 var
   Cache: TTableDataCache;
-  i: Integer;
+  i, CacheIndex: Integer;
 begin
-  if FTableCache.TryGetData(TableName, Cache) then
+  CacheIndex := FTableCache.IndexOf(TableName);
+  if CacheIndex <> -1 then
   begin
+    Cache := FTableCache.Data[CacheIndex];
     // already exists: clear and replace
     for i := 0 to High(Cache.Rows) do
       Cache.Rows[i].Free;

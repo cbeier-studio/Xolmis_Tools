@@ -5,7 +5,7 @@ unit dev_mock_types;
 interface
 
 uses
-  Classes, SysUtils, fgl, fpjson, jsonparser;
+  Classes, SysUtils, fgl, fpjson, jsonparser, FileUtil;
 
 type
   TGlobalOptions = class
@@ -216,28 +216,6 @@ type
     function Resolve(Schema: TTableSchema): TStringList;
   end;
 
-  { TMockDataGenerator }
-
-  TMockDataGenerator = class
-  private
-    FConfig: TGeneratorConfig;
-    FSchemas: specialize TFPGMap<string, TTableSchema>;
-    FValueGen: TValueGenerator;
-
-    procedure LoadSchemas;
-    function ResolveTableOrder: TStringList;
-    function ResolveColumnOrder(ASchema: TTableSchema): TStringList;
-
-    function GenerateColumnValue(Col: TColumn; Row: TStringList; Schema: TTableSchema): string;
-    procedure GenerateTable(const Schema: TTableSchema; const OutputFile: string);
-  public
-    constructor Create;
-    destructor Destroy; override;
-
-    procedure LoadConfig(const FileName: string);
-    procedure GenerateAll;
-  end;
-
   procedure Require(const Condition: Boolean; const Msg: string);
   procedure RequireNonEmpty(const S, FieldName: string);
   procedure RequireInSet(const S, FieldName: string; const Allowed: array of string);
@@ -328,6 +306,8 @@ begin
 end;
 
 function TGeneratorConfig.GetSchemaByName(const AName: String): TSchemaRef;
+var
+  i: Integer;
 begin
   Result := nil;
 
@@ -457,7 +437,7 @@ begin
   { Validate generationOrder references }
   for i := 0 to GenerationOrder.Count - 1 do
     Require(
-      Schemas.IndexOfName(GenerationOrder[i]) <> -1,
+      GetSchemaByName(GenerationOrder[i]) <> nil,
       'generationOrder references unknown schema "' + GenerationOrder[i] + '"'
     );
 end;
@@ -778,10 +758,14 @@ begin
       RequireInSet(Col.GenerationMode, 'generationMode',
         ['random', 'sequential', 'incremental', 'conditional', 'template', 'list']);
 
+    if Col.Weights.Count > 0 then
+      Require(Col.EnumValues.Count > 0,
+        'columns[' + IntToStr(i) + '].weights requires enum values');
+
     if Col.EnumValues.Count > 0 then
-      Require(Col.Weights.Count = 0
+      Require((Col.Weights.Count = 0)
         or (Col.Weights.Count = Col.EnumValues.Count),
-        'weights must match enum length');
+        'columns[' + IntToStr(i) + '].weights must match enum length');
 
     if (Col.SourceTable <> '') xor (Col.SourceField <> '') then
       raise Exception.Create('sourceTable and sourceField must be used together');
@@ -984,170 +968,6 @@ begin
       raise Exception.Create('Cycle detected in column dependencies.');
   finally
     Queue.Free;
-  end;
-end;
-
-{ TMockDataGenerator }
-
-constructor TMockDataGenerator.Create;
-begin
-  FConfig := nil;
-  FSchemas := specialize TFPGMap<string, TTableSchema>.Create;
-  FValueGen := nil;
-end;
-
-destructor TMockDataGenerator.Destroy;
-var
-  i: Integer;
-begin
-  for i := 0 to FSchemas.Count - 1 do
-    FSchemas.Data[i].Free;
-  FSchemas.Free;
-  FConfig.Free;
-  FValueGen.Free;
-  inherited Destroy;
-end;
-
-procedure TMockDataGenerator.GenerateAll;
-var
-  Order: TStringList;
-  i: Integer;
-  TableName: string;
-  Schema: TTableSchema;
-  SRef: TSchemaRef;
-begin
-  Order := ResolveTableOrder;
-  try
-    for i := 0 to Order.Count - 1 do
-    begin
-      TableName := Order[i];
-      Schema := FSchemas[TableName];
-      SRef := FConfig.Schemas[FConfig.Schemas.IndexOfName(TableName)];
-
-      if SRef.OutputFiles.Count = 0 then
-        GenerateTable(Schema, FConfig.GlobalOptions.OutputDir + '/' + TableName + '.csv')
-      else
-        GenerateTable(Schema, FConfig.GlobalOptions.OutputDir + '/' + SRef.OutputFiles[0]);
-    end;
-  finally
-    Order.Free;
-  end;
-end;
-
-function TMockDataGenerator.GenerateColumnValue(Col: TColumn; Row: TStringList; Schema: TTableSchema): string;
-begin
-  Result := FValueGen.Generate(Col, Row, Schema);
-end;
-
-procedure TMockDataGenerator.GenerateTable(const Schema: TTableSchema; const OutputFile: string);
-var
-  ColOrder: TStringList;
-  Exporter: ITableExporter;
-  Headers: array of string;
-  Values: array of string;
-  Row: TStringList;
-  GeneratedRows: array of TStringList;
-  i, c: Integer;
-  Count: Integer;
-begin
-  ColOrder := ResolveColumnOrder(Schema);
-  try
-    Count := FConfig.GetSchemaByName(Schema.TableName).MaxCount;
-
-    SetLength(Headers, ColOrder.Count);
-    SetLength(Values, ColOrder.Count);
-    SetLength(GeneratedRows, Count);
-
-    for i := 0 to ColOrder.Count - 1 do
-      Headers[i] := ColOrder[i];
-
-    Exporter := CreateExporter(efCSV, Schema.TableName);
-    Exporter.Open(OutputFile, Headers);
-
-    for i := 0 to Count - 1 do
-    begin
-      Row := TStringList.Create;
-      Row.NameValueSeparator := '=';
-      GeneratedRows[i] := Row;
-
-      for c := 0 to ColOrder.Count - 1 do
-      begin
-        Values[c] := GenerateColumnValue(
-          Schema.Columns[ColOrder[c]],
-          Row,
-          Schema
-        );
-        Row.Values[ColOrder[c]] := Values[c];
-      end;
-
-      Exporter.WriteRow(Values);
-    end;
-
-    Exporter.Close;
-
-    FValueGen.RegisterTableData(Schema.TableName, GeneratedRows);
-
-  finally
-    ColOrder.Free;
-  end;
-end;
-
-procedure TMockDataGenerator.LoadConfig(const FileName: string);
-begin
-  if Assigned(FConfig) then
-    FreeAndNil(FConfig);
-
-  FConfig := TGeneratorConfig.Create;
-  FConfig.LoadFromJSON(FileName);
-  FConfig.Validate;
-
-  LoadSchemas;
-
-  FreeAndNil(FValueGen);
-  FValueGen := TValueGenerator.Create(FConfig);
-end;
-
-procedure TMockDataGenerator.LoadSchemas;
-var
-  i: Integer;
-  SRef: TSchemaRef;
-  Schema: TTableSchema;
-begin
-  FSchemas.Clear;
-
-  for i := 0 to FConfig.Schemas.Count - 1 do
-  begin
-    SRef := FConfig.Schemas[i];
-
-    Schema := TTableSchema.Create;
-    Schema.LoadFromJSON(SRef.FileName);
-    Schema.Validate;
-
-    FSchemas.Add(SRef.Name, Schema);
-  end;
-end;
-
-function TMockDataGenerator.ResolveColumnOrder(ASchema: TTableSchema): TStringList;
-var
-  Resolver: TColumnDependencyResolver;
-begin
-  Resolver := TColumnDependencyResolver.Create;
-  try
-    Result := Resolver.Resolve(ASchema);
-  finally
-    Resolver.Free;
-  end;
-end;
-
-function TMockDataGenerator.ResolveTableOrder: TStringList;
-var
-  Resolver: TTableDependencyResolver;
-begin
-  Resolver := TTableDependencyResolver.Create;
-  try
-    Result := Resolver.Resolve(FConfig);
-  finally
-    Resolver.Free;
   end;
 end;
 

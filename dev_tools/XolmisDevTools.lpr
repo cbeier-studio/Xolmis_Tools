@@ -11,7 +11,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, frm_devtools, dev_types, frm_classgenerator, frm_settingseditor, frm_logviewer, sdflaz, lazcontrols,
-  frm_docsgenerator, dev_mock_types, dev_mock_functions;
+  frm_docsgenerator, dev_mock_types, dev_mock_functions, dev_mock_generator;
 
 {$R *.res}
 
