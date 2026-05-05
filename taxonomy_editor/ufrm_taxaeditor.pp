@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LCLType, LCLIntf, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, Menus, DB, DBCtrls,
-  ActnList, StdCtrls, BCPanel, BCButton, ColorSpeedButton, StrUtils, RegExpr, Character,
+  ActnList, StdCtrls, BCPanel, BCButton, ColorSpeedButton, StrUtils, RegExpr, Character, fpjson, jsonparser,
   BGRABitmap, SQLDB, CheckLst, Grids, DBGrids, ComCtrls, DBEditButton, ToggleSwitch, utils_global, data_types,
   Types, ImgList, HtmlView;
 
@@ -96,6 +96,7 @@ type
     ptSliverFullname: TBCPanel;
     ptToolbar: TPanel;
     ptVernacular: TPanel;
+    SaveDlg: TSaveDialog;
     sbAddVernacular: TSpeedButton;
     sbAdvancedFilters: TSpeedButton;
     sbCancelRecord: TSpeedButton;
@@ -280,6 +281,7 @@ type
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
     procedure pmxMobileSpeciesListClick(Sender: TObject);
+    procedure pmxRanksListClick(Sender: TObject);
     procedure rbMarkedYesClick(Sender: TObject);
     procedure sbAddSynonymClick(Sender: TObject);
     procedure sbAddVernacularClick(Sender: TObject);
@@ -1546,6 +1548,63 @@ begin
     ShowModal;
   finally
     FreeAndNil(dlgExportSpeciesList);
+  end;
+end;
+
+procedure TfrmTaxaEditor.pmxRanksListClick(Sender: TObject);
+var
+  Arr: TJSONArray;
+  Obj: TJSONObject;
+  FS: TFileStream;
+  FRank: TRank;
+  FRepo: TRankRepository;
+  BM: TBookMark;
+  FFileName: String;
+  S: TStringStream;
+begin
+  if SaveDlg.Execute then
+    FFileName := SaveDlg.FileName
+  else
+    Exit;
+
+  FRepo := TRankRepository.Create(dmTaxa.sqlCon);
+  FRank := TRank.Create();
+  Arr := TJSONArray.Create;
+  try
+    BM := dmTaxa.qRanks.GetBookmark;
+    dmTaxa.qRanks.DisableControls;
+    dmTaxa.qRanks.First;
+    try
+      while not dmTaxa.qRanks.EOF do
+      begin
+        FRank.Clear;
+        FRepo.Hydrate(dmTaxa.qRanks, FRank);
+        Obj := GetJSON(FRank.ToJSON) as TJSONObject;
+        Arr.Add(Obj);
+
+        dmTaxa.qRanks.Next;
+      end;
+    finally
+      dmTaxa.qRanks.GotoBookmark(BM);
+      FreeAndNil(FRank);
+      FRepo.Free;
+      dmTaxa.qRanks.EnableControls;
+    end;
+
+    S := TStringStream.Create(Arr.FormatJSON([], 2));
+    try
+      FS := TFileStream.Create(FFileName, fmCreate);
+      try
+        FS.CopyFrom(S, S.Size);
+      finally
+        FS.Free;
+      end;
+    finally
+      S.Free;
+    end;
+
+  finally
+    Arr.Free;
   end;
 end;
 

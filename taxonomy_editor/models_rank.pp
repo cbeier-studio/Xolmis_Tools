@@ -150,15 +150,16 @@ var
 begin
   Obj := TJSONObject(GetJSON(AJSONString));
   try
+    FId             := Obj.Get('rank_id', 0);
     FName           := Obj.Get('rank_name', '');
     FAbbreviation   := Obj.Get('abbreviation', '');
-    FRankIndex      := Obj.Get('rank_index', 0);
+    FRankIndex      := Obj.Get('rank_seq', 0);
     FMainRank       := Obj.Get('main_rank', False);
     FSubrank        := Obj.Get('subrank', False);
     FInfrarank      := Obj.Get('infrarank', False);
     FInfraspecific  := Obj.Get('infraspecific', False);
-    FZoologicalCode := Obj.Get('zoological', True);
-    FBotanicalCode  := Obj.Get('botanical', False);
+    FZoologicalCode := Obj.Get('iczn', True);
+    FBotanicalCode  := Obj.Get('icbn', False);
   finally
     Obj.Free;
   end;
@@ -170,15 +171,16 @@ var
 begin
   JSONObject := TJSONObject.Create;
   try
+    JSONObject.Add('rank_id', FId);
     JSONObject.Add('rank_name', FName);
     JSONObject.Add('abbreviation', FAbbreviation);
-    JSONObject.Add('rank_index', FRankIndex);
+    JSONObject.Add('rank_seq', FRankIndex);
     JSONObject.Add('main_rank', FMainRank);
     JSONObject.Add('subrank', FSubrank);
     JSONObject.Add('infrarank', FInfrarank);
     JSONObject.Add('infraspecific', FInfraspecific);
-    JSONObject.Add('zoological', FZoologicalCode);
-    JSONObject.Add('botanical', FBotanicalCode);
+    JSONObject.Add('iczn', FZoologicalCode);
+    JSONObject.Add('icbn', FBotanicalCode);
 
     Result := JSONObject.AsJSON;
   finally

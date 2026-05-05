@@ -7,7 +7,7 @@ object frmTaxaEditor: TfrmTaxaEditor
   ClientHeight = 1061
   ClientWidth = 1924
   SnapOptions.SnapToMonitor = True
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.6.0.0'
   WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate
@@ -5854,6 +5854,14 @@ object frmTaxaEditor: TfrmTaxaEditor
     object pmxRanksList: TMenuItem
       Caption = 'Taxon ranks list'
       Visible = False
+      OnClick = pmxRanksListClick
     end
+  end
+  object SaveDlg: TSaveDialog
+    DefaultExt = '.json'
+    Filter = 'JSON files|*.json'
+    Options = [ofOverwritePrompt, ofEnableSizing]
+    Left = 360
+    Top = 272
   end
 end
