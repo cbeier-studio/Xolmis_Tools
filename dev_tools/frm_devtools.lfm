@@ -551,7 +551,7 @@ object frmDevTools: TfrmDevTools
       Anchors = [akTop, akRight]
       AutoSize = True
       Caption = 'Open'
-      Enabled = False
+      OnClick = btnOpenDataGeneratorClick
       TabOrder = 0
     end
   end

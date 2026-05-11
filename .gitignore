@@ -35,6 +35,7 @@ published/
 sqlite3.dll
 #test/
 data/
+output/
 *.json
 *.ini
 *.sqlite3

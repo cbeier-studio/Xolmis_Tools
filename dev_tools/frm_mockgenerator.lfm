@@ -1,0 +1,56 @@
+object frmMockGenerator: TfrmMockGenerator
+  Left = 300
+  Height = 440
+  Top = 180
+  Width = 780
+  Caption = 'Mock Data Generator'
+  ClientHeight = 440
+  ClientWidth = 780
+  OnCreate = FormCreate
+  LCLVersion = '4.4.0.0'
+  object lblConfig: TLabel
+    Left = 16
+    Height = 15
+    Top = 18
+    Width = 65
+    Caption = 'Config File:'
+    ParentColor = False
+  end
+  object eConfigFile: TFileNameEdit
+    Left = 88
+    Height = 23
+    Top = 14
+    Width = 676
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 0
+  end
+  object MemoLog: TMemo
+    Left = 16
+    Height = 344
+    Top = 54
+    Width = 748
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ScrollBars = ssAutoBoth
+    TabOrder = 1
+  end
+  object btnGenerate: TButton
+    Left = 605
+    Height = 25
+    Top = 407
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'Generate'
+    OnClick = btnGenerateClick
+    TabOrder = 2
+  end
+  object btnClose: TButton
+    Left = 689
+    Height = 25
+    Top = 407
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'Close'
+    OnClick = btnCloseClick
+    TabOrder = 3
+  end
+end

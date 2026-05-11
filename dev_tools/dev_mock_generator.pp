@@ -13,6 +13,7 @@ type
 
   TMockDataGenerator = class
   private
+    FConfigFileName: string;
     FConfig: TGeneratorConfig;
     FSchemas: specialize TFPGMap<string, TTableSchema>;
     FValueGen: TValueGenerator;
@@ -22,7 +23,8 @@ type
     function ResolveColumnOrder(ASchema: TTableSchema): TStringList;
 
     function GenerateColumnValue(Col: TColumn; Row: TStringList; Schema: TTableSchema): string;
-    procedure GenerateTable(const Schema: TTableSchema; const OutputFile: string);
+    procedure GenerateTable(const Schema: TTableSchema; const OutputFile: string;
+      const RowCount: Integer);
   public
     constructor Create;
     destructor Destroy; override;
@@ -52,6 +54,7 @@ end;
 
 constructor TMockDataGenerator.Create;
 begin
+  FConfigFileName := '';
   FConfig := nil;
   FSchemas := specialize TFPGMap<string, TTableSchema>.Create;
   FValueGen := nil;
@@ -76,19 +79,39 @@ var
   TableName: string;
   Schema: TTableSchema;
   SRef: TSchemaRef;
+  RowCount: Integer;
+  OutputBaseDir: string;
+  c: Integer;
 begin
   Order := ResolveTableOrder;
   try
+    OutputBaseDir := IncludeTrailingPathDelimiter(FConfig.GlobalOptions.OutputDir);
+
     for i := 0 to Order.Count - 1 do
     begin
       TableName := Order[i];
       Schema := FSchemas[TableName];
       SRef := FConfig.GetSchemaByName(TableName);
 
+      if SRef = nil then
+        raise Exception.Create('Schema not found in config: ' + TableName);
+
+      RowCount := SRef.DefaultCount;
+      if RowCount <= 0 then
+        RowCount := SRef.MaxCount;
+
+      if (SRef.MaxCount > 0) and (RowCount > SRef.MaxCount) then
+        RowCount := SRef.MaxCount;
+
+      if (FConfig.GlobalOptions.MaxRecordsPerTable > 0)
+         and (RowCount > FConfig.GlobalOptions.MaxRecordsPerTable) then
+        RowCount := FConfig.GlobalOptions.MaxRecordsPerTable;
+
       if SRef.OutputFiles.Count = 0 then
-        GenerateTable(Schema, FConfig.GlobalOptions.OutputDir + '/' + TableName + '.csv')
+        GenerateTable(Schema, OutputBaseDir + TableName + '.csv', RowCount)
       else
-        GenerateTable(Schema, FConfig.GlobalOptions.OutputDir + '/' + SRef.OutputFiles[0]);
+        for c := 0 to SRef.OutputFiles.Count - 1 do
+          GenerateTable(Schema, OutputBaseDir + SRef.OutputFiles[c], RowCount);
     end;
   finally
     Order.Free;
@@ -100,30 +123,23 @@ begin
   Result := FValueGen.Generate(Col, Row, Schema);
 end;
 
-procedure TMockDataGenerator.GenerateTable(const Schema: TTableSchema; const OutputFile: string);
+procedure TMockDataGenerator.GenerateTable(const Schema: TTableSchema;
+  const OutputFile: string; const RowCount: Integer);
 var
   ColOrder: TStringList;
   OutLines: TStringList;
   Values: array of string;
   Row: TStringList;
   GeneratedRows: array of TStringList;
-  SRef: TSchemaRef;
   Col: TColumn;
   i, c: Integer;
-  Count: Integer;
   Line: string;
 begin
   ColOrder := ResolveColumnOrder(Schema);
   OutLines := TStringList.Create;
   try
-    SRef := FConfig.GetSchemaByName(Schema.TableName);
-    if SRef = nil then
-      raise Exception.Create('Schema not found in config: ' + Schema.TableName);
-
-    Count := SRef.MaxCount;
-
     SetLength(Values, ColOrder.Count);
-    SetLength(GeneratedRows, Count);
+    SetLength(GeneratedRows, RowCount);
 
     Line := '';
     for i := 0 to ColOrder.Count - 1 do
@@ -134,7 +150,7 @@ begin
     end;
     OutLines.Add(Line);
 
-    for i := 0 to Count - 1 do
+    for i := 0 to RowCount - 1 do
     begin
       Row := TStringList.Create;
       Row.NameValueSeparator := '=';
@@ -177,12 +193,56 @@ begin
 end;
 
 procedure TMockDataGenerator.LoadConfig(const FileName: string);
+var
+  BaseDir: string;
+  i: Integer;
+
+  function IsAbsolutePath(const APath: string): Boolean;
+  begin
+    Result := (ExtractFileDrive(APath) <> '')
+      or ((Length(APath) >= 2) and (APath[1] = '\\') and (APath[2] = '\\'))
+      or ((APath <> '') and ((APath[1] = '/') or (APath[1] = '\\')));
+  end;
+
+  function ToAbsoluteFromBase(const APath: string): string;
+  begin
+    if IsAbsolutePath(APath) then
+      Exit(APath);
+    Result := ExpandFileName(IncludeTrailingPathDelimiter(BaseDir) + APath);
+  end;
 begin
   if Assigned(FConfig) then
     FreeAndNil(FConfig);
 
+  FConfigFileName := ExpandFileName(FileName);
+
+  if not FileExists(FConfigFileName) then
+    raise Exception.CreateFmt('Generator config file not found: %s', [FConfigFileName]);
+
+  BaseDir := ExtractFileDir(FConfigFileName);
+
   FConfig := TGeneratorConfig.Create;
-  FConfig.LoadFromJSON(FileName);
+  FConfig.LoadFromJSON(FConfigFileName);
+
+  for i := 0 to FConfig.Schemas.Count - 1 do
+    FConfig.Schemas[i].FileName := ToAbsoluteFromBase(FConfig.Schemas[i].FileName);
+
+  for i := 0 to FConfig.Repositories.Count - 1 do
+    FConfig.Repositories[i].FileName := ToAbsoluteFromBase(FConfig.Repositories[i].FileName);
+
+  { Validate file paths before proceeding }
+  for i := 0 to FConfig.Schemas.Count - 1 do
+    if not FileExists(FConfig.Schemas[i].FileName) then
+      raise Exception.CreateFmt('Schema file not found for "%s": %s',
+        [FConfig.Schemas[i].Name, FConfig.Schemas[i].FileName]);
+
+  for i := 0 to FConfig.Repositories.Count - 1 do
+    if not FileExists(FConfig.Repositories[i].FileName) then
+      raise Exception.CreateFmt('Repository file not found for "%s": %s',
+        [FConfig.Repositories[i].Name, FConfig.Repositories[i].FileName]);
+
+  FConfig.GlobalOptions.OutputDir := ToAbsoluteFromBase(FConfig.GlobalOptions.OutputDir);
+
   FConfig.Validate;
 
   LoadSchemas;
@@ -197,6 +257,8 @@ var
   SRef: TSchemaRef;
   Schema: TTableSchema;
 begin
+  for i := 0 to FSchemas.Count - 1 do
+    FSchemas.Data[i].Free;
   FSchemas.Clear;
 
   for i := 0 to FConfig.Schemas.Count - 1 do

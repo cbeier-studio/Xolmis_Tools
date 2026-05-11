@@ -139,7 +139,7 @@ Each key inside `externalSource` is an object with:
 | `stateField` | string | State field name |
 | `cityField` | string | City field name |
 | `allowedCountries` | string[] | List of allowed countries |
-| `additionalProperties` | true | Allows extra fields |
+| `additionalProperties` | boolean | Allows extra fields |
 | `localitiesSource` | string | Path to the source file for locality names |
 
 ## 6. `columns` Section
@@ -308,7 +308,7 @@ All arguments allowed by the schema:
 | `decimals` | integer |
 | `groupField` | string |
 | `timeField` | string |
-| `textcase` | uppercase, lowercase, titlecase |
+| `textcase` | uppercase, lowercase, titlecase, sentencecase |
 | `tableField` | string |
 | `nullableProbability` | number (0–1) |
 | `skipNulls` | boolean |
@@ -327,4 +327,4 @@ All arguments allowed by the schema:
 - Use `optionalParent` when FK may be null.  
 - Use `sequence_within_group` for group-based numbering.  
 - Validate `tableField` in polymorphic tables.  
-- Avoid `additionalProperties` outside allowed sections.  
+- Avoid `additionalProperties` outside allowed sections.

@@ -146,6 +146,7 @@ type
     IncrementBy: Integer;
     Nullable: Boolean;
     DefaultValue: string;
+    NowValue: Boolean;
     FixedValue: string;
     Ignore: Boolean;
     EnumValues: TStringList;
@@ -223,6 +224,21 @@ type
 
 
 implementation
+
+function JSONValueToRawString(Value: TJSONData): string;
+begin
+  if Value = nil then
+    Exit('');
+
+  case Value.JSONType of
+    jtArray, jtObject:
+      Result := Value.AsJSON;
+    jtString, jtNumber, jtBoolean, jtNull:
+      Result := Value.AsString;
+  else
+    Result := Value.AsJSON;
+  end;
+end;
 
 procedure Require(const Condition: Boolean; const Msg: string);
 begin
@@ -335,7 +351,15 @@ begin
   Obj := TJSONObject(JSON);
 
   { version }
-  Version := Obj.Get('version', 1);
+  if Obj.Find('version') <> nil then
+  begin
+    if Obj.Find('version').JSONType = jtNumber then
+      Version := Obj.Get('version', 1)
+    else
+      Version := StrToIntDef(Obj.Get('version', '1'), 1);
+  end
+  else
+    Version := 1;
 
   { generationOrder }
   GenerationOrder.Clear;
@@ -494,6 +518,8 @@ begin
   inherited Destroy;
 end;
 
+{ TColumn }
+
 constructor TColumn.Create;
 begin
   EnumValues := TStringList.Create;
@@ -539,6 +565,8 @@ var
   JSON: TJSONData;
   Obj, Sub: TJSONObject;
   Arr: TJSONArray;
+  ColArr: TJSONArray;
+  Item: TJSONData;
   i, j: Integer;
   Col: TColumn;
   Ext: TExternalSource;
@@ -586,11 +614,18 @@ begin
     Arr := Sub.Arrays['levels'];
     for i := 0 to Arr.Count - 1 do
     begin
+      Item := Arr.Items[i];
+      if (Item = nil) or (Item.JSONType <> jtObject) then
+        raise Exception.CreateFmt(
+          'Validation error: hierarchy.levels[%d] must be an object in schema "%s"',
+          [i, FileName]
+        );
+
       Lev := THierarchyLevel.Create;
-      Lev.Rank := Arr.Objects[i].Get('rank', '');
-      Lev.Min := Arr.Objects[i].Get('min', 0);
-      Lev.Max := Arr.Objects[i].Get('max', 0);
-      Lev.Source := Arr.Objects[i].Get('source', '');
+      Lev.Rank := TJSONObject(Item).Get('rank', '');
+      Lev.Min := TJSONObject(Item).Get('min', 0);
+      Lev.Max := TJSONObject(Item).Get('max', 0);
+      Lev.Source := TJSONObject(Item).Get('source', '');
       Hierarchy.Levels.Add(Lev);
     end;
   end;
@@ -628,11 +663,18 @@ begin
 
   { columns }
   Columns.Clear;
-  Arr := Obj.Arrays['columns'];
+  ColArr := Obj.Arrays['columns'];
 
-  for i := 0 to Arr.Count - 1 do
+  for i := 0 to ColArr.Count - 1 do
   begin
-    Sub := Arr.Objects[i];
+    Item := ColArr.Items[i];
+    if (Item = nil) or (Item.JSONType <> jtObject) then
+      raise Exception.CreateFmt(
+        'Validation error: columns[%d] must be an object in schema "%s"',
+        [i, FileName]
+      );
+
+    Sub := TJSONObject(Item);
     Col := TColumn.Create;
 
     Col.Name := Sub.Get('name', '');
@@ -644,6 +686,7 @@ begin
     Col.IncrementBy := Sub.Get('incrementBy', 1);
     Col.Nullable := Sub.Get('nullable', False);
     Col.DefaultValue := Sub.Get('default', '');
+    Col.NowValue := Sub.Get('now', False);
     Col.FixedValue := Sub.Get('fixed', '');
     Col.Ignore := Sub.Get('ignore', False);
     Col.Mask := Sub.Get('mask', '');
@@ -689,7 +732,7 @@ begin
     begin
       for j := 0 to Sub.Objects['args'].Count - 1 do
         Col.Args.Raw.Add(Sub.Objects['args'].Names[j] + '=' +
-                         Sub.Objects['args'].Items[j].AsString);
+                         JSONValueToRawString(Sub.Objects['args'].Items[j]));
     end;
 
     { dependsOn }
