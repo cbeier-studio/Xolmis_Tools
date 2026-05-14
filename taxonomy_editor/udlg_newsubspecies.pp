@@ -52,6 +52,8 @@ implementation
 uses
   utils_dialogs;
 
+{$R *.lfm}
+
 { TdlgNewSubspecies }
 
 procedure TdlgNewSubspecies.eEpythetKeyPress(Sender: TObject; var Key: char);

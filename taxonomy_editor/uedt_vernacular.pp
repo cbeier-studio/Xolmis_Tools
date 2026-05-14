@@ -52,6 +52,8 @@ implementation
 uses
   data_getvalue, utils_global, utils_dialogs, udm_taxa;
 
+{$R *.lfm}
+
 { TedtVernacular }
 
 procedure TedtVernacular.FormCreate(Sender: TObject);

@@ -40,6 +40,8 @@ implementation
 
 uses utils_dialogs, data_getvalue, io_json, udm_taxa;
 
+{$R *.lfm}
+
 { TdlgExportSpeciesList }
 
 procedure TdlgExportSpeciesList.LoadLanguageList;

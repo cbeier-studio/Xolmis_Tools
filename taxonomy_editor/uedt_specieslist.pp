@@ -46,6 +46,8 @@ implementation
 uses
   utils_dialogs, utils_taxonomy, udm_taxa;
 
+{$R *.lfm}
+
 { TedtSpeciesList }
 
 procedure TedtSpeciesList.eFindKeyPress(Sender: TObject; var Key: char);

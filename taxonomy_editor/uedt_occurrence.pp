@@ -38,6 +38,8 @@ implementation
 uses
   data_getvalue, udm_taxa, udlg_loading;
 
+{$R *.lfm}
+
 { TedtOccurrence }
 
 procedure TedtOccurrence.btnSaveClick(Sender: TObject);

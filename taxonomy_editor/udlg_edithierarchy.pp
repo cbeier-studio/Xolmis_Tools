@@ -117,6 +117,8 @@ implementation
 uses
   data_getvalue, utils_global, utils_dialogs;
 
+{$R *.lfm}
+
 { TdlgEditHierarchy }
 
 procedure TdlgEditHierarchy.cbClearFamilyChange(Sender: TObject);

@@ -2720,6 +2720,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       ShowCaption = False
       ShowHint = True
       ParentShowHint = False
+      OnClick = sbSortRecordsClick
     end
     object sbAdvancedFilters: TSpeedButton
       AnchorSideTop.Control = pToolbar

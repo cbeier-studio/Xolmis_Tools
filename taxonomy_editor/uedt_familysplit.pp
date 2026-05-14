@@ -43,6 +43,8 @@ implementation
 uses
   models_taxon, udm_taxa, udlg_loading;
 
+{$R *.lfm}
+
 { TedtFamilySplit }
 
 procedure TedtFamilySplit.btnSaveClick(Sender: TObject);

@@ -65,6 +65,8 @@ implementation
 uses
   utils_dialogs;
 
+{$R *.lfm}
+
 { TdlgDestTaxon }
 
 procedure TdlgDestTaxon.sbApplyToSelectedClick(Sender: TObject);
