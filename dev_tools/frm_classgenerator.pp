@@ -59,6 +59,7 @@ type
     procedure GenerateRepositoryFindBy;
     procedure GenerateRepositoryGetById;
     procedure GenerateRepositoryHydrate;
+    procedure GenerateRepositoryHydrateFromRow;
     procedure GenerateRepositoryInsert;
     procedure GenerateRepositoryTableName;
     procedure GenerateRepositoryUpdate;
@@ -981,6 +982,62 @@ begin
     Add('    FMarked := FieldByName(''marked_status'').AsBoolean;');
     Add('    FActive := FieldByName(''active_status'').AsBoolean;');
     Add('  end;');
+    Add('end;');
+    Add('');
+  end;
+end;
+
+procedure TfrmClassGenerator.GenerateRepositoryHydrateFromRow;
+var
+  r: Integer;
+begin
+  with synOutput, Lines do
+  begin
+    Add('procedure ' + eClassName.Text + 'Repository.HydrateFromRow(const ARow: TXRow; E: TXolmisRecord);');
+    Add('var');
+    Add('  R: ' + eClassName.Text + ';');
+    Add('begin');
+    Add('  if (aDataSet = nil) or (E = nil) or aDataSet.EOF then');
+    Add('    Exit;');
+    Add('  if not (E is ' + eClassName.Text + ') then');
+    Add('    raise Exception.Create(''HydrateFromRow: Expected ' + eClassName.Text + '''');
+    Add('');
+    Add('  R := ' + eClassName.Text + '(E);');
+    for r := 1 to gridMap.RowCount - 1 do
+      case gridMap.Cells[2, r] of
+        'String':
+        begin
+          Add('  if ARow.IndexOfName(''' + gridMap.Cells[3, r] + ''') >= 0 then');
+          Add('    R.' + gridMap.Cells[1, r] + ' := ARow.Values[''' + gridMap.Cells[3, r] + '''];');
+        end;
+        'Integer':
+        begin
+          Add('  if ARow.IndexOfName(''' + gridMap.Cells[3, r] + ''') >= 0 then');
+          Add('    R.' + gridMap.Cells[1, r] + ' := StrToIntDef(ARow.Values[''' + gridMap.Cells[3, r] + '''], 0);');
+        end;
+        'Double',
+        'Extended':
+        begin
+          Add('  if ARow.IndexOfName(''' + gridMap.Cells[3, r] + ''') >= 0 then');
+          Add('    R.' + gridMap.Cells[1, r] + ' := StrToFloatDef(ARow.Values[''' + gridMap.Cells[3, r] + '''], 0);');
+        end;
+        'Date',
+        'DateTime':
+        begin
+          Add('  if ARow.IndexOfName(''' + gridMap.Cells[3, r] + ''') >= 0 then');
+          Add('    R.' + gridMap.Cells[1, r] + ' := StrToDateDef(ARow.Values[''' + gridMap.Cells[3, r] + '''], NullDate);');
+        end;
+        'Time':
+        begin
+          Add('  if ARow.IndexOfName(''' + gridMap.Cells[3, r] + ''') >= 0 then');
+          Add('    R.' + gridMap.Cells[1, r] + ' := StrToTimeDef(ARow.Values[''' + gridMap.Cells[3, r] + '''], NullTime);');
+        end;
+        'Boolean':
+        begin
+          Add('  if ARow.IndexOfName(''' + gridMap.Cells[3, r] + ''') >= 0 then');
+          Add('    R.' + gridMap.Cells[1, r] + ' := StrToBoolDef(ARow.Values[''' + gridMap.Cells[3, r] + '''], False);');
+        end;
+      end;
     Add('end;');
     Add('');
   end;

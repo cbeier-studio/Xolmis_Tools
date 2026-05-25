@@ -8,6 +8,7 @@ object frmClassGenerator: TfrmClassGenerator
   ClientWidth = 1077
   PopupMode = pmAuto
   Position = poDefaultPosOnly
+  LCLVersion = '4.6.0.0'
   OnCreate = FormCreate
   object pNames: TPanel
     Left = 0
@@ -144,7 +145,7 @@ object frmClassGenerator: TfrmClassGenerator
     Columns = <    
       item
         Title.Caption = 'Property'
-        Width = 174
+        Width = 175
       end    
       item
         DropDownRows = 10
@@ -159,11 +160,11 @@ object frmClassGenerator: TfrmClassGenerator
           'Boolean'
         )
         Title.Caption = 'Type'
-        Width = 174
+        Width = 175
       end    
       item
         Title.Caption = 'Fieldname'
-        Width = 173
+        Width = 175
       end>
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAutoAddRows, goAlwaysShowEditor, goThumbTracking, goSmoothScroll, goFixedRowNumbering, goCellEllipsis]
     RowCount = 2
@@ -172,9 +173,9 @@ object frmClassGenerator: TfrmClassGenerator
     OnEditingDone = gridMapEditingDone
     ColWidths = (
       64
-      174
-      174
-      173
+      175
+      175
+      175
     )
   end
   inline synOutput: TSynEdit
@@ -652,6 +653,8 @@ object frmClassGenerator: TfrmClassGenerator
         MouseActions = <>
         MaxExtraMarksColums = 0
         Options = [sgmoDeDuplicateMarksOnOverflow]
+        MarkupInfo.Background = clBtnFace
+        MarkupInfo.Foreground = clNone
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
         Width = 17
@@ -668,6 +671,9 @@ object frmClassGenerator: TfrmClassGenerator
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
+        MarkupInfo.Background = clNone
+        MarkupInfo.Foreground = clGreen
+        MarkupInfo.FrameColor = 59900
       end
       object SynGutterSeparator1: TSynGutterSeparator
         Width = 2
