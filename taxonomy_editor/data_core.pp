@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Dialogs, DB, SQLDB;
 
 const
-  SCHEMA_VERSION: Integer = 2;
+  SCHEMA_VERSION: Integer = 3;
 
   function CreateTaxonomyDatabase(aFilename: String): Boolean;
   function UpgradeDatabaseSchema: Boolean;
@@ -18,6 +18,7 @@ const
   procedure CreateDBMetadataTable(Connection: TSQLConnector);
   procedure CreateCountriesTable(Connection: TSQLConnector);
   procedure CreateLanguagesTable(Connection: TSQLConnector);
+  procedure CreateMethodsTable(Connection: TSQLConnector);
   procedure CreateTaxonRanksTable(Connection: TSQLConnector);
   procedure CreateZooTaxaTable(Connection: TSQLConnector);
   procedure CreateVernacularNamesTable(Connection: TSQLConnector);
@@ -45,7 +46,7 @@ begin
   try
     dlgLoading.Show;
     dlgLoading.Min := 0;
-    dlgLoading.Max := 10;
+    dlgLoading.Max := 11;
     dlgLoading.UpdateProgress('Creating database...', 0);
     //dlgProgress.Title := rsTitleCreateDatabase;
     //dlgProgress.Text := rsProgressPreparing;
@@ -97,6 +98,13 @@ begin
         dlgLoading.UpdateProgress('Creating table: Languages...', dlgLoading.Progress + 1);
         Application.ProcessMessages;
         CreateLanguagesTable(Conn);
+        //dlgProgress.Position := dlgProgress.Position + 1;
+
+        // Methods
+        //dlgProgress.Text := Format(rsProgressCreatingTable, [rsTitleHistory, dlgProgress.Position + 1, dlgProgress.Max]);
+        dlgLoading.UpdateProgress('Creating table: Methods...', dlgLoading.Progress + 1);
+        Application.ProcessMessages;
+        CreateMethodsTable(Conn);
         //dlgProgress.Position := dlgProgress.Position + 1;
 
         // Taxon ranks
@@ -262,12 +270,14 @@ begin
         Result := True;
       end;
 
-      //if OldVersion < 3 then
-      //begin
-      //  LogDebug(Format('Upgrading database to version %d', [OldVersion]));
-      //
-      //  Result := True;
-      //end;
+      if OldVersion < 3 then
+      begin
+        dlgLoading.UpdateProgress('Upgrading database schema to v3...', -1);
+
+        CreateMethodsTable(dmTaxa.sqlCon);
+
+        Result := True;
+      end;
 
       if Result then
       begin
@@ -601,6 +611,25 @@ begin
   //Connection.ExecuteDirect('CREATE INDEX idx_country_code ON countries (' +
   //  'country_code COLLATE NOCASE' +
   //');');
+end;
+
+procedure CreateMethodsTable(Connection: TSQLConnector);
+begin
+  Connection.ExecuteDirect('CREATE TABLE IF NOT EXISTS methods (' +
+      'method_id        INTEGER       UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,' +
+      'method_name      VARCHAR (100) UNIQUE NOT NULL,' +
+      'abbreviation     VARCHAR (20),' +
+      'ebird_name       VARCHAR (60),' +
+      'category         VARCHAR (30),' +
+      'description      TEXT,' +
+      'recommended_uses TEXT,' +
+      'notes            TEXT,' +
+      'can_delete       BOOLEAN       DEFAULT (1),' +
+      'insert_date      DATETIME,' +
+      'update_date      DATETIME,' +
+      'marked_status    BOOLEAN       DEFAULT (0),' +
+      'active_status    BOOLEAN       DEFAULT (1)' +
+  ');');
 end;
 
 end.

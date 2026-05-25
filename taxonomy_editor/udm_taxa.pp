@@ -16,6 +16,7 @@ type
     dsChildTaxa: TDataSource;
     dsCountries: TDataSource;
     dsLanguages: TDataSource;
+    dsMethods: TDataSource;
     dslookRanks: TDataSource;
     dsPacks: TDataSource;
     dsRanks: TDataSource;
@@ -40,6 +41,7 @@ type
     qCountriesmarked_status: TBooleanField;
     qCountriesupdate_date: TDateTimeField;
     qLanguages: TSQLQuery;
+    qMethods: TSQLQuery;
     qLanguagesactive_status: TBooleanField;
     qLanguagescountry_code: TStringField;
     qLanguagesinsert_date: TDateTimeField;
@@ -49,6 +51,19 @@ type
     qLanguagesmarked_status: TBooleanField;
     qLanguagesupdate_date: TDateTimeField;
     qLanguagesvariation_code: TStringField;
+    qMethodsabbreviation: TStringField;
+    qMethodsactive_status: TBooleanField;
+    qMethodscan_delete: TBooleanField;
+    qMethodscategory: TStringField;
+    qMethodsdescription: TMemoField;
+    qMethodsebird_name: TStringField;
+    qMethodsinsert_date: TDateTimeField;
+    qMethodsmarked_status: TBooleanField;
+    qMethodsmethod_id: TLongintField;
+    qMethodsmethod_name: TStringField;
+    qMethodsnotes: TMemoField;
+    qMethodsrecommended_uses: TMemoField;
+    qMethodsupdate_date: TDateTimeField;
     qPacks: TSQLQuery;
     qPacksactive_status: TBooleanField;
     qPacksinsert_date: TDateTimeField;
@@ -164,6 +179,8 @@ type
     procedure DataModuleDestroy(Sender: TObject);
     procedure qCountriesBeforePost(DataSet: TDataSet);
     procedure qLanguagesBeforePost(DataSet: TDataSet);
+    procedure qMethodsAfterInsert(DataSet: TDataSet);
+    procedure qMethodsBeforePost(DataSet: TDataSet);
     procedure qPacksBeforePost(DataSet: TDataSet);
     procedure qRanksBeforePost(DataSet: TDataSet);
     procedure qSynonymsBeforePost(DataSet: TDataSet);
@@ -247,6 +264,18 @@ begin
 end;
 
 procedure TdmTaxa.qLanguagesBeforePost(DataSet: TDataSet);
+begin
+  if DataSet.State = dsInsert then
+    DataSet.FieldByName('insert_date').AsDateTime := Now;
+  DataSet.FieldByName('update_date').AsDateTime := Now;
+end;
+
+procedure TdmTaxa.qMethodsAfterInsert(DataSet: TDataSet);
+begin
+  DataSet.FieldByName('can_delete').AsBoolean:= False;
+end;
+
+procedure TdmTaxa.qMethodsBeforePost(DataSet: TDataSet);
 begin
   if DataSet.State = dsInsert then
     DataSet.FieldByName('insert_date').AsDateTime := Now;

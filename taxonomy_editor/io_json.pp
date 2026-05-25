@@ -9,6 +9,10 @@ uses
 
   function ExportSpeciesList(aFileName: String; CountryId, LanguageId: Integer; VernacularNames: Boolean = False): Boolean;
   function ExportCompleteTaxonomy(aFileName: String): Boolean;
+  function ExportCountriesList(aFileName: String): Boolean;
+  function ExportLanguagesList(aFileName: String): Boolean;
+  function ExportMethodsList(aFileName: String): Boolean;
+  function ExportTaxonRanksList(aFileName: String): Boolean;
 
 implementation
 
@@ -292,7 +296,7 @@ begin
         AddNullableString(TaxonObj, 'quick_code', TaxaQry.FieldByName('quick_code'));
         AddNullableInteger(TaxonObj, 'rank_id', TaxaQry.FieldByName('rank_id'));
         AddNullableString(TaxonObj, 'rank_name', TaxaQry.FieldByName('rank_name'));
-        AddNullableString(TaxonObj, 'rank_acronym', TaxaQry.FieldByName('rank_acronym'));
+        AddNullableString(TaxonObj, 'rank_abbrev', TaxaQry.FieldByName('rank_acronym'));
         AddNullableInteger(TaxonObj, 'parent_taxon_id', TaxaQry.FieldByName('parent_taxon_id'));
         AddNullableString(TaxonObj, 'parent_taxon_name', TaxaQry.FieldByName('parent_taxon_name'));
         AddNullableString(TaxonObj, 'iucn_status', TaxaQry.FieldByName('iucn_status'));
@@ -432,6 +436,480 @@ begin
     FreeAndNil(VernQry);
     FreeAndNil(SynQry);
     FreeAndNil(TaxaQry);
+  end;
+end;
+
+function ExportCountriesList(aFileName: String): Boolean;
+var
+  Qry: TSQLQuery;
+  CountQry: TSQLQuery;
+  FS: TFileStream;
+  CountryObj: TJSONObject;
+  TotalCountries: Integer;
+  Exported: Integer;
+  Percent: Integer;
+begin
+  Result := False;
+  Qry := TSQLQuery.Create(nil);
+  CountQry := TSQLQuery.Create(nil);
+  FS := nil;
+  TotalCountries := 0;
+  Exported := 0;
+
+  try
+    Parar := False;
+    if not dlgLoading.Visible then
+      dlgLoading.Show;
+    dlgLoading.UpdateProgress('Exporting countries list...', -1, True);
+
+    Qry.DataBase := dmTaxa.sqlCon;
+    CountQry.DataBase := dmTaxa.sqlCon;
+
+    CountQry.SQL.Text := 'SELECT COUNT(*) AS total_countries FROM countries WHERE active_status = 1';
+    CountQry.Open;
+    TotalCountries := CountQry.FieldByName('total_countries').AsInteger;
+    CountQry.Close;
+
+    if TotalCountries = 0 then
+    begin
+      dlgLoading.UpdateProgress('Exporting countries list... (0/0)', 100, False);
+      Result := True;
+      Exit;
+    end;
+
+    Qry.SQL.Add('SELECT');
+    Qry.SQL.Add('  country_id,');
+    Qry.SQL.Add('  country_code,');
+    Qry.SQL.Add('  country_name,');
+    Qry.SQL.Add('  insert_date,');
+    Qry.SQL.Add('  update_date,');
+    Qry.SQL.Add('  marked_status,');
+    Qry.SQL.Add('  active_status');
+    Qry.SQL.Add('FROM countries');
+    Qry.SQL.Add('WHERE active_status = 1');
+    Qry.SQL.Add('ORDER BY country_name ASC, country_id ASC');
+
+    FS := TFileStream.Create(aFileName, fmCreate);
+
+    Qry.Open;
+    dlgLoading.UpdateProgress(Format('Exporting countries list... (0/%d)', [TotalCountries]), 0, True);
+    while not Qry.EOF do
+    begin
+      if Parar then
+        Break;
+
+      CountryObj := TJSONObject.Create;
+      try
+        AddNullableInteger(CountryObj, 'country_id', Qry.FieldByName('country_id'));
+        AddNullableString(CountryObj, 'country_code', Qry.FieldByName('country_code'));
+        AddNullableString(CountryObj, 'country_name', Qry.FieldByName('country_name'));
+        AddNullableString(CountryObj, 'insert_date', Qry.FieldByName('insert_date'));
+        AddNullableString(CountryObj, 'update_date', Qry.FieldByName('update_date'));
+        // AddNullableBoolean(CountryObj, 'marked_status', Qry.FieldByName('marked_status'));
+        AddNullableBoolean(CountryObj, 'active_status', Qry.FieldByName('active_status'));
+
+        WriteJSONLLine(FS, CountryObj.AsJSON);
+      finally
+        CountryObj.Free;
+      end;
+
+      Inc(Exported);
+      if (Exported mod 100 = 0) or (Exported = TotalCountries) then
+      begin
+        Percent := Round((Exported * 100.0) / TotalCountries);
+        dlgLoading.UpdateProgress(
+          Format('Exporting countries list... (%d/%d)', [Exported, TotalCountries]),
+          Percent,
+          True
+        );
+      end;
+
+      Qry.Next;
+    end;
+    Qry.Close;
+
+    if Parar then
+    begin
+      if FileExists(aFileName) then
+        DeleteFile(aFileName);
+      Exit(False);
+    end;
+
+    dlgLoading.UpdateProgress(Format('Exporting countries list... (%d/%d)', [Exported, TotalCountries]), 100, False);
+    Result := True;
+  finally
+    if dlgLoading.Visible then
+      dlgLoading.Hide;
+    dlgLoading.Max := 100;
+    dlgLoading.Progress := 0;
+    dlgLoading.ShowCancel := False;
+
+    FreeAndNil(FS);
+    FreeAndNil(CountQry);
+    FreeAndNil(Qry);
+  end;
+end;
+
+function ExportLanguagesList(aFileName: String): Boolean;
+var
+  Qry: TSQLQuery;
+  CountQry: TSQLQuery;
+  FS: TFileStream;
+  LanguageObj: TJSONObject;
+  TotalLanguages: Integer;
+  Exported: Integer;
+  Percent: Integer;
+begin
+  Result := False;
+  Qry := TSQLQuery.Create(nil);
+  CountQry := TSQLQuery.Create(nil);
+  FS := nil;
+  TotalLanguages := 0;
+  Exported := 0;
+
+  try
+    Parar := False;
+    if not dlgLoading.Visible then
+      dlgLoading.Show;
+    dlgLoading.UpdateProgress('Exporting languages list...', -1, True);
+
+    Qry.DataBase := dmTaxa.sqlCon;
+    CountQry.DataBase := dmTaxa.sqlCon;
+
+    CountQry.SQL.Text := 'SELECT COUNT(*) AS total_languages FROM languages WHERE active_status = 1';
+    CountQry.Open;
+    TotalLanguages := CountQry.FieldByName('total_languages').AsInteger;
+    CountQry.Close;
+
+    if TotalLanguages = 0 then
+    begin
+      dlgLoading.UpdateProgress('Exporting languages list... (0/0)', 100, False);
+      Result := True;
+      Exit;
+    end;
+
+    Qry.SQL.Add('SELECT');
+    Qry.SQL.Add('  language_id,');
+    Qry.SQL.Add('  macrolanguage_code,');
+    Qry.SQL.Add('  country_code,');
+    Qry.SQL.Add('  variation_code,');
+    Qry.SQL.Add('  language_name,');
+    Qry.SQL.Add('  insert_date,');
+    Qry.SQL.Add('  update_date,');
+    Qry.SQL.Add('  marked_status,');
+    Qry.SQL.Add('  active_status');
+    Qry.SQL.Add('FROM languages');
+    Qry.SQL.Add('WHERE active_status = 1');
+    Qry.SQL.Add('ORDER BY language_name ASC, language_id ASC');
+
+    FS := TFileStream.Create(aFileName, fmCreate);
+
+    Qry.Open;
+    dlgLoading.UpdateProgress(Format('Exporting languages list... (0/%d)', [TotalLanguages]), 0, True);
+    while not Qry.EOF do
+    begin
+      if Parar then
+        Break;
+
+      LanguageObj := TJSONObject.Create;
+      try
+        AddNullableInteger(LanguageObj, 'language_id', Qry.FieldByName('language_id'));
+        AddNullableString(LanguageObj, 'macrolanguage_code', Qry.FieldByName('macrolanguage_code'));
+        AddNullableString(LanguageObj, 'country_code', Qry.FieldByName('country_code'));
+        AddNullableString(LanguageObj, 'variation_code', Qry.FieldByName('variation_code'));
+        AddNullableString(LanguageObj, 'language_name', Qry.FieldByName('language_name'));
+        AddNullableString(LanguageObj, 'insert_date', Qry.FieldByName('insert_date'));
+        AddNullableString(LanguageObj, 'update_date', Qry.FieldByName('update_date'));
+        // AddNullableBoolean(LanguageObj, 'marked_status', Qry.FieldByName('marked_status'));
+        AddNullableBoolean(LanguageObj, 'active_status', Qry.FieldByName('active_status'));
+
+        WriteJSONLLine(FS, LanguageObj.AsJSON);
+      finally
+        LanguageObj.Free;
+      end;
+
+      Inc(Exported);
+      if (Exported mod 100 = 0) or (Exported = TotalLanguages) then
+      begin
+        Percent := Round((Exported * 100.0) / TotalLanguages);
+        dlgLoading.UpdateProgress(
+          Format('Exporting languages list... (%d/%d)', [Exported, TotalLanguages]),
+          Percent,
+          True
+        );
+      end;
+
+      Qry.Next;
+    end;
+    Qry.Close;
+
+    if Parar then
+    begin
+      if FileExists(aFileName) then
+        DeleteFile(aFileName);
+      Exit(False);
+    end;
+
+    dlgLoading.UpdateProgress(Format('Exporting languages list... (%d/%d)', [Exported, TotalLanguages]), 100, False);
+    Result := True;
+  finally
+    if dlgLoading.Visible then
+      dlgLoading.Hide;
+    dlgLoading.Max := 100;
+    dlgLoading.Progress := 0;
+    dlgLoading.ShowCancel := False;
+
+    FreeAndNil(FS);
+    FreeAndNil(CountQry);
+    FreeAndNil(Qry);
+  end;
+end;
+
+function ExportTaxonRanksList(aFileName: String): Boolean;
+var
+  Qry: TSQLQuery;
+  CountQry: TSQLQuery;
+  FS: TFileStream;
+  RankObj: TJSONObject;
+  TotalRanks: Integer;
+  Exported: Integer;
+  Percent: Integer;
+begin
+  Result := False;
+  Qry := TSQLQuery.Create(nil);
+  CountQry := TSQLQuery.Create(nil);
+  FS := nil;
+  TotalRanks := 0;
+  Exported := 0;
+
+  try
+    Parar := False;
+    if not dlgLoading.Visible then
+      dlgLoading.Show;
+    dlgLoading.UpdateProgress('Exporting taxon ranks list...', -1, True);
+
+    Qry.DataBase := dmTaxa.sqlCon;
+    CountQry.DataBase := dmTaxa.sqlCon;
+
+    CountQry.SQL.Text := 'SELECT COUNT(*) AS total_ranks FROM taxon_ranks WHERE active_status = 1';
+    CountQry.Open;
+    TotalRanks := CountQry.FieldByName('total_ranks').AsInteger;
+    CountQry.Close;
+
+    if TotalRanks = 0 then
+    begin
+      dlgLoading.UpdateProgress('Exporting taxon ranks list... (0/0)', 100, False);
+      Result := True;
+      Exit;
+    end;
+
+    Qry.SQL.Add('SELECT');
+    Qry.SQL.Add('  rank_id,');
+    Qry.SQL.Add('  rank_seq,');
+    Qry.SQL.Add('  rank_name,');
+    Qry.SQL.Add('  rank_acronym,');
+    Qry.SQL.Add('  zoological_code,');
+    Qry.SQL.Add('  botanical_code,');
+    Qry.SQL.Add('  main_rank,');
+    Qry.SQL.Add('  subrank,');
+    Qry.SQL.Add('  infrarank,');
+    Qry.SQL.Add('  infraspecific,');
+    Qry.SQL.Add('  insert_date,');
+    Qry.SQL.Add('  update_date,');
+    Qry.SQL.Add('  marked_status,');
+    Qry.SQL.Add('  active_status');
+    Qry.SQL.Add('FROM taxon_ranks');
+    Qry.SQL.Add('WHERE active_status = 1');
+    Qry.SQL.Add('ORDER BY rank_seq ASC, rank_id ASC');
+
+    FS := TFileStream.Create(aFileName, fmCreate);
+
+    Qry.Open;
+    dlgLoading.UpdateProgress(Format('Exporting taxon ranks list... (0/%d)', [TotalRanks]), 0, True);
+    while not Qry.EOF do
+    begin
+      if Parar then
+        Break;
+
+      RankObj := TJSONObject.Create;
+      try
+        AddNullableInteger(RankObj, 'rank_id', Qry.FieldByName('rank_id'));
+        AddNullableInteger(RankObj, 'rank_seq', Qry.FieldByName('rank_seq'));
+        AddNullableString(RankObj, 'rank_name', Qry.FieldByName('rank_name'));
+        AddNullableString(RankObj, 'abbreviation', Qry.FieldByName('rank_acronym'));
+        AddNullableBoolean(RankObj, 'zoological_code', Qry.FieldByName('zoological_code'));
+        AddNullableBoolean(RankObj, 'botanical_code', Qry.FieldByName('botanical_code'));
+        AddNullableBoolean(RankObj, 'main_rank', Qry.FieldByName('main_rank'));
+        AddNullableBoolean(RankObj, 'subrank', Qry.FieldByName('subrank'));
+        AddNullableBoolean(RankObj, 'infrarank', Qry.FieldByName('infrarank'));
+        AddNullableBoolean(RankObj, 'infraspecific', Qry.FieldByName('infraspecific'));
+        AddNullableString(RankObj, 'insert_date', Qry.FieldByName('insert_date'));
+        AddNullableString(RankObj, 'update_date', Qry.FieldByName('update_date'));
+        // AddNullableBoolean(RankObj, 'marked_status', Qry.FieldByName('marked_status'));
+        AddNullableBoolean(RankObj, 'active_status', Qry.FieldByName('active_status'));
+
+        WriteJSONLLine(FS, RankObj.AsJSON);
+      finally
+        RankObj.Free;
+      end;
+
+      Inc(Exported);
+      if (Exported mod 100 = 0) or (Exported = TotalRanks) then
+      begin
+        Percent := Round((Exported * 100.0) / TotalRanks);
+        dlgLoading.UpdateProgress(
+          Format('Exporting taxon ranks list... (%d/%d)', [Exported, TotalRanks]),
+          Percent,
+          True
+        );
+      end;
+
+      Qry.Next;
+    end;
+    Qry.Close;
+
+    if Parar then
+    begin
+      if FileExists(aFileName) then
+        DeleteFile(aFileName);
+      Exit(False);
+    end;
+
+    dlgLoading.UpdateProgress(Format('Exporting taxon ranks list... (%d/%d)', [Exported, TotalRanks]), 100, False);
+    Result := True;
+  finally
+    if dlgLoading.Visible then
+      dlgLoading.Hide;
+    dlgLoading.Max := 100;
+    dlgLoading.Progress := 0;
+    dlgLoading.ShowCancel := False;
+
+    FreeAndNil(FS);
+    FreeAndNil(CountQry);
+    FreeAndNil(Qry);
+  end;
+end;
+
+function ExportMethodsList(aFileName: String): Boolean;
+var
+  Qry: TSQLQuery;
+  CountQry: TSQLQuery;
+  FS: TFileStream;
+  MethodObj: TJSONObject;
+  TotalMethods: Integer;
+  Exported: Integer;
+  Percent: Integer;
+begin
+  Result := False;
+  Qry := TSQLQuery.Create(nil);
+  CountQry := TSQLQuery.Create(nil);
+  FS := nil;
+  TotalMethods := 0;
+  Exported := 0;
+
+  try
+    Parar := False;
+    if not dlgLoading.Visible then
+      dlgLoading.Show;
+    dlgLoading.UpdateProgress('Exporting methods list...', -1, True);
+
+    Qry.DataBase := dmTaxa.sqlCon;
+    CountQry.DataBase := dmTaxa.sqlCon;
+
+    CountQry.SQL.Text := 'SELECT COUNT(*) AS total_methods FROM methods WHERE active_status = 1';
+    CountQry.Open;
+    TotalMethods := CountQry.FieldByName('total_methods').AsInteger;
+    CountQry.Close;
+
+    if TotalMethods = 0 then
+    begin
+      dlgLoading.UpdateProgress('Exporting methods list... (0/0)', 100, False);
+      Result := True;
+      Exit;
+    end;
+
+    Qry.SQL.Add('SELECT');
+    Qry.SQL.Add('  method_id,');
+    Qry.SQL.Add('  method_name,');
+    Qry.SQL.Add('  abbreviation,');
+    Qry.SQL.Add('  ebird_name,');
+    Qry.SQL.Add('  category,');
+    Qry.SQL.Add('  description,');
+    Qry.SQL.Add('  recommended_uses,');
+    Qry.SQL.Add('  notes,');
+    Qry.SQL.Add('  can_delete,');
+    Qry.SQL.Add('  insert_date,');
+    Qry.SQL.Add('  update_date,');
+    Qry.SQL.Add('  marked_status,');
+    Qry.SQL.Add('  active_status');
+    Qry.SQL.Add('FROM methods');
+    Qry.SQL.Add('WHERE active_status = 1');
+    Qry.SQL.Add('ORDER BY method_name ASC, method_id ASC');
+
+    FS := TFileStream.Create(aFileName, fmCreate);
+
+    Qry.Open;
+    dlgLoading.UpdateProgress(Format('Exporting methods list... (0/%d)', [TotalMethods]), 0, True);
+    while not Qry.EOF do
+    begin
+      if Parar then
+        Break;
+
+      MethodObj := TJSONObject.Create;
+      try
+        AddNullableInteger(MethodObj, 'method_id', Qry.FieldByName('method_id'));
+        AddNullableString(MethodObj, 'method_name', Qry.FieldByName('method_name'));
+        AddNullableString(MethodObj, 'abbreviation', Qry.FieldByName('abbreviation'));
+        AddNullableString(MethodObj, 'ebird_name', Qry.FieldByName('ebird_name'));
+        AddNullableString(MethodObj, 'category', Qry.FieldByName('category'));
+        AddNullableString(MethodObj, 'description', Qry.FieldByName('description'));
+        AddNullableString(MethodObj, 'recommended_uses', Qry.FieldByName('recommended_uses'));
+        AddNullableString(MethodObj, 'notes', Qry.FieldByName('notes'));
+        AddNullableBoolean(MethodObj, 'can_delete', Qry.FieldByName('can_delete'));
+        AddNullableString(MethodObj, 'insert_date', Qry.FieldByName('insert_date'));
+        AddNullableString(MethodObj, 'update_date', Qry.FieldByName('update_date'));
+        // AddNullableBoolean(MethodObj, 'marked_status', Qry.FieldByName('marked_status'));
+        AddNullableBoolean(MethodObj, 'active_status', Qry.FieldByName('active_status'));
+
+        WriteJSONLLine(FS, MethodObj.AsJSON);
+      finally
+        MethodObj.Free;
+      end;
+
+      Inc(Exported);
+      if (Exported mod 100 = 0) or (Exported = TotalMethods) then
+      begin
+        Percent := Round((Exported * 100.0) / TotalMethods);
+        dlgLoading.UpdateProgress(
+          Format('Exporting methods list... (%d/%d)', [Exported, TotalMethods]),
+          Percent,
+          True
+        );
+      end;
+
+      Qry.Next;
+    end;
+    Qry.Close;
+
+    if Parar then
+    begin
+      if FileExists(aFileName) then
+        DeleteFile(aFileName);
+      Exit(False);
+    end;
+
+    dlgLoading.UpdateProgress(Format('Exporting methods list... (%d/%d)', [Exported, TotalMethods]), 100, False);
+    Result := True;
+  finally
+    if dlgLoading.Visible then
+      dlgLoading.Hide;
+    dlgLoading.Max := 100;
+    dlgLoading.Progress := 0;
+    dlgLoading.ShowCancel := False;
+
+    FreeAndNil(FS);
+    FreeAndNil(CountQry);
+    FreeAndNil(Qry);
   end;
 end;
 

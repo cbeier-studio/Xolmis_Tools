@@ -36,7 +36,8 @@ type
     tbLanguages,
     tbVernacularNames,
     tbSynonyms,
-    tbTaxonCountries);
+    tbTaxonCountries,
+    tbMethods);
 
   TFilterValue = (fvNone, fvReset, fvAll, fvMarked, fvUnmarked, fvDeleted, fvQueued);
   TCriteriaType = (crNone,
@@ -149,7 +150,8 @@ const
     'l',
     'zv',
     'zs',
-    'zc');
+    'zc',
+    'm');
   TABLE_NAMES: array[TTableType] of String = ('',
     'taxon_ranks',
     'zoo_taxa',
@@ -159,7 +161,8 @@ const
     'languages',
     'vernacular_names',
     'zoo_taxa_synonyms',
-    'zoo_taxa_countries');
+    'zoo_taxa_countries',
+    'methods');
   CRITERIA_OPERATORS: array[TCriteriaType] of String = ('',
     'LIKE', 'LIKE', '=', 'DISTINCT',
     'BETWEEN', '>=', '<=',

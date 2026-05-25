@@ -36,6 +36,7 @@ sqlite3.dll
 #test/
 data/
 output/
+.vscode/
 *.json
 *.ini
 *.sqlite3

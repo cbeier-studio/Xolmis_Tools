@@ -46,6 +46,7 @@ type
     etParentTaxon: TDBEditButton;
     etQuickcode: TDBEdit;
     etSortNr: TDBEdit;
+    gridMethods: TDBGrid;
     gridPacks: TDBGrid;
     gridTaxa: TDBGrid;
     HtmlView: THtmlViewer;
@@ -65,6 +66,8 @@ type
     lbltSortNr: TLabel;
     lbltVernacular: TLabel;
     MenuItem6: TMenuItem;
+    pmxMethodsList: TMenuItem;
+    pgMethods: TPage;
     pmxLanguagesList: TMenuItem;
     pmxRanksList: TMenuItem;
     pmxMobileSpeciesList: TMenuItem;
@@ -115,6 +118,7 @@ type
     sbExport: TSpeedButton;
     sbFirstRecord: TSpeedButton;
     sbInsertRecord: TSpeedButton;
+    sbMethods: TSpeedButton;
     sbLastRecord: TSpeedButton;
     sbLumpTaxon: TSpeedButton;
     sbMoreOptions: TSpeedButton;
@@ -284,7 +288,10 @@ type
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
+    procedure pmxCountriesListClick(Sender: TObject);
     procedure pmxDesktopCompleteTaxonomyClick(Sender: TObject);
+    procedure pmxLanguagesListClick(Sender: TObject);
+    procedure pmxMethodsListClick(Sender: TObject);
     procedure pmxMobileSpeciesListClick(Sender: TObject);
     procedure pmxRanksListClick(Sender: TObject);
     procedure rbMarkedYesClick(Sender: TObject);
@@ -328,9 +335,9 @@ type
     procedure tsTaxonExtinctOff(Sender: TObject);
     procedure tsTaxonExtinctOn(Sender: TObject);
   private
-    FSearchTaxa, FSearchPacks, FSearchRanks, FSearchCountries, FSearchLanguages: TCustomSearch;
+    FSearchTaxa, FSearchPacks, FSearchRanks, FSearchCountries, FSearchLanguages, FSearchMethods: TCustomSearch;
     FTaxaSearchString, FPackageSearchString,
-      FRankSearchString, FCountrySearchString, FLanguageSearchString: String;
+      FRankSearchString, FCountrySearchString, FLanguageSearchString, FMethodSearchString: String;
     CanToggle, canSearch: Boolean;
     isFiltered: Boolean;
     Working: Boolean;
@@ -341,6 +348,7 @@ type
     procedure OpenAsync;
     function SearchCountries(aValue: String): Boolean;
     function SearchLanguages(aValue: String): Boolean;
+    function SearchMethods(aValue: String): Boolean;
     function SearchPackages(aValue: String): Boolean;
     function SearchRanks(aValue: String): Boolean;
     function SearchTaxa(aValue: String): Boolean;
@@ -781,6 +789,14 @@ begin
     tbVernacularNames: ;
     tbSynonyms: ;
     tbTaxonCountries: ;
+    tbMethods:
+    begin
+      p := FSearchMethods.SortFields.Add(TSortedField.Create);
+      FSearchMethods.SortFields.Items[p].FieldName := aFieldName;
+      FSearchMethods.SortFields.Items[p].Direction := aDirection;
+      FSearchMethods.SortFields.Items[p].Collation := aCollation;
+      FSearchMethods.SortFields.Items[p].Lookup := IsAnAlias;
+    end;
   end;
 end;
 
@@ -1121,6 +1137,10 @@ begin
   FSearchLanguages := TCustomSearch.Create(tbLanguages);
   FSearchLanguages.DataSet := dmTaxa.qLanguages;
   FSearchLanguages.TableAlias := EmptyStr;
+
+  FSearchMethods := TCustomSearch.Create(tbMethods);
+  FSearchMethods.DataSet := dmTaxa.qMethods;
+  FSearchMethods.TableAlias := EmptyStr;
 end;
 
 procedure TfrmTaxaEditor.FormDestroy(Sender: TObject);
@@ -1130,6 +1150,7 @@ begin
   FreeAndNil(FSearchRanks);
   FreeAndNil(FSearchCountries);
   FreeAndNil(FSearchLanguages);
+  FreeAndNil(FSearchMethods);
 
   if Assigned(dlgLoading) then
     FreeAndNil(dlgLoading);
@@ -1186,6 +1207,18 @@ begin
         if (dmTaxa.qLanguages.State in [dsInsert, dsEdit]) then
         begin
           dmTaxa.qLanguages.Cancel;
+        end
+        else
+        begin
+          eFind.SetFocus;
+          eFind.Clear;
+        end;
+      end;
+      5:
+      begin
+        if (dmTaxa.qMethods.State in [dsInsert, dsEdit]) then
+        begin
+          dmTaxa.qMethods.Cancel;
         end
         else
         begin
@@ -1265,6 +1298,7 @@ begin
   dmTaxa.qTaxaChanges.Open;
   dmTaxa.qCountries.Open;
   dmTaxa.qLanguages.Open;
+  dmTaxa.qMethods.Open;
 
   UpdateButtons;
 
@@ -1281,6 +1315,7 @@ begin
   pmxMobileSpeciesList.Visible := False;
   pmxCountriesList.Visible := False;
   pmxLanguagesList.Visible := False;
+  pmxMethodsList.Visible := False;
 
   case nbPages.PageIndex of
     0:
@@ -1304,6 +1339,10 @@ begin
     4:
     begin
       pmxLanguagesList.Visible := True;
+    end;
+    5:
+    begin
+      pmxMethodsList.Visible := True;
     end;
   end;
 end;
@@ -1670,10 +1709,28 @@ begin
     dmTaxa.qTaxa.Refresh;
 end;
 
+procedure TfrmTaxaEditor.pmxCountriesListClick(Sender: TObject);
+begin
+  if SaveJsonlDlg.Execute then
+    ExportCountriesList(SaveJsonlDlg.FileName);
+end;
+
 procedure TfrmTaxaEditor.pmxDesktopCompleteTaxonomyClick(Sender: TObject);
 begin
   if SaveJsonlDlg.Execute then
     ExportCompleteTaxonomy(SaveJsonlDlg.FileName);
+end;
+
+procedure TfrmTaxaEditor.pmxLanguagesListClick(Sender: TObject);
+begin
+  if SaveJsonlDlg.Execute then
+    ExportLanguagesList(SaveJsonlDlg.FileName);
+end;
+
+procedure TfrmTaxaEditor.pmxMethodsListClick(Sender: TObject);
+begin
+  if SaveJsonlDlg.Execute then
+    ExportMethodsList(SaveJsonlDlg.FileName);
 end;
 
 procedure TfrmTaxaEditor.pmxMobileSpeciesListClick(Sender: TObject);
@@ -1688,60 +1745,9 @@ begin
 end;
 
 procedure TfrmTaxaEditor.pmxRanksListClick(Sender: TObject);
-var
-  Arr: TJSONArray;
-  Obj: TJSONObject;
-  FS: TFileStream;
-  FRank: TRank;
-  FRepo: TRankRepository;
-  BM: TBookMark;
-  FFileName: String;
-  S: TStringStream;
 begin
-  if SaveDlg.Execute then
-    FFileName := SaveDlg.FileName
-  else
-    Exit;
-
-  FRepo := TRankRepository.Create(dmTaxa.sqlCon);
-  FRank := TRank.Create();
-  Arr := TJSONArray.Create;
-  try
-    BM := dmTaxa.qRanks.GetBookmark;
-    dmTaxa.qRanks.DisableControls;
-    dmTaxa.qRanks.First;
-    try
-      while not dmTaxa.qRanks.EOF do
-      begin
-        FRank.Clear;
-        FRepo.Hydrate(dmTaxa.qRanks, FRank);
-        Obj := GetJSON(FRank.ToJSON) as TJSONObject;
-        Arr.Add(Obj);
-
-        dmTaxa.qRanks.Next;
-      end;
-    finally
-      dmTaxa.qRanks.GotoBookmark(BM);
-      FreeAndNil(FRank);
-      FRepo.Free;
-      dmTaxa.qRanks.EnableControls;
-    end;
-
-    S := TStringStream.Create(Arr.FormatJSON([], 2));
-    try
-      FS := TFileStream.Create(FFileName, fmCreate);
-      try
-        FS.CopyFrom(S, S.Size);
-      finally
-        FS.Free;
-      end;
-    finally
-      S.Free;
-    end;
-
-  finally
-    Arr.Free;
-  end;
+  if SaveJsonlDlg.Execute then
+    ExportTaxonRanksList(SaveJsonlDlg.FileName);
 end;
 
 procedure TfrmTaxaEditor.rbMarkedYesClick(Sender: TObject);
@@ -1850,6 +1856,10 @@ begin
     begin
       dmTaxa.qLanguages.Cancel;
     end;
+    5:
+    begin
+      dmTaxa.qMethods.Cancel;
+    end;
   end;
 
   UpdateButtons;
@@ -1909,6 +1919,7 @@ begin
     2: DeleteRecord(tbTaxonRanks, dmTaxa.qRanks);
     3: DeleteRecord(tbCountries, dmTaxa.qCountries);
     4: DeleteRecord(tbLanguages, dmTaxa.qLanguages);
+    5: DeleteRecord(tbMethods, dmTaxa.qMethods);
   end;
 end;
 
@@ -2130,6 +2141,7 @@ begin
     2: dmTaxa.qRanks.Edit;
     3: dmTaxa.qCountries.Edit;
     4: dmTaxa.qLanguages.Edit;
+    5: dmTaxa.qMethods.Edit;
   end;
 end;
 
@@ -2159,6 +2171,7 @@ begin
     2: dmTaxa.qRanks.First;
     3: dmTaxa.qCountries.First;
     4: dmTaxa.qLanguages.First;
+    5: dmTaxa.qMethods.First;
   end;
 end;
 
@@ -2175,6 +2188,7 @@ begin
     2: dmTaxa.qRanks.Insert;
     3: dmTaxa.qCountries.Insert;
     4: dmTaxa.qLanguages.Insert;
+    5: dmTaxa.qMethods.Insert;
   end;
 end;
 
@@ -2186,6 +2200,7 @@ begin
     2: dmTaxa.qRanks.Last;
     3: dmTaxa.qCountries.Last;
     4: dmTaxa.qLanguages.Last;
+    5: dmTaxa.qMethods.Last;
   end;
 end;
 
@@ -2276,6 +2291,7 @@ begin
     2: dmTaxa.qRanks.Next;
     3: dmTaxa.qCountries.Next;
     4: dmTaxa.qLanguages.Next;
+    5: dmTaxa.qMethods.Next;
   end;
 end;
 
@@ -2287,6 +2303,7 @@ begin
     2: dmTaxa.qRanks.Prior;
     3: dmTaxa.qCountries.Prior;
     4: dmTaxa.qLanguages.Prior;
+    5: dmTaxa.qMethods.Prior;
   end;
 end;
 
@@ -2308,6 +2325,7 @@ begin
     2: dmTaxa.qRanks.Refresh;
     3: dmTaxa.qCountries.Refresh;
     4: dmTaxa.qLanguages.Refresh;
+    5: dmTaxa.qMethods.Refresh;
   end;
 end;
 
@@ -2341,6 +2359,10 @@ begin
     4:
     begin
       dmTaxa.qLanguages.Post;
+    end;
+    5:
+    begin
+      dmTaxa.qMethods.Post;
     end;
   end;
 end;
@@ -2518,6 +2540,7 @@ begin
     2: eFind.Text := FRankSearchString;
     3: eFind.Text := FCountrySearchString;
     4: eFind.Text := FLanguageSearchString;
+    5: eFind.Text := FMethodSearchString;
   end;
   canSearch := True;
 
@@ -2642,6 +2665,70 @@ begin
   AddSortedField(tbLanguages, 'language_name', sdAscending);
 
   Result := FSearchLanguages.RunSearch > 0;
+
+  Working := False;
+
+  UpdateButtons;
+end;
+
+function TfrmTaxaEditor.SearchMethods(aValue: String): Boolean;
+var
+  FCriteria: TCriteriaType;
+  aGroup: Integer;
+  dummyInt: Longint;
+begin
+  Result := False;
+
+  if Working then
+    Exit;
+
+  Working := True;
+  FSearchMethods.Fields.Clear;
+  FSearchMethods.QuickFilters.Clear;
+
+  FCriteria := crLike;
+  aValue := Trim(aValue);
+
+  if aValue <> EmptyStr then
+  begin
+    if ExecRegExpr('^=.+$', aValue) then
+    begin
+      FCriteria := crEqual;
+      aValue := StringReplace(aValue, '=', '', [rfReplaceAll]);
+    end
+    else
+    if ExecRegExpr('^:.+$', aValue) then
+    begin
+      FCriteria := crStartLike;
+      aValue := StringReplace(aValue, ':', '', [rfReplaceAll]);
+    end;
+
+    if TryStrToInt(aValue, dummyInt) then
+    begin
+      aGroup := FSearchMethods.Fields.Add(TSearchGroup.Create);
+      FSearchMethods.Fields[aGroup].Fields.Add(TSearchField.Create('method_id', 'Method (ID)', sdtInteger, crEqual,
+        False, aValue));
+    end
+    else
+    begin
+      aGroup := FSearchMethods.Fields.Add(TSearchGroup.Create);
+      FSearchMethods.Fields[aGroup].Fields.Add(TSearchField.Create('method_name', 'Name', sdtText, FCriteria,
+        False, aValue));
+      FSearchMethods.Fields[aGroup].Fields.Add(TSearchField.Create('abbreviation', 'Abbreviation', sdtText, FCriteria,
+        False, aValue));
+      FSearchMethods.Fields[aGroup].Fields.Add(TSearchField.Create('ebird_name', 'eBird name', sdtText, FCriteria,
+        False, aValue));
+      FSearchMethods.Fields[aGroup].Fields.Add(TSearchField.Create('category', 'Category', sdtText, FCriteria,
+        False, aValue));
+    end;
+  end;
+
+  //GetTaxaFilters;
+
+  FSearchMethods.SortFields.Clear;
+  AddSortedField(tbMethods, 'method_name', sdAscending);
+
+  Result := FSearchMethods.RunSearch > 0;
 
   Working := False;
 
@@ -2803,6 +2890,11 @@ begin
     begin
       FLanguageSearchString := eFind.Text;
       SearchLanguages(FLanguageSearchString);
+    end;
+    5:
+    begin
+      FMethodSearchString := eFind.Text;
+      SearchMethods(FMethodSearchString);
     end;
   end;
 end;
@@ -3060,6 +3152,7 @@ begin
     2: aDataSet := dmTaxa.qRanks;
     3: aDataSet := dmTaxa.qCountries;
     4: aDataSet := dmTaxa.qLanguages;
+    5: aDataSet := dmTaxa.qMethods;
   end;
 
   case aDataSet.State of
