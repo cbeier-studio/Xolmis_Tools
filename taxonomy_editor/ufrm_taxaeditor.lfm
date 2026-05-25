@@ -4,7 +4,7 @@ object frmTaxaEditor: TfrmTaxaEditor
   Top = 0
   Width = 1940
   Caption = 'Xolmis Taxonomy Editor'
-  ClientHeight = 1061
+  ClientHeight = 1100
   ClientWidth = 1924
   SnapOptions.SnapToMonitor = True
   LCLVersion = '4.6.0.0'
@@ -23,7 +23,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 50
-    Height = 1009
+    Height = 1048
     Top = 52
     Width = 1874
     PageIndex = 0
@@ -32,13 +32,13 @@ object frmTaxaEditor: TfrmTaxaEditor
     object pgTaxa: TPage
       object splitTaxaLeft: TSplitter
         Left = 411
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 5
       end
       object splitTaxaRight: TSplitter
         Left = 1507
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 5
         Align = alRight
@@ -46,7 +46,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object nbTaxaSide: TNotebook
         Left = 1512
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 312
         PageIndex = 0
@@ -55,7 +55,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         object pgTaxaFilters: TPage
           object sboxTaxaFilters: TScrollBox
             Left = 0
-            Height = 1009
+            Height = 1048
             Top = 0
             Width = 312
             HorzScrollBar.Page = 166
@@ -64,7 +64,7 @@ object frmTaxaEditor: TfrmTaxaEditor
             BorderStyle = bsNone
             ChildSizing.LeftRightSpacing = 8
             ChildSizing.TopBottomSpacing = 8
-            ClientHeight = 1009
+            ClientHeight = 1048
             ClientWidth = 312
             Color = 15066599
             ParentBackground = False
@@ -591,7 +591,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object pDetails: TPanel
         Left = 1145
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 362
         Align = alRight
@@ -599,7 +599,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ChildSizing.LeftRightSpacing = 8
         ChildSizing.TopBottomSpacing = 16
         ChildSizing.VerticalSpacing = 8
-        ClientHeight = 1009
+        ClientHeight = 1048
         ClientWidth = 362
         Color = 15066599
         ParentBackground = False
@@ -774,12 +774,12 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object pTaxaList: TPanel
         Left = 0
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 411
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 1009
+        ClientHeight = 1048
         ClientWidth = 411
         ParentBackground = False
         TabOrder = 4
@@ -803,7 +803,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         end
         object gridTaxa: TDBGrid
           Left = 0
-          Height = 1009
+          Height = 1048
           Top = 0
           Width = 411
           Align = alClient
@@ -867,12 +867,12 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object ptContent: TPanel
         Left = 416
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 729
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 1009
+        ClientHeight = 1048
         ClientWidth = 729
         ParentBackground = False
         TabOrder = 5
@@ -885,7 +885,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           AnchorSideBottom.Control = ptContent
           AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 906
+          Height = 945
           Top = 103
           Width = 729
           HorzScrollBar.Page = 347
@@ -893,7 +893,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           VertScrollBar.Page = 740
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderStyle = bsNone
-          ClientHeight = 906
+          ClientHeight = 945
           ClientWidth = 729
           TabOrder = 1
           object peTaxa: TPanel
@@ -1758,7 +1758,7 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object pTaxaRightBar: TPanel
         Left = 1824
-        Height = 1009
+        Height = 1048
         Top = 0
         Width = 50
         Align = alRight
@@ -1767,7 +1767,7 @@ object frmTaxaEditor: TfrmTaxaEditor
         ChildSizing.LeftRightSpacing = 8
         ChildSizing.TopBottomSpacing = 16
         ChildSizing.VerticalSpacing = 8
-        ClientHeight = 1009
+        ClientHeight = 1048
         ClientWidth = 50
         ParentBackground = False
         TabOrder = 6
@@ -2257,7 +2257,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 1061
+    Height = 1100
     Top = 0
     Width = 50
     Anchors = [akTop, akLeft, akBottom]
@@ -2266,7 +2266,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     ChildSizing.LeftRightSpacing = 4
     ChildSizing.TopBottomSpacing = 8
     ChildSizing.VerticalSpacing = 4
-    ClientHeight = 1061
+    ClientHeight = 1100
     ClientWidth = 50
     Color = 16448250
     ParentBackground = False
@@ -2936,6 +2936,11 @@ object frmTaxaEditor: TfrmTaxaEditor
       Caption = 'Normalize synonyms'
       OnExecute = actNormalizeSynonymsExecute
     end
+    object actSortNumbers: TAction
+      Category = 'Batch'
+      Caption = 'Update sort numbers'
+      OnExecute = actSortNumbersExecute
+    end
   end
   object pmMain: TPopupMenu
     Images = bMenu
@@ -2968,6 +2973,9 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
       object mmNormalizeSynonyms: TMenuItem
         Action = actNormalizeSynonyms
+      end
+      object MenuItem6: TMenuItem
+        Action = actSortNumbers
       end
     end
     object Separator1: TMenuItem
@@ -5839,6 +5847,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     object pmxDesktopCompleteTaxonomy: TMenuItem
       Caption = 'Xolmis Desktop complete taxonomy'
       Visible = False
+      OnClick = pmxDesktopCompleteTaxonomyClick
     end
     object pmxDesktopTaxonomyUpdate: TMenuItem
       Caption = 'Xolmis Desktop taxonomy update'
@@ -5864,5 +5873,12 @@ object frmTaxaEditor: TfrmTaxaEditor
     Options = [ofOverwritePrompt, ofEnableSizing]
     Left = 360
     Top = 272
+  end
+  object SaveJsonlDlg: TSaveDialog
+    DefaultExt = '.jsonl'
+    Filter = 'JSONL files|*.jsonl'
+    Options = [ofOverwritePrompt, ofEnableSizing]
+    Left = 360
+    Top = 328
   end
 end

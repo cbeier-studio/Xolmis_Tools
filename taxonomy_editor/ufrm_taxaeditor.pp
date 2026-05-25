@@ -23,6 +23,7 @@ type
     actAbout: TAction;
     actImportIOCNames: TAction;
     actImportClements: TAction;
+    actSortNumbers: TAction;
     actNormalizeSynonyms: TAction;
     actSspVernacularNames: TAction;
     actRewriteHierarchy: TAction;
@@ -63,6 +64,7 @@ type
     lbltRank: TLabel;
     lbltSortNr: TLabel;
     lbltVernacular: TLabel;
+    MenuItem6: TMenuItem;
     pmxLanguagesList: TMenuItem;
     pmxRanksList: TMenuItem;
     pmxMobileSpeciesList: TMenuItem;
@@ -97,6 +99,7 @@ type
     ptToolbar: TPanel;
     ptVernacular: TPanel;
     SaveDlg: TSaveDialog;
+    SaveJsonlDlg: TSaveDialog;
     sbAddVernacular: TSpeedButton;
     sbAdvancedFilters: TSpeedButton;
     sbCancelRecord: TSpeedButton;
@@ -244,6 +247,7 @@ type
     procedure actImportIOCNamesExecute(Sender: TObject);
     procedure actNormalizeSynonymsExecute(Sender: TObject);
     procedure actRewriteHierarchyExecute(Sender: TObject);
+    procedure actSortNumbersExecute(Sender: TObject);
     procedure actSspVernacularNamesExecute(Sender: TObject);
     procedure cbAuthorshipKeyPress(Sender: TObject; var Key: char);
     procedure cbtIucnStatusDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
@@ -280,6 +284,7 @@ type
     procedure pmtSortClick(Sender: TObject);
     procedure pmvMoveToGenusClick(Sender: TObject);
     procedure pmvMoveToSpeciesClick(Sender: TObject);
+    procedure pmxDesktopCompleteTaxonomyClick(Sender: TObject);
     procedure pmxMobileSpeciesListClick(Sender: TObject);
     procedure pmxRanksListClick(Sender: TObject);
     procedure rbMarkedYesClick(Sender: TObject);
@@ -355,7 +360,7 @@ uses
   data_core, data_crud, data_getvalue, data_select, data_validations,
   models_rank, models_taxon,
   utils_dialogs, utils_taxonomy,
-  io_clements, io_ioc,
+  io_clements, io_ioc, io_json,
   udm_taxa, udlg_about, udlg_loading, udlg_find, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter,
   uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit, udlg_export_species_list;
 
@@ -551,6 +556,131 @@ begin
     finally
       FreeAndNil(Qry);
     end;
+  finally
+    dlgLoading.Hide;
+    dlgLoading.Max := 100;
+  end;
+end;
+
+procedure TfrmTaxaEditor.actSortNumbersExecute(Sender: TObject);
+var
+  Qry: TSQLQuery;
+  iOrder, iFamily, iGenus: Integer;
+begin
+  try
+    dlgLoading.Show;
+    dlgLoading.Max := 4;
+    dlgLoading.UpdateProgress('Updating missing sort numbers...', 0);
+
+    Qry := TSQLQuery.Create(nil);
+    with Qry, SQL do
+    try
+      DataBase := dmTaxa.sqlCon;
+      Transaction := dmTaxa.sqlTrans;
+      MacroCheck := True;
+
+      iOrder := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'ord.');
+      iFamily := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'fam.');
+      iGenus := GetKey('taxon_ranks', 'rank_id', 'rank_acronym', 'g.');
+
+      if not dmTaxa.sqlTrans.Active then
+        dmTaxa.sqlTrans.StartTransaction;
+      try
+        { Genus: must precede descendant species/subspecies. }
+        dlgLoading.UpdateProgress('Updating missing sort numbers: Genus...', 1);
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET sort_num = (');
+        Add('  SELECT MIN(child.sort_num) - 0.01');
+        Add('  FROM zoo_taxa child');
+        Add('  WHERE (child.genus_id = zoo_taxa.taxon_id)');
+        Add('    AND (child.taxon_id <> zoo_taxa.taxon_id)');
+        Add('    AND (child.sort_num IS NOT NULL)');
+        Add('    AND (child.sort_num > 0)');
+        Add('    AND (child.active_status = 1)');
+        Add('),');
+        Add('update_date = datetime(''now'',''subsec'')');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id)');
+        Add('  AND ((zoo_taxa.sort_num IS NULL) OR (zoo_taxa.sort_num = 0))');
+        Add('  AND (zoo_taxa.active_status = 1)');
+        Add('  AND EXISTS (');
+        Add('    SELECT 1 FROM zoo_taxa child');
+        Add('    WHERE (child.genus_id = zoo_taxa.taxon_id)');
+        Add('      AND (child.taxon_id <> zoo_taxa.taxon_id)');
+        Add('      AND (child.sort_num IS NOT NULL)');
+        Add('      AND (child.sort_num > 0)');
+        Add('      AND (child.active_status = 1)');
+        Add('  )');
+        ParamByName('rank_id').AsInteger := iGenus;
+        ExecSQL;
+
+        { Family: must precede genera and all descendants in the family. }
+        dlgLoading.UpdateProgress('Updating missing sort numbers: Family...', 2);
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET sort_num = (');
+        Add('  SELECT MIN(child.sort_num) - 0.01');
+        Add('  FROM zoo_taxa child');
+        Add('  WHERE (child.family_id = zoo_taxa.taxon_id)');
+        Add('    AND (child.taxon_id <> zoo_taxa.taxon_id)');
+        Add('    AND (child.sort_num IS NOT NULL)');
+        Add('    AND (child.sort_num > 0)');
+        Add('    AND (child.active_status = 1)');
+        Add('),');
+        Add('update_date = datetime(''now'',''subsec'')');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id)');
+        Add('  AND ((zoo_taxa.sort_num IS NULL) OR (zoo_taxa.sort_num = 0))');
+        Add('  AND (zoo_taxa.active_status = 1)');
+        Add('  AND EXISTS (');
+        Add('    SELECT 1 FROM zoo_taxa child');
+        Add('    WHERE (child.family_id = zoo_taxa.taxon_id)');
+        Add('      AND (child.taxon_id <> zoo_taxa.taxon_id)');
+        Add('      AND (child.sort_num IS NOT NULL)');
+        Add('      AND (child.sort_num > 0)');
+        Add('      AND (child.active_status = 1)');
+        Add('  )');
+        ParamByName('rank_id').AsInteger := iFamily;
+        ExecSQL;
+
+        { Order: must precede families and all descendants in the order. }
+        dlgLoading.UpdateProgress('Updating missing sort numbers: Order...', 3);
+        Clear;
+        Add('UPDATE zoo_taxa');
+        Add('SET sort_num = (');
+        Add('  SELECT MIN(child.sort_num) - 0.01');
+        Add('  FROM zoo_taxa child');
+        Add('  WHERE (child.order_id = zoo_taxa.taxon_id)');
+        Add('    AND (child.taxon_id <> zoo_taxa.taxon_id)');
+        Add('    AND (child.sort_num IS NOT NULL)');
+        Add('    AND (child.sort_num > 0)');
+        Add('    AND (child.active_status = 1)');
+        Add('),');
+        Add('update_date = datetime(''now'',''subsec'')');
+        Add('WHERE (zoo_taxa.rank_id = :rank_id)');
+        Add('  AND ((zoo_taxa.sort_num IS NULL) OR (zoo_taxa.sort_num = 0))');
+        Add('  AND (zoo_taxa.active_status = 1)');
+        Add('  AND EXISTS (');
+        Add('    SELECT 1 FROM zoo_taxa child');
+        Add('    WHERE (child.order_id = zoo_taxa.taxon_id)');
+        Add('      AND (child.taxon_id <> zoo_taxa.taxon_id)');
+        Add('      AND (child.sort_num IS NOT NULL)');
+        Add('      AND (child.sort_num > 0)');
+        Add('      AND (child.active_status = 1)');
+        Add('  )');
+        ParamByName('rank_id').AsInteger := iOrder;
+        ExecSQL;
+
+        dmTaxa.sqlTrans.CommitRetaining;
+      except
+        dmTaxa.sqlTrans.RollbackRetaining;
+        raise;
+      end;
+    finally
+      FreeAndNil(Qry);
+    end;
+
+    dmTaxa.qTaxa.Refresh;
+    dlgLoading.UpdateProgress('Missing sort numbers updated!', 4);
   finally
     dlgLoading.Hide;
     dlgLoading.Max := 100;
@@ -1538,6 +1668,12 @@ begin
 
   if needRefresh then
     dmTaxa.qTaxa.Refresh;
+end;
+
+procedure TfrmTaxaEditor.pmxDesktopCompleteTaxonomyClick(Sender: TObject);
+begin
+  if SaveJsonlDlg.Execute then
+    ExportCompleteTaxonomy(SaveJsonlDlg.FileName);
 end;
 
 procedure TfrmTaxaEditor.pmxMobileSpeciesListClick(Sender: TObject);
