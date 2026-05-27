@@ -47,11 +47,14 @@ type
     etQuickcode: TDBEdit;
     etSortNr: TDBEdit;
     gridMethods: TDBGrid;
+    gridMethodsI18n: TDBGrid;
     gridPacks: TDBGrid;
+    gridRanksI18n: TDBGrid;
     gridTaxa: TDBGrid;
     HtmlView: THtmlViewer;
     iconFind: TImage;
     lblCountTaxa: TLabel;
+    lblmTranslations: TLabel;
     lbltAuthorship: TLabel;
     lbltCountries: TLabel;
     lbltDistribution: TLabel;
@@ -65,7 +68,9 @@ type
     lbltRank: TLabel;
     lbltSortNr: TLabel;
     lbltVernacular: TLabel;
+    lblrTranslations: TLabel;
     MenuItem6: TMenuItem;
+    pRanksI18n: TPanel;
     pmxMethodsList: TMenuItem;
     pgMethods: TPage;
     pmxLanguagesList: TMenuItem;
@@ -86,6 +91,7 @@ type
     pmGridNames: TPopupMenu;
     pmExport: TPopupMenu;
     pPacksList: TPanel;
+    pMethodsI18n: TPanel;
     ptAuthorship: TPanel;
     pTaxaList: TPanel;
     pTaxaRightBar: TPanel;
@@ -103,14 +109,18 @@ type
     ptVernacular: TPanel;
     SaveDlg: TSaveDialog;
     SaveJsonlDlg: TSaveDialog;
+    sbAddMethodTranslation: TSpeedButton;
     sbAddVernacular: TSpeedButton;
+    sbAddRankTranslation: TSpeedButton;
     sbAdvancedFilters: TSpeedButton;
     sbCancelRecord: TSpeedButton;
     sbClearFilters: TSpeedButton;
     sbClearFind: TColorSpeedButton;
     sbDelCountry: TSpeedButton;
+    sbDelMethodTranslation: TSpeedButton;
     sbDelRecord: TSpeedButton;
     sbDelVernacular: TSpeedButton;
+    sbDelRankTranslation: TSpeedButton;
     sbEditCountry: TSpeedButton;
     sbEditHierarchy: TSpeedButton;
     sbEditRecord: TSpeedButton;
@@ -270,6 +280,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
+    procedure gridMethodsDblClick(Sender: TObject);
     procedure gridSynonymsPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn;
       AState: TGridDrawState);
     procedure gridTaxaCellClick(Column: TColumn);
@@ -278,6 +289,8 @@ type
     procedure gridTaxaMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
       var Handled: Boolean);
     procedure gridTaxaPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn; AState: TGridDrawState);
+    procedure pgMethodsResize(Sender: TObject);
+    procedure pgRanksResize(Sender: TObject);
     procedure pmExportPopup(Sender: TObject);
     procedure pmgMarkAllClick(Sender: TObject);
     procedure pmgNewPolitypicGroupClick(Sender: TObject);
@@ -295,6 +308,8 @@ type
     procedure pmxMobileSpeciesListClick(Sender: TObject);
     procedure pmxRanksListClick(Sender: TObject);
     procedure rbMarkedYesClick(Sender: TObject);
+    procedure sbAddMethodTranslationClick(Sender: TObject);
+    procedure sbAddRankTranslationClick(Sender: TObject);
     procedure sbAddSynonymClick(Sender: TObject);
     procedure sbAddVernacularClick(Sender: TObject);
     procedure sbAdvancedFiltersClick(Sender: TObject);
@@ -304,6 +319,8 @@ type
     procedure sbClearFindClick(Sender: TObject);
     procedure sbDelChangeClick(Sender: TObject);
     procedure sbDelCountryClick(Sender: TObject);
+    procedure sbDelMethodTranslationClick(Sender: TObject);
+    procedure sbDelRankTranslationClick(Sender: TObject);
     procedure sbDelRecordClick(Sender: TObject);
     procedure sbDelSynonymClick(Sender: TObject);
     procedure sbDelVernacularClick(Sender: TObject);
@@ -366,11 +383,12 @@ implementation
 
 uses
   data_core, data_crud, data_getvalue, data_select, data_validations,
-  models_rank, models_taxon,
+  models_rank, models_taxon, models_method,
   utils_dialogs, utils_taxonomy,
   io_clements, io_ioc, io_json,
   udm_taxa, udlg_about, udlg_loading, udlg_find, udlg_desttaxon, udlg_edithierarchy, udlg_newsubspecies, udlg_sqlfilter,
-  uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit, udlg_export_species_list;
+  uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit, udlg_export_species_list, uedt_rank_i18n,
+  uedt_method, uedt_method_i18n;
 
 {$R *.lfm}
 
@@ -1299,12 +1317,24 @@ begin
   dmTaxa.qCountries.Open;
   dmTaxa.qLanguages.Open;
   dmTaxa.qMethods.Open;
+  dmTaxa.qRanksI18n.Open;
+  dmTaxa.qMethodsI18n.Open;
 
   UpdateButtons;
 
   dlgLoading.Hide;
   CanToggle := True;
   canSearch := True;
+end;
+
+procedure TfrmTaxaEditor.pgMethodsResize(Sender: TObject);
+begin
+  gridMethodsI18n.Height := Round(pgMethods.Height * 0.3);
+end;
+
+procedure TfrmTaxaEditor.pgRanksResize(Sender: TObject);
+begin
+  gridRanksI18n.Height := Round(pgRanks.Height * 0.3);
 end;
 
 procedure TfrmTaxaEditor.pmExportPopup(Sender: TObject);
@@ -1730,7 +1760,7 @@ end;
 procedure TfrmTaxaEditor.pmxMethodsListClick(Sender: TObject);
 begin
   if SaveJsonlDlg.Execute then
-    ExportMethodsList(SaveJsonlDlg.FileName);
+    ExportMethodsListByLanguage(SaveJsonlDlg.FileName);
 end;
 
 procedure TfrmTaxaEditor.pmxMobileSpeciesListClick(Sender: TObject);
@@ -1747,7 +1777,7 @@ end;
 procedure TfrmTaxaEditor.pmxRanksListClick(Sender: TObject);
 begin
   if SaveJsonlDlg.Execute then
-    ExportTaxonRanksList(SaveJsonlDlg.FileName);
+    ExportTaxonRanksListByLanguage(SaveJsonlDlg.FileName);
 end;
 
 procedure TfrmTaxaEditor.rbMarkedYesClick(Sender: TObject);
@@ -1756,6 +1786,48 @@ begin
     Exit;
 
   SearchTaxa(eFind.Text);
+end;
+
+procedure TfrmTaxaEditor.sbAddMethodTranslationClick(Sender: TObject);
+var
+  Repo: TMethodI18nRepository;
+begin
+  Repo := TMethodI18nRepository.Create(dmTaxa.sqlCon);
+  edtMethodI18n := TedtMethodI18n.Create(nil);
+  with edtMethodI18n do
+  try
+    IsNew := True;
+    MethodId := dmTaxa.qMethods.FieldByName('method_id').AsInteger;
+    if ShowModal = mrOK then
+    begin
+      Repo.Insert(Vernacular);
+      dmTaxa.qMethodsI18n.Refresh;
+    end;
+  finally
+    FreeAndNil(edtMethodI18n);
+    Repo.Free;
+  end;
+end;
+
+procedure TfrmTaxaEditor.sbAddRankTranslationClick(Sender: TObject);
+var
+  Repo: TRankI18nRepository;
+begin
+  Repo := TRankI18nRepository.Create(dmTaxa.sqlCon);
+  edtRankI18n := TedtRankI18n.Create(nil);
+  with edtRankI18n do
+  try
+    IsNew := True;
+    RankId := dmTaxa.qRanks.FieldByName('rank_id').AsInteger;
+    if ShowModal = mrOK then
+    begin
+      Repo.Insert(Vernacular);
+      dmTaxa.qRanksI18n.Refresh;
+    end;
+  finally
+    FreeAndNil(edtRankI18n);
+    Repo.Free;
+  end;
 end;
 
 procedure TfrmTaxaEditor.sbAddSynonymClick(Sender: TObject);
@@ -1909,6 +1981,16 @@ end;
 procedure TfrmTaxaEditor.sbDelCountryClick(Sender: TObject);
 begin
   DeleteRecord(tbTaxonCountries, dmTaxa.qTaxonCountries);
+end;
+
+procedure TfrmTaxaEditor.sbDelMethodTranslationClick(Sender: TObject);
+begin
+  DeleteRecordPermanently(dmTaxa.qMethodsI18n);
+end;
+
+procedure TfrmTaxaEditor.sbDelRankTranslationClick(Sender: TObject);
+begin
+  DeleteRecordPermanently(dmTaxa.qRanksI18n);
 end;
 
 procedure TfrmTaxaEditor.sbDelRecordClick(Sender: TObject);
@@ -2134,6 +2216,8 @@ begin
 end;
 
 procedure TfrmTaxaEditor.sbEditRecordClick(Sender: TObject);
+var
+  Repo: TMethodRepository;
 begin
   case nbPages.PageIndex of
     0: dmTaxa.qTaxa.Edit;
@@ -2141,7 +2225,24 @@ begin
     2: dmTaxa.qRanks.Edit;
     3: dmTaxa.qCountries.Edit;
     4: dmTaxa.qLanguages.Edit;
-    5: dmTaxa.qMethods.Edit;
+    5:
+    begin
+      Repo := TMethodRepository.Create(dmTaxa.sqlCon);
+      edtMethod := TedtMethod.Create(nil);
+      with edtMethod do
+      try
+        IsNew := True;
+        MethodId := dmTaxa.qMethods.FieldByName('method_id').AsInteger;
+        if ShowModal = mrOK then
+        begin
+          Repo.Update(Method);
+          dmTaxa.qMethods.Refresh;
+        end;
+      finally
+        FreeAndNil(edtMethod);
+        Repo.Free;
+      end;
+    end;
   end;
 end;
 
@@ -2181,6 +2282,8 @@ begin
 end;
 
 procedure TfrmTaxaEditor.sbInsertRecordClick(Sender: TObject);
+var
+  Repo: TMethodRepository;
 begin
   case nbPages.PageIndex of
     0: dmTaxa.qTaxa.Insert;
@@ -2188,7 +2291,23 @@ begin
     2: dmTaxa.qRanks.Insert;
     3: dmTaxa.qCountries.Insert;
     4: dmTaxa.qLanguages.Insert;
-    5: dmTaxa.qMethods.Insert;
+    5:
+    begin
+      Repo := TMethodRepository.Create(dmTaxa.sqlCon);
+      edtMethod := TedtMethod.Create(nil);
+      with edtMethod do
+      try
+        IsNew := True;
+        if ShowModal = mrOK then
+        begin
+          Repo.Insert(Method);
+          dmTaxa.qMethods.Refresh;
+        end;
+      finally
+        FreeAndNil(edtMethod);
+        Repo.Free;
+      end;
+    end;
   end;
 end;
 
@@ -3017,6 +3136,12 @@ begin
   //end;
 
   CanToggle := True;
+end;
+
+procedure TfrmTaxaEditor.gridMethodsDblClick(Sender: TObject);
+begin
+  if sbEditRecord.Enabled then
+    sbEditRecordClick(nil);
 end;
 
 procedure TfrmTaxaEditor.gridSynonymsPrepareCanvas(sender: TObject; DataCol: Integer; Column: TColumn;

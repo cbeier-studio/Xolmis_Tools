@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Controls, Dialogs, DB, SQLDB, data_types;
 
   procedure DeleteRecord(aTable: TTableType; aDataSet: TDataSet);
+  procedure DeleteRecordPermanently(aDataSet: TDataSet);
   procedure RestoreRecord(aTable: TTableType; aDataSet: TDataSet);
 
   function CanEdit(aDataset: TDataset): Boolean;
@@ -157,6 +158,35 @@ begin
         Result := True;
       end;
     end;
+  end;
+end;
+
+procedure DeleteRecordPermanently(aDataSet: TDataSet);
+begin
+  // Confirmation dialog
+  with dmTaxa.TaskDlg do
+  begin
+    Title := rsDeleteRecordTitle;
+    Text := rsDeleteRecordPrompt;
+    Caption := rsTitleConfirmation;
+    CommonButtons := [tcbYes, tcbNo];
+    MainIcon := tdiNone;
+    DefaultButton := tcbNo;
+    //FooterIcon := tdiInformation;
+    //FooterText := rsDeleteRecordFooter;
+    if Execute then
+      if ModalResult = mrNo then
+        Exit;
+  end;
+
+  try
+    aDataSet.Delete;
+
+    dmTaxa.sqlTrans.CommitRetaining;
+    aDataSet.Refresh;
+  except
+    dmTaxa.sqlTrans.RollbackRetaining;
+    raise;
   end;
 end;
 

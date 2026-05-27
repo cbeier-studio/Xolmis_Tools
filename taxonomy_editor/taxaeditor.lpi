@@ -337,6 +337,29 @@
         <Filename Value="io_json.pp"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="models_method.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uedt_rank_i18n.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtRankI18n"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uedt_method.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtMethod"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uedt_method_i18n.pp"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="edtMethodI18n"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

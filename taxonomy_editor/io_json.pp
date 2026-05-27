@@ -11,8 +11,10 @@ uses
   function ExportCompleteTaxonomy(aFileName: String): Boolean;
   function ExportCountriesList(aFileName: String): Boolean;
   function ExportLanguagesList(aFileName: String): Boolean;
-  function ExportMethodsList(aFileName: String): Boolean;
-  function ExportTaxonRanksList(aFileName: String): Boolean;
+  function ExportMethodsList(aFileName: String; LanguageId: Integer = 0): Boolean;
+  function ExportTaxonRanksList(aFileName: String; LanguageId: Integer = 0): Boolean;
+  function ExportMethodsListByLanguage(aBaseFileName: String): Boolean;
+  function ExportTaxonRanksListByLanguage(aBaseFileName: String): Boolean;
 
 implementation
 
@@ -58,6 +60,22 @@ begin
   OutputLine := Line + LineEnding;
   if OutputLine <> EmptyStr then
     Stream.WriteBuffer(Pointer(OutputLine)^, Length(OutputLine));
+end;
+
+function BuildLocalizedFileName(const BaseFileName, LangCode: String): String;
+var
+  Ext: String;
+  NormalizedLangCode: String;
+begin
+  Ext := ExtractFileExt(BaseFileName);
+  if Ext = EmptyStr then
+    Ext := '.jsonl';
+
+  NormalizedLangCode := LowerCase(Trim(LangCode));
+  if NormalizedLangCode = EmptyStr then
+    NormalizedLangCode := 'en';
+
+  Result := ChangeFileExt(BaseFileName, EmptyStr) + '.' + NormalizedLangCode + Ext;
 end;
 
 function ExportSpeciesList(aFileName: String; CountryId, LanguageId: Integer; VernacularNames: Boolean
@@ -665,7 +683,7 @@ begin
   end;
 end;
 
-function ExportTaxonRanksList(aFileName: String): Boolean;
+function ExportTaxonRanksList(aFileName: String; LanguageId: Integer): Boolean;
 var
   Qry: TSQLQuery;
   CountQry: TSQLQuery;
@@ -704,23 +722,26 @@ begin
     end;
 
     Qry.SQL.Add('SELECT');
-    Qry.SQL.Add('  rank_id,');
-    Qry.SQL.Add('  rank_seq,');
-    Qry.SQL.Add('  rank_name,');
-    Qry.SQL.Add('  rank_acronym,');
-    Qry.SQL.Add('  zoological_code,');
-    Qry.SQL.Add('  botanical_code,');
-    Qry.SQL.Add('  main_rank,');
-    Qry.SQL.Add('  subrank,');
-    Qry.SQL.Add('  infrarank,');
-    Qry.SQL.Add('  infraspecific,');
-    Qry.SQL.Add('  insert_date,');
-    Qry.SQL.Add('  update_date,');
-    Qry.SQL.Add('  marked_status,');
-    Qry.SQL.Add('  active_status');
-    Qry.SQL.Add('FROM taxon_ranks');
-    Qry.SQL.Add('WHERE active_status = 1');
-    Qry.SQL.Add('ORDER BY rank_seq ASC, rank_id ASC');
+    Qry.SQL.Add('  r.rank_id,');
+    Qry.SQL.Add('  r.rank_seq,');
+    Qry.SQL.Add('  COALESCE(ri.rank_name, r.rank_name) AS rank_name,');
+    Qry.SQL.Add('  r.rank_acronym,');
+    Qry.SQL.Add('  r.zoological_code,');
+    Qry.SQL.Add('  r.botanical_code,');
+    Qry.SQL.Add('  r.main_rank,');
+    Qry.SQL.Add('  r.subrank,');
+    Qry.SQL.Add('  r.infrarank,');
+    Qry.SQL.Add('  r.infraspecific,');
+    Qry.SQL.Add('  r.insert_date,');
+    Qry.SQL.Add('  r.update_date,');
+    Qry.SQL.Add('  r.marked_status,');
+    Qry.SQL.Add('  r.active_status');
+    Qry.SQL.Add('FROM taxon_ranks AS r');
+    Qry.SQL.Add('LEFT JOIN taxon_rank_i18n AS ri ON ri.rank_id = r.rank_id AND ri.language_id = :language_id');
+    Qry.SQL.Add('WHERE r.active_status = 1');
+    Qry.SQL.Add('ORDER BY r.rank_seq ASC, r.rank_id ASC');
+
+    Qry.ParamByName('language_id').AsInteger := LanguageId;
 
     FS := TFileStream.Create(aFileName, fmCreate);
 
@@ -790,7 +811,7 @@ begin
   end;
 end;
 
-function ExportMethodsList(aFileName: String): Boolean;
+function ExportMethodsList(aFileName: String; LanguageId: Integer): Boolean;
 var
   Qry: TSQLQuery;
   CountQry: TSQLQuery;
@@ -829,22 +850,25 @@ begin
     end;
 
     Qry.SQL.Add('SELECT');
-    Qry.SQL.Add('  method_id,');
-    Qry.SQL.Add('  method_name,');
-    Qry.SQL.Add('  abbreviation,');
-    Qry.SQL.Add('  ebird_name,');
-    Qry.SQL.Add('  category,');
-    Qry.SQL.Add('  description,');
-    Qry.SQL.Add('  recommended_uses,');
-    Qry.SQL.Add('  notes,');
-    Qry.SQL.Add('  can_delete,');
-    Qry.SQL.Add('  insert_date,');
-    Qry.SQL.Add('  update_date,');
-    Qry.SQL.Add('  marked_status,');
-    Qry.SQL.Add('  active_status');
-    Qry.SQL.Add('FROM methods');
-    Qry.SQL.Add('WHERE active_status = 1');
-    Qry.SQL.Add('ORDER BY method_name ASC, method_id ASC');
+    Qry.SQL.Add('  m.method_id,');
+    Qry.SQL.Add('  COALESCE(mi.method_name, m.method_name) AS method_name,');
+    Qry.SQL.Add('  m.abbreviation,');
+    Qry.SQL.Add('  m.ebird_name,');
+    Qry.SQL.Add('  COALESCE(mi.category, m.category) AS category,');
+    Qry.SQL.Add('  COALESCE(mi.description, m.description) AS description,');
+    Qry.SQL.Add('  COALESCE(mi.recommended_uses, m.recommended_uses) AS recommended_uses,');
+    Qry.SQL.Add('  COALESCE(mi.notes, m.notes) AS notes,');
+    Qry.SQL.Add('  m.can_delete,');
+    Qry.SQL.Add('  m.insert_date,');
+    Qry.SQL.Add('  m.update_date,');
+    Qry.SQL.Add('  m.marked_status,');
+    Qry.SQL.Add('  m.active_status');
+    Qry.SQL.Add('FROM methods AS m');
+    Qry.SQL.Add('LEFT JOIN method_i18n AS mi ON mi.method_id = m.method_id AND mi.language_id = :language_id');
+    Qry.SQL.Add('WHERE m.active_status = 1');
+    Qry.SQL.Add('ORDER BY COALESCE(mi.method_name, m.method_name) ASC, m.method_id ASC');
+
+    Qry.ParamByName('language_id').AsInteger := LanguageId;
 
     FS := TFileStream.Create(aFileName, fmCreate);
 
@@ -910,6 +934,98 @@ begin
     FreeAndNil(FS);
     FreeAndNil(CountQry);
     FreeAndNil(Qry);
+  end;
+end;
+
+function ExportMethodsListByLanguage(aBaseFileName: String): Boolean;
+var
+  LangQry: TSQLQuery;
+  OutFileName: String;
+  ExportOk: Boolean;
+  ExportedEnglish: Boolean;
+begin
+  Result := True;
+  LangQry := TSQLQuery.Create(nil);
+  ExportedEnglish := False;
+  try
+    LangQry.DataBase := dmTaxa.sqlCon;
+    LangQry.SQL.Text :=
+      'SELECT language_id, macrolanguage_code ' +
+      'FROM languages ' +
+      'WHERE active_status = 1 ' +
+      'ORDER BY macrolanguage_code ASC, language_id ASC';
+    LangQry.Open;
+
+    if LangQry.RecordCount = 0 then
+      Exit(ExportMethodsList(aBaseFileName, 0));
+
+    while not LangQry.EOF do
+    begin
+      OutFileName := BuildLocalizedFileName(aBaseFileName, LangQry.FieldByName('macrolanguage_code').AsString);
+      ExportOk := ExportMethodsList(OutFileName, LangQry.FieldByName('language_id').AsInteger);
+      if not ExportOk then
+        Result := False;
+
+      if SameText(Trim(LangQry.FieldByName('macrolanguage_code').AsString), 'en') then
+        ExportedEnglish := True;
+
+      LangQry.Next;
+    end;
+
+    if not ExportedEnglish then
+    begin
+      OutFileName := BuildLocalizedFileName(aBaseFileName, 'en');
+      if not ExportMethodsList(OutFileName, 0) then
+        Result := False;
+    end;
+  finally
+    FreeAndNil(LangQry);
+  end;
+end;
+
+function ExportTaxonRanksListByLanguage(aBaseFileName: String): Boolean;
+var
+  LangQry: TSQLQuery;
+  OutFileName: String;
+  ExportOk: Boolean;
+  ExportedEnglish: Boolean;
+begin
+  Result := True;
+  LangQry := TSQLQuery.Create(nil);
+  ExportedEnglish := False;
+  try
+    LangQry.DataBase := dmTaxa.sqlCon;
+    LangQry.SQL.Text :=
+      'SELECT language_id, macrolanguage_code ' +
+      'FROM languages ' +
+      'WHERE active_status = 1 ' +
+      'ORDER BY macrolanguage_code ASC, language_id ASC';
+    LangQry.Open;
+
+    if LangQry.RecordCount = 0 then
+      Exit(ExportTaxonRanksList(aBaseFileName, 0));
+
+    while not LangQry.EOF do
+    begin
+      OutFileName := BuildLocalizedFileName(aBaseFileName, LangQry.FieldByName('macrolanguage_code').AsString);
+      ExportOk := ExportTaxonRanksList(OutFileName, LangQry.FieldByName('language_id').AsInteger);
+      if not ExportOk then
+        Result := False;
+
+      if SameText(Trim(LangQry.FieldByName('macrolanguage_code').AsString), 'en') then
+        ExportedEnglish := True;
+
+      LangQry.Next;
+    end;
+
+    if not ExportedEnglish then
+    begin
+      OutFileName := BuildLocalizedFileName(aBaseFileName, 'en');
+      if not ExportTaxonRanksList(OutFileName, 0) then
+        Result := False;
+    end;
+  finally
+    FreeAndNil(LangQry);
   end;
 end;
 

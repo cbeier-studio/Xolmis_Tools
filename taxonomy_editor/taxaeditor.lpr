@@ -24,7 +24,7 @@ uses
   // Forms
   ufrm_TaxaEditor, udlg_desttaxon, udlg_edithierarchy, udlg_sqlfilter,
   udlg_newsubspecies, udm_taxa, uedt_occurrence, uedt_specieslist, uedt_vernacular, uedt_familysplit, 
-udlg_export_species_list, io_json;
+udlg_export_species_list, io_json, uedt_rank_i18n, uedt_method, uedt_method_i18n;
 
 {$R *.res}
 

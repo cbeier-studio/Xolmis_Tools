@@ -26,7 +26,7 @@ object frmTaxaEditor: TfrmTaxaEditor
     Height = 1048
     Top = 52
     Width = 1874
-    PageIndex = 5
+    PageIndex = 2
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 1
     object pgTaxa: TPage
@@ -2065,13 +2065,19 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
     end
     object pgRanks: TPage
+      OnResize = pgRanksResize
       object gridRanks: TDBGrid
+        AnchorSideLeft.Control = pgRanks
+        AnchorSideTop.Control = pgRanks
+        AnchorSideRight.Control = pgRanks
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pRanksI18n
         Left = 6
-        Height = 1003
+        Height = 506
         Top = 0
         Width = 1862
-        Align = alClient
         AlternateColor = 16448250
+        Anchors = [akTop, akLeft, akRight, akBottom]
         AutoFillColumns = True
         BorderSpacing.Left = 6
         BorderSpacing.Right = 6
@@ -2086,7 +2092,7 @@ object frmTaxaEditor: TfrmTaxaEditor
           end        
           item
             Title.Caption = 'Name'
-            Width = 593
+            Width = 589
             FieldName = 'rank_name'
           end        
           item
@@ -2148,6 +2154,106 @@ object frmTaxaEditor: TfrmTaxaEditor
         Scrollbars = ssAutoVertical
         TabOrder = 0
         TitleStyle = tsNative
+      end
+      object gridRanksI18n: TDBGrid
+        AnchorSideLeft.Control = pgRanks
+        AnchorSideRight.Control = pgRanks
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pgRanks
+        AnchorSideBottom.Side = asrBottom
+        Left = 6
+        Height = 498
+        Top = 544
+        Width = 1862
+        AlternateColor = 16448250
+        Anchors = [akLeft, akRight, akBottom]
+        AutoFillColumns = True
+        BorderSpacing.Left = 6
+        BorderSpacing.Top = 6
+        BorderSpacing.Right = 6
+        BorderSpacing.Bottom = 6
+        Color = clWindow
+        Columns = <        
+          item
+            SizePriority = 0
+            Title.Caption = 'Language'
+            Width = 250
+            FieldName = 'language_name'
+          end        
+          item
+            Title.Caption = 'Rank name'
+            Width = 1596
+            FieldName = 'rank_name'
+          end>
+        DataSource = dmTaxa.dsRanksI18n
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight, dgThumbTracking]
+        Scrollbars = ssAutoVertical
+        TabOrder = 1
+        TitleStyle = tsNative
+      end
+      object pRanksI18n: TPanel
+        AnchorSideLeft.Control = gridRanksI18n
+        AnchorSideRight.Control = gridRanksI18n
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = gridRanksI18n
+        Left = 6
+        Height = 26
+        Top = 512
+        Width = 1862
+        Anchors = [akLeft, akRight, akBottom]
+        AutoSize = True
+        BevelOuter = bvNone
+        ClientHeight = 26
+        ClientWidth = 1862
+        TabOrder = 2
+        object lblrTranslations: TLabel
+          AnchorSideLeft.Control = pRanksI18n
+          AnchorSideTop.Control = pRanksI18n
+          Left = 0
+          Height = 21
+          Top = 0
+          Width = 83
+          BorderSpacing.Right = 24
+          Caption = 'Translations'
+          Font.Height = -16
+          Layout = tlCenter
+          ParentColor = False
+          ParentFont = False
+        end
+        object sbAddRankTranslation: TSpeedButton
+          AnchorSideLeft.Control = lblrTranslations
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pRanksI18n
+          Left = 107
+          Height = 26
+          Top = 0
+          Width = 52
+          AutoSize = True
+          BorderSpacing.Right = 16
+          Caption = 'Add'
+          DisabledImageIndex = 1
+          Flat = True
+          Images = bMenu
+          ImageIndex = 0
+          OnClick = sbAddRankTranslationClick
+        end
+        object sbDelRankTranslation: TSpeedButton
+          AnchorSideLeft.Control = sbAddRankTranslation
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pRanksI18n
+          AnchorSideRight.Side = asrBottom
+          Left = 175
+          Height = 26
+          Top = 0
+          Width = 63
+          AutoSize = True
+          Caption = 'Delete'
+          DisabledImageIndex = 5
+          Flat = True
+          Images = bMenu
+          ImageIndex = 4
+          OnClick = sbDelRankTranslationClick
+        end
       end
     end
     object pgCountries: TPage
@@ -2251,13 +2357,19 @@ object frmTaxaEditor: TfrmTaxaEditor
       end
     end
     object pgMethods: TPage
+      OnResize = pgMethodsResize
       object gridMethods: TDBGrid
+        AnchorSideLeft.Control = pgMethods
+        AnchorSideTop.Control = pgMethods
+        AnchorSideRight.Control = pgMethods
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pMethodsI18n
         Left = 6
-        Height = 1042
+        Height = 458
         Top = 0
         Width = 1862
-        Align = alClient
         AlternateColor = 16448250
+        Anchors = [akTop, akLeft, akRight, akBottom]
         AutoFillColumns = True
         BorderSpacing.Left = 6
         BorderSpacing.Right = 6
@@ -2324,6 +2436,128 @@ object frmTaxaEditor: TfrmTaxaEditor
         Scrollbars = ssAutoVertical
         TabOrder = 0
         TitleStyle = tsNative
+        OnDblClick = gridMethodsDblClick
+      end
+      object gridMethodsI18n: TDBGrid
+        AnchorSideLeft.Control = pgMethods
+        AnchorSideRight.Control = pgMethods
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pgMethods
+        AnchorSideBottom.Side = asrBottom
+        Left = 6
+        Height = 546
+        Top = 496
+        Width = 1862
+        AlternateColor = 16448250
+        Anchors = [akLeft, akRight, akBottom]
+        AutoFillColumns = True
+        BorderSpacing.Left = 6
+        BorderSpacing.Top = 6
+        BorderSpacing.Right = 6
+        BorderSpacing.Bottom = 6
+        Color = clWindow
+        Columns = <        
+          item
+            SizePriority = 0
+            Title.Caption = 'Language'
+            Width = 250
+            FieldName = 'language_name'
+          end        
+          item
+            Title.Caption = 'Method name'
+            Width = 337
+            FieldName = 'method_name'
+          end        
+          item
+            SizePriority = 0
+            Title.Caption = 'Category'
+            Width = 250
+            FieldName = 'category'
+          end        
+          item
+            Title.Caption = 'Description'
+            Width = 337
+            FieldName = 'description'
+          end        
+          item
+            Title.Caption = 'Recommended uses'
+            Width = 336
+            FieldName = 'recommended_uses'
+          end        
+          item
+            Title.Caption = 'Notes'
+            Width = 336
+            FieldName = 'notes'
+          end>
+        DataSource = dmTaxa.dsMethodsI18n
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgHeaderHotTracking, dgHeaderPushedLook, dgDisableDelete, dgCellHints, dgCellEllipsis, dgRowHighlight, dgThumbTracking, dgDisplayMemoText]
+        Scrollbars = ssAutoVertical
+        TabOrder = 1
+        TitleStyle = tsNative
+      end
+      object pMethodsI18n: TPanel
+        AnchorSideLeft.Control = gridMethodsI18n
+        AnchorSideRight.Control = gridMethodsI18n
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = gridMethodsI18n
+        Left = 6
+        Height = 26
+        Top = 464
+        Width = 1862
+        Anchors = [akLeft, akRight, akBottom]
+        AutoSize = True
+        BevelOuter = bvNone
+        ClientHeight = 26
+        ClientWidth = 1862
+        TabOrder = 2
+        object lblmTranslations: TLabel
+          AnchorSideLeft.Control = pMethodsI18n
+          AnchorSideTop.Control = pMethodsI18n
+          Left = 0
+          Height = 21
+          Top = 0
+          Width = 83
+          BorderSpacing.Right = 24
+          Caption = 'Translations'
+          Font.Height = -16
+          Layout = tlCenter
+          ParentColor = False
+          ParentFont = False
+        end
+        object sbAddMethodTranslation: TSpeedButton
+          AnchorSideLeft.Control = lblmTranslations
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pMethodsI18n
+          Left = 107
+          Height = 26
+          Top = 0
+          Width = 52
+          AutoSize = True
+          BorderSpacing.Right = 16
+          Caption = 'Add'
+          DisabledImageIndex = 1
+          Flat = True
+          Images = bMenu
+          ImageIndex = 0
+          OnClick = sbAddMethodTranslationClick
+        end
+        object sbDelMethodTranslation: TSpeedButton
+          AnchorSideLeft.Control = sbAddMethodTranslation
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pMethodsI18n
+          AnchorSideRight.Side = asrBottom
+          Left = 175
+          Height = 26
+          Top = 0
+          Width = 63
+          AutoSize = True
+          Caption = 'Delete'
+          DisabledImageIndex = 5
+          Flat = True
+          Images = bMenu
+          ImageIndex = 4
+          OnClick = sbDelMethodTranslationClick
+        end
       end
     end
   end

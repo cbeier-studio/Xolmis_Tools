@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Dialogs, DB, SQLDB;
 
 const
-  SCHEMA_VERSION: Integer = 3;
+  SCHEMA_VERSION: Integer = 4;
 
   function CreateTaxonomyDatabase(aFilename: String): Boolean;
   function UpgradeDatabaseSchema: Boolean;
@@ -19,7 +19,9 @@ const
   procedure CreateCountriesTable(Connection: TSQLConnector);
   procedure CreateLanguagesTable(Connection: TSQLConnector);
   procedure CreateMethodsTable(Connection: TSQLConnector);
+  procedure CreateMethodsI18nTable(Connection: TSQLConnector);
   procedure CreateTaxonRanksTable(Connection: TSQLConnector);
+  procedure CreateTaxonRanksI18nTable(Connection: TSQLConnector);
   procedure CreateZooTaxaTable(Connection: TSQLConnector);
   procedure CreateVernacularNamesTable(Connection: TSQLConnector);
   procedure CreateSynonymsTable(Connection: TSQLConnector);
@@ -46,7 +48,7 @@ begin
   try
     dlgLoading.Show;
     dlgLoading.Min := 0;
-    dlgLoading.Max := 11;
+    dlgLoading.Max := 13;
     dlgLoading.UpdateProgress('Creating database...', 0);
     //dlgProgress.Title := rsTitleCreateDatabase;
     //dlgProgress.Text := rsProgressPreparing;
@@ -107,12 +109,22 @@ begin
         CreateMethodsTable(Conn);
         //dlgProgress.Position := dlgProgress.Position + 1;
 
+        // Methods translations
+        dlgLoading.UpdateProgress('Creating table: Methods translations...', dlgLoading.Progress + 1);
+        Application.ProcessMessages;
+        CreateMethodsI18nTable(Conn);
+
         // Taxon ranks
         //dlgProgress.Text := Format(rsProgressCreatingTable, [rsTitleTaxonRanks, dlgProgress.Position + 1, dlgProgress.Max]);
         dlgLoading.UpdateProgress('Creating table: Taxon ranks...', dlgLoading.Progress + 1);
         Application.ProcessMessages;
         CreateTaxonRanksTable(Conn);
         //dlgProgress.Position := dlgProgress.Position + 1;
+
+        // Taxon ranks translations
+        dlgLoading.UpdateProgress('Creating table: Taxon ranks translations...', dlgLoading.Progress + 1);
+        Application.ProcessMessages;
+        CreateTaxonRanksI18nTable(Conn);
 
         // Zoo taxa
         //dlgProgress.Text := Format(rsProgressCreatingTable, [rsTitleZooTaxa, dlgProgress.Position + 1, dlgProgress.Max]);
@@ -279,6 +291,16 @@ begin
         Result := True;
       end;
 
+      if OldVersion < 4 then
+      begin
+        dlgLoading.UpdateProgress('Upgrading database schema to v4...', -1);
+
+        CreateMethodsI18nTable(dmTaxa.sqlCon);
+        CreateTaxonRanksI18nTable(dmTaxa.sqlCon);
+
+        Result := True;
+      end;
+
       if Result then
       begin
         dmTaxa.sqlTrans.CommitRetaining;
@@ -427,6 +449,22 @@ begin
 
   Connection.ExecuteDirect('CREATE INDEX IF NOT EXISTS idx_rank_name ON taxon_ranks (' +
     'rank_name COLLATE NOCASE' +
+  ');');
+end;
+
+procedure CreateTaxonRanksI18nTable(Connection: TSQLConnector);
+begin
+  Connection.ExecuteDirect('CREATE TABLE IF NOT EXISTS taxon_rank_i18n (' +
+    'rank_id      INTEGER      NOT NULL REFERENCES taxon_ranks (rank_id) ON DELETE CASCADE ON UPDATE CASCADE,' +
+    'language_id  INTEGER      NOT NULL REFERENCES languages (language_id) ON DELETE CASCADE ON UPDATE CASCADE,' +
+    'rank_name    VARCHAR (30) NOT NULL,' +
+    'insert_date  DATETIME     DEFAULT (DATETIME(''now'', ''localtime'') ),' +
+    'update_date  DATETIME     DEFAULT (DATETIME(''now'', ''localtime'') ),' +
+    'PRIMARY KEY (rank_id, language_id)' +
+  ');');
+
+  Connection.ExecuteDirect('CREATE INDEX IF NOT EXISTS idx_rank_i18n_language ON taxon_rank_i18n (' +
+    'language_id COLLATE BINARY' +
   ');');
 end;
 
@@ -629,6 +667,26 @@ begin
       'update_date      DATETIME,' +
       'marked_status    BOOLEAN       DEFAULT (0),' +
       'active_status    BOOLEAN       DEFAULT (1)' +
+  ');');
+end;
+
+procedure CreateMethodsI18nTable(Connection: TSQLConnector);
+begin
+  Connection.ExecuteDirect('CREATE TABLE IF NOT EXISTS method_i18n (' +
+      'method_id          INTEGER       NOT NULL REFERENCES methods (method_id) ON DELETE CASCADE ON UPDATE CASCADE,' +
+      'language_id        INTEGER       NOT NULL REFERENCES languages (language_id) ON DELETE CASCADE ON UPDATE CASCADE,' +
+      'method_name        VARCHAR (100),' +
+      'category           VARCHAR (30),' +
+      'description        TEXT,' +
+      'recommended_uses   TEXT,' +
+      'notes              TEXT,' +
+      'insert_date        DATETIME      DEFAULT (DATETIME(''now'', ''localtime'') ),' +
+      'update_date        DATETIME      DEFAULT (DATETIME(''now'', ''localtime'') ),' +
+      'PRIMARY KEY (method_id, language_id)' +
+  ');');
+
+  Connection.ExecuteDirect('CREATE INDEX IF NOT EXISTS idx_method_i18n_language ON method_i18n (' +
+    'language_id COLLATE BINARY' +
   ');');
 end;
 

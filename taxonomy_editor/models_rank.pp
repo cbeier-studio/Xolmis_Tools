@@ -60,6 +60,46 @@ type
     procedure Delete(E: TXolmisRecord); override;
   end;
 
+  { TRankI18n }
+
+  TRankI18n = class(TXolmisRecord)
+  protected
+    FRankId: Integer;
+    FLanguageId: Integer;
+    FRankName: String;
+  public
+    constructor Create(aRankId: Integer = 0; aLanguageId: Integer = 0); reintroduce; virtual;
+    procedure Clear; override;
+    procedure Assign(Source: TPersistent); override;
+    function Clone: TXolmisRecord; reintroduce;
+    function Diff(const aOld: TRankI18n; var Changes: TStrings): Boolean; virtual;
+    function EqualsTo(const Other: TRankI18n): Boolean;
+    procedure FromJSON(const aJSONString: String); virtual;
+    function ToJSON: String;
+    function ToString: String; override;
+    function Validate(out Msg: string): Boolean; virtual;
+  published
+    property RankId: Integer read FRankId write FRankId;
+    property LanguageId: Integer read FLanguageId write FLanguageId;
+    property RankName: String read FRankName write FRankName;
+  end;
+
+  { TRankI18nRepository }
+
+  TRankI18nRepository = class(TXolmisRepository)
+  protected
+    function TableName: string; override;
+  public
+    function Exists(const Id: Integer): Boolean; override;
+    procedure FindBy(const FieldName: String; const Value: Variant; E: TXolmisRecord); override;
+    procedure GetById(const Id: Integer; E: TXolmisRecord); override;
+    procedure GetByRankAndLanguage(const aRankId, aLanguageId: Integer; E: TRankI18n);
+    procedure Hydrate(aDataSet: TDataSet; E: TXolmisRecord); override;
+    procedure Insert(E: TXolmisRecord); override;
+    procedure Update(E: TXolmisRecord); override;
+    procedure Delete(E: TXolmisRecord); override;
+  end;
+
 implementation
 
 uses
@@ -498,6 +538,374 @@ begin
     ParamByName('rank_id').AsInteger := R.Id;
 
     ExecSQL;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+{ TRankI18n }
+
+constructor TRankI18n.Create(aRankId: Integer; aLanguageId: Integer);
+begin
+  inherited Create;
+  FRankId := aRankId;
+  FLanguageId := aLanguageId;
+end;
+
+procedure TRankI18n.Clear;
+begin
+  inherited Clear;
+  FRankId := 0;
+  FLanguageId := 0;
+  FRankName := EmptyStr;
+end;
+
+procedure TRankI18n.Assign(Source: TPersistent);
+begin
+  inherited Assign(Source);
+  if Source is TRankI18n then
+  begin
+    FRankId := TRankI18n(Source).RankId;
+    FLanguageId := TRankI18n(Source).LanguageId;
+    FRankName := TRankI18n(Source).RankName;
+  end;
+end;
+
+function TRankI18n.Clone: TXolmisRecord;
+begin
+  Result := TRankI18n(inherited Clone);
+end;
+
+function TRankI18n.Diff(const aOld: TRankI18n; var Changes: TStrings): Boolean;
+var
+  R: String;
+begin
+  Result := False;
+  R := EmptyStr;
+  if Assigned(Changes) then
+    Changes.Clear;
+  if aOld = nil then
+    Exit(False);
+
+  if not SameText(aOld.RankName, FRankName) then
+  begin
+    R := Format('RankName: "%s" -> "%s"', [aOld.RankName, FRankName]);
+    if Assigned(Changes) then
+      Changes.Add(R);
+  end;
+
+  Result := Assigned(Changes) and (Changes.Count > 0);
+end;
+
+function TRankI18n.EqualsTo(const Other: TRankI18n): Boolean;
+begin
+  Result := Assigned(Other) and
+    (FRankId = Other.RankId) and
+    (FLanguageId = Other.LanguageId);
+end;
+
+procedure TRankI18n.FromJSON(const aJSONString: String);
+var
+  Obj: TJSONObject;
+begin
+  Obj := TJSONObject(GetJSON(aJSONString));
+  try
+    FRankId := Obj.Get('rank_id', 0);
+    FLanguageId := Obj.Get('language_id', 0);
+    FRankName := Obj.Get('rank_name', '');
+  finally
+    Obj.Free;
+  end;
+end;
+
+function TRankI18n.ToJSON: String;
+var
+  JSONObject: TJSONObject;
+begin
+  JSONObject := TJSONObject.Create;
+  try
+    JSONObject.Add('rank_id', FRankId);
+    JSONObject.Add('language_id', FLanguageId);
+    JSONObject.Add('rank_name', FRankName);
+
+    Result := JSONObject.AsJSON;
+  finally
+    JSONObject.Free;
+  end;
+end;
+
+function TRankI18n.ToString: String;
+begin
+  Result := Format('RankI18n(RankId=%d, LanguageId=%d, RankName=%s, InsertDate=%s, UpdateDate=%s)',
+    [FRankId, FLanguageId, FRankName, DateTimeToStr(FInsertDate), DateTimeToStr(FUpdateDate)]);
+end;
+
+function TRankI18n.Validate(out Msg: string): Boolean;
+begin
+  if FRankId = 0 then
+  begin
+    Msg := 'RankId required.';
+    Exit(False);
+  end;
+  if FLanguageId = 0 then
+  begin
+    Msg := 'LanguageId required.';
+    Exit(False);
+  end;
+  if FRankName = EmptyStr then
+  begin
+    Msg := 'RankName required.';
+    Exit(False);
+  end;
+
+  Msg := '';
+  Result := True;
+end;
+
+{ TRankI18nRepository }
+
+function TRankI18nRepository.TableName: string;
+begin
+  Result := 'taxon_rank_i18n';
+end;
+
+function TRankI18nRepository.Exists(const Id: Integer): Boolean;
+var
+  Qry: TSQLQuery;
+begin
+  Qry := NewQuery;
+  with Qry do
+  try
+    MacroCheck := True;
+    SQL.Text := 'SELECT 1 AS x FROM %tablename WHERE rank_id=:id LIMIT 1';
+    MacroByName('tablename').Value := TableName;
+    ParamByName('id').AsInteger := Id;
+    Open;
+    Result := not EOF;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TRankI18nRepository.FindBy(const FieldName: String; const Value: Variant; E: TXolmisRecord);
+const
+  ALLOWED: array[0..2] of string = ('rank_id', 'language_id', 'rank_name');
+var
+  Qry: TSQLQuery;
+  I: Integer;
+  Ok: Boolean;
+begin
+  if not (E is TRankI18n) then
+    raise Exception.Create('FindBy: Expected TRankI18n');
+
+  Ok := False;
+  for I := Low(ALLOWED) to High(ALLOWED) do
+    if SameText(FieldName, ALLOWED[I]) then
+    begin
+      Ok := True;
+      Break;
+    end;
+  if not Ok then
+    raise Exception.CreateFmt('Field %s not allowed in FindBy', [FieldName]);
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    Add('SELECT * FROM %tablename');
+    Add('WHERE %afield = :avalue');
+    Add('ORDER BY rank_id, language_id');
+
+    MacroByName('tablename').Value := TableName;
+    MacroByName('afield').Value := FieldName;
+    ParamByName('avalue').Value := Value;
+    Open;
+
+    if not EOF then
+      Hydrate(Qry, TRankI18n(E));
+
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TRankI18nRepository.GetById(const Id: Integer; E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+begin
+  if not (E is TRankI18n) then
+    raise Exception.Create('GetById: Expected TRankI18n');
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    Clear;
+    Add('SELECT * FROM %tablename');
+    Add('WHERE rank_id = :id');
+    Add('ORDER BY language_id LIMIT 1');
+    MacroByName('tablename').Value := TableName;
+    ParamByName('id').AsInteger := Id;
+    Open;
+    if not EOF then
+      Hydrate(Qry, TRankI18n(E));
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TRankI18nRepository.GetByRankAndLanguage(const aRankId, aLanguageId: Integer; E: TRankI18n);
+var
+  Qry: TSQLQuery;
+begin
+  if E = nil then
+    Exit;
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    Clear;
+    Add('SELECT * FROM %tablename');
+    Add('WHERE rank_id = :rank_id');
+    Add('AND language_id = :language_id');
+    MacroByName('tablename').Value := TableName;
+    ParamByName('rank_id').AsInteger := aRankId;
+    ParamByName('language_id').AsInteger := aLanguageId;
+    Open;
+    if not EOF then
+      Hydrate(Qry, E);
+    Close;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TRankI18nRepository.Hydrate(aDataSet: TDataSet; E: TXolmisRecord);
+var
+  R: TRankI18n;
+begin
+  if (aDataSet = nil) or (E = nil) or aDataSet.EOF then
+    Exit;
+  if not (E is TRankI18n) then
+    raise Exception.Create('Hydrate: Expected TRankI18n');
+
+  R := TRankI18n(E);
+  with aDataSet do
+  begin
+    R.RankId := FieldByName('rank_id').AsInteger;
+    R.LanguageId := FieldByName('language_id').AsInteger;
+    R.RankName := FieldByName('rank_name').AsString;
+    GetTimeStamp(FieldByName('insert_date'), R.InsertDate);
+    GetTimeStamp(FieldByName('update_date'), R.UpdateDate);
+  end;
+end;
+
+procedure TRankI18nRepository.Insert(E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+  R: TRankI18n;
+begin
+  if not (E is TRankI18n) then
+    raise Exception.Create('Insert: Expected TRankI18n');
+
+  R := TRankI18n(E);
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    Clear;
+    Add('INSERT INTO taxon_rank_i18n (' +
+      'rank_id, ' +
+      'language_id, ' +
+      'rank_name, ' +
+      'insert_date) ');
+    Add('VALUES (' +
+      ':rank_id, ' +
+      ':language_id, ' +
+      ':rank_name, ' +
+      'datetime(''now'', ''subsec''))');
+
+    ParamByName('rank_id').AsInteger := R.RankId;
+    ParamByName('language_id').AsInteger := R.LanguageId;
+    ParamByName('rank_name').AsString := R.RankName;
+
+    ExecSQL;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TRankI18nRepository.Update(E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+  R: TRankI18n;
+begin
+  if not (E is TRankI18n) then
+    raise Exception.Create('Update: Expected TRankI18n');
+
+  R := TRankI18n(E);
+  if (R.RankId = 0) or (R.LanguageId = 0) then
+    raise Exception.CreateFmt('TRankI18nRepository.Update: %s.', ['RankId or LanguageId is empty']);
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    Clear;
+    Add('UPDATE taxon_rank_i18n SET ' +
+      'rank_name = :rank_name, ' +
+      'update_date = datetime(''now'', ''subsec'')');
+    Add('WHERE (rank_id = :rank_id) AND (language_id = :language_id)');
+
+    ParamByName('rank_name').AsString := R.RankName;
+    ParamByName('rank_id').AsInteger := R.RankId;
+    ParamByName('language_id').AsInteger := R.LanguageId;
+
+    ExecSQL;
+  finally
+    FreeAndNil(Qry);
+  end;
+end;
+
+procedure TRankI18nRepository.Delete(E: TXolmisRecord);
+var
+  Qry: TSQLQuery;
+  R: TRankI18n;
+begin
+  if not (E is TRankI18n) then
+    raise Exception.Create('Delete: Expected TRankI18n');
+
+  R := TRankI18n(E);
+  if (R.RankId = 0) or (R.LanguageId = 0) then
+    raise Exception.CreateFmt('TRankI18nRepository.Delete: %s.', ['RankId or LanguageId is empty']);
+
+  Qry := NewQuery;
+  with Qry, SQL do
+  try
+    MacroCheck := True;
+
+    if not FTrans.Active then
+      FTrans.StartTransaction;
+    try
+      Clear;
+      Add('DELETE FROM %tablename');
+      Add('WHERE (rank_id = :rank_id) AND (language_id = :language_id)');
+
+      MacroByName('tablename').Value := TableName;
+      ParamByName('rank_id').AsInteger := R.RankId;
+      ParamByName('language_id').AsInteger := R.LanguageId;
+
+      ExecSQL;
+
+      FTrans.CommitRetaining;
+    except
+      FTrans.RollbackRetaining;
+      raise;
+    end;
   finally
     FreeAndNil(Qry);
   end;

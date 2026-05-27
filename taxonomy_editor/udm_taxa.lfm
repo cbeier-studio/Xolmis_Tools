@@ -1982,8 +1982,8 @@ object dmTaxa: TdmTaxa
     )
     Params = <>
     Macros = <>
-    Left = 130
-    Top = 487
+    Left = 280
+    Top = 332
     object qCountriescountry_id: TLongintField
       DisplayLabel = 'ID'
       FieldKind = fkData
@@ -2118,7 +2118,7 @@ object dmTaxa: TdmTaxa
     )
     Params = <>
     Macros = <>
-    Left = 210
+    Left = 280
     Top = 487
     object qLanguageslanguage_id: TLongintField
       DisplayLabel = 'ID'
@@ -2216,12 +2216,12 @@ object dmTaxa: TdmTaxa
   end
   object dsCountries: TDataSource
     DataSet = qCountries
-    Left = 130
-    Top = 434
+    Left = 280
+    Top = 279
   end
   object dsLanguages: TDataSource
     DataSet = qLanguages
-    Left = 210
+    Left = 280
     Top = 434
   end
   object qSpeciesList: TSQLQuery
@@ -2289,8 +2289,8 @@ object dmTaxa: TdmTaxa
       end>
     Macros = <>
     DataSource = dsCountries
-    Left = 296
-    Top = 490
+    Left = 370
+    Top = 335
     object qSpeciesListtaxon_country_id: TLongintField
       FieldKind = fkData
       FieldName = 'taxon_country_id'
@@ -2369,8 +2369,8 @@ object dmTaxa: TdmTaxa
   end
   object dsSpeciesList: TDataSource
     DataSet = qSpeciesList
-    Left = 296
-    Top = 434
+    Left = 370
+    Top = 279
   end
   object qMethods: TSQLQuery
     FieldDefs = <    
@@ -2455,8 +2455,8 @@ object dmTaxa: TdmTaxa
     )
     Params = <>
     Macros = <>
-    Left = 376
-    Top = 335
+    Left = 520
+    Top = 490
     object qMethodsmarked_status: TBooleanField
       DisplayLabel = 'Marked'
       FieldKind = fkData
@@ -2609,7 +2609,325 @@ object dmTaxa: TdmTaxa
   end
   object dsMethods: TDataSource
     DataSet = qMethods
-    Left = 376
-    Top = 279
+    Left = 520
+    Top = 434
+  end
+  object qMethodsI18n: TSQLQuery
+    PacketRecords = 2000
+    FieldDefs = <    
+      item
+        Name = 'method_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'language_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'method_name'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end    
+      item
+        Name = 'category'
+        DataType = ftString
+        Precision = -1
+        Size = 30
+      end    
+      item
+        Name = 'description'
+        DataType = ftMemo
+        Precision = -1
+      end    
+      item
+        Name = 'recommended_uses'
+        DataType = ftMemo
+        Precision = -1
+      end    
+      item
+        Name = 'notes'
+        DataType = ftMemo
+        Precision = -1
+      end    
+      item
+        Name = 'insert_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'update_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'language_name'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end>
+    BeforePost = qTaxaChangesBeforePost
+    Database = sqlCon
+    Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT mi.*,'
+      '  l.language_name AS language_name'
+      'FROM method_i18n AS mi'
+      'LEFT JOIN languages AS l ON mi.language_id = l.language_id'
+      'WHERE (mi.method_id = :method_id)'
+      'ORDER BY language_name ASC, mi.method_name ASC'
+    )
+    Options = [sqoAutoApplyUpdates]
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'method_id'
+        ParamType = ptInput
+      end>
+    Macros = <>
+    DataSource = dsMethods
+    Left = 594
+    Top = 490
+    object qMethodsI18nmethod_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'method_id'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = False
+      Required = True
+      Visible = False
+    end
+    object qMethodsI18nlanguage_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'language_id'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = False
+      Required = True
+      Visible = False
+    end
+    object qMethodsI18nlanguage_name: TStringField
+      DisplayLabel = 'Language'
+      FieldKind = fkData
+      FieldName = 'language_name'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 100
+    end
+    object qMethodsI18nmethod_name: TStringField
+      DisplayLabel = 'Method name'
+      FieldKind = fkData
+      FieldName = 'method_name'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 100
+    end
+    object qMethodsI18ncategory: TStringField
+      DisplayLabel = 'Category'
+      FieldKind = fkData
+      FieldName = 'category'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 30
+    end
+    object qMethodsI18ndescription: TMemoField
+      DisplayLabel = 'Description'
+      FieldKind = fkData
+      FieldName = 'description'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      BlobType = ftMemo
+      Transliterate = False
+    end
+    object qMethodsI18nrecommended_uses: TMemoField
+      DisplayLabel = 'Recommended uses'
+      FieldKind = fkData
+      FieldName = 'recommended_uses'
+      Index = 6
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      BlobType = ftMemo
+      Transliterate = False
+    end
+    object qMethodsI18nnotes: TMemoField
+      DisplayLabel = 'Notes'
+      FieldKind = fkData
+      FieldName = 'notes'
+      Index = 7
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      BlobType = ftMemo
+      Transliterate = False
+    end
+    object qMethodsI18ninsert_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'insert_date'
+      Index = 8
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qMethodsI18nupdate_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'update_date'
+      Index = 9
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+  end
+  object dsMethodsI18n: TDataSource
+    DataSet = qMethodsI18n
+    Left = 594
+    Top = 434
+  end
+  object qRanksI18n: TSQLQuery
+    PacketRecords = 2000
+    FieldDefs = <    
+      item
+        Name = 'rank_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'language_id'
+        DataType = ftInteger
+        Precision = -1
+      end    
+      item
+        Name = 'rank_name'
+        DataType = ftString
+        Precision = -1
+        Size = 30
+      end    
+      item
+        Name = 'insert_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'update_date'
+        DataType = ftDateTime
+        Precision = -1
+      end    
+      item
+        Name = 'language_name'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end>
+    BeforePost = qTaxaChangesBeforePost
+    Database = sqlCon
+    Transaction = sqlTrans
+    SQL.Strings = (
+      'SELECT ri.*,'
+      '  l.language_name AS language_name'
+      'FROM taxon_rank_i18n AS ri'
+      'LEFT JOIN languages AS l ON ri.language_id = l.language_id'
+      'WHERE (ri.rank_id = :rank_id)'
+      'ORDER BY language_name ASC, ri.rank_name ASC'
+    )
+    Options = [sqoAutoApplyUpdates]
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'rank_id'
+        ParamType = ptInput
+      end>
+    Macros = <>
+    DataSource = dsRanks
+    Left = 128
+    Top = 490
+    object qRanksI18nrank_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'rank_id'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = False
+      Required = True
+      Visible = False
+    end
+    object qRanksI18nlanguage_id: TLongintField
+      FieldKind = fkData
+      FieldName = 'language_id'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = False
+      Required = True
+      Visible = False
+    end
+    object qRanksI18nlanguage_name: TStringField
+      DisplayLabel = 'Language'
+      FieldKind = fkData
+      FieldName = 'language_name'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 100
+    end
+    object qRanksI18nrank_name: TStringField
+      DisplayLabel = 'Rank name'
+      FieldKind = fkData
+      FieldName = 'rank_name'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = True
+      Size = 30
+    end
+    object qRanksI18ninsert_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'insert_date'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+    object qRanksI18nupdate_date: TDateTimeField
+      FieldKind = fkData
+      FieldName = 'update_date'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Visible = False
+    end
+  end
+  object dsRanksI18n: TDataSource
+    DataSet = qRanksI18n
+    Left = 128
+    Top = 434
   end
 end
