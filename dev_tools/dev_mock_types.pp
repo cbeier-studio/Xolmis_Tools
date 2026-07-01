@@ -5,7 +5,7 @@ unit dev_mock_types;
 interface
 
 uses
-  Classes, SysUtils, fgl, fpjson, jsonparser, FileUtil;
+  Classes, SysUtils, Contnrs, fgl, fpjson, jsonparser, FileUtil;
 
 type
   TGlobalOptions = class
@@ -29,6 +29,7 @@ type
     MaxCount: Integer;
     Dependencies: TStringList;
     OutputFiles: TStringList;
+    Enabled: Boolean;
     constructor Create;
     destructor Destroy; override;
   end;
@@ -217,6 +218,28 @@ type
     function Resolve(Schema: TTableSchema): TStringList;
   end;
 
+type
+  ITableExporter = interface ['{408EA381-A716-436E-8D95-AF50EA521B75}']
+    procedure ExportTable(const Schema: TTableSchema; const ColOrder: TStringList; const Rows: array of TStringList;
+      const OutputFile: string);
+  end;
+
+  TExporterEntry = class
+  public
+    Exporter: ITableExporter;
+    constructor Create(const AExporter: ITableExporter);
+  end;
+
+  { TExporterRegistry }
+
+  TExporterRegistry = class
+  private
+    class var FList: TFPHashObjectList;
+  public
+    class procedure RegisterExporter(const Ext: string; const Exporter: ITableExporter);
+    class function GetExporter(const Ext: string): ITableExporter;
+  end;
+
   procedure Require(const Condition: Boolean; const Msg: string);
   procedure RequireNonEmpty(const S, FieldName: string);
   procedure RequireInSet(const S, FieldName: string; const Allowed: array of string);
@@ -224,6 +247,13 @@ type
 
 
 implementation
+
+{ TExporterEntry }
+
+constructor TExporterEntry.Create(const AExporter: ITableExporter);
+begin
+  Exporter := AExporter;
+end;
 
 function JSONValueToRawString(Value: TJSONData): string;
 begin
@@ -391,6 +421,7 @@ begin
     SRef.FileName := Item.FindPath('file').AsString;
     SRef.DefaultCount := Item.FindPath('defaultCount').AsInteger;
     SRef.MaxCount := Item.FindPath('maxCount').AsInteger;
+    SRef.Enabled := Item.FindPath('enabled').AsBoolean;
 
     { dependencies }
     if Item.FindPath('dependencies') <> nil then
@@ -811,7 +842,7 @@ begin
         'columns[' + IntToStr(i) + '].weights must match enum length');
 
     if (Col.SourceTable <> '') xor (Col.SourceField <> '') then
-      raise Exception.Create('sourceTable and sourceField must be used together');
+      raise Exception.CreateFmt('sourceTable and sourceField must be used together (%s)', [TableName]);
 
     if Col.RangeMin <> '' then
       Require(Col.RangeMax <> '', 'range must have two values');
@@ -860,14 +891,14 @@ var
 begin
   Result := TStringList.Create;
 
-  { Inicializa in-degree }
+  { Initialize in-degree }
   for i := 0 to Config.Schemas.Count - 1 do
   begin
     S := Config.Schemas[i];
     FInDegree.Add(S.Name, 0);
   end;
 
-  { Constrói o grafo }
+  { Build graph }
   for i := 0 to Config.Schemas.Count - 1 do
   begin
     S := Config.Schemas[i];
@@ -956,14 +987,14 @@ var
 begin
   Result := TStringList.Create;
 
-  { Inicializa in-degree }
+  { Initialize in-degree }
   for i := 0 to Schema.Columns.Count - 1 do
   begin
     Col := Schema.Columns[i];
     FInDegree.Add(Col.Name, 0);
   end;
 
-  { Constrói o grafo }
+  { Build graph }
   for i := 0 to Schema.Columns.Count - 1 do
   begin
     Col := Schema.Columns[i];
@@ -1013,6 +1044,59 @@ begin
     Queue.Free;
   end;
 end;
+
+{ TExporterRegistry }
+
+class function TExporterRegistry.GetExporter(const Ext: string): ITableExporter;
+var
+  Obj: TObject;
+  Entry: TExporterEntry;
+begin
+  Result := nil;
+
+  if FList = nil then
+    raise Exception.Create('ExporterRegistry not initialized');
+
+  Obj := FList.Find(LowerCase(Ext));
+  if Obj = nil then
+    Exit(nil);
+
+  if not (Obj is TExporterEntry) then
+    raise Exception.CreateFmt('Exporter "%s" is stored with invalid registry type', [Ext]);
+
+  Entry := TExporterEntry(Obj);
+  Result := Entry.Exporter;
+end;
+
+class procedure TExporterRegistry.RegisterExporter(const Ext: string; const Exporter: ITableExporter);
+var
+  Key: string;
+  Existing: TObject;
+begin
+  if FList = nil then
+    raise Exception.Create('ExporterRegistry not initialized');
+
+  if Exporter = nil then
+    raise Exception.CreateFmt('Cannot register nil exporter for "%s"', [Ext]);
+
+  Key := LowerCase(Ext);
+
+  Existing := FList.Find(Key);
+  if Existing <> nil then
+  begin
+    // replace the old exporter
+    FList.Delete(FList.IndexOf(Existing));
+  end;
+
+  // add the new one
+  FList.Add(Key, TExporterEntry.Create(Exporter));
+end;
+
+initialization
+  TExporterRegistry.FList := TFPHashObjectList.Create(True);
+
+finalization
+  TExporterRegistry.FList.Free;
 
 end.
 

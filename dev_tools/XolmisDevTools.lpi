@@ -37,6 +37,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="laz_fpspreadsheet"/>
+      </Item>
+      <Item>
         <PackageName Value="LazControls"/>
       </Item>
       <Item>
